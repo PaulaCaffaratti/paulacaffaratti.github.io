@@ -1,1207 +1,722 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Control de Premoldeados</title>
+  <title>Control de Premoldeados</title>
 
-<style>
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f3f5f7;
-    color: #1f2937;
-}
-
-/* HEADER */
-
-header {
-    background: #17324d;
-    color: white;
-    padding: 22px;
-}
-
-.header-content {
-    max-width: 1200px;
-    margin: auto;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 25px;
-}
-
-header p {
-    margin: 6px 0 0;
-    color: #cbd5e1;
-}
-
-/* CONTENEDOR */
-
-.container {
-    max-width: 1200px;
-    margin: 25px auto;
-    padding: 0 18px;
-}
-
-/* RESUMEN */
-
-.resumen {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-.resumen-card {
-    background: white;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-}
-
-.resumen-numero {
-    font-size: 32px;
-    font-weight: bold;
-    color: #17324d;
-}
-
-.resumen-titulo {
-    color: #64748b;
-    font-size: 13px;
-    margin-top: 5px;
-}
-
-/* TABLA POR TIPO */
-
-.panel {
-    background: white;
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-}
-
-.panel h2 {
-    margin-top: 0;
-    color: #17324d;
-}
-
-.tabla {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.tabla th,
-.tabla td {
-    padding: 12px;
-    border-bottom: 1px solid #e2e8f0;
-    text-align: center;
-}
-
-.tabla th {
-    background: #f8fafc;
-    color: #475569;
-    font-size: 13px;
-}
-
-.tabla td:first-child,
-.tabla th:first-child {
-    text-align: left;
-    font-weight: bold;
-}
-
-/* BARRA DE AVANCE */
-
-.barra {
-    width: 100%;
-    height: 8px;
-    background: #e2e8f0;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.barra-progreso {
-    height: 100%;
-    background: #16a34a;
-}
-
-/* BUSCADOR */
-
-.toolbar {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 18px;
-}
-
-input,
-select {
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    padding: 12px;
-    background: white;
-    font-size: 14px;
-}
-
-.search {
-    flex: 1;
-}
-
-button {
-    border: none;
-    border-radius: 8px;
-    padding: 12px 18px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.btn-primary {
-    background: #f59e0b;
-    color: #172033;
-}
-
-.btn-primary:hover {
-    background: #d97706;
-    color: white;
-}
-
-.btn-secondary {
-    background: #e2e8f0;
-}
-
-/* FORMULARIO */
-
-.add-form {
-    display: none;
-    background: white;
-    padding: 20px;
-    border-radius: 14px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-}
-
-.add-form h2 {
-    margin-top: 0;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.form-actions {
-    margin-top: 15px;
-    display: flex;
-    gap: 10px;
-}
-
-/* PIEZAS */
-
-.pieza {
-    background: white;
-    border-radius: 14px;
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.pieza-info {
-    flex: 1;
-}
-
-.codigo {
-    font-size: 19px;
-    font-weight: bold;
-    color: #17324d;
-}
-
-.tipo {
-    color: #64748b;
-    margin-top: 4px;
-}
-
-/* ESTADOS */
-
-.estado {
-    padding: 9px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-.estado-taller {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.estado-transito {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.estado-obra {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.estado-calidad {
-    background: #ede9fe;
-    color: #6d28d9;
-}
-
-.estado-montado {
-    background: #16a34a;
-    color: white;
-}
-
-/* BOTON AVANZAR */
-
-.btn-avanzar {
-    background: #17324d;
-    color: white;
-    font-size: 12px;
-}
-
-.btn-avanzar:hover {
-    background: #244d73;
-}
-
-/* VACIO */
-
-.empty {
-    text-align: center;
-    padding: 50px;
-    color: #64748b;
-    background: white;
-    border-radius: 14px;
-}
-
-/* CELULAR */
-
-@media (max-width: 700px) {
-
-    .resumen {
-        grid-template-columns: 1fr;
+  <style>
+    * {
+      box-sizing: border-box;
     }
 
-    .toolbar {
-        flex-direction: column;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
+
+    header {
+      background: #1e3a5f;
+      color: white;
+      padding: 25px 40px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      opacity: 0.8;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .resumen {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .tarjeta {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .tarjeta h3 {
+      margin: 0;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .tarjeta .numero {
+      font-size: 30px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .herramientas {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    input, select {
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    #buscador {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .btn-nuevo {
+      background: #1e3a5f;
+      color: white;
+    }
+
+    .btn-avanzar {
+      background: #16a34a;
+      color: white;
+      padding: 8px 12px;
+    }
+
+    .btn-eliminar {
+      background: #dc2626;
+      color: white;
+      padding: 8px 12px;
+      margin-left: 5px;
+    }
+
+    .formulario {
+      display: none;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .formulario.activo {
+      display: block;
+    }
+
+    .formulario h2 {
+      margin-top: 0;
     }
 
     .form-grid {
-        grid-template-columns: 1fr;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
     }
 
-    .pieza {
-        align-items: flex-start;
-        flex-direction: column;
+    .form-grid input,
+    .form-grid select {
+      width: 100%;
+    }
+
+    .btn-guardar {
+      background: #1e3a5f;
+      color: white;
+      margin-top: 15px;
+    }
+
+    .tabla-contenedor {
+      overflow-x: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    th {
+      background: #eaf0f6;
+      text-align: left;
+      padding: 15px;
+      font-size: 13px;
+    }
+
+    td {
+      padding: 15px;
+      border-top: 1px solid #e5e7eb;
     }
 
     .estado {
-        width: 100%;
-        text-align: center;
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 13px;
     }
 
-    .tabla {
-        font-size: 12px;
+    .taller {
+      background: #dbeafe;
+      color: #1d4ed8;
     }
 
-    .tabla th,
-    .tabla td {
-        padding: 8px 4px;
+    .salio {
+      background: #ffedd5;
+      color: #c2410c;
     }
 
-}
+    .llego {
+      background: #fef3c7;
+      color: #a16207;
+    }
 
-</style>
+    .calidad {
+      background: #f3e8ff;
+      color: #7e22ce;
+    }
+
+    .montado {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .vacio {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 20px;
+      }
+
+      main {
+        padding: 20px 12px;
+      }
+
+      header h1 {
+        font-size: 23px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-
-<div class="header-content">
-
-<h1>🏗️ Control de Premoldeados</h1>
-
-<p>Seguimiento de fabricación, transporte, obra, calidad y montaje</p>
-
-</div>
-
+  <h1>🏗️ Control de Premoldeados</h1>
+  <p>Seguimiento y trazabilidad de piezas desde el taller hasta el montaje</p>
 </header>
 
+<main>
 
-<div class="container">
+  <!-- RESUMEN -->
+  <section class="resumen">
 
+    <div class="tarjeta">
+      <h3>TOTAL</h3>
+      <div class="numero" id="total">0</div>
+    </div>
 
-<!-- RESUMEN GENERAL -->
+    <div class="tarjeta">
+      <h3>EN TALLER</h3>
+      <div class="numero" id="totalTaller">0</div>
+    </div>
 
-<div class="resumen">
+    <div class="tarjeta">
+      <h3>EN OBRA</h3>
+      <div class="numero" id="totalObra">0</div>
+    </div>
 
-<div class="resumen-card">
+    <div class="tarjeta">
+      <h3>MONTADOS</h3>
+      <div class="numero" id="totalMontados">0</div>
+    </div>
 
-<div class="resumen-numero" id="totalGeneral">
-0
-</div>
+  </section>
 
-<div class="resumen-titulo">
-TOTAL PREMOLDEADOS
-</div>
 
-</div>
+  <!-- BUSCADOR Y BOTON -->
+  <section class="herramientas">
 
+    <input
+      type="text"
+      id="buscador"
+      placeholder="🔎 Buscar por código o tipo..."
+    >
 
-<div class="resumen-card">
+    <button class="btn-nuevo" onclick="mostrarFormulario()">
+      + Nuevo premoldeado
+    </button>
 
-<div class="resumen-numero" id="totalObra">
-0
-</div>
+  </section>
 
-<div class="resumen-titulo">
-EN OBRA
-</div>
 
-</div>
+  <!-- FORMULARIO -->
+  <section class="formulario" id="formulario">
 
+    <h2>Nuevo premoldeado</h2>
 
-<div class="resumen-card">
+    <div class="form-grid">
 
-<div class="resumen-numero" id="totalMontados">
-0
-</div>
+      <input
+        type="text"
+        id="codigo"
+        placeholder="Código (ej: V-001)"
+      >
 
-<div class="resumen-titulo">
-MONTADOS
-</div>
+      <select id="tipo">
+        <option value="">Seleccionar tipo</option>
+        <option>Viga</option>
+        <option>Columna</option>
+        <option>Losa</option>
+        <option>Panel</option>
+        <option>Base</option>
+        <option>Otro</option>
+      </select>
 
-</div>
+    </div>
 
-</div>
+    <button class="btn-guardar" onclick="agregarPremoldeado()">
+      Guardar premoldeado
+    </button>
 
+  </section>
 
-<!-- RESUMEN POR TIPO -->
 
-<div class="panel">
+  <!-- TABLA -->
+  <section class="tabla-contenedor">
 
-<h2>📊 Resumen por tipo</h2>
+    <table>
 
-<table class="tabla">
+      <thead>
+        <tr>
+          <th>CÓDIGO</th>
+          <th>TIPO</th>
+          <th>ESTADO ACTUAL</th>
+          <th>ACCIÓN</th>
+        </tr>
+      </thead>
 
-<thead>
+      <tbody id="tablaPremoldeados">
+      </tbody>
 
-<tr>
+    </table>
 
-<th>Tipo</th>
-<th>Total</th>
-<th>En obra</th>
-<th>Montados</th>
-<th>Avance</th>
+    <div id="mensajeVacio" class="vacio">
+      Todavía no hay premoldeados cargados.
+    </div>
 
-</tr>
+  </section>
 
-</thead>
-
-<tbody id="tablaTipos"></tbody>
-
-</table>
-
-</div>
-
-
-<!-- BUSCADOR -->
-
-<div class="toolbar">
-
-<input
-class="search"
-id="search"
-type="text"
-placeholder="🔎 Buscar por código..."
-oninput="render()"
->
-
-
-<select id="filtroTipo" onchange="render()">
-
-<option value="todos">
-Todos los tipos
-</option>
-
-</select>
-
-
-<button
-class="btn-primary"
-onclick="mostrarFormulario()">
-
-+ Nuevo
-
-</button>
-
-</div>
-
-
-<!-- NUEVO PREMOLDEADO -->
-
-<div class="add-form" id="addForm">
-
-<h2>Nuevo premoldeado</h2>
-
-<div class="form-grid">
-
-<input
-id="newCode"
-placeholder="Código (ej. PM-00125)"
->
-
-<input
-id="newType"
-placeholder="Tipo (ej. S1, S2, B1...)"
->
-
-</div>
-
-
-<div class="form-actions">
-
-<button
-class="btn-primary"
-onclick="agregarPremoldeado()">
-
-Guardar
-
-</button>
-
-
-<button
-class="btn-secondary"
-onclick="ocultarFormulario()">
-
-Cancelar
-
-</button>
-
-</div>
-
-</div>
-
-
-<!-- LISTA -->
-
-<div id="list"></div>
-
-
-</div>
+</main>
 
 
 <script>
 
+  /*
+    ETAPAS DEL PROCESO
+  */
 
-/* ETAPAS */
+  const etapas = [
+    {
+      nombre: "🏭 TALLER",
+      clase: "taller"
+    },
+    {
+      nombre: "🚛 SALIÓ A OBRA",
+      clase: "salio"
+    },
+    {
+      nombre: "📍 LLEGÓ A OBRA",
+      clase: "llego"
+    },
+    {
+      nombre: "🔍 CALIDAD",
+      clase: "calidad"
+    },
+    {
+      nombre: "🏗️ MONTADO",
+      clase: "montado"
+    }
+  ];
 
-const etapas = [
 
-"Taller",
+  /*
+    CARGAR DATOS GUARDADOS
+  */
 
-"En tránsito",
+  let premoldeados =
+    JSON.parse(localStorage.getItem("premoldeados")) || [];
 
-"En obra",
 
-"Calidad",
+  /*
+    MOSTRAR / OCULTAR FORMULARIO
+  */
 
-"Montado"
+  function mostrarFormulario() {
 
-];
+    document
+      .getElementById("formulario")
+      .classList.toggle("activo");
 
+  }
 
 
-/* DATOS */
+  /*
+    AGREGAR NUEVO PREMOLDEADO
+  */
 
-let premoldeados =
-JSON.parse(localStorage.getItem("premoldeados")) || [
+  function agregarPremoldeado() {
 
-{
-code:"PM-00125",
-type:"S1",
+    const codigo =
+      document.getElementById("codigo").value.trim();
 
-etapas:[
+    const tipo =
+      document.getElementById("tipo").value;
 
-{done:true,responsable:"Juan",fecha:"28/08/2026 15:42"},
 
-{done:true,responsable:"Pedro",fecha:"29/08/2026 07:15"},
+    if (!codigo || !tipo) {
 
-{done:true,responsable:"Carlos",fecha:"29/08/2026 10:23"},
+      alert("Por favor completá el código y el tipo.");
 
-{done:false},
+      return;
 
-{done:false}
+    }
 
-]
 
-},
+    /*
+      VERIFICAR QUE NO EXISTA
+    */
 
-{
+    const existe =
+      premoldeados.some(
+        p =>
+          p.codigo.toLowerCase() ===
+          codigo.toLowerCase()
+      );
 
-code:"PM-00126",
 
-type:"S1",
+    if (existe) {
 
-etapas:[
+      alert("Ya existe un premoldeado con ese código.");
 
-{done:true,responsable:"Juan",fecha:"28/08/2026 16:10"},
+      return;
 
-{done:true,responsable:"Pedro",fecha:"29/08/2026 07:40"},
+    }
 
-{done:true,responsable:"Carlos",fecha:"29/08/2026 11:20"},
 
-{done:true,responsable:"Ana",fecha:"29/08/2026 12:10"},
+    /*
+      CREAR PREMOLDEADO
 
-{done:false}
+      etapa: 0 = TALLER
+    */
 
-]
+    premoldeados.push({
 
-},
+      codigo: codigo,
 
-{
+      tipo: tipo,
 
-code:"PM-00127",
+      etapa: 0,
 
-type:"S2",
+      fechaCreacion:
+        new Date().toLocaleString()
 
-etapas:[
+    });
 
-{done:true,responsable:"Juan",fecha:"28/08/2026 17:05"},
 
-{done:true,responsable:"Pedro",fecha:"29/08/2026 08:00"},
+    guardarDatos();
 
-{done:false},
 
-{done:false},
+    /*
+      LIMPIAR FORMULARIO
+    */
 
-{done:false}
+    document.getElementById("codigo").value = "";
 
-]
+    document.getElementById("tipo").value = "";
 
-},
 
-{
+    document
+      .getElementById("formulario")
+      .classList.remove("activo");
 
-code:"PM-00128",
 
-type:"B1",
+    renderizar();
 
-etapas:[
+  }
 
-{done:true,responsable:"Juan",fecha:"28/08/2026 17:20"},
 
-{done:false},
+  /*
+    AVANZAR A LA SIGUIENTE ETAPA
+  */
 
-{done:false},
+  function avanzarEtapa(indice) {
 
-{done:false},
+    if (
+      premoldeados[indice].etapa <
+      etapas.length - 1
+    ) {
 
-{done:false}
+      premoldeados[indice].etapa++;
 
-]
+      guardarDatos();
 
-}
+      renderizar();
 
-];
+    }
 
+  }
 
 
-/* GUARDAR */
+  /*
+    ELIMINAR PREMOLDEADO
+  */
 
-function guardar(){
+  function eliminarPremoldeado(indice) {
 
-localStorage.setItem(
-"premoldeados",
-JSON.stringify(premoldeados)
-);
+    const confirmar =
+      confirm(
+        "¿Seguro que querés eliminar este premoldeado?"
+      );
 
-}
 
+    if (confirmar) {
 
+      premoldeados.splice(indice, 1);
 
-/* FECHA */
+      guardarDatos();
 
-function fechaActual(){
+      renderizar();
 
-const ahora = new Date();
+    }
 
-return ahora.toLocaleDateString("es-AR")
-+
-" "
-+
-ahora.toLocaleTimeString(
-"es-AR",
-{
-hour:"2-digit",
-minute:"2-digit"
-}
-);
+  }
 
-}
 
+  /*
+    GUARDAR EN EL NAVEGADOR
+  */
 
+  function guardarDatos() {
 
-/* ESTADO ACTUAL */
+    localStorage.setItem(
+      "premoldeados",
+      JSON.stringify(premoldeados)
+    );
 
-function obtenerEstado(p){
+  }
 
-for(let i=4;i>=0;i--){
 
-if(p.etapas[i].done){
+  /*
+    MOSTRAR TABLA
+  */
 
-return etapas[i];
+  function renderizar() {
 
-}
+    const tabla =
+      document.getElementById("tablaPremoldeados");
 
-}
+    const mensajeVacio =
+      document.getElementById("mensajeVacio");
 
-return "Pendiente";
 
-}
+    tabla.innerHTML = "";
 
 
+    const busqueda =
+      document
+        .getElementById("buscador")
+        .value
+        .toLowerCase();
 
-/* CLASE DEL ESTADO */
 
-function claseEstado(estado){
+    const filtrados =
+      premoldeados.filter(p =>
+        p.codigo.toLowerCase().includes(busqueda) ||
+        p.tipo.toLowerCase().includes(busqueda)
+      );
 
-if(estado==="Taller")
-return "estado-taller";
 
-if(estado==="En tránsito")
-return "estado-transito";
+    if (filtrados.length === 0) {
 
-if(estado==="En obra")
-return "estado-obra";
+      mensajeVacio.style.display = "block";
 
-if(estado==="Calidad")
-return "estado-calidad";
+    } else {
 
-if(estado==="Montado")
-return "estado-montado";
+      mensajeVacio.style.display = "none";
 
-return "";
+    }
 
-}
 
+    filtrados.forEach(p => {
 
+      /*
+        BUSCAR INDICE REAL
+      */
 
-/* AVANZAR */
+      const indice =
+        premoldeados.indexOf(p);
 
-function avanzar(index){
 
-let etapaActual = -1;
+      const estado =
+        etapas[p.etapa];
 
-for(
-let i=0;
-i<5;
-i++
-){
 
-if(
-premoldeados[index]
-.etapas[i]
-.done
-){
+      const botonAvanzar =
+        p.etapa < etapas.length - 1
 
-etapaActual=i;
+          ? `
+            <button
+              class="btn-avanzar"
+              onclick="avanzarEtapa(${indice})"
+            >
+              Avanzar
+            </button>
+          `
 
-}
+          : `
+            <strong>✓ Finalizado</strong>
+          `;
 
-}
 
+      tabla.innerHTML += `
 
-let siguiente=etapaActual+1;
+        <tr>
 
+          <td>
+            <strong>${p.codigo}</strong>
+          </td>
 
-if(siguiente>=5){
+          <td>
+            ${p.tipo}
+          </td>
 
-alert("Este premoldeado ya está montado.");
+          <td>
 
-return;
+            <span
+              class="estado ${estado.clase}"
+            >
+              ${estado.nombre}
+            </span>
 
-}
+          </td>
 
+          <td>
 
-const responsable =
-prompt(
-"Nombre del responsable:"
-);
+            ${botonAvanzar}
 
+            <button
+              class="btn-eliminar"
+              onclick="eliminarPremoldeado(${indice})"
+            >
+              Eliminar
+            </button>
 
-if(!responsable)
-return;
+          </td>
 
+        </tr>
 
-premoldeados[index]
-.etapas[siguiente]={
+      `;
 
-done:true,
+    });
 
-responsable:responsable,
 
-fecha:fechaActual()
+    actualizarResumen();
 
-};
+  }
 
 
-guardar();
+  /*
+    ACTUALIZAR RESUMEN
+  */
 
-render();
+  function actualizarResumen() {
 
-}
+    document.getElementById("total").textContent =
+      premoldeados.length;
 
 
+    document
+      .getElementById("totalTaller")
+      .textContent =
+      premoldeados.filter(
+        p => p.etapa === 0
+      ).length;
 
-/* NUEVO */
 
-function agregarPremoldeado(){
+    /*
+      EN OBRA:
 
-const code =
-document.getElementById("newCode")
-.value.trim();
+      SALIÓ
+      LLEGÓ
+      CALIDAD
+    */
 
-const type =
-document.getElementById("newType")
-.value.trim()
-.toUpperCase();
+    document
+      .getElementById("totalObra")
+      .textContent =
+      premoldeados.filter(
+        p =>
+          p.etapa >= 1 &&
+          p.etapa <= 3
+      ).length;
 
 
-if(!code || !type){
+    document
+      .getElementById("totalMontados")
+      .textContent =
+      premoldeados.filter(
+        p => p.etapa === 4
+      ).length;
 
-alert(
-"Completá el código y el tipo."
-);
+  }
 
-return;
 
-}
+  /*
+    BUSCADOR
+  */
 
+  document
+    .getElementById("buscador")
+    .addEventListener(
+      "input",
+      renderizar
+    );
 
-premoldeados.push({
 
-code:code,
+  /*
+    INICIAR PAGINA
+  */
 
-type:type,
-
-etapas:[
-
-{done:false},
-
-{done:false},
-
-{done:false},
-
-{done:false},
-
-{done:false}
-
-]
-
-});
-
-
-guardar();
-
-document.getElementById("newCode")
-.value="";
-
-document.getElementById("newType")
-.value="";
-
-ocultarFormulario();
-
-render();
-
-}
-
-
-
-/* FORMULARIO */
-
-function mostrarFormulario(){
-
-document.getElementById("addForm")
-.style.display="block";
-
-}
-
-
-function ocultarFormulario(){
-
-document.getElementById("addForm")
-.style.display="none";
-
-}
-
-
-
-/* TIPOS */
-
-function actualizarTipos(){
-
-const select =
-document.getElementById("filtroTipo");
-
-const tipos =
-[
-...new Set(
-premoldeados.map(p=>p.type)
-)
-].sort();
-
-
-const valorActual =
-select.value;
-
-
-select.innerHTML =
-'<option value="todos">Todos los tipos</option>';
-
-
-tipos.forEach(tipo=>{
-
-const option =
-document.createElement("option");
-
-option.value=tipo;
-
-option.textContent=tipo;
-
-select.appendChild(option);
-
-});
-
-
-if(
-tipos.includes(valorActual)
-){
-
-select.value=valorActual;
-
-}
-
-}
-
-
-
-/* RESUMEN */
-
-function actualizarResumen(){
-
-document.getElementById(
-"totalGeneral"
-).textContent =
-premoldeados.length;
-
-
-document.getElementById(
-"totalObra"
-).textContent =
-
-premoldeados.filter(
-p=>p.etapas[2].done &&
-!p.etapas[4].done
-).length;
-
-
-document.getElementById(
-"totalMontados"
-).textContent =
-
-premoldeados.filter(
-p=>p.etapas[4].done
-).length;
-
-
-
-const tipos =
-[
-...new Set(
-premoldeados.map(p=>p.type)
-)
-].sort();
-
-
-const tabla =
-document.getElementById(
-"tablaTipos"
-);
-
-
-tabla.innerHTML="";
-
-
-tipos.forEach(tipo=>{
-
-const piezas =
-premoldeados.filter(
-p=>p.type===tipo
-);
-
-
-const total =
-piezas.length;
-
-
-const obra =
-piezas.filter(
-p=>
-p.etapas[2].done &&
-!p.etapas[4].done
-).length;
-
-
-const montados =
-piezas.filter(
-p=>p.etapas[4].done
-).length;
-
-
-const porcentaje =
-total===0
-?0
-:Math.round(
-(montados/total)*100
-);
-
-
-tabla.innerHTML += `
-
-<tr>
-
-<td>${tipo}</td>
-
-<td>${total}</td>
-
-<td>${obra}</td>
-
-<td>${montados}</td>
-
-<td>
-
-<div class="barra">
-
-<div
-class="barra-progreso"
-style="width:${porcentaje}%">
-</div>
-
-</div>
-
-${porcentaje}%
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-}
-
-
-
-/* RENDER */
-
-function render(){
-
-actualizarTipos();
-
-actualizarResumen();
-
-
-const texto =
-document.getElementById(
-"search"
-).value.toLowerCase();
-
-
-const filtro =
-document.getElementById(
-"filtroTipo"
-).value;
-
-
-const filtrados =
-premoldeados.filter(p=>{
-
-const coincideTexto =
-p.code
-.toLowerCase()
-.includes(texto);
-
-
-const coincideTipo =
-filtro==="todos" ||
-p.type===filtro;
-
-
-return
-coincideTexto &&
-coincideTipo;
-
-});
-
-
-const lista =
-document.getElementById(
-"list"
-);
-
-
-if(filtrados.length===0){
-
-lista.innerHTML=`
-
-<div class="empty">
-
-No se encontraron premoldeados.
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-lista.innerHTML =
-filtrados.map(p=>{
-
-const index =
-premoldeados.indexOf(p);
-
-
-const estado =
-obtenerEstado(p);
-
-
-const ultimoIndice =
-p.etapas.findLastIndex(
-e=>e.done
-);
-
-
-let detalle="Pendiente";
-
-
-if(ultimoIndice>=0){
-
-detalle =
-p.etapas[
-ultimoIndice
-].responsable
-+
-" · "
-+
-p.etapas[
-ultimoIndice
-].fecha;
-
-}
-
-
-const terminado =
-ultimoIndice===4;
-
-
-return `
-
-<div class="pieza">
-
-<div class="pieza-info">
-
-<div class="codigo">
-
-${p.code}
-
-</div>
-
-<div class="tipo">
-
-Tipo: <strong>${p.type}</strong>
-
-</div>
-
-<div style="
-font-size:11px;
-color:#64748b;
-margin-top:6px;
-">
-
-${detalle}
-
-</div>
-
-</div>
-
-
-<div class="estado
-${claseEstado(estado)}
-">
-
-${estado}
-
-</div>
-
-
-${
-terminado
-?
-""
-:
-`
-
-<button
-class="btn-avanzar"
-onclick="avanzar(${index})">
-
-Avanzar →
-
-</button>
-
-`
-}
-
-</div>
-
-`;
-
-}).join("");
-
-}
-
-
-
-/* INICIO */
-
-render();
-
+  renderizar();
 
 </script>
 
 </body>
-
 </html>
-```
