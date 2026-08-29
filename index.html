@@ -1,12 +1,14 @@
+```html
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Control de Premoldeados</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -15,13 +17,20 @@ body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     background: #f3f5f7;
-    color: #263238;
+    color: #1f2937;
 }
 
+/* HEADER */
+
 header {
-    background: #263238;
+    background: #17324d;
     color: white;
-    padding: 22px 30px;
+    padding: 22px;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: auto;
 }
 
 header h1 {
@@ -31,439 +40,1168 @@ header h1 {
 
 header p {
     margin: 6px 0 0;
-    color: #cfd8dc;
+    color: #cbd5e1;
 }
+
+/* CONTENEDOR */
 
 .container {
     max-width: 1200px;
-    margin: auto;
-    padding: 25px;
+    margin: 25px auto;
+    padding: 0 18px;
 }
 
-.stats {
+/* RESUMEN */
+
+.resumen {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     margin-bottom: 25px;
 }
 
-.stat {
+.resumen-card {
     background: white;
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
 
-.stat .number {
-    font-size: 30px;
+.resumen-numero {
+    font-size: 32px;
     font-weight: bold;
-    color: #263238;
+    color: #17324d;
 }
 
-.stat .label {
-    color: #607d8b;
+.resumen-titulo {
+    color: #64748b;
+    font-size: 13px;
     margin-top: 5px;
-    font-size: 14px;
 }
+
+/* TABLA POR TIPO */
+
+.panel {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+
+.panel h2 {
+    margin-top: 0;
+    color: #17324d;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla th,
+.tabla td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.tabla th {
+    background: #f8fafc;
+    color: #475569;
+    font-size: 13px;
+}
+
+.tabla td:first-child,
+.tabla th:first-child {
+    text-align: left;
+    font-weight: bold;
+}
+
+/* BARRA DE AVANCE */
+
+.barra {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.barra-progreso {
+    height: 100%;
+    background: #16a34a;
+}
+
+/* BUSCADOR */
 
 .toolbar {
     display: flex;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+}
+
+input,
+select {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px;
+    background: white;
+    font-size: 14px;
 }
 
 .search {
     flex: 1;
-    padding: 13px 15px;
-    border: 1px solid #cfd8dc;
-    border-radius: 9px;
-    font-size: 15px;
 }
 
 button {
     border: none;
     border-radius: 8px;
-    padding: 12px 17px;
+    padding: 12px 18px;
     cursor: pointer;
     font-weight: bold;
 }
 
 .btn-primary {
-    background: #f57c00;
+    background: #f59e0b;
+    color: #172033;
+}
+
+.btn-primary:hover {
+    background: #d97706;
     color: white;
 }
 
-.card {
+.btn-secondary {
+    background: #e2e8f0;
+}
+
+/* FORMULARIO */
+
+.add-form {
+    display: none;
     background: white;
-    border-radius: 14px;
     padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.07);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-radius: 14px;
     margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
 
-.piece-title {
-    font-size: 19px;
-    font-weight: bold;
+.add-form h2 {
+    margin-top: 0;
 }
 
-.piece-type {
-    color: #607d8b;
-    font-size: 14px;
-    margin-top: 4px;
-}
-
-.status {
-    font-size: 13px;
-    padding: 7px 11px;
-    border-radius: 20px;
-    background: #fff3e0;
-    color: #e65100;
-    font-weight: bold;
-}
-
-.steps {
+.form-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-actions {
+    margin-top: 15px;
+    display: flex;
     gap: 10px;
 }
 
-.step {
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 14px;
-    text-align: center;
-}
+/* PIEZAS */
 
-.step.completed {
-    background: #e8f5e9;
-    border-color: #81c784;
-}
+.pieza {
+    background: white;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
 
-.icon {
-    width: 34px;
-    height: 34px;
-    margin: auto;
-    border-radius: 50%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: #eceff1;
-    color: #78909c;
-    font-weight: bold;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-.completed .icon {
-    background: #43a047;
+.pieza-info {
+    flex: 1;
+}
+
+.codigo {
+    font-size: 19px;
+    font-weight: bold;
+    color: #17324d;
+}
+
+.tipo {
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* ESTADOS */
+
+.estado {
+    padding: 9px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.estado-taller {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.estado-transito {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.estado-obra {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.estado-calidad {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.estado-montado {
+    background: #16a34a;
     color: white;
 }
 
-.step-name {
-    font-size: 13px;
-    font-weight: bold;
-    margin-top: 9px;
-}
+/* BOTON AVANZAR */
 
-.step-date {
-    font-size: 11px;
-    color: #78909c;
-    margin-top: 5px;
-}
-
-.step button {
-    margin-top: 9px;
-    padding: 7px 9px;
-    font-size: 11px;
-    background: #eceff1;
-    color: #37474f;
-}
-
-.completed button {
-    background: #43a047;
+.btn-avanzar {
+    background: #17324d;
     color: white;
+    font-size: 12px;
 }
 
-@media (max-width: 800px) {
-    .stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.btn-avanzar:hover {
+    background: #244d73;
+}
 
-    .steps {
+/* VACIO */
+
+.empty {
+    text-align: center;
+    padding: 50px;
+    color: #64748b;
+    background: white;
+    border-radius: 14px;
+}
+
+/* CELULAR */
+
+@media (max-width: 700px) {
+
+    .resumen {
         grid-template-columns: 1fr;
     }
 
     .toolbar {
         flex-direction: column;
     }
-}
-</style>
 
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pieza {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .estado {
+        width: 100%;
+        text-align: center;
+    }
+
+    .tabla {
+        font-size: 12px;
+    }
+
+    .tabla th,
+    .tabla td {
+        padding: 8px 4px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
 <header>
-    <h1>🏗️ Control de Premoldeados</h1>
-    <p>Seguimiento de fabricación, traslado, recepción, calidad y montaje</p>
+
+<div class="header-content">
+
+<h1>🏗️ Control de Premoldeados</h1>
+
+<p>Seguimiento de fabricación, transporte, obra, calidad y montaje</p>
+
+</div>
+
 </header>
+
 
 <div class="container">
 
-```
-<div class="stats">
-    <div class="stat">
-        <div class="number" id="total">0</div>
-        <div class="label">Total</div>
-    </div>
 
-    <div class="stat">
-        <div class="number" id="taller">0</div>
-        <div class="label">En taller</div>
-    </div>
+<!-- RESUMEN GENERAL -->
 
-    <div class="stat">
-        <div class="number" id="transito">0</div>
-        <div class="label">En tránsito</div>
-    </div>
+<div class="resumen">
 
-    <div class="stat">
-        <div class="number" id="obra">0</div>
-        <div class="label">En obra</div>
-    </div>
+<div class="resumen-card">
 
-    <div class="stat">
-        <div class="number" id="montados">0</div>
-        <div class="label">Montados</div>
-    </div>
+<div class="resumen-numero" id="totalGeneral">
+0
 </div>
+
+<div class="resumen-titulo">
+TOTAL PREMOLDEADOS
+</div>
+
+</div>
+
+
+<div class="resumen-card">
+
+<div class="resumen-numero" id="totalObra">
+0
+</div>
+
+<div class="resumen-titulo">
+EN OBRA
+</div>
+
+</div>
+
+
+<div class="resumen-card">
+
+<div class="resumen-numero" id="totalMontados">
+0
+</div>
+
+<div class="resumen-titulo">
+MONTADOS
+</div>
+
+</div>
+
+</div>
+
+
+<!-- RESUMEN POR TIPO -->
+
+<div class="panel">
+
+<h2>📊 Resumen por tipo</h2>
+
+<table class="tabla">
+
+<thead>
+
+<tr>
+
+<th>Tipo</th>
+<th>Total</th>
+<th>En obra</th>
+<th>Montados</th>
+<th>Avance</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaTipos"></tbody>
+
+</table>
+
+</div>
+
+
+<!-- BUSCADOR -->
 
 <div class="toolbar">
-    <input
-        class="search"
-        id="search"
-        placeholder="🔎 Buscar por código o tipo..."
-        oninput="render()"
-    >
 
-    <button class="btn-primary" onclick="addPiece()">
-        + Nuevo premoldeado
-    </button>
+<input
+class="search"
+id="search"
+type="text"
+placeholder="🔎 Buscar por código..."
+oninput="render()"
+>
+
+
+<select id="filtroTipo" onchange="render()">
+
+<option value="todos">
+Todos los tipos
+</option>
+
+</select>
+
+
+<button
+class="btn-primary"
+onclick="mostrarFormulario()">
+
++ Nuevo
+
+</button>
+
 </div>
 
-<div id="pieces"></div>
-```
+
+<!-- NUEVO PREMOLDEADO -->
+
+<div class="add-form" id="addForm">
+
+<h2>Nuevo premoldeado</h2>
+
+<div class="form-grid">
+
+<input
+id="newCode"
+placeholder="Código (ej. PM-00125)"
+>
+
+<input
+id="newType"
+placeholder="Tipo (ej. S1, S2, B1...)"
+>
 
 </div>
+
+
+<div class="form-actions">
+
+<button
+class="btn-primary"
+onclick="agregarPremoldeado()">
+
+Guardar
+
+</button>
+
+
+<button
+class="btn-secondary"
+onclick="ocultarFormulario()">
+
+Cancelar
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- LISTA -->
+
+<div id="list"></div>
+
+
+</div>
+
 
 <script>
 
-let pieces = [
-    {
-        id: "PM-00125",
-        type: "Viga V-25",
-        steps: [true, true, true, true, false],
-        dates: [
-            "28/08/2026 14:32",
-            "29/08/2026 07:15",
-            "29/08/2026 10:23",
-            "29/08/2026 11:05",
-            ""
-        ]
-    },
-    {
-        id: "PM-00126",
-        type: "Columna C-12",
-        steps: [true, true, false, false, false],
-        dates: [
-            "28/08/2026 15:10",
-            "29/08/2026 07:40",
-            "",
-            "",
-            ""
-        ]
-    },
-    {
-        id: "PM-00127",
-        type: "Panel P-08",
-        steps: [true, false, false, false, false],
-        dates: [
-            "29/08/2026 08:20",
-            "",
-            "",
-            "",
-            ""
-        ]
-    }
+
+/* ETAPAS */
+
+const etapas = [
+
+"Taller",
+
+"En tránsito",
+
+"En obra",
+
+"Calidad",
+
+"Montado"
+
 ];
 
-const stepNames = [
-    "Liberado taller",
-    "Salió del taller",
-    "Llegó a obra",
-    "Liberado calidad",
-    "Montado"
+
+
+/* DATOS */
+
+let premoldeados =
+JSON.parse(localStorage.getItem("premoldeados")) || [
+
+{
+code:"PM-00125",
+type:"S1",
+
+etapas:[
+
+{done:true,responsable:"Juan",fecha:"28/08/2026 15:42"},
+
+{done:true,responsable:"Pedro",fecha:"29/08/2026 07:15"},
+
+{done:true,responsable:"Carlos",fecha:"29/08/2026 10:23"},
+
+{done:false},
+
+{done:false}
+
+]
+
+},
+
+{
+
+code:"PM-00126",
+
+type:"S1",
+
+etapas:[
+
+{done:true,responsable:"Juan",fecha:"28/08/2026 16:10"},
+
+{done:true,responsable:"Pedro",fecha:"29/08/2026 07:40"},
+
+{done:true,responsable:"Carlos",fecha:"29/08/2026 11:20"},
+
+{done:true,responsable:"Ana",fecha:"29/08/2026 12:10"},
+
+{done:false}
+
+]
+
+},
+
+{
+
+code:"PM-00127",
+
+type:"S2",
+
+etapas:[
+
+{done:true,responsable:"Juan",fecha:"28/08/2026 17:05"},
+
+{done:true,responsable:"Pedro",fecha:"29/08/2026 08:00"},
+
+{done:false},
+
+{done:false},
+
+{done:false}
+
+]
+
+},
+
+{
+
+code:"PM-00128",
+
+type:"B1",
+
+etapas:[
+
+{done:true,responsable:"Juan",fecha:"28/08/2026 17:20"},
+
+{done:false},
+
+{done:false},
+
+{done:false},
+
+{done:false}
+
+]
+
+}
+
 ];
 
-function render() {
 
-    const search = document
-        .getElementById("search")
-        .value
-        .toLowerCase();
 
-    const container = document.getElementById("pieces");
+/* GUARDAR */
 
-    const filtered = pieces.filter(p =>
-        p.id.toLowerCase().includes(search) ||
-        p.type.toLowerCase().includes(search)
-    );
+function guardar(){
 
-    container.innerHTML = "";
+localStorage.setItem(
+"premoldeados",
+JSON.stringify(premoldeados)
+);
 
-    filtered.forEach((piece, index) => {
-
-        const completed = piece.steps.filter(Boolean).length;
-
-        let status = "En taller";
-
-        if (completed === 5) {
-            status = "Montado";
-        } else if (completed >= 4) {
-            status = "Listo para montaje";
-        } else if (completed >= 2) {
-            status = "En obra";
-        } else if (completed >= 1) {
-            status = "En tránsito";
-        }
-
-        let html = `
-        <div class="card">
-
-            <div class="card-header">
-
-                <div>
-                    <div class="piece-title">${piece.id}</div>
-                    <div class="piece-type">${piece.type}</div>
-                </div>
-
-                <div class="status">${status}</div>
-
-            </div>
-
-            <div class="steps">
-        `;
-
-        stepNames.forEach((name, stepIndex) => {
-
-            const done = piece.steps[stepIndex];
-
-            html += `
-                <div class="step ${done ? "completed" : ""}">
-
-                    <div class="icon">
-                        ${done ? "✓" : stepIndex + 1}
-                    </div>
-
-                    <div class="step-name">
-                        ${name}
-                    </div>
-
-                    <div class="step-date">
-                        ${done ? piece.dates[stepIndex] : "Pendiente"}
-                    </div>
-
-                    <button onclick="toggleStep(${index}, ${stepIndex})">
-                        ${done ? "Completado" : "Completar"}
-                    </button>
-
-                </div>
-            `;
-        });
-
-        html += `
-            </div>
-        </div>
-        `;
-
-        container.innerHTML += html;
-    });
-
-    updateStats();
 }
 
-function toggleStep(pieceIndex, stepIndex) {
 
-    pieces[pieceIndex].steps[stepIndex] =
-        !pieces[pieceIndex].steps[stepIndex];
 
-    if (pieces[pieceIndex].steps[stepIndex]) {
+/* FECHA */
 
-        const now = new Date();
+function fechaActual(){
 
-        pieces[pieceIndex].dates[stepIndex] =
-            now.toLocaleDateString("es-AR") +
-            " " +
-            now.toLocaleTimeString("es-AR", {
-                hour: "2-digit",
-                minute: "2-digit"
-            });
+const ahora = new Date();
 
-    } else {
+return ahora.toLocaleDateString("es-AR")
++
+" "
++
+ahora.toLocaleTimeString(
+"es-AR",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+);
 
-        pieces[pieceIndex].dates[stepIndex] = "";
-
-    }
-
-    render();
 }
 
-function addPiece() {
 
-    const id = prompt("Código del premoldeado:");
 
-    if (!id) return;
+/* ESTADO ACTUAL */
 
-    const type = prompt("Tipo / descripción:");
+function obtenerEstado(p){
 
-    if (!type) return;
+for(let i=4;i>=0;i--){
 
-    pieces.push({
-        id: id.toUpperCase(),
-        type: type,
-        steps: [false, false, false, false, false],
-        dates: ["", "", "", "", ""]
-    });
+if(p.etapas[i].done){
 
-    render();
+return etapas[i];
+
 }
 
-function updateStats() {
-
-    document.getElementById("total").innerText =
-        pieces.length;
-
-    document.getElementById("taller").innerText =
-        pieces.filter(p => p.steps[0] && !p.steps[1]).length;
-
-    document.getElementById("transito").innerText =
-        pieces.filter(p => p.steps[1] && !p.steps[2]).length;
-
-    document.getElementById("obra").innerText =
-        pieces.filter(p => p.steps[2] && !p.steps[4]).length;
-
-    document.getElementById("montados").innerText =
-        pieces.filter(p => p.steps[4]).length;
 }
+
+return "Pendiente";
+
+}
+
+
+
+/* CLASE DEL ESTADO */
+
+function claseEstado(estado){
+
+if(estado==="Taller")
+return "estado-taller";
+
+if(estado==="En tránsito")
+return "estado-transito";
+
+if(estado==="En obra")
+return "estado-obra";
+
+if(estado==="Calidad")
+return "estado-calidad";
+
+if(estado==="Montado")
+return "estado-montado";
+
+return "";
+
+}
+
+
+
+/* AVANZAR */
+
+function avanzar(index){
+
+let etapaActual = -1;
+
+for(
+let i=0;
+i<5;
+i++
+){
+
+if(
+premoldeados[index]
+.etapas[i]
+.done
+){
+
+etapaActual=i;
+
+}
+
+}
+
+
+let siguiente=etapaActual+1;
+
+
+if(siguiente>=5){
+
+alert("Este premoldeado ya está montado.");
+
+return;
+
+}
+
+
+const responsable =
+prompt(
+"Nombre del responsable:"
+);
+
+
+if(!responsable)
+return;
+
+
+premoldeados[index]
+.etapas[siguiente]={
+
+done:true,
+
+responsable:responsable,
+
+fecha:fechaActual()
+
+};
+
+
+guardar();
 
 render();
+
+}
+
+
+
+/* NUEVO */
+
+function agregarPremoldeado(){
+
+const code =
+document.getElementById("newCode")
+.value.trim();
+
+const type =
+document.getElementById("newType")
+.value.trim()
+.toUpperCase();
+
+
+if(!code || !type){
+
+alert(
+"Completá el código y el tipo."
+);
+
+return;
+
+}
+
+
+premoldeados.push({
+
+code:code,
+
+type:type,
+
+etapas:[
+
+{done:false},
+
+{done:false},
+
+{done:false},
+
+{done:false},
+
+{done:false}
+
+]
+
+});
+
+
+guardar();
+
+document.getElementById("newCode")
+.value="";
+
+document.getElementById("newType")
+.value="";
+
+ocultarFormulario();
+
+render();
+
+}
+
+
+
+/* FORMULARIO */
+
+function mostrarFormulario(){
+
+document.getElementById("addForm")
+.style.display="block";
+
+}
+
+
+function ocultarFormulario(){
+
+document.getElementById("addForm")
+.style.display="none";
+
+}
+
+
+
+/* TIPOS */
+
+function actualizarTipos(){
+
+const select =
+document.getElementById("filtroTipo");
+
+const tipos =
+[
+...new Set(
+premoldeados.map(p=>p.type)
+)
+].sort();
+
+
+const valorActual =
+select.value;
+
+
+select.innerHTML =
+'<option value="todos">Todos los tipos</option>';
+
+
+tipos.forEach(tipo=>{
+
+const option =
+document.createElement("option");
+
+option.value=tipo;
+
+option.textContent=tipo;
+
+select.appendChild(option);
+
+});
+
+
+if(
+tipos.includes(valorActual)
+){
+
+select.value=valorActual;
+
+}
+
+}
+
+
+
+/* RESUMEN */
+
+function actualizarResumen(){
+
+document.getElementById(
+"totalGeneral"
+).textContent =
+premoldeados.length;
+
+
+document.getElementById(
+"totalObra"
+).textContent =
+
+premoldeados.filter(
+p=>p.etapas[2].done &&
+!p.etapas[4].done
+).length;
+
+
+document.getElementById(
+"totalMontados"
+).textContent =
+
+premoldeados.filter(
+p=>p.etapas[4].done
+).length;
+
+
+
+const tipos =
+[
+...new Set(
+premoldeados.map(p=>p.type)
+)
+].sort();
+
+
+const tabla =
+document.getElementById(
+"tablaTipos"
+);
+
+
+tabla.innerHTML="";
+
+
+tipos.forEach(tipo=>{
+
+const piezas =
+premoldeados.filter(
+p=>p.type===tipo
+);
+
+
+const total =
+piezas.length;
+
+
+const obra =
+piezas.filter(
+p=>
+p.etapas[2].done &&
+!p.etapas[4].done
+).length;
+
+
+const montados =
+piezas.filter(
+p=>p.etapas[4].done
+).length;
+
+
+const porcentaje =
+total===0
+?0
+:Math.round(
+(montados/total)*100
+);
+
+
+tabla.innerHTML += `
+
+<tr>
+
+<td>${tipo}</td>
+
+<td>${total}</td>
+
+<td>${obra}</td>
+
+<td>${montados}</td>
+
+<td>
+
+<div class="barra">
+
+<div
+class="barra-progreso"
+style="width:${porcentaje}%">
+</div>
+
+</div>
+
+${porcentaje}%
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+
+/* RENDER */
+
+function render(){
+
+actualizarTipos();
+
+actualizarResumen();
+
+
+const texto =
+document.getElementById(
+"search"
+).value.toLowerCase();
+
+
+const filtro =
+document.getElementById(
+"filtroTipo"
+).value;
+
+
+const filtrados =
+premoldeados.filter(p=>{
+
+const coincideTexto =
+p.code
+.toLowerCase()
+.includes(texto);
+
+
+const coincideTipo =
+filtro==="todos" ||
+p.type===filtro;
+
+
+return
+coincideTexto &&
+coincideTipo;
+
+});
+
+
+const lista =
+document.getElementById(
+"list"
+);
+
+
+if(filtrados.length===0){
+
+lista.innerHTML=`
+
+<div class="empty">
+
+No se encontraron premoldeados.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+lista.innerHTML =
+filtrados.map(p=>{
+
+const index =
+premoldeados.indexOf(p);
+
+
+const estado =
+obtenerEstado(p);
+
+
+const ultimoIndice =
+p.etapas.findLastIndex(
+e=>e.done
+);
+
+
+let detalle="Pendiente";
+
+
+if(ultimoIndice>=0){
+
+detalle =
+p.etapas[
+ultimoIndice
+].responsable
++
+" · "
++
+p.etapas[
+ultimoIndice
+].fecha;
+
+}
+
+
+const terminado =
+ultimoIndice===4;
+
+
+return `
+
+<div class="pieza">
+
+<div class="pieza-info">
+
+<div class="codigo">
+
+${p.code}
+
+</div>
+
+<div class="tipo">
+
+Tipo: <strong>${p.type}</strong>
+
+</div>
+
+<div style="
+font-size:11px;
+color:#64748b;
+margin-top:6px;
+">
+
+${detalle}
+
+</div>
+
+</div>
+
+
+<div class="estado
+${claseEstado(estado)}
+">
+
+${estado}
+
+</div>
+
+
+${
+terminado
+?
+""
+:
+`
+
+<button
+class="btn-avanzar"
+onclick="avanzar(${index})">
+
+Avanzar →
+
+</button>
+
+`
+}
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+
+/* INICIO */
+
+render();
+
 
 </script>
 
 </body>
+
 </html>
+```
