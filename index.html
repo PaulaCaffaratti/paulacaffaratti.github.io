@@ -12,414 +12,479 @@
 <style>
 
 *{
-    box-sizing:border-box;
+box-sizing:border-box;
 }
 
 body{
-    margin:0;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#f5f7fb;
-    color:#172033;
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f5f7fb;
+color:#172033;
 }
 
 .app{
-    display:flex;
-    min-height:100vh;
+display:flex;
+min-height:100vh;
 }
 
 .sidebar{
-    width:220px;
-    background:#fff;
-    border-right:1px solid #e7eaf0;
-    padding:22px 14px;
-    position:fixed;
-    top:0;
-    bottom:0;
+width:220px;
+background:#fff;
+border-right:1px solid #e7eaf0;
+padding:22px 14px;
+position:fixed;
+top:0;
+bottom:0;
 }
 
 .logo{
-    padding:8px 12px 25px;
-    font-size:18px;
-    font-weight:700;
-    color:#173b8f;
+padding:8px 12px 25px;
+font-size:18px;
+font-weight:700;
+color:#173b8f;
 }
 
 .logo span{
-    display:block;
-    font-size:11px;
-    color:#8a94a6;
-    margin-top:5px;
-    font-weight:400;
+display:block;
+font-size:11px;
+color:#8a94a6;
+margin-top:5px;
+font-weight:400;
 }
 
 .menu{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
+display:flex;
+flex-direction:column;
+gap:6px;
 }
 
 .menu a{
-    text-decoration:none;
-    color:#697386;
-    padding:12px 13px;
-    border-radius:9px;
-    font-size:14px;
+text-decoration:none;
+color:#697386;
+padding:12px 13px;
+border-radius:9px;
+font-size:14px;
 }
 
 .menu a:hover{
-    background:#f1f4fa;
-    color:#1745d1;
+background:#f1f4fa;
+color:#1745d1;
 }
 
 .menu a.active{
-    background:#edf3ff;
-    color:#1745d1;
-    font-weight:700;
+background:#edf3ff;
+color:#1745d1;
+font-weight:700;
 }
 
 .main{
-    margin-left:220px;
-    width:calc(100% - 220px);
+margin-left:220px;
+width:calc(100% - 220px);
 }
 
 .topbar{
-    height:70px;
-    background:#fff;
-    border-bottom:1px solid #e7eaf0;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 30px;
+height:70px;
+background:#fff;
+border-bottom:1px solid #e7eaf0;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
 }
 
 .project-title{
-    font-size:13px;
-    color:#8a94a6;
+font-size:13px;
+color:#8a94a6;
 }
 
 .project-title strong{
-    color:#172033;
-    font-size:16px;
-    margin-left:8px;
+color:#172033;
+font-size:16px;
+margin-left:8px;
 }
 
 .status-live{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    font-size:12px;
-    color:#657084;
+display:flex;
+align-items:center;
+gap:7px;
+font-size:12px;
+color:#657084;
 }
 
 .dot{
-    width:8px;
-    height:8px;
-    background:#f2994a;
-    border-radius:50%;
+width:8px;
+height:8px;
+background:#f2994a;
+border-radius:50%;
 }
 
 .content{
-    padding:28px 32px 50px;
-    max-width:1500px;
-    margin:auto;
+padding:28px 32px 50px;
+max-width:1500px;
+margin:auto;
 }
 
 .page-title{
-    margin-bottom:22px;
+margin-bottom:22px;
 }
 
 .page-title h1{
-    margin:0;
-    font-size:25px;
+margin:0;
+font-size:25px;
 }
 
 .page-title p{
-    margin:6px 0 0;
-    color:#8a94a6;
-    font-size:13px;
+margin:6px 0 0;
+color:#8a94a6;
+font-size:13px;
 }
 
 .kpis{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:16px;
-    margin-bottom:18px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:16px;
+margin-bottom:18px;
 }
 
 .kpi{
-    background:#fff;
-    border:1px solid #e8ebf1;
-    border-radius:12px;
-    padding:19px;
+background:#fff;
+border:1px solid #e8ebf1;
+border-radius:12px;
+padding:19px;
 }
 
 .kpi-label{
-    font-size:12px;
-    color:#8a94a6;
-    margin-bottom:9px;
+font-size:12px;
+color:#8a94a6;
+margin-bottom:9px;
 }
 
 .kpi-value{
-    font-size:28px;
-    font-weight:700;
+font-size:28px;
+font-weight:700;
 }
 
 .kpi-sub{
-    margin-top:7px;
-    font-size:11px;
-    color:#8a94a6;
+margin-top:7px;
+font-size:11px;
+color:#8a94a6;
 }
 
-.kpi-main{border-left:4px solid #2855d9}
-.kpi-green{border-left:4px solid #27ae60}
-.kpi-orange{border-left:4px solid #f2994a}
-.kpi-purple{border-left:4px solid #8e63ce}
+.kpi-main{
+border-left:4px solid #2855d9;
+}
+
+.kpi-green{
+border-left:4px solid #27ae60;
+}
+
+.kpi-orange{
+border-left:4px solid #f2994a;
+}
+
+.kpi-purple{
+border-left:4px solid #8e63ce;
+}
 
 .card{
-    background:#fff;
-    border:1px solid #e8ebf1;
-    border-radius:12px;
-    padding:20px;
+background:#fff;
+border:1px solid #e8ebf1;
+border-radius:12px;
+padding:20px;
 }
 
 .card-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:18px;
 }
 
 .card-title{
-    font-size:15px;
-    font-weight:700;
+font-size:15px;
+font-weight:700;
 }
 
 .card-subtitle{
-    color:#929bad;
-    font-size:11px;
-    margin-top:4px;
+color:#929bad;
+font-size:11px;
+margin-top:4px;
 }
 
 .dashboard-grid{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:18px;
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:18px;
 }
 
 .chart-container{
-    height:330px;
+height:330px;
 }
 
 .status-box{
-    background:#f7f9fc;
-    border-radius:10px;
-    padding:18px;
-    margin-bottom:15px;
+background:#f7f9fc;
+border-radius:10px;
+padding:18px;
+margin-bottom:15px;
 }
 
 .status-big{
-    font-size:26px;
-    font-weight:700;
+font-size:26px;
+font-weight:700;
 }
 
 .status-label{
-    color:#8a94a6;
-    font-size:11px;
-    margin-top:4px;
+color:#8a94a6;
+font-size:11px;
+margin-top:4px;
 }
 
 .progress{
-    height:8px;
-    background:#e8edf5;
-    border-radius:20px;
-    overflow:hidden;
-    margin:15px 0 8px;
+height:8px;
+background:#e8edf5;
+border-radius:20px;
+overflow:hidden;
+margin:15px 0 8px;
 }
 
 .progress-bar{
-    height:100%;
-    width:0;
-    background:#2855d9;
-    border-radius:20px;
+height:100%;
+width:0;
+background:#2855d9;
+border-radius:20px;
 }
 
 .progress-info{
-    display:flex;
-    justify-content:space-between;
-    font-size:11px;
-    color:#7c8799;
+display:flex;
+justify-content:space-between;
+font-size:11px;
+color:#7c8799;
 }
 
 .flow{
-    margin-top:18px;
+margin-top:18px;
 }
 
 .flow-grid{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:10px;
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:10px;
 }
 
 .flow-step{
-    border:1px solid #e7eaf0;
-    border-radius:10px;
-    padding:16px 12px;
-    background:#fff;
+border:1px solid #e7eaf0;
+border-radius:10px;
+padding:16px 12px;
+background:#fff;
 }
 
 .flow-icon{
-    font-size:21px;
-    margin-bottom:9px;
+font-size:21px;
+margin-bottom:9px;
 }
 
 .flow-name{
-    font-size:12px;
-    font-weight:700;
+font-size:12px;
+font-weight:700;
 }
 
 .flow-value{
-    font-size:22px;
-    font-weight:700;
-    margin-top:7px;
+font-size:22px;
+font-weight:700;
+margin-top:7px;
 }
 
 .flow-percent{
-    font-size:10px;
-    color:#8a94a6;
-    margin-top:3px;
+font-size:10px;
+color:#8a94a6;
+margin-top:3px;
 }
 
 .tipo-card{
-    margin-top:18px;
+margin-top:18px;
+}
+
+.tipo-actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.tipo-btn{
+border:1px solid #dce3ea;
+background:#fff;
+color:#45556d;
+padding:8px 12px;
+border-radius:8px;
+font-size:12px;
+font-weight:700;
+cursor:pointer;
+}
+
+.tipo-btn:hover{
+background:#f4f7fb;
+}
+
+.tipo-btn.active{
+background:#edf3ff;
+border-color:#bfd0ff;
+color:#1745d1;
+}
+
+.detalle-tipos{
+display:none;
+margin-top:10px;
+}
+
+.detalle-tipos.visible{
+display:block;
+}
+
+.tipo-chart-wrap{
+width:100%;
+min-height:400px;
+position:relative;
 }
 
 .tabla-scroll{
-    overflow-x:auto;
+overflow-x:auto;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
+width:100%;
+border-collapse:collapse;
 }
 
 th{
-    text-align:left;
-    color:#929bad;
-    font-size:10px;
-    padding:11px 8px;
-    border-bottom:1px solid #edf0f4;
+text-align:left;
+color:#929bad;
+font-size:10px;
+padding:11px 8px;
+border-bottom:1px solid #edf0f4;
 }
 
 td{
-    padding:12px 8px;
-    font-size:12px;
-    border-bottom:1px solid #f0f2f6;
+padding:12px 8px;
+font-size:12px;
+border-bottom:1px solid #f0f2f6;
 }
 
 .tipo-table th:not(:first-child),
 .tipo-table td:not(:first-child){
-    text-align:center;
+text-align:center;
 }
 
 .tipo-nombre{
-    font-weight:700;
+font-weight:700;
 }
 
 .tipo-total{
-    font-weight:700;
+font-weight:700;
 }
 
 .bottom-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-    margin-top:18px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+margin-top:18px;
 }
 
 .badge{
-    padding:5px 8px;
-    border-radius:20px;
-    font-size:10px;
-    font-weight:700;
+padding:5px 8px;
+border-radius:20px;
+font-size:10px;
+font-weight:700;
 }
 
 .badge-green{
-    background:#e9f8ef;
-    color:#239653;
+background:#e9f8ef;
+color:#239653;
 }
 
 .badge-blue{
-    background:#edf3ff;
-    color:#2855d9;
+background:#edf3ff;
+color:#2855d9;
 }
 
 .badge-orange{
-    background:#fff3e8;
-    color:#d97924;
+background:#fff3e8;
+color:#d97924;
 }
 
 .badge-gray{
-    background:#eef1f5;
-    color:#687386;
+background:#eef1f5;
+color:#687386;
 }
 
 .error{
-    display:none;
-    background:#fff0f0;
-    border:1px solid #ffc7c7;
-    color:#a32121;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:18px;
-    font-size:13px;
+display:none;
+background:#fff0f0;
+border:1px solid #ffc7c7;
+color:#a32121;
+padding:12px;
+border-radius:8px;
+margin-bottom:18px;
+font-size:13px;
 }
 
 @media(max-width:1100px){
-    .flow-grid{
-        grid-template-columns:repeat(3,1fr);
-    }
+
+.flow-grid{
+grid-template-columns:repeat(3,1fr);
+}
+
 }
 
 @media(max-width:1000px){
-    .sidebar{
-        width:70px;
-    }
 
-    .logo span,
-    .menu a span{
-        display:none;
-    }
+.sidebar{
+width:70px;
+}
 
-    .main{
-        margin-left:70px;
-        width:calc(100% - 70px);
-    }
+.logo span,
+.menu a span{
+display:none;
+}
 
-    .kpis{
-        grid-template-columns:repeat(2,1fr);
-    }
+.main{
+margin-left:70px;
+width:calc(100% - 70px);
+}
 
-    .dashboard-grid{
-        grid-template-columns:1fr;
-    }
+.kpis{
+grid-template-columns:repeat(2,1fr);
+}
+
+.dashboard-grid{
+grid-template-columns:1fr;
+}
+
 }
 
 @media(max-width:700px){
-    .content{
-        padding:18px;
-    }
 
-    .kpis{
-        grid-template-columns:1fr;
-    }
+.content{
+padding:18px;
+}
 
-    .flow-grid{
-        grid-template-columns:1fr 1fr;
-    }
+.kpis{
+grid-template-columns:1fr;
+}
 
-    .bottom-grid{
-        grid-template-columns:1fr;
-    }
+.flow-grid{
+grid-template-columns:1fr 1fr;
+}
+
+.bottom-grid{
+grid-template-columns:1fr;
+}
+
+.card-header{
+align-items:flex-start;
+flex-direction:column;
+}
+
 }
 
 </style>
@@ -437,9 +502,19 @@ td{
 </div>
 
 <nav class="menu">
-<a href="index.html" class="active">📊 <span>Resumen</span></a>
-<a href="base.html">📋 <span>Base de Ingeniería</span></a>
-<a href="avance.html">🚀 <span>Avance</span></a>
+
+<a href="index.html" class="active">
+📊 <span>Resumen</span>
+</a>
+
+<a href="base.html">
+📋 <span>Base de Ingeniería</span>
+</a>
+
+<a href="avance.html">
+🚀 <span>Avance</span>
+</a>
+
 </nav>
 
 </aside>
@@ -472,44 +547,100 @@ Proyecto
 <div class="error" id="errorBox"></div>
 
 
+<!-- KPIs -->
+
 <section class="kpis">
 
 <div class="kpi kpi-main">
-<div class="kpi-label">TOTAL DE PIEZAS</div>
-<div class="kpi-value" id="total">0</div>
-<div class="kpi-sub">Base de Ingeniería</div>
+
+<div class="kpi-label">
+TOTAL DE PIEZAS
 </div>
+
+<div class="kpi-value" id="total">
+0
+</div>
+
+<div class="kpi-sub">
+Base de Ingeniería
+</div>
+
+</div>
+
 
 <div class="kpi kpi-green">
-<div class="kpi-label">LIBERADAS EN TALLER</div>
-<div class="kpi-value" id="liberadas">0</div>
-<div class="kpi-sub" id="liberadasPct">0% del total</div>
+
+<div class="kpi-label">
+LIBERADAS EN TALLER
 </div>
+
+<div class="kpi-value" id="liberadas">
+0
+</div>
+
+<div class="kpi-sub" id="liberadasPct">
+0% del total
+</div>
+
+</div>
+
 
 <div class="kpi kpi-orange">
-<div class="kpi-label">EN OBRA</div>
-<div class="kpi-value" id="obra">0</div>
-<div class="kpi-sub" id="obraPct">0% del total</div>
+
+<div class="kpi-label">
+EN OBRA
 </div>
 
+<div class="kpi-value" id="obra">
+0
+</div>
+
+<div class="kpi-sub" id="obraPct">
+0% del total
+</div>
+
+</div>
+
+
 <div class="kpi kpi-purple">
-<div class="kpi-label">MONTADAS</div>
-<div class="kpi-value" id="kpiMontadas">0</div>
-<div class="kpi-sub" id="kpiMontadasPct">0% del total</div>
+
+<div class="kpi-label">
+MONTADAS
+</div>
+
+<div class="kpi-value" id="kpiMontadas">
+0
+</div>
+
+<div class="kpi-sub" id="kpiMontadasPct">
+0% del total
+</div>
+
 </div>
 
 </section>
 
+
+<!-- CURVA + ESTADO -->
 
 <div class="dashboard-grid">
 
 <section class="card">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Avance acumulado del proyecto</div>
-<div class="card-subtitle">Curva S — Planificado vs Real</div>
+
+<div class="card-title">
+Avance acumulado del proyecto
 </div>
+
+<div class="card-subtitle">
+Curva S — Planificado vs Real
+</div>
+
+</div>
+
 </div>
 
 <div class="chart-container">
@@ -522,11 +653,21 @@ Proyecto
 <section class="card">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Estado del proyecto</div>
-<div class="card-subtitle">Indicador ejecutivo</div>
+
+<div class="card-title">
+Estado del proyecto
 </div>
+
+<div class="card-subtitle">
+Indicador ejecutivo
 </div>
+
+</div>
+
+</div>
+
 
 <div class="status-box">
 
@@ -543,181 +684,521 @@ Estado general
 </div>
 
 <div class="progress-info">
-<span>Avance real</span>
-<strong id="progressText">0%</strong>
+
+<span>
+Avance real
+</span>
+
+<strong id="progressText">
+0%
+</strong>
+
 </div>
 
 </div>
 
 
 <div class="status-box">
-<div class="status-big" id="deviation">0%</div>
-<div class="status-label">Desvío contra planificación</div>
+
+<div class="status-big" id="deviation">
+0%
+</div>
+
+<div class="status-label">
+Desvío contra planificación
+</div>
+
 </div>
 
 
 <div class="status-box">
-<div class="status-label">Última actualización</div>
-<div id="lastUpdate" style="font-weight:700;margin-top:5px">-</div>
+
+<div class="status-label">
+Última actualización
+</div>
+
+<div
+id="lastUpdate"
+style="font-weight:700;margin-top:5px">
+
+-
+
+</div>
+
 </div>
 
 </section>
 
 </div>
 
+
+<!-- FLUJO -->
 
 <section class="card flow">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Flujo de premoldeados</div>
-<div class="card-subtitle">QA/QC se calcula contra las piezas en obra</div>
+
+<div class="card-title">
+Flujo de premoldeados
 </div>
+
+<div class="card-subtitle">
+QA/QC se calcula contra las piezas en obra
 </div>
+
+</div>
+
+</div>
+
 
 <div class="flow-grid">
 
-<div class="flow-step">
-<div class="flow-icon">🏭</div>
-<div class="flow-name">En taller</div>
-<div class="flow-value" id="taller">0</div>
-<div class="flow-percent" id="tallerPct">0%</div>
-</div>
 
 <div class="flow-step">
-<div class="flow-icon">✓</div>
-<div class="flow-name">Liberada</div>
-<div class="flow-value" id="flowLiberadas">0</div>
-<div class="flow-percent" id="flowLiberadasPct">0%</div>
+
+<div class="flow-icon">
+🏭
 </div>
 
-<div class="flow-step">
-<div class="flow-icon">🚧</div>
-<div class="flow-name">En obra</div>
-<div class="flow-value" id="flowObra">0</div>
-<div class="flow-percent" id="flowObraPct">0%</div>
+<div class="flow-name">
+En taller
 </div>
 
-<div class="flow-step">
-<div class="flow-icon">✔</div>
-<div class="flow-name">QA/QC</div>
-<div class="flow-value" id="qaqc">0</div>
-<div class="flow-percent" id="qaqcPct">0%</div>
+<div class="flow-value" id="taller">
+0
 </div>
 
-<div class="flow-step">
-<div class="flow-icon">🏗️</div>
-<div class="flow-name">Montada</div>
-<div class="flow-value" id="montadas">0</div>
-<div class="flow-percent" id="montadasPctFlow">0%</div>
+<div class="flow-percent" id="tallerPct">
+0%
 </div>
 
-<div class="flow-step">
-<div class="flow-icon">🎨</div>
-<div class="flow-name">Pintada</div>
-<div class="flow-value" id="flowPintadas">0</div>
-<div class="flow-percent" id="flowPintadasPct">0%</div>
 </div>
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+✓
+</div>
+
+<div class="flow-name">
+Liberada
+</div>
+
+<div class="flow-value" id="flowLiberadas">
+0
+</div>
+
+<div class="flow-percent" id="flowLiberadasPct">
+0%
+</div>
+
+</div>
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+🚧
+</div>
+
+<div class="flow-name">
+En obra
+</div>
+
+<div class="flow-value" id="flowObra">
+0
+</div>
+
+<div class="flow-percent" id="flowObraPct">
+0%
+</div>
+
+</div>
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+✔
+</div>
+
+<div class="flow-name">
+QA/QC
+</div>
+
+<div class="flow-value" id="qaqc">
+0
+</div>
+
+<div class="flow-percent" id="qaqcPct">
+0%
+</div>
+
+</div>
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+🏗️
+</div>
+
+<div class="flow-name">
+Montada
+</div>
+
+<div class="flow-value" id="montadas">
+0
+</div>
+
+<div class="flow-percent" id="montadasPctFlow">
+0%
+</div>
+
+</div>
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+🎨
+</div>
+
+<div class="flow-name">
+Pintada
+</div>
+
+<div class="flow-value" id="flowPintadas">
+0
+</div>
+
+<div class="flow-percent" id="flowPintadasPct">
+0%
+</div>
+
+</div>
+
 
 </div>
 
 </section>
 
 
+<!-- AVANCE POR TIPO -->
+
 <section class="card tipo-card">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Avance por tipo de premoldeado</div>
-<div class="card-subtitle">Comparación contra el total cargado por Ingeniería</div>
+
+<div class="card-title">
+Avance por tipo de premoldeado
 </div>
+
+<div class="card-subtitle">
+Detalle agrupado según tipo cargado por Ingeniería
 </div>
+
+</div>
+
+
+<div class="tipo-actions">
+
+<button
+id="btnGrafico"
+class="tipo-btn"
+onclick="mostrarDetalleTipos('grafico')">
+
+📊 Gráfico
+
+</button>
+
+<button
+id="btnTabla"
+class="tipo-btn"
+onclick="mostrarDetalleTipos('tabla')">
+
+📋 Tabla
+
+</button>
+
+<button
+class="tipo-btn"
+onclick="ocultarDetalleTipos()">
+
+🙈 Ocultar
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- GRÁFICO OCULTO -->
+
+<div
+id="detalleGrafico"
+class="detalle-tipos">
+
+<div
+id="tipoChartWrap"
+class="tipo-chart-wrap">
+
+<canvas id="graficoTipos"></canvas>
+
+</div>
+
+</div>
+
+
+<!-- TABLA OCULTA -->
+
+<div
+id="detalleTabla"
+class="detalle-tipos">
 
 <div class="tabla-scroll">
 
 <table class="tipo-table">
 
 <thead>
+
 <tr>
+
 <th>TIPO</th>
+
 <th>TOTAL INGENIERÍA</th>
+
 <th>EN TALLER</th>
+
 <th>EN OBRA</th>
+
 <th>MONTADAS</th>
+
 </tr>
+
 </thead>
 
+
 <tbody id="tablaTipos">
+
 <tr>
-<td colspan="5">Cargando...</td>
+
+<td colspan="5">
+Cargando...
+</td>
+
 </tr>
+
 </tbody>
 
 </table>
 
 </div>
 
+</div>
+
 </section>
 
 
+<!-- INDICADORES -->
+
 <div class="bottom-grid">
+
 
 <section class="card">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Indicadores de avance</div>
-<div class="card-subtitle">Resumen acumulado por etapa</div>
+
+<div class="card-title">
+Indicadores de avance
 </div>
+
+<div class="card-subtitle">
+Resumen acumulado por etapa
 </div>
+
+</div>
+
+</div>
+
 
 <table>
 
 <thead>
+
 <tr>
+
 <th>ETAPA</th>
+
 <th>CANTIDAD</th>
+
 <th>AVANCE</th>
+
 </tr>
+
 </thead>
+
 
 <tbody>
 
-<tr>
-<td>Taller</td>
-<td id="tblTaller">0</td>
-<td><span class="badge badge-gray" id="tblTallerPct">0%</span></td>
-</tr>
 
 <tr>
-<td>Liberada taller</td>
-<td id="tblLiberadas">0</td>
-<td><span class="badge badge-green" id="tblLiberadasPct">0%</span></td>
+
+<td>
+Taller
+</td>
+
+<td id="tblTaller">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-gray"
+id="tblTallerPct">
+
+0%
+
+</span>
+
+</td>
+
 </tr>
 
-<tr>
-<td>En obra</td>
-<td id="tblObra">0</td>
-<td><span class="badge badge-orange" id="tblObraPct">0%</span></td>
-</tr>
 
 <tr>
-<td>QA/QC</td>
-<td id="tblQA">0</td>
-<td><span class="badge badge-blue" id="tblQAPct">0%</span></td>
+
+<td>
+Liberada taller
+</td>
+
+<td id="tblLiberadas">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-green"
+id="tblLiberadasPct">
+
+0%
+
+</span>
+
+</td>
+
 </tr>
 
-<tr>
-<td>Montada</td>
-<td id="tblMontadas">0</td>
-<td><span class="badge badge-green" id="tblMontadasPct">0%</span></td>
-</tr>
 
 <tr>
-<td>Pintada</td>
-<td id="tblPintadas">0</td>
-<td><span class="badge badge-green" id="tblPintadasPct">0%</span></td>
+
+<td>
+En obra
+</td>
+
+<td id="tblObra">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-orange"
+id="tblObraPct">
+
+0%
+
+</span>
+
+</td>
+
 </tr>
+
+
+<tr>
+
+<td>
+QA/QC
+</td>
+
+<td id="tblQA">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-blue"
+id="tblQAPct">
+
+0%
+
+</span>
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+Montada
+</td>
+
+<td id="tblMontadas">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-green"
+id="tblMontadasPct">
+
+0%
+
+</span>
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td>
+Pintada
+</td>
+
+<td id="tblPintadas">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-green"
+id="tblPintadasPct">
+
+0%
+
+</span>
+
+</td>
+
+</tr>
+
 
 </tbody>
 
@@ -726,38 +1207,84 @@ Estado general
 </section>
 
 
+<!-- LECTURA EJECUTIVA -->
+
 <section class="card">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Lectura ejecutiva</div>
-<div class="card-subtitle">Situación actual del proyecto</div>
-</div>
+
+<div class="card-title">
+Lectura ejecutiva
 </div>
 
-<div style="font-size:13px;line-height:1.7;color:#687386">
+<div class="card-subtitle">
+Situación actual del proyecto
+</div>
+
+</div>
+
+</div>
+
+
+<div
+style="
+font-size:13px;
+line-height:1.7;
+color:#687386;
+">
 
 <strong style="color:#172033">
 Avance general
 </strong>
 
-<p>
-El proyecto presenta un avance ponderado acumulado del
-<strong id="executivePct">0%</strong>.
-</p>
 
 <p>
-Liberadas en taller:
-<strong id="executiveLiberadas">0</strong>.
-En obra:
-<strong id="executiveObra">0</strong>.
-QA/QC:
-<strong id="executiveQA">0</strong>.
-Montadas:
-<strong id="executiveMontadas">0</strong>.
-Pintadas:
-<strong id="executivePintadas">0</strong>.
+
+El proyecto presenta un avance ponderado acumulado del
+
+<strong id="executivePct">
+0%
+</strong>.
+
 </p>
+
+
+<p>
+
+Liberadas en taller:
+
+<strong id="executiveLiberadas">
+0
+</strong>.
+
+En obra:
+
+<strong id="executiveObra">
+0
+</strong>.
+
+QA/QC:
+
+<strong id="executiveQA">
+0
+</strong>.
+
+Montadas:
+
+<strong id="executiveMontadas">
+0
+</strong>.
+
+Pintadas:
+
+<strong id="executivePintadas">
+0
+</strong>.
+
+</p>
+
 
 <p>
 Todos los indicadores se leen directamente desde Supabase.
@@ -766,6 +1293,7 @@ Todos los indicadores se leen directamente desde Supabase.
 </div>
 
 </section>
+
 
 </div>
 
@@ -778,11 +1306,17 @@ Todos los indicadores se leen directamente desde Supabase.
 
 <script>
 
+/* =====================================================
+SUPABASE
+===================================================== */
+
 const SUPABASE_URL =
 "https://tnnioleawbhuqjuykrsf.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
+
 
 const db =
 supabase.createClient(
@@ -791,29 +1325,47 @@ SUPABASE_KEY
 );
 
 
+/* =====================================================
+PLANIFICACIÓN
+===================================================== */
+
 const PLAN = [
 
 {fecha:"2026-08-01",porcentaje:5},
+
 {fecha:"2026-09-01",porcentaje:15},
+
 {fecha:"2026-10-01",porcentaje:30},
+
 {fecha:"2026-11-01",porcentaje:48},
+
 {fecha:"2026-12-01",porcentaje:65},
+
 {fecha:"2027-01-01",porcentaje:78},
+
 {fecha:"2027-02-01",porcentaje:88},
+
 {fecha:"2027-03-01",porcentaje:95},
+
 {fecha:"2027-04-01",porcentaje:100}
 
 ];
 
 
 let piezas=[];
+
 let chart=null;
+
+let chartTipos=null;
+
 let timer=null;
 
+let datosTipos=[];
 
-/* =========================
+
+/* =====================================================
 CARGAR DATOS
-========================= */
+===================================================== */
 
 async function cargarDatos(){
 
@@ -828,10 +1380,13 @@ data,
 error
 }=
 await db
+
 .from("premoldeados")
+
 .select(
 "id,codigo,tipo,modelo,etapa,montada,pintada,responsable,fecha,created_at"
 )
+
 .order(
 "id",
 {
@@ -844,15 +1399,20 @@ if(error){
 
 console.error(error);
 
+
 setConnection(
 "Error de conexión",
 "#eb5757"
 );
 
+
 mostrarError(
+
 "No se pudo leer la tabla premoldeados: "+
 error.message
+
 );
+
 
 return;
 
@@ -890,9 +1450,9 @@ cargarDatos,
 }
 
 
-/* =========================
+/* =====================================================
 DASHBOARD
-========================= */
+===================================================== */
 
 function actualizarDashboard(){
 
@@ -901,12 +1461,14 @@ piezas.length;
 
 
 /*
-0 = Taller
-1 = Liberada Taller
-2 = En Obra
+ETAPAS
+
+0 = EN TALLER
+1 = LIBERADA EN TALLER
+2 = EN OBRA
 3 = QA/QC
 
-Montada y Pintada son independientes.
+MONTAJE Y PINTURA SON INDEPENDIENTES
 */
 
 
@@ -946,11 +1508,10 @@ p=>p.pintada===true
 ).length;
 
 
-/*
-PORCENTAJES CONTRA TOTAL INGENIERÍA
-*/
+/* PORCENTAJE SOBRE INGENIERÍA */
 
-function pctTotal(cantidad){
+const pctTotal=
+cantidad=>{
 
 if(total===0){
 return 0;
@@ -962,22 +1523,16 @@ total *
 100
 );
 
-}
+};
 
 
 /*
-PORCENTAJE QA/QC
+CALIDAD
 
-ESTE ES EL CAMBIO IMPORTANTE.
+LA BASE ES EN OBRA.
 
-EL DENOMINADOR ES "EN OBRA".
-
-NO ES TOTAL INGENIERÍA.
-
-Ejemplo:
-obra = 90
-qaqc = 90
-resultado = 100%
+90 QA/QC / 90 EN OBRA
+= 100%
 */
 
 const pctCalidad=
@@ -987,28 +1542,15 @@ obra===0
 ?0
 
 :Math.round(
+
 (qaqc / obra) * 100
+
 );
 
 
 /*
 AVANCE GENERAL
 */
-
-const hitosCompletados=
-
-taller +
-
-liberadas +
-
-obra +
-
-qaqc +
-
-montadas +
-
-pintadas;
-
 
 const avanceGeneral=
 
@@ -1018,16 +1560,27 @@ total===0
 
 :Math.round(
 
-hitosCompletados /
-(total*6) *
+(
+taller +
+liberadas +
+obra +
+qaqc +
+montadas +
+pintadas
+)
+
+/
+
+(total*6)
+
+*
+
 100
 
 );
 
 
-/* =========================
-KPIS SUPERIORES
-========================= */
+/* KPIs */
 
 setText(
 "total",
@@ -1074,9 +1627,7 @@ pctTotal(montadas)+
 );
 
 
-/* =========================
-FLUJO
-========================= */
+/* FLUJO */
 
 setText(
 "taller",
@@ -1114,18 +1665,17 @@ pctTotal(obra)+"%"
 );
 
 
-/*
-QA/QC:
-
-ACÁ USA pctCalidad,
-NO pctTotal.
-*/
-
 setText(
 "qaqc",
 qaqc
 );
 
+
+/*
+IMPORTANTE:
+
+ACÁ QA/QC USA pctCalidad
+*/
 
 setText(
 "qaqcPct",
@@ -1157,9 +1707,7 @@ pctTotal(pintadas)+"%"
 );
 
 
-/* =========================
-INDICADORES
-========================= */
+/* INDICADORES */
 
 setText(
 "tblTaller",
@@ -1197,17 +1745,18 @@ pctTotal(obra)+"%"
 );
 
 
-/*
-QA/QC:
-
-90 / 90 = 100%
-*/
-
 setText(
 "tblQA",
 qaqc
 );
 
+
+/*
+IMPORTANTE:
+
+TAMBIÉN ACÁ QA/QC USA
+EN OBRA COMO DENOMINADOR
+*/
 
 setText(
 "tblQAPct",
@@ -1239,9 +1788,7 @@ pctTotal(pintadas)+"%"
 );
 
 
-/* =========================
-AVANCE GENERAL
-========================= */
+/* AVANCE GENERAL */
 
 setText(
 "progressText",
@@ -1263,9 +1810,7 @@ document
 avanceGeneral+"%";
 
 
-/* =========================
-LECTURA EJECUTIVA
-========================= */
+/* EJECUTIVO */
 
 setText(
 "executiveLiberadas",
@@ -1297,13 +1842,18 @@ pintadas
 );
 
 
-actualizarTablaTipos();
+/* POR TIPO */
+
+actualizarDatosTipos();
+
 
 actualizarEstado(
 avanceGeneral
 );
 
+
 actualizarFecha();
+
 
 actualizarCurva(
 avanceGeneral
@@ -1312,17 +1862,11 @@ avanceGeneral
 }
 
 
-/* =========================
-TABLA POR TIPO
-========================= */
+/* =====================================================
+AGRUPAR POR TIPO
+===================================================== */
 
-function actualizarTablaTipos(){
-
-const tbody=
-document.getElementById(
-"tablaTipos"
-);
-
+function actualizarDatosTipos(){
 
 const agrupados={};
 
@@ -1382,7 +1926,7 @@ agrupados[tipo].montadas++;
 });
 
 
-const lista=
+datosTipos=
 Object
 .values(agrupados)
 .sort(
@@ -1394,7 +1938,42 @@ b.tipo,
 );
 
 
-if(lista.length===0){
+actualizarTablaTipos();
+
+
+const graficoVisible=
+document
+.getElementById(
+"detalleGrafico"
+)
+.classList
+.contains(
+"visible"
+);
+
+
+if(graficoVisible){
+
+actualizarGraficoTipos();
+
+}
+
+}
+
+
+/* =====================================================
+TABLA POR TIPO
+===================================================== */
+
+function actualizarTablaTipos(){
+
+const tbody=
+document.getElementById(
+"tablaTipos"
+);
+
+
+if(datosTipos.length===0){
 
 tbody.innerHTML=`
 
@@ -1417,28 +1996,46 @@ return;
 
 tbody.innerHTML=
 
-lista.map(x=>`
+datosTipos.map(x=>`
 
 <tr>
 
 <td class="tipo-nombre">
+
 ${escapeHtml(x.tipo)}
+
 </td>
+
 
 <td class="tipo-total">
+
 ${x.total}
+
 </td>
 
+
 <td>
+
 ${x.taller}
+
 </td>
 
+
 <td>
+
 ${x.obra}
+
 </td>
 
+
 <td>
-<strong>${x.montadas}</strong>
+
+<strong>
+
+${x.montadas}
+
+</strong>
+
 </td>
 
 </tr>
@@ -1448,14 +2045,390 @@ ${x.obra}
 }
 
 
-/* =========================
-ESTADO
-========================= */
+/* =====================================================
+MOSTRAR / OCULTAR DETALLE
+===================================================== */
+
+function mostrarDetalleTipos(
+modo
+){
+
+const grafico=
+document.getElementById(
+"detalleGrafico"
+);
+
+
+const tabla=
+document.getElementById(
+"detalleTabla"
+);
+
+
+const btnGrafico=
+document.getElementById(
+"btnGrafico"
+);
+
+
+const btnTabla=
+document.getElementById(
+"btnTabla"
+);
+
+
+grafico.classList.remove(
+"visible"
+);
+
+
+tabla.classList.remove(
+"visible"
+);
+
+
+btnGrafico.classList.remove(
+"active"
+);
+
+
+btnTabla.classList.remove(
+"active"
+);
+
+
+if(modo==="grafico"){
+
+grafico.classList.add(
+"visible"
+);
+
+
+btnGrafico.classList.add(
+"active"
+);
+
+
+setTimeout(
+actualizarGraficoTipos,
+50
+);
+
+}
+
+
+if(modo==="tabla"){
+
+tabla.classList.add(
+"visible"
+);
+
+
+btnTabla.classList.add(
+"active"
+);
+
+}
+
+}
+
+
+function ocultarDetalleTipos(){
+
+document
+.getElementById(
+"detalleGrafico"
+)
+.classList
+.remove(
+"visible"
+);
+
+
+document
+.getElementById(
+"detalleTabla"
+)
+.classList
+.remove(
+"visible"
+);
+
+
+document
+.getElementById(
+"btnGrafico"
+)
+.classList
+.remove(
+"active"
+);
+
+
+document
+.getElementById(
+"btnTabla"
+)
+.classList
+.remove(
+"active"
+);
+
+}
+
+
+/* =====================================================
+GRÁFICO POR TIPO
+===================================================== */
+
+function actualizarGraficoTipos(){
+
+if(datosTipos.length===0){
+return;
+}
+
+
+const wrap=
+document.getElementById(
+"tipoChartWrap"
+);
+
+
+/*
+Altura dinámica.
+
+Si hay muchos tipos,
+el gráfico crece para que
+los nombres sean legibles.
+*/
+
+wrap.style.height=
+
+Math.max(
+400,
+datosTipos.length*42
+)
++
+"px";
+
+
+const ctx=
+document
+.getElementById(
+"graficoTipos"
+)
+.getContext(
+"2d"
+);
+
+
+if(chartTipos){
+
+chartTipos.destroy();
+
+}
+
+
+chartTipos=
+new Chart(
+ctx,
+{
+
+type:"bar",
+
+
+data:{
+
+labels:
+datosTipos.map(
+x=>x.tipo
+),
+
+
+datasets:[
+
+{
+
+label:
+"Total Ingeniería",
+
+data:
+datosTipos.map(
+x=>x.total
+),
+
+backgroundColor:
+"#c9d2e3",
+
+borderRadius:
+4
+
+},
+
+{
+
+label:
+"En taller",
+
+data:
+datosTipos.map(
+x=>x.taller
+),
+
+backgroundColor:
+"#8ea9df",
+
+borderRadius:
+4
+
+},
+
+{
+
+label:
+"En obra",
+
+data:
+datosTipos.map(
+x=>x.obra
+),
+
+backgroundColor:
+"#f1a55b",
+
+borderRadius:
+4
+
+},
+
+{
+
+label:
+"Montadas",
+
+data:
+datosTipos.map(
+x=>x.montadas
+),
+
+backgroundColor:
+"#55b77a",
+
+borderRadius:
+4
+
+}
+
+]
+
+},
+
+
+options:{
+
+indexAxis:"y",
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+
+interaction:{
+
+mode:"index",
+
+intersect:false
+
+},
+
+
+plugins:{
+
+legend:{
+
+display:true,
+
+position:"top"
+
+},
+
+
+tooltip:{
+
+callbacks:{
+
+label:
+function(ctx){
+
+return (
+
+ctx.dataset.label+
+": "+
+ctx.raw
+
+);
+
+}
+
+}
+
+}
+
+},
+
+
+scales:{
+
+x:{
+
+beginAtZero:true,
+
+ticks:{
+
+precision:0
+
+},
+
+grid:{
+
+color:
+"#edf0f5"
+
+}
+
+},
+
+
+y:{
+
+grid:{
+
+display:false
+
+}
+
+}
+
+}
+
+}
+
+}
+
+);
+
+}
+
+
+/* =====================================================
+ESTADO DEL PROYECTO
+===================================================== */
 
 function obtenerPlanActual(){
 
 const hoy=
 new Date();
+
 
 let plan=0;
 
@@ -1499,18 +2472,11 @@ avanceReal-
 planActual;
 
 
-const textoDesvio=
-
-(desvio>0?"+":"")+
-
-desvio+
-
-"%";
-
-
 setText(
 "deviation",
-textoDesvio
+(desvio>0?"+":"")+
+desvio+
+"%"
 );
 
 
@@ -1553,23 +2519,11 @@ status.style.color=
 }
 
 
-/* =========================
+/* =====================================================
 FECHA
-========================= */
+===================================================== */
 
 function actualizarFecha(){
-
-if(piezas.length===0){
-
-setText(
-"lastUpdate",
-"-"
-);
-
-return;
-
-}
-
 
 const fechas=
 piezas
@@ -1626,9 +2580,9 @@ ultima.toLocaleString(
 }
 
 
-/* =========================
+/* =====================================================
 CURVA S
-========================= */
+===================================================== */
 
 function actualizarCurva(
 avanceActual
@@ -1725,45 +2679,61 @@ ctx,
 
 type:"line",
 
+
 data:{
 
 labels:labels,
+
 
 datasets:[
 
 {
 
-label:"Planificado",
+label:
+"Planificado",
 
-data:planData,
+data:
+planData,
 
-borderColor:"#b8c3d8",
+borderColor:
+"#b8c3d8",
 
-borderWidth:2,
+borderWidth:
+2,
 
-borderDash:[6,6],
+borderDash:
+[6,6],
 
-pointRadius:2,
+pointRadius:
+2,
 
-tension:0.35
+tension:
+0.35
 
 },
 
 {
 
-label:"Real",
+label:
+"Real",
 
-data:realData,
+data:
+realData,
 
-borderColor:"#2855d9",
+borderColor:
+"#2855d9",
 
-borderWidth:3,
+borderWidth:
+3,
 
-pointRadius:4,
+pointRadius:
+4,
 
-tension:0.35,
+tension:
+0.35,
 
-spanGaps:false
+spanGaps:
+false
 
 }
 
@@ -1771,11 +2741,13 @@ spanGaps:false
 
 },
 
+
 options:{
 
 responsive:true,
 
 maintainAspectRatio:false,
+
 
 interaction:{
 
@@ -1785,41 +2757,17 @@ mode:"index"
 
 },
 
+
 plugins:{
 
 legend:{
+
 display:true
-},
-
-tooltip:{
-
-callbacks:{
-
-label:
-function(ctx){
-
-if(ctx.parsed.y===null){
-
-return "";
-
-}
-
-return (
-
-ctx.dataset.label+
-": "+
-ctx.parsed.y+
-"%"
-
-);
-
-}
-
-}
 
 }
 
 },
+
 
 scales:{
 
@@ -1842,6 +2790,7 @@ return value+"%";
 
 },
 
+
 x:{
 
 grid:{
@@ -1863,9 +2812,9 @@ display:false
 }
 
 
-/* =========================
+/* =====================================================
 UTILIDADES
-========================= */
+===================================================== */
 
 function setText(
 id,
@@ -1873,7 +2822,10 @@ value
 ){
 
 const el=
-document.getElementById(id);
+document.getElementById(
+id
+);
+
 
 if(el){
 
@@ -1915,8 +2867,10 @@ document.getElementById(
 "errorBox"
 );
 
+
 box.textContent=
 mensaje;
+
 
 box.style.display=
 "block";
@@ -1956,9 +2910,9 @@ return String(text)
 }
 
 
-/* =========================
+/* =====================================================
 INICIAR
-========================= */
+===================================================== */
 
 cargarDatos();
 
