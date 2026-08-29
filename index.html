@@ -170,21 +170,10 @@ body{
     color:#8a94a6;
 }
 
-.kpi-main{
-    border-left:4px solid #2855d9;
-}
-
-.kpi-green{
-    border-left:4px solid #27ae60;
-}
-
-.kpi-orange{
-    border-left:4px solid #f2994a;
-}
-
-.kpi-purple{
-    border-left:4px solid #8e63ce;
-}
+.kpi-main{border-left:4px solid #2855d9}
+.kpi-green{border-left:4px solid #27ae60}
+.kpi-orange{border-left:4px solid #f2994a}
+.kpi-purple{border-left:4px solid #8e63ce}
 
 .card{
     background:#fff;
@@ -386,15 +375,12 @@ td{
 }
 
 @media(max-width:1100px){
-
     .flow-grid{
         grid-template-columns:repeat(3,1fr);
     }
-
 }
 
 @media(max-width:1000px){
-
     .sidebar{
         width:70px;
     }
@@ -416,11 +402,9 @@ td{
     .dashboard-grid{
         grid-template-columns:1fr;
     }
-
 }
 
 @media(max-width:700px){
-
     .content{
         padding:18px;
     }
@@ -436,7 +420,6 @@ td{
     .bottom-grid{
         grid-template-columns:1fr;
     }
-
 }
 
 </style>
@@ -454,22 +437,13 @@ td{
 </div>
 
 <nav class="menu">
-
-<a href="index.html" class="active">
-📊 <span>Resumen</span>
-</a>
-
-<a href="base.html">
-📋 <span>Base de Ingeniería</span>
-</a>
-
-<a href="avance.html">
-🚀 <span>Avance</span>
-</a>
-
+<a href="index.html" class="active">📊 <span>Resumen</span></a>
+<a href="base.html">📋 <span>Base de Ingeniería</span></a>
+<a href="avance.html">🚀 <span>Avance</span></a>
 </nav>
 
 </aside>
+
 
 <main class="main">
 
@@ -487,146 +461,72 @@ Proyecto
 
 </header>
 
+
 <div class="content">
 
 <div class="page-title">
-
 <h1>Resumen ejecutivo</h1>
-
-<p>
-Seguimiento general de fabricación, logística, calidad, montaje y pintura
-</p>
-
+<p>Seguimiento general de fabricación, logística, calidad, montaje y pintura</p>
 </div>
 
 <div class="error" id="errorBox"></div>
 
 
-<!-- KPIS -->
-
 <section class="kpis">
 
 <div class="kpi kpi-main">
-
-<div class="kpi-label">
-TOTAL DE PIEZAS
+<div class="kpi-label">TOTAL DE PIEZAS</div>
+<div class="kpi-value" id="total">0</div>
+<div class="kpi-sub">Base de Ingeniería</div>
 </div>
-
-<div class="kpi-value" id="total">
-0
-</div>
-
-<div class="kpi-sub">
-Base de Ingeniería
-</div>
-
-</div>
-
 
 <div class="kpi kpi-green">
-
-<div class="kpi-label">
-LIBERADAS EN TALLER
+<div class="kpi-label">LIBERADAS EN TALLER</div>
+<div class="kpi-value" id="liberadas">0</div>
+<div class="kpi-sub" id="liberadasPct">0% del total</div>
 </div>
-
-<div class="kpi-value" id="liberadas">
-0
-</div>
-
-<div class="kpi-sub" id="liberadasPct">
-0% del total
-</div>
-
-</div>
-
 
 <div class="kpi kpi-orange">
-
-<div class="kpi-label">
-EN OBRA
+<div class="kpi-label">EN OBRA</div>
+<div class="kpi-value" id="obra">0</div>
+<div class="kpi-sub" id="obraPct">0% del total</div>
 </div>
-
-<div class="kpi-value" id="obra">
-0
-</div>
-
-<div class="kpi-sub" id="obraPct">
-0% del total
-</div>
-
-</div>
-
 
 <div class="kpi kpi-purple">
-
-<div class="kpi-label">
-MONTADAS
-</div>
-
-<div class="kpi-value" id="kpiMontadas">
-0
-</div>
-
-<div class="kpi-sub" id="kpiMontadasPct">
-0% del total
-</div>
-
+<div class="kpi-label">MONTADAS</div>
+<div class="kpi-value" id="kpiMontadas">0</div>
+<div class="kpi-sub" id="kpiMontadasPct">0% del total</div>
 </div>
 
 </section>
 
-
-<!-- CURVA -->
 
 <div class="dashboard-grid">
 
 <section class="card">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Avance acumulado del proyecto
+<div class="card-title">Avance acumulado del proyecto</div>
+<div class="card-subtitle">Curva S — Planificado vs Real</div>
 </div>
-
-<div class="card-subtitle">
-Curva S — Planificado vs Real
-</div>
-
-</div>
-
 </div>
 
 <div class="chart-container">
-
 <canvas id="sCurve"></canvas>
-
 </div>
 
 </section>
 
 
-<!-- ESTADO -->
-
 <section class="card">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Estado del proyecto
+<div class="card-title">Estado del proyecto</div>
+<div class="card-subtitle">Indicador ejecutivo</div>
 </div>
-
-<div class="card-subtitle">
-Indicador ejecutivo
 </div>
-
-</div>
-
-</div>
-
 
 <div class="status-box">
 
@@ -639,209 +539,84 @@ Estado general
 </div>
 
 <div class="progress">
-
-<div
-class="progress-bar"
-id="progressBar">
-</div>
-
+<div class="progress-bar" id="progressBar"></div>
 </div>
 
 <div class="progress-info">
-
-<span>
-Avance real
-</span>
-
-<strong id="progressText">
-0%
-</strong>
-
+<span>Avance real</span>
+<strong id="progressText">0%</strong>
 </div>
 
 </div>
 
 
 <div class="status-box">
-
-<div class="status-big" id="deviation">
-0%
-</div>
-
-<div class="status-label">
-Desvío contra planificación
-</div>
-
+<div class="status-big" id="deviation">0%</div>
+<div class="status-label">Desvío contra planificación</div>
 </div>
 
 
 <div class="status-box">
-
-<div class="status-label">
-Última actualización
-</div>
-
-<div
-id="lastUpdate"
-style="font-weight:700;margin-top:5px">
-
--
-
-</div>
-
+<div class="status-label">Última actualización</div>
+<div id="lastUpdate" style="font-weight:700;margin-top:5px">-</div>
 </div>
 
 </section>
 
 </div>
 
-
-<!-- FLUJO -->
 
 <section class="card flow">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Flujo de premoldeados
+<div class="card-title">Flujo de premoldeados</div>
+<div class="card-subtitle">QA/QC se calcula contra las piezas en obra</div>
 </div>
-
-<div class="card-subtitle">
-QA/QC se calcula contra las piezas en obra
-</div>
-
-</div>
-
 </div>
 
 <div class="flow-grid">
 
+<div class="flow-step">
+<div class="flow-icon">🏭</div>
+<div class="flow-name">En taller</div>
+<div class="flow-value" id="taller">0</div>
+<div class="flow-percent" id="tallerPct">0%</div>
+</div>
 
 <div class="flow-step">
-
-<div class="flow-icon">
-🏭
+<div class="flow-icon">✓</div>
+<div class="flow-name">Liberada</div>
+<div class="flow-value" id="flowLiberadas">0</div>
+<div class="flow-percent" id="flowLiberadasPct">0%</div>
 </div>
-
-<div class="flow-name">
-En taller
-</div>
-
-<div class="flow-value" id="taller">
-0
-</div>
-
-<div class="flow-percent" id="tallerPct">
-0%
-</div>
-
-</div>
-
 
 <div class="flow-step">
-
-<div class="flow-icon">
-✓
+<div class="flow-icon">🚧</div>
+<div class="flow-name">En obra</div>
+<div class="flow-value" id="flowObra">0</div>
+<div class="flow-percent" id="flowObraPct">0%</div>
 </div>
-
-<div class="flow-name">
-Liberada
-</div>
-
-<div class="flow-value" id="flowLiberadas">
-0
-</div>
-
-<div class="flow-percent" id="flowLiberadasPct">
-0%
-</div>
-
-</div>
-
 
 <div class="flow-step">
-
-<div class="flow-icon">
-🚧
+<div class="flow-icon">✔</div>
+<div class="flow-name">QA/QC</div>
+<div class="flow-value" id="qaqc">0</div>
+<div class="flow-percent" id="qaqcPct">0%</div>
 </div>
-
-<div class="flow-name">
-En obra
-</div>
-
-<div class="flow-value" id="flowObra">
-0
-</div>
-
-<div class="flow-percent" id="flowObraPct">
-0%
-</div>
-
-</div>
-
 
 <div class="flow-step">
-
-<div class="flow-icon">
-✔
+<div class="flow-icon">🏗️</div>
+<div class="flow-name">Montada</div>
+<div class="flow-value" id="montadas">0</div>
+<div class="flow-percent" id="montadasPctFlow">0%</div>
 </div>
-
-<div class="flow-name">
-QA/QC
-</div>
-
-<div class="flow-value" id="qaqc">
-0
-</div>
-
-<div class="flow-percent" id="qaqcPct">
-0%
-</div>
-
-</div>
-
 
 <div class="flow-step">
-
-<div class="flow-icon">
-🏗️
-</div>
-
-<div class="flow-name">
-Montada
-</div>
-
-<div class="flow-value" id="montadas">
-0
-</div>
-
-<div class="flow-percent" id="montadasPctFlow">
-0%
-</div>
-
-</div>
-
-
-<div class="flow-step">
-
-<div class="flow-icon">
-🎨
-</div>
-
-<div class="flow-name">
-Pintada
-</div>
-
-<div class="flow-value" id="flowPintadas">
-0
-</div>
-
-<div class="flow-percent" id="flowPintadasPct">
-0%
-</div>
-
+<div class="flow-icon">🎨</div>
+<div class="flow-name">Pintada</div>
+<div class="flow-value" id="flowPintadas">0</div>
+<div class="flow-percent" id="flowPintadasPct">0%</div>
 </div>
 
 </div>
@@ -849,24 +624,13 @@ Pintada
 </section>
 
 
-<!-- TABLA POR TIPO -->
-
 <section class="card tipo-card">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Avance por tipo de premoldeado
+<div class="card-title">Avance por tipo de premoldeado</div>
+<div class="card-subtitle">Comparación contra el total cargado por Ingeniería</div>
 </div>
-
-<div class="card-subtitle">
-Comparación contra el total cargado por Ingeniería
-</div>
-
-</div>
-
 </div>
 
 <div class="tabla-scroll">
@@ -874,43 +638,19 @@ Comparación contra el total cargado por Ingeniería
 <table class="tipo-table">
 
 <thead>
-
 <tr>
-
-<th>
-TIPO
-</th>
-
-<th>
-TOTAL INGENIERÍA
-</th>
-
-<th>
-EN TALLER
-</th>
-
-<th>
-EN OBRA
-</th>
-
-<th>
-MONTADAS
-</th>
-
+<th>TIPO</th>
+<th>TOTAL INGENIERÍA</th>
+<th>EN TALLER</th>
+<th>EN OBRA</th>
+<th>MONTADAS</th>
 </tr>
-
 </thead>
 
 <tbody id="tablaTipos">
-
 <tr>
-
-<td colspan="5">
-Cargando...
-</td>
-
+<td colspan="5">Cargando...</td>
 </tr>
-
 </tbody>
 
 </table>
@@ -920,201 +660,63 @@ Cargando...
 </section>
 
 
-<!-- INDICADORES -->
-
 <div class="bottom-grid">
-
 
 <section class="card">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Indicadores de avance
+<div class="card-title">Indicadores de avance</div>
+<div class="card-subtitle">Resumen acumulado por etapa</div>
 </div>
-
-<div class="card-subtitle">
-Resumen acumulado por etapa
-</div>
-
-</div>
-
 </div>
 
 <table>
 
 <thead>
-
 <tr>
-
-<th>
-ETAPA
-</th>
-
-<th>
-CANTIDAD
-</th>
-
-<th>
-AVANCE
-</th>
-
+<th>ETAPA</th>
+<th>CANTIDAD</th>
+<th>AVANCE</th>
 </tr>
-
 </thead>
 
 <tbody>
 
-
 <tr>
-
-<td>
-Taller
-</td>
-
-<td id="tblTaller">
-0
-</td>
-
-<td>
-
-<span
-class="badge badge-gray"
-id="tblTallerPct">
-
-0%
-
-</span>
-
-</td>
-
+<td>Taller</td>
+<td id="tblTaller">0</td>
+<td><span class="badge badge-gray" id="tblTallerPct">0%</span></td>
 </tr>
 
-
 <tr>
-
-<td>
-Liberada taller
-</td>
-
-<td id="tblLiberadas">
-0
-</td>
-
-<td>
-
-<span
-class="badge badge-green"
-id="tblLiberadasPct">
-
-0%
-
-</span>
-
-</td>
-
+<td>Liberada taller</td>
+<td id="tblLiberadas">0</td>
+<td><span class="badge badge-green" id="tblLiberadasPct">0%</span></td>
 </tr>
 
-
 <tr>
-
-<td>
-En obra
-</td>
-
-<td id="tblObra">
-0
-</td>
-
-<td>
-
-<span
-class="badge badge-orange"
-id="tblObraPct">
-
-0%
-
-</span>
-
-</td>
-
+<td>En obra</td>
+<td id="tblObra">0</td>
+<td><span class="badge badge-orange" id="tblObraPct">0%</span></td>
 </tr>
 
-
 <tr>
-
-<td>
-QA/QC
-</td>
-
-<td id="tblQA">
-0
-</td>
-
-<td>
-
-<span
-class="badge badge-blue"
-id="tblQAPct">
-
-0%
-
-</span>
-
-</td>
-
+<td>QA/QC</td>
+<td id="tblQA">0</td>
+<td><span class="badge badge-blue" id="tblQAPct">0%</span></td>
 </tr>
 
-
 <tr>
-
-<td>
-Montada
-</td>
-
-<td id="tblMontadas">
-0
-</td>
-
-<td>
-
-<span
-class="badge badge-green"
-id="tblMontadasPct">
-
-0%
-
-</span>
-
-</td>
-
+<td>Montada</td>
+<td id="tblMontadas">0</td>
+<td><span class="badge badge-green" id="tblMontadasPct">0%</span></td>
 </tr>
 
-
 <tr>
-
-<td>
-Pintada
-</td>
-
-<td id="tblPintadas">
-0
-</td>
-
-<td>
-
-<span
-class="badge badge-green"
-id="tblPintadasPct">
-
-0%
-
-</span>
-
-</td>
-
+<td>Pintada</td>
+<td id="tblPintadas">0</td>
+<td><span class="badge badge-green" id="tblPintadasPct">0%</span></td>
 </tr>
 
 </tbody>
@@ -1124,24 +726,13 @@ id="tblPintadasPct">
 </section>
 
 
-<!-- LECTURA EJECUTIVA -->
-
 <section class="card">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Lectura ejecutiva
+<div class="card-title">Lectura ejecutiva</div>
+<div class="card-subtitle">Situación actual del proyecto</div>
 </div>
-
-<div class="card-subtitle">
-Situación actual del proyecto
-</div>
-
-</div>
-
 </div>
 
 <div style="font-size:13px;line-height:1.7;color:#687386">
@@ -1151,53 +742,25 @@ Avance general
 </strong>
 
 <p>
-
 El proyecto presenta un avance ponderado acumulado del
-
-<strong id="executivePct">
-0%
-</strong>.
-
+<strong id="executivePct">0%</strong>.
 </p>
 
 <p>
-
 Liberadas en taller:
-
-<strong id="executiveLiberadas">
-0
-</strong>.
-
+<strong id="executiveLiberadas">0</strong>.
 En obra:
-
-<strong id="executiveObra">
-0
-</strong>.
-
+<strong id="executiveObra">0</strong>.
 QA/QC:
-
-<strong id="executiveQA">
-0
-</strong>.
-
+<strong id="executiveQA">0</strong>.
 Montadas:
-
-<strong id="executiveMontadas">
-0
-</strong>.
-
+<strong id="executiveMontadas">0</strong>.
 Pintadas:
-
-<strong id="executivePintadas">
-0
-</strong>.
-
+<strong id="executivePintadas">0</strong>.
 </p>
 
 <p>
-
 Todos los indicadores se leen directamente desde Supabase.
-
 </p>
 
 </div>
@@ -1215,17 +778,11 @@ Todos los indicadores se leen directamente desde Supabase.
 
 <script>
 
-/* =====================================================
-SUPABASE
-===================================================== */
-
 const SUPABASE_URL =
 "https://tnnioleawbhuqjuykrsf.supabase.co";
 
-
 const SUPABASE_KEY =
 "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
-
 
 const db =
 supabase.createClient(
@@ -1234,70 +791,29 @@ SUPABASE_KEY
 );
 
 
-/* =====================================================
-PLANIFICACIÓN
-===================================================== */
-
 const PLAN = [
 
-{
-fecha:"2026-08-01",
-porcentaje:5
-},
-
-{
-fecha:"2026-09-01",
-porcentaje:15
-},
-
-{
-fecha:"2026-10-01",
-porcentaje:30
-},
-
-{
-fecha:"2026-11-01",
-porcentaje:48
-},
-
-{
-fecha:"2026-12-01",
-porcentaje:65
-},
-
-{
-fecha:"2027-01-01",
-porcentaje:78
-},
-
-{
-fecha:"2027-02-01",
-porcentaje:88
-},
-
-{
-fecha:"2027-03-01",
-porcentaje:95
-},
-
-{
-fecha:"2027-04-01",
-porcentaje:100
-}
+{fecha:"2026-08-01",porcentaje:5},
+{fecha:"2026-09-01",porcentaje:15},
+{fecha:"2026-10-01",porcentaje:30},
+{fecha:"2026-11-01",porcentaje:48},
+{fecha:"2026-12-01",porcentaje:65},
+{fecha:"2027-01-01",porcentaje:78},
+{fecha:"2027-02-01",porcentaje:88},
+{fecha:"2027-03-01",porcentaje:95},
+{fecha:"2027-04-01",porcentaje:100}
 
 ];
 
 
 let piezas=[];
-
 let chart=null;
-
 let timer=null;
 
 
-/* =====================================================
+/* =========================
 CARGAR DATOS
-===================================================== */
+========================= */
 
 async function cargarDatos(){
 
@@ -1312,13 +828,10 @@ data,
 error
 }=
 await db
-
 .from("premoldeados")
-
 .select(
 "id,codigo,tipo,modelo,etapa,montada,pintada,responsable,fecha,created_at"
 )
-
 .order(
 "id",
 {
@@ -1377,9 +890,9 @@ cargarDatos,
 }
 
 
-/* =====================================================
+/* =========================
 DASHBOARD
-===================================================== */
+========================= */
 
 function actualizarDashboard(){
 
@@ -1388,15 +901,12 @@ piezas.length;
 
 
 /*
-ETAPAS:
-
-0 = EN TALLER
-1 = LIBERADA EN TALLER
-2 = EN OBRA
+0 = Taller
+1 = Liberada Taller
+2 = En Obra
 3 = QA/QC
 
-MONTADA Y PINTADA SON CAMPOS
-INDEPENDIENTES.
+Montada y Pintada son independientes.
 */
 
 
@@ -1437,13 +947,10 @@ p=>p.pintada===true
 
 
 /*
-PORCENTAJES GENERALES
-
-Todos contra Total Ingeniería.
+PORCENTAJES CONTRA TOTAL INGENIERÍA
 */
 
-const pct=
-cantidad=>{
+function pctTotal(cantidad){
 
 if(total===0){
 return 0;
@@ -1455,30 +962,22 @@ total *
 100
 );
 
-};
+}
 
 
 /*
-PORCENTAJE DE CALIDAD
+PORCENTAJE QA/QC
 
-IMPORTANTE:
+ESTE ES EL CAMBIO IMPORTANTE.
 
-CALIDAD NO SE CALCULA
-CONTRA EL TOTAL DE INGENIERÍA.
+EL DENOMINADOR ES "EN OBRA".
 
-SE CALCULA:
-
-QA/QC / EN OBRA
+NO ES TOTAL INGENIERÍA.
 
 Ejemplo:
-
-40 en obra
-40 QA/QC
-= 100%
-
-90 en obra
-40 QA/QC
-= 44%
+obra = 90
+qaqc = 90
+resultado = 100%
 */
 
 const pctCalidad=
@@ -1488,25 +987,12 @@ obra===0
 ?0
 
 :Math.round(
-
-qaqc /
-obra *
-100
-
+(qaqc / obra) * 100
 );
 
 
 /*
 AVANCE GENERAL
-
-Se consideran 6 hitos:
-
-Taller
-Liberada
-Obra
-QA/QC
-Montada
-Pintada
 */
 
 const hitosCompletados=
@@ -1533,16 +1019,14 @@ total===0
 :Math.round(
 
 hitosCompletados /
-
 (total*6) *
-
 100
 
 );
 
 
 /* =========================
-KPIS
+KPIS SUPERIORES
 ========================= */
 
 setText(
@@ -1559,7 +1043,7 @@ liberadas
 
 setText(
 "liberadasPct",
-pct(liberadas)+
+pctTotal(liberadas)+
 "% del total"
 );
 
@@ -1572,7 +1056,7 @@ obra
 
 setText(
 "obraPct",
-pct(obra)+
+pctTotal(obra)+
 "% del total"
 );
 
@@ -1585,7 +1069,7 @@ montadas
 
 setText(
 "kpiMontadasPct",
-pct(montadas)+
+pctTotal(montadas)+
 "% del total"
 );
 
@@ -1602,7 +1086,7 @@ taller
 
 setText(
 "tallerPct",
-pct(taller)+"%"
+pctTotal(taller)+"%"
 );
 
 
@@ -1614,7 +1098,7 @@ liberadas
 
 setText(
 "flowLiberadasPct",
-pct(liberadas)+"%"
+pctTotal(liberadas)+"%"
 );
 
 
@@ -1626,15 +1110,15 @@ obra
 
 setText(
 "flowObraPct",
-pct(obra)+"%"
+pctTotal(obra)+"%"
 );
 
 
 /*
-CALIDAD:
+QA/QC:
 
-cantidad real QA/QC
-porcentaje contra EN OBRA
+ACÁ USA pctCalidad,
+NO pctTotal.
 */
 
 setText(
@@ -1657,7 +1141,7 @@ montadas
 
 setText(
 "montadasPctFlow",
-pct(montadas)+"%"
+pctTotal(montadas)+"%"
 );
 
 
@@ -1669,12 +1153,12 @@ pintadas
 
 setText(
 "flowPintadasPct",
-pct(pintadas)+"%"
+pctTotal(pintadas)+"%"
 );
 
 
 /* =========================
-TABLA INDICADORES
+INDICADORES
 ========================= */
 
 setText(
@@ -1685,7 +1169,7 @@ taller
 
 setText(
 "tblTallerPct",
-pct(taller)+"%"
+pctTotal(taller)+"%"
 );
 
 
@@ -1697,7 +1181,7 @@ liberadas
 
 setText(
 "tblLiberadasPct",
-pct(liberadas)+"%"
+pctTotal(liberadas)+"%"
 );
 
 
@@ -1709,15 +1193,14 @@ obra
 
 setText(
 "tblObraPct",
-pct(obra)+"%"
+pctTotal(obra)+"%"
 );
 
 
 /*
 QA/QC:
 
-el porcentaje toma como base
-la cantidad EN OBRA.
+90 / 90 = 100%
 */
 
 setText(
@@ -1740,7 +1223,7 @@ montadas
 
 setText(
 "tblMontadasPct",
-pct(montadas)+"%"
+pctTotal(montadas)+"%"
 );
 
 
@@ -1752,7 +1235,7 @@ pintadas
 
 setText(
 "tblPintadasPct",
-pct(pintadas)+"%"
+pctTotal(pintadas)+"%"
 );
 
 
@@ -1814,20 +1297,13 @@ pintadas
 );
 
 
-/* TABLA POR TIPO */
-
 actualizarTablaTipos();
-
-
-/* ESTADO */
 
 actualizarEstado(
 avanceGeneral
 );
 
-
 actualizarFecha();
-
 
 actualizarCurva(
 avanceGeneral
@@ -1836,9 +1312,9 @@ avanceGeneral
 }
 
 
-/* =====================================================
+/* =========================
 TABLA POR TIPO
-===================================================== */
+========================= */
 
 function actualizarTablaTipos(){
 
@@ -1883,13 +1359,6 @@ montadas:0
 agrupados[tipo].total++;
 
 
-/*
-EN TALLER
-
-Toda pieza existente en Ingeniería
-está al menos en etapa 0.
-*/
-
 if(Number(p.etapa)>=0){
 
 agrupados[tipo].taller++;
@@ -1897,24 +1366,12 @@ agrupados[tipo].taller++;
 }
 
 
-/*
-EN OBRA
-
-etapa 2 o superior
-*/
-
 if(Number(p.etapa)>=2){
 
 agrupados[tipo].obra++;
 
 }
 
-
-/*
-MONTADAS
-
-Lee el campo booleano montada.
-*/
 
 if(p.montada===true){
 
@@ -1965,41 +1422,23 @@ lista.map(x=>`
 <tr>
 
 <td class="tipo-nombre">
-
 ${escapeHtml(x.tipo)}
-
 </td>
-
 
 <td class="tipo-total">
-
 ${x.total}
-
 </td>
 
-
 <td>
-
 ${x.taller}
-
 </td>
 
-
 <td>
-
 ${x.obra}
-
 </td>
 
-
 <td>
-
-<strong>
-
-${x.montadas}
-
-</strong>
-
+<strong>${x.montadas}</strong>
 </td>
 
 </tr>
@@ -2009,15 +1448,14 @@ ${x.montadas}
 }
 
 
-/* =====================================================
-ESTADO DEL PROYECTO
-===================================================== */
+/* =========================
+ESTADO
+========================= */
 
 function obtenerPlanActual(){
 
 const hoy=
 new Date();
-
 
 let plan=0;
 
@@ -2115,9 +1553,9 @@ status.style.color=
 }
 
 
-/* =====================================================
-ÚLTIMA ACTUALIZACIÓN
-===================================================== */
+/* =========================
+FECHA
+========================= */
 
 function actualizarFecha(){
 
@@ -2188,9 +1626,9 @@ ultima.toLocaleString(
 }
 
 
-/* =====================================================
+/* =========================
 CURVA S
-===================================================== */
+========================= */
 
 function actualizarCurva(
 avanceActual
@@ -2224,14 +1662,6 @@ p=>p.porcentaje
 );
 
 
-/*
-No tenemos todavía un historial
-por fecha de cada cambio de etapa.
-
-Por eso el valor REAL se muestra
-en la fecha actual.
-*/
-
 const realData=
 PLAN.map(
 ()=>null
@@ -2253,6 +1683,7 @@ new Date(
 p.fecha+
 "T00:00:00"
 );
+
 
 if(fecha<=hoy){
 
@@ -2279,11 +1710,9 @@ chart.destroy();
 
 const ctx=
 document
-
 .getElementById(
 "sCurve"
 )
-
 .getContext(
 "2d"
 );
@@ -2304,51 +1733,37 @@ datasets:[
 
 {
 
-label:
-"Planificado",
+label:"Planificado",
 
-data:
-planData,
+data:planData,
 
-borderColor:
-"#b8c3d8",
+borderColor:"#b8c3d8",
 
-borderWidth:
-2,
+borderWidth:2,
 
-borderDash:
-[6,6],
+borderDash:[6,6],
 
-pointRadius:
-2,
+pointRadius:2,
 
-tension:
-0.35
+tension:0.35
 
 },
 
 {
 
-label:
-"Real",
+label:"Real",
 
-data:
-realData,
+data:realData,
 
-borderColor:
-"#2855d9",
+borderColor:"#2855d9",
 
-borderWidth:
-3,
+borderWidth:3,
 
-pointRadius:
-4,
+pointRadius:4,
 
-tension:
-0.35,
+tension:0.35,
 
-spanGaps:
-false
+spanGaps:false
 
 }
 
@@ -2392,11 +1807,8 @@ return "";
 return (
 
 ctx.dataset.label+
-
 ": "+
-
 ctx.parsed.y+
-
 "%"
 
 );
@@ -2451,9 +1863,9 @@ display:false
 }
 
 
-/* =====================================================
+/* =========================
 UTILIDADES
-===================================================== */
+========================= */
 
 function setText(
 id,
@@ -2544,9 +1956,9 @@ return String(text)
 }
 
 
-/* =====================================================
+/* =========================
 INICIAR
-===================================================== */
+========================= */
 
 cargarDatos();
 
