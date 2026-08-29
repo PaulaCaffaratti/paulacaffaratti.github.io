@@ -1,0 +1,887 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Base de Ingeniería - Control de Premoldeados</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --azul: #102f52;
+      --verde: #28734b;
+      --rojo: #b43c3c;
+      --fondo: #f4f6f8;
+      --texto: #24364b;
+      --borde: #dce3ea;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+    }
+
+    header {
+      background: linear-gradient(135deg, #102f52, #183f68);
+      color: white;
+      padding: 20px 35px;
+    }
+
+    header h1 {
+      margin: 0 0 12px;
+      font-size: 26px;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 9px 14px;
+      border-radius: 7px;
+      background: rgba(255,255,255,.12);
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    nav a:hover,
+    nav a.activo {
+      background: white;
+      color: var(--azul);
+    }
+
+    main {
+      max-width: 1400px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .titulo-seccion {
+      margin-bottom: 20px;
+    }
+
+    .titulo-seccion h2 {
+      margin: 0 0 6px;
+    }
+
+    .titulo-seccion p {
+      margin: 0;
+      color: #657487;
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .buscador {
+      width: 350px;
+      max-width: 100%;
+      padding: 13px;
+      border: 1px solid #ccd6df;
+      border-radius: 8px;
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-principal {
+      background: var(--azul);
+      color: white;
+      border: none;
+      padding: 13px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .formulario {
+      display: none;
+      background: white;
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .formulario.activo {
+      display: block;
+    }
+
+    .formulario h2 {
+      margin-top: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    input,
+    textarea {
+      padding: 13px;
+      border: 1px solid #ccd6df;
+      border-radius: 8px;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 160px;
+      resize: vertical;
+    }
+
+    .btn-guardar {
+      background: var(--verde);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 14px;
+      font-weight: bold;
+    }
+
+    .btn-secundario {
+      background: white;
+      border: 1px solid #ccd6df;
+      color: var(--texto);
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 14px;
+      margin-left: 8px;
+    }
+
+    .info {
+      background: #eef5fc;
+      border-left: 4px solid #28649a;
+      padding: 14px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .tabla-contenedor {
+      background: white;
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    th {
+      background: #f4f6f8;
+      text-align: left;
+      padding: 14px;
+      font-size: 12px;
+    }
+
+    td {
+      padding: 13px 14px;
+      border-top: 1px solid #e6ebef;
+      font-size: 13px;
+    }
+
+    .estado-inicial {
+      background: #e5f0fa;
+      color: #28649a;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .btn-eliminar {
+      background: white;
+      color: var(--rojo);
+      border: 1px solid #e5bbbb;
+      padding: 7px 10px;
+      border-radius: 7px;
+    }
+
+    .vacio {
+      padding: 35px;
+      text-align: center;
+      color: #778595;
+    }
+
+    .contador {
+      background: white;
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .contador strong {
+      font-size: 24px;
+    }
+
+    @media(max-width: 700px) {
+
+      header {
+        padding: 18px;
+      }
+
+      main {
+        padding: 15px;
+      }
+
+      .acciones {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .buscador {
+        width: 100%;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <h1>🏗️ CONTROL DE PREMOLDEADOS</h1>
+
+  <nav>
+    <a href="index.html">📊 RESUMEN</a>
+    <a href="base.html" class="activo">📋 BASE DE INGENIERÍA</a>
+    <a href="avance.html">🚀 AVANCE</a>
+  </nav>
+
+</header>
+
+
+<main>
+
+  <section class="titulo-seccion">
+
+    <h2>📋 Base de Ingeniería</h2>
+
+    <p>
+      Cargá aquí el listado inicial de todos los premoldeados del proyecto.
+    </p>
+
+  </section>
+
+
+  <div class="info">
+
+    💡 <strong>Importante:</strong>
+    las piezas se cargan inicialmente sin responsable y comienzan
+    automáticamente en la etapa <strong>EN TALLER</strong>.
+    El responsable se registra recién cuando alguien confirma un avance.
+
+  </div>
+
+
+  <div class="contador">
+
+    TOTAL CARGADO:
+    <strong id="total">0</strong>
+    premoldeados
+
+  </div>
+
+
+  <section class="acciones">
+
+    <input
+      class="buscador"
+      id="buscador"
+      placeholder="🔎 Buscar código, tipo o modelo..."
+    >
+
+    <button
+      class="btn-principal"
+      onclick="mostrarFormulario()"
+    >
+      + AGREGAR PREMOLDEADO
+    </button>
+
+  </section>
+
+
+  <!-- FORMULARIO -->
+
+  <section
+    class="formulario"
+    id="formulario"
+  >
+
+    <h2>➕ Agregar premoldeado</h2>
+
+    <div class="form-grid">
+
+      <input
+        id="codigo"
+        placeholder="Código - Ej: S1-001"
+      >
+
+      <input
+        id="tipo"
+        placeholder="Tipo - Ej: Sleeper"
+      >
+
+      <input
+        id="modelo"
+        placeholder="Modelo - Ej: S1"
+      >
+
+    </div>
+
+
+    <button
+      class="btn-guardar"
+      onclick="agregarPremoldeado()"
+    >
+      GUARDAR PREMOLDEADO
+    </button>
+
+
+    <button
+      class="btn-secundario"
+      onclick="mostrarFormulario()"
+    >
+      CANCELAR
+    </button>
+
+
+    <hr style="margin:35px 0;border:.5px solid #e5e9ed">
+
+
+    <!-- CARGA MASIVA -->
+
+    <h2>📥 Carga masiva</h2>
+
+    <p>
+      Podés pegar varias piezas de una vez.
+    </p>
+
+    <p>
+      Formato:
+      <strong>CÓDIGO | TIPO | MODELO</strong>
+    </p>
+
+    <textarea
+      id="cargaMasiva"
+      placeholder="S1-001 | Sleeper | S1
+S1-002 | Sleeper | S1
+S1-003 | Sleeper | S1
+S4-001 | Sleeper | S4
+C1-001 | Cámara | C1"
+    ></textarea>
+
+
+    <button
+      class="btn-guardar"
+      onclick="cargarMasivamente()"
+    >
+      CARGAR LISTADO
+    </button>
+
+  </section>
+
+
+  <!-- TABLA -->
+
+  <section class="tabla-contenedor">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>CÓDIGO</th>
+          <th>TIPO</th>
+          <th>MODELO</th>
+          <th>ESTADO INICIAL</th>
+          <th>ACCIÓN</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="tabla"></tbody>
+
+    </table>
+
+
+    <div
+      class="vacio"
+      id="mensajeVacio"
+    >
+
+      Todavía no hay premoldeados cargados.
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+  /*
+    Los datos se guardan con la misma clave
+    que utilizan index.html y avance.html.
+  */
+
+  let premoldeados =
+    JSON.parse(
+      localStorage.getItem("premoldeados")
+    ) || [];
+
+
+  function guardar() {
+
+    localStorage.setItem(
+      "premoldeados",
+      JSON.stringify(premoldeados)
+    );
+
+  }
+
+
+  function mostrarFormulario() {
+
+    document
+      .getElementById("formulario")
+      .classList
+      .toggle("activo");
+
+  }
+
+
+  function agregarPremoldeado() {
+
+    const codigo =
+      document
+      .getElementById("codigo")
+      .value
+      .trim();
+
+
+    const tipo =
+      document
+      .getElementById("tipo")
+      .value
+      .trim();
+
+
+    const modelo =
+      document
+      .getElementById("modelo")
+      .value
+      .trim();
+
+
+    if (!codigo || !tipo || !modelo) {
+
+      alert(
+        "Completá Código, Tipo y Modelo."
+      );
+
+      return;
+
+    }
+
+
+    const existe =
+      premoldeados.some(
+        p =>
+          p.codigo
+          .toLowerCase()
+          ===
+          codigo.toLowerCase()
+      );
+
+
+    if (existe) {
+
+      alert(
+        "Ya existe una pieza con ese código."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      ETAPA 0 = EN TALLER
+
+      No se asigna responsable.
+    */
+
+    premoldeados.push({
+
+      codigo: codigo,
+
+      tipo: tipo,
+
+      modelo: modelo,
+
+      etapa: 0,
+
+      responsable: "",
+
+      fecha: "",
+
+      historial: []
+
+    });
+
+
+    guardar();
+
+
+    document
+      .getElementById("codigo")
+      .value = "";
+
+
+    document
+      .getElementById("tipo")
+      .value = "";
+
+
+    document
+      .getElementById("modelo")
+      .value = "";
+
+
+    renderizar();
+
+  }
+
+
+  function cargarMasivamente() {
+
+    const texto =
+      document
+      .getElementById("cargaMasiva")
+      .value
+      .trim();
+
+
+    if (!texto) {
+
+      alert(
+        "Pegá el listado de premoldeados."
+      );
+
+      return;
+
+    }
+
+
+    let agregados = 0;
+
+    let repetidos = 0;
+
+
+    texto
+      .split("\n")
+      .forEach(linea => {
+
+
+        const partes =
+          linea.split("|");
+
+
+        if (partes.length >= 3) {
+
+
+          const codigo =
+            partes[0].trim();
+
+
+          const tipo =
+            partes[1].trim();
+
+
+          const modelo =
+            partes[2].trim();
+
+
+          if (
+            codigo &&
+            tipo &&
+            modelo
+          ) {
+
+
+            const existe =
+              premoldeados.some(
+                p =>
+                  p.codigo
+                  .toLowerCase()
+                  ===
+                  codigo.toLowerCase()
+              );
+
+
+            if (!existe) {
+
+
+              premoldeados.push({
+
+                codigo: codigo,
+
+                tipo: tipo,
+
+                modelo: modelo,
+
+                etapa: 0,
+
+                responsable: "",
+
+                fecha: "",
+
+                historial: []
+
+              });
+
+
+              agregados++;
+
+
+            } else {
+
+              repetidos++;
+
+            }
+
+          }
+
+        }
+
+      });
+
+
+    guardar();
+
+
+    document
+      .getElementById("cargaMasiva")
+      .value = "";
+
+
+    renderizar();
+
+
+    alert(
+
+      "Se agregaron " +
+      agregados +
+      " premoldeados.\n\n" +
+
+      "Repetidos no agregados: " +
+      repetidos
+
+    );
+
+  }
+
+
+  function eliminar(indice) {
+
+    const pieza =
+      premoldeados[indice];
+
+
+    const confirmar =
+      confirm(
+
+        "¿Seguro que querés eliminar?\n\n" +
+
+        pieza.codigo +
+        " — " +
+        pieza.tipo +
+        " " +
+        pieza.modelo
+
+      );
+
+
+    if (!confirmar) {
+
+      return;
+
+    }
+
+
+    premoldeados.splice(
+      indice,
+      1
+    );
+
+
+    guardar();
+
+    renderizar();
+
+  }
+
+
+  function renderizar() {
+
+    const tabla =
+      document
+      .getElementById("tabla");
+
+
+    const busqueda =
+      document
+      .getElementById("buscador")
+      .value
+      .toLowerCase();
+
+
+    tabla.innerHTML = "";
+
+
+    const filtrados =
+      premoldeados.filter(p =>
+
+        p.codigo
+        .toLowerCase()
+        .includes(busqueda)
+
+        ||
+
+        p.tipo
+        .toLowerCase()
+        .includes(busqueda)
+
+        ||
+
+        p.modelo
+        .toLowerCase()
+        .includes(busqueda)
+
+      );
+
+
+    document
+      .getElementById("total")
+      .textContent =
+      premoldeados.length;
+
+
+    document
+      .getElementById("mensajeVacio")
+      .style.display =
+
+      filtrados.length === 0
+        ? "block"
+        : "none";
+
+
+    filtrados.forEach(pieza => {
+
+
+      const indice =
+        premoldeados.indexOf(
+          pieza
+        );
+
+
+      tabla.innerHTML += `
+
+        <tr>
+
+          <td>
+            <strong>
+              ${pieza.codigo}
+            </strong>
+          </td>
+
+          <td>
+            ${pieza.tipo}
+          </td>
+
+          <td>
+            ${pieza.modelo}
+          </td>
+
+          <td>
+
+            <span class="estado-inicial">
+
+              ${
+                pieza.etapa === 0
+                  ? "EN TALLER"
+                  : "YA EN AVANCE"
+              }
+
+            </span>
+
+          </td>
+
+          <td>
+
+            <button
+              class="btn-eliminar"
+              onclick="eliminar(${indice})"
+            >
+              🗑 ELIMINAR
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    });
+
+  }
+
+
+  document
+    .getElementById("buscador")
+    .addEventListener(
+      "input",
+      renderizar
+    );
+
+
+  renderizar();
+
+</script>
+
+</body>
+</html>
+```
