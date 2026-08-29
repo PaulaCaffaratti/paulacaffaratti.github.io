@@ -21,10 +21,9 @@ background:#f4f6f8;
 color:#24364b;
 }
 
-
-/* ==============================
+/* =========================
 SIDEBAR
-============================== */
+========================= */
 
 .sidebar{
 position:fixed;
@@ -62,10 +61,9 @@ background:white;
 color:#102f52;
 }
 
-
-/* ==============================
+/* =========================
 MAIN
-============================== */
+========================= */
 
 .main{
 margin-left:235px;
@@ -80,10 +78,6 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 gap:20px;
-}
-
-.topbar strong{
-font-size:14px;
 }
 
 .conexion{
@@ -118,18 +112,12 @@ color:#718096;
 font-size:14px;
 }
 
-
-/* ==============================
-PANELES
-============================== */
-
 .panel{
 background:white;
 border:1px solid #dce3ea;
 border-radius:14px;
 padding:22px;
 margin-bottom:20px;
-box-shadow:0 2px 8px rgba(16,47,82,.03);
 }
 
 .panel-titulo{
@@ -160,10 +148,9 @@ color:#45596f;
 display:none!important;
 }
 
-
-/* ==============================
-TOTAL PRINCIPAL
-============================== */
+/* =========================
+TOTAL
+========================= */
 
 .total-principal{
 display:flex;
@@ -171,11 +158,7 @@ align-items:center;
 justify-content:space-between;
 gap:20px;
 padding:24px 28px;
-background:linear-gradient(
-135deg,
-#102f52,
-#174b76
-);
+background:linear-gradient(135deg,#102f52,#174b76);
 color:white;
 border-radius:14px;
 margin-bottom:20px;
@@ -185,7 +168,6 @@ margin-bottom:20px;
 font-size:12px;
 font-weight:bold;
 opacity:.8;
-letter-spacing:.5px;
 }
 
 .total-numero{
@@ -208,10 +190,9 @@ font-size:12px;
 opacity:.8;
 }
 
-
-/* ==============================
+/* =========================
 FLUJO
-============================== */
+========================= */
 
 .flujo{
 display:grid;
@@ -257,10 +238,9 @@ font-weight:bold;
 color:#28734b;
 }
 
-
-/* ==============================
+/* =========================
 CURVA S
-============================== */
+========================= */
 
 .metricas-m3{
 display:grid;
@@ -320,17 +300,9 @@ font-weight:800;
 margin:10px 0 17px;
 }
 
-.estado-verde{
-color:#198754;
-}
-
-.estado-amarillo{
-color:#c17c00;
-}
-
-.estado-rojo{
-color:#c23838;
-}
+.estado-verde{color:#198754;}
+.estado-amarillo{color:#c17c00;}
+.estado-rojo{color:#c23838;}
 
 .estado-fila{
 display:flex;
@@ -341,10 +313,6 @@ border-bottom:1px solid #e5eaf0;
 font-size:12px;
 }
 
-.estado-fila:last-child{
-border-bottom:0;
-}
-
 .nota{
 font-size:11px;
 line-height:1.55;
@@ -352,21 +320,9 @@ color:#7a8898;
 margin-top:15px;
 }
 
-.advertencia{
-display:none;
-background:#fff8e9;
-border:1px solid #ead9a6;
-border-radius:8px;
-padding:10px 12px;
-font-size:11px;
-color:#765e22;
-margin-top:15px;
-}
-
-
-/* ==============================
+/* =========================
 FAMILIAS
-============================== */
+========================= */
 
 .familias{
 display:grid;
@@ -419,7 +375,6 @@ color:#718096;
 .barra-label{
 display:flex;
 justify-content:space-between;
-gap:10px;
 font-size:11px;
 font-weight:bold;
 margin-top:12px;
@@ -433,13 +388,12 @@ overflow:hidden;
 margin-top:5px;
 }
 
-.barra > div{
+.barra>div{
 height:100%;
 background:#2a72a5;
-border-radius:20px;
 }
 
-.barra.montaje > div{
+.barra.montaje>div{
 background:#28734b;
 }
 
@@ -471,10 +425,6 @@ border-bottom:1px solid #edf0f3;
 font-size:11px;
 }
 
-.tipo-detalle:last-child{
-border-bottom:0;
-}
-
 .tipo-nombre{
 font-weight:800;
 margin-bottom:5px;
@@ -486,11 +436,6 @@ gap:12px;
 flex-wrap:wrap;
 color:#68798c;
 }
-
-
-/* ==============================
-RESPONSIVE
-============================== */
 
 @media(max-width:1150px){
 
@@ -513,19 +458,10 @@ grid-template-columns:repeat(2,1fr);
 .sidebar{
 position:relative;
 width:100%;
-height:auto;
 }
 
 .main{
 margin-left:0;
-}
-
-.sidebar a{
-display:inline-block;
-}
-
-.logo{
-margin-bottom:15px;
 }
 
 .grid-curva{
@@ -542,42 +478,11 @@ grid-template-columns:1fr;
 
 }
 
-@media(max-width:550px){
-
-.contenido{
-padding:15px;
-}
-
-.topbar{
-padding:15px;
-}
-
-.total-principal{
-display:block;
-}
-
-.total-volumen{
-text-align:left;
-margin-top:20px;
-}
-
-.metricas-m3{
-grid-template-columns:1fr;
-}
-
-}
-
 </style>
 
 </head>
 
-
 <body>
-
-
-<!-- ==============================
-SIDEBAR
-============================== -->
 
 <aside class="sidebar">
 
@@ -601,13 +506,7 @@ PREMOLDEADOS
 </aside>
 
 
-
-<!-- ==============================
-MAIN
-============================== -->
-
 <div class="main">
-
 
 <div class="topbar">
 
@@ -615,20 +514,14 @@ MAIN
 Seguimiento de Premoldeados
 </strong>
 
-<div
-id="conexion"
-class="conexion">
-
+<div id="conexion" class="conexion">
 ⏳ Conectando...
-
 </div>
 
 </div>
-
 
 
 <main class="contenido">
-
 
 <h1>
 Resumen ejecutivo
@@ -639,13 +532,7 @@ Seguimiento general de premoldeados: fabricación, logística, calidad, montaje 
 </p>
 
 
-
-<!-- ==============================
-TOTAL
-============================== -->
-
 <div class="total-principal">
-
 
 <div>
 
@@ -653,46 +540,32 @@ TOTAL
 PREMOLDEADOS CARGADOS EN INGENIERÍA
 </small>
 
-<div
-class="total-numero"
-id="total">
-
+<div class="total-numero" id="total">
 0
-
 </div>
 
 <div style="font-size:12px;opacity:.8">
-
 Base de Ingeniería
-
 </div>
 
 </div>
-
 
 <div class="total-volumen">
 
 <strong id="volumenProyecto">
-0,00 m³
+308,496 m³
 </strong>
 
 <span>
-Volumen total planificado del proyecto
+219 unidades planificadas
 </span>
 
 </div>
 
-
 </div>
 
 
-
-<!-- ==============================
-FLUJO
-============================== -->
-
 <section class="panel">
-
 
 <div class="panel-titulo">
 
@@ -705,222 +578,72 @@ FLUJO
 
 <div class="flujo">
 
+<div class="etapa">
+<div class="etapa-icono">🏭</div>
+<div class="etapa-nombre">En taller</div>
+<div class="etapa-valor">
+<span id="taller">0</span>
+<small>unidades</small>
+</div>
+<div class="etapa-pct" id="pctTaller">0%</div>
+</div>
 
 <div class="etapa">
-
-<div class="etapa-icono">
-🏭
-</div>
-
-<div class="etapa-nombre">
-En taller
-</div>
-
+<div class="etapa-icono">✅</div>
+<div class="etapa-nombre">Liberado</div>
 <div class="etapa-valor">
-
-<span id="taller">
-0
-</span>
-
-<small>
-unidades
-</small>
-
+<span id="liberadas">0</span>
+<small>unidades</small>
 </div>
-
-<div
-class="etapa-pct"
-id="pctTaller">
-
-0%
-
+<div class="etapa-pct" id="pctLiberadas">0%</div>
 </div>
-
-</div>
-
-
 
 <div class="etapa">
-
-<div class="etapa-icono">
-✅
-</div>
-
-<div class="etapa-nombre">
-Liberado
-</div>
-
+<div class="etapa-icono">🚧</div>
+<div class="etapa-nombre">En obra</div>
 <div class="etapa-valor">
-
-<span id="liberadas">
-0
-</span>
-
-<small>
-unidades
-</small>
-
+<span id="obra">0</span>
+<small>unidades</small>
 </div>
-
-<div
-class="etapa-pct"
-id="pctLiberadas">
-
-0%
-
+<div class="etapa-pct" id="pctObra">0%</div>
 </div>
-
-</div>
-
-
 
 <div class="etapa">
-
-<div class="etapa-icono">
-🚧
-</div>
-
-<div class="etapa-nombre">
-En obra
-</div>
-
+<div class="etapa-icono">✔️</div>
+<div class="etapa-nombre">QA/QC</div>
 <div class="etapa-valor">
-
-<span id="obra">
-0
-</span>
-
-<small>
-unidades
-</small>
-
+<span id="qaqc">0</span>
+<small>unidades</small>
 </div>
-
-<div
-class="etapa-pct"
-id="pctObra">
-
-0%
-
+<div class="etapa-pct" id="pctQaqc">0%</div>
 </div>
-
-</div>
-
-
 
 <div class="etapa">
-
-<div class="etapa-icono">
-✔️
-</div>
-
-<div class="etapa-nombre">
-QA/QC
-</div>
-
+<div class="etapa-icono">🏗️</div>
+<div class="etapa-nombre">Montado</div>
 <div class="etapa-valor">
-
-<span id="qaqc">
-0
-</span>
-
-<small>
-unidades
-</small>
-
+<span id="montadas">0</span>
+<small>unidades</small>
 </div>
-
-<div
-class="etapa-pct"
-id="pctQaqc">
-
-0%
-
+<div class="etapa-pct" id="pctMontadas">0%</div>
 </div>
-
-</div>
-
-
 
 <div class="etapa">
-
-<div class="etapa-icono">
-🏗️
-</div>
-
-<div class="etapa-nombre">
-Montado
-</div>
-
+<div class="etapa-icono">🎨</div>
+<div class="etapa-nombre">Pintado</div>
 <div class="etapa-valor">
-
-<span id="montadas">
-0
-</span>
-
-<small>
-unidades
-</small>
-
+<span id="pintadas">0</span>
+<small>unidades</small>
 </div>
-
-<div
-class="etapa-pct"
-id="pctMontadas">
-
-0%
-
+<div class="etapa-pct" id="pctPintadas">0%</div>
 </div>
-
-</div>
-
-
-
-<div class="etapa">
-
-<div class="etapa-icono">
-🎨
-</div>
-
-<div class="etapa-nombre">
-Pintado
-</div>
-
-<div class="etapa-valor">
-
-<span id="pintadas">
-0
-</span>
-
-<small>
-unidades
-</small>
-
-</div>
-
-<div
-class="etapa-pct"
-id="pctPintadas">
-
-0%
-
-</div>
-
-</div>
-
 
 </div>
 
 </section>
 
 
-
-<!-- ==============================
-CURVA S
-============================== -->
-
 <section class="panel">
-
 
 <div class="panel-titulo">
 
@@ -945,15 +668,14 @@ Ocultar ▲
 
 <div class="metricas-m3">
 
-
 <div class="metrica">
 
 <span>
-Volumen proyecto
+Volumen total proyecto
 </span>
 
 <strong id="m3Total">
-0,00 m³
+308,496 m³
 </strong>
 
 </div>
@@ -997,9 +719,7 @@ Desvío
 
 </div>
 
-
 </div>
-
 
 
 <div class="grid-curva">
@@ -1012,14 +732,11 @@ Desvío
 </div>
 
 
-
 <div class="estado-proyecto">
-
 
 <h3>
 Estado del proyecto
 </h3>
-
 
 <div
 id="estadoProyecto"
@@ -1072,7 +789,7 @@ Desvío
 <div class="estado-fila">
 
 <span>
-Avance volumétrico
+Avance real
 </span>
 
 <strong id="estadoPct">
@@ -1097,25 +814,15 @@ Fecha de control
 
 <div class="nota">
 
-<strong>BASE:</strong>
-m³ de montaje planificados acumulados según las fechas de inicio y fin suministradas.
+La línea <strong>BASE</strong> representa los m³ de montaje planificados acumulados entre Finc y Ffin.
 
 <br><br>
 
-<strong>REAL:</strong>
-m³ correspondientes a piezas marcadas como Montaje, acumulados según su fecha de montaje registrada en Supabase.
+La línea <strong>REAL</strong> suma los m³ de cada pieza marcada como montada según su <strong>fecha_montaje</strong> en Supabase.
 
 </div>
 
-
-<div
-id="advertenciaTipos"
-class="advertencia">
 </div>
-
-
-</div>
-
 
 </div>
 
@@ -1124,13 +831,7 @@ class="advertencia">
 </section>
 
 
-
-<!-- ==============================
-FAMILIAS
-============================== -->
-
 <section class="panel">
-
 
 <div class="panel-titulo">
 
@@ -1149,29 +850,23 @@ Ocultar ▲
 
 </div>
 
-
 <div
 id="contenidoFamilias"
 class="familias">
 </div>
 
-
 </section>
-
 
 </main>
 
 </div>
 
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 <script>
-
 
 /* =====================================================
 SUPABASE
@@ -1180,10 +875,8 @@ SUPABASE
 const SUPABASE_URL=
 "https://tnnioleawbhuqjuykrsf.supabase.co";
 
-
 const SUPABASE_KEY=
 "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
-
 
 const db=
 supabase.createClient(
@@ -1192,508 +885,105 @@ SUPABASE_KEY
 );
 
 
-
 /* =====================================================
-PLANIFICACIÓN DE MONTAJE
-
-cantidad = cantidad total del proyecto
-m3       = m³ POR CADA PREMOLDEADO
-inicio   = fecha inicio montaje
-fin      = fecha fin montaje
+BASE PLANIFICADA DEFINITIVA
 ===================================================== */
 
-const PLAN_MONTAJE=[
-
-
-{
-tipo:"B0A",
-cantidad:2,
-m3:3.91,
-inicio:"2026-08-12",
-fin:"2026-08-16"
-},
-
-{
-tipo:"B0B",
-cantidad:2,
-m3:3.91,
-inicio:"2026-08-12",
-fin:"2026-08-16"
-},
-
-{
-tipo:"B1",
-cantidad:14,
-m3:7.40,
-inicio:"2026-08-12",
-fin:"2026-08-16"
-},
-
-{
-tipo:"B2",
-cantidad:4,
-m3:2.50,
-inicio:"2026-08-12",
-fin:"2026-08-16"
-},
-
-{
-tipo:"B3",
-cantidad:4,
-m3:7.56,
-inicio:"2026-08-12",
-fin:"2026-08-16"
-},
-
-
-{
-tipo:"F1",
-cantidad:20,
-m3:0.28,
-inicio:"2026-08-31",
-fin:"2026-09-02"
-},
-
-{
-tipo:"F2",
-cantidad:4,
-m3:0.31,
-inicio:"2026-08-31",
-fin:"2026-09-02"
-},
-
-{
-tipo:"F1A",
-cantidad:4,
-m3:0.28,
-inicio:"2026-08-31",
-fin:"2026-09-02"
-},
-
-
-{
-tipo:"FPE",
-cantidad:1,
-m3:0.64,
-inicio:"2026-09-25",
-fin:"2026-09-28"
-},
-
-{
-tipo:"TPE",
-cantidad:1,
-m3:0.26,
-inicio:"2026-09-25",
-fin:"2026-09-28"
-},
-
-
-{
-tipo:"C1",
-cantidad:2,
-m3:0.993,
-inicio:"2026-10-01",
-fin:"2026-10-12"
-},
-
-{
-tipo:"C2",
-cantidad:5,
-m3:1.03,
-inicio:"2026-10-01",
-fin:"2026-10-12"
-},
-
-{
-tipo:"C3",
-cantidad:3,
-m3:1.03,
-inicio:"2026-10-01",
-fin:"2026-10-12"
-},
-
-{
-tipo:"C4",
-cantidad:4,
-m3:1.07,
-inicio:"2026-10-01",
-fin:"2026-10-12"
-},
-
-
-{
-tipo:"S1",
-cantidad:2,
-m3:1.59,
-inicio:"2026-09-01",
-fin:"2026-09-03"
-},
-
-{
-tipo:"S2A",
-cantidad:4,
-m3:2.92,
-inicio:"2026-09-01",
-fin:"2026-09-03"
-},
-
-{
-tipo:"S2B",
-cantidad:1,
-m3:2.92,
-inicio:"2026-09-01",
-fin:"2026-09-03"
-},
-
-{
-tipo:"S3",
-cantidad:2,
-m3:1.77,
-inicio:"2026-09-01",
-fin:"2026-09-03"
-},
-
-{
-tipo:"S4A",
-cantidad:3,
-m3:1.10,
-inicio:"2026-09-01",
-fin:"2026-09-03"
-},
-
-{
-tipo:"S4B",
-cantidad:4,
-m3:0.55,
-inicio:"2026-09-01",
-fin:"2026-09-03"
-},
-
-{
-tipo:"S5",
-cantidad:2,
-m3:0.80,
-inicio:"2026-09-01",
-fin:"2026-09-03"
-},
-
-{
-tipo:"S6",
-cantidad:2,
-m3:0.30,
-inicio:"2026-09-01",
-fin:"2026-09-03"
-},
-
-
-{
-tipo:"FDS",
-cantidad:10,
-m3:1.50,
-inicio:"2026-10-06",
-fin:"2026-10-16"
-},
-
-{
-tipo:"ILUM",
-cantidad:4,
-m3:2.24,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-
-{
-tipo:"FS-01",
-cantidad:20,
-m3:0.197,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"FS-02",
-cantidad:10,
-m3:0.128,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"FS-03",
-cantidad:20,
-m3:0.08,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"FS-04",
-cantidad:1,
-m3:0.44,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"FS-06",
-cantidad:12,
-m3:0.30,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-
-{
-tipo:"B-01",
-cantidad:1,
-m3:2.36,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"B-02",
-cantidad:1,
-m3:1.37,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"B-03",
-cantidad:1,
-m3:1.03,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"B-04",
-cantidad:4,
-m3:1.57,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"B-06",
-cantidad:1,
-m3:1.27,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-{
-tipo:"B-07",
-cantidad:3,
-m3:1.02,
-inicio:"2026-10-01",
-fin:"2026-10-13"
-},
-
-
-{
-tipo:"MG-BA",
-cantidad:1,
-m3:1.75,
-inicio:"2026-11-05",
-fin:"2026-11-10"
-},
-
-{
-tipo:"MG-VB",
-cantidad:1,
-m3:0.59,
-inicio:"2026-11-05",
-fin:"2026-11-10"
-},
-
-{
-tipo:"MG-VA",
-cantidad:1,
-m3:0.46,
-inicio:"2026-11-05",
-fin:"2026-11-10"
-},
-
-{
-tipo:"MG-C",
-cantidad:1,
-m3:0.20,
-inicio:"2026-11-05",
-fin:"2026-11-10"
-},
-
-{
-tipo:"MG-BA2",
-cantidad:1,
-m3:0.58,
-inicio:"2026-11-05",
-fin:"2026-11-10"
-},
-
-{
-tipo:"MG-C2",
-cantidad:1,
-m3:0.20,
-inicio:"2026-11-05",
-fin:"2026-11-10"
-},
-
-
-{
-tipo:"ALC-A",
-cantidad:1,
-m3:1.16,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-{
-tipo:"ALC-B",
-cantidad:18,
-m3:1.16,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-{
-tipo:"ALC-C",
-cantidad:1,
-m3:1.16,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-
-{
-tipo:"TA-1",
-cantidad:1,
-m3:0.08,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-{
-tipo:"TA-2",
-cantidad:1,
-m3:0.10,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-{
-tipo:"TA-3",
-cantidad:2,
-m3:0.045,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-
-{
-tipo:"LO-1",
-cantidad:1,
-m3:0.44,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-{
-tipo:"LO-2",
-cantidad:1,
-m3:0.36,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-
-{
-tipo:"VI-1",
-cantidad:1,
-m3:0.07,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-{
-tipo:"VI-2",
-cantidad:1,
-m3:0.05,
-inicio:"2026-09-17",
-fin:"2026-09-29"
-},
-
-
-{
-tipo:"MO-1",
-cantidad:1,
-m3:3.64,
-inicio:"2026-09-18",
-fin:"2026-10-12"
-},
-
-{
-tipo:"MO-2",
-cantidad:1,
-m3:3.64,
-inicio:"2026-09-18",
-fin:"2026-10-12"
-},
-
-
-{
-tipo:"CD-516",
-cantidad:1,
-m3:0.20,
-inicio:"2026-09-07",
-fin:"2026-09-09"
-}
-
+const BASE_PROYECTO=[
+
+{tipo:"B0A",cantidad:2,m3:3.91,inicio:"2026-08-12",fin:"2026-08-16"},
+{tipo:"B0B",cantidad:2,m3:3.91,inicio:"2026-08-12",fin:"2026-08-16"},
+{tipo:"B1",cantidad:14,m3:7.4,inicio:"2026-08-12",fin:"2026-08-16"},
+{tipo:"B2",cantidad:4,m3:2.5,inicio:"2026-08-12",fin:"2026-08-16"},
+{tipo:"B3",cantidad:4,m3:7.56,inicio:"2026-08-12",fin:"2026-08-16"},
+
+{tipo:"F1",cantidad:20,m3:0.28,inicio:"2026-08-31",fin:"2026-09-02"},
+{tipo:"F2",cantidad:4,m3:0.31,inicio:"2026-08-31",fin:"2026-09-02"},
+{tipo:"FPE",cantidad:1,m3:0.64,inicio:"2026-09-25",fin:"2026-09-28"},
+{tipo:"TPE",cantidad:1,m3:0.26,inicio:"2026-09-25",fin:"2026-09-28"},
+{tipo:"F1A",cantidad:4,m3:0.28,inicio:"2026-08-31",fin:"2026-09-02"},
+
+{tipo:"C1",cantidad:2,m3:0.993,inicio:"2026-10-01",fin:"2026-10-12"},
+{tipo:"C2",cantidad:5,m3:1.03,inicio:"2026-10-01",fin:"2026-10-12"},
+{tipo:"C3",cantidad:3,m3:1.03,inicio:"2026-10-01",fin:"2026-10-12"},
+{tipo:"C4",cantidad:4,m3:1.07,inicio:"2026-10-01",fin:"2026-10-12"},
+
+{tipo:"S1",cantidad:2,m3:1.59,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S2A",cantidad:4,m3:2.92,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S2B",cantidad:1,m3:2.92,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S3",cantidad:2,m3:1.77,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S4A",cantidad:3,m3:1.1,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S4B",cantidad:4,m3:0.55,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S5",cantidad:2,m3:0.8,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S6",cantidad:2,m3:0.3,inicio:"2026-09-01",fin:"2026-09-03"},
+
+{tipo:"PTS-A",cantidad:2,m3:3.41,inicio:"2026-08-27",fin:"2026-08-27"},
+{tipo:"BTS",cantidad:1,m3:3.1,inicio:"2026-08-27",fin:"2026-08-30"},
+{tipo:"BTS-C",cantidad:1,m3:0.87,inicio:"2026-08-27",fin:"2026-08-30"},
+
+{tipo:"FDS",cantidad:10,m3:1.5,inicio:"2026-10-06",fin:"2026-10-16"},
+{tipo:"ILUM",cantidad:4,m3:2.24,inicio:"2026-09-29",fin:"2026-10-09"},
+
+{tipo:"FS-01",cantidad:20,m3:0.197,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"FS-02",cantidad:10,m3:0.128,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"FS-03",cantidad:20,m3:0.08,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"FS-06",cantidad:12,m3:0.3,inicio:"2026-10-01",fin:"2026-10-13"},
+
+{tipo:"B-01",cantidad:1,m3:2.36,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-02",cantidad:1,m3:1.37,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-03",cantidad:1,m3:1.03,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-04",cantidad:4,m3:1.57,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-06",cantidad:1,m3:1.27,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-07",cantidad:3,m3:1.02,inicio:"2026-10-01",fin:"2026-10-13"},
+
+{tipo:"FS-04",cantidad:1,m3:0.44,inicio:"2026-10-01",fin:"2026-10-13"},
+
+{tipo:"MG-BA",cantidad:1,m3:1.75,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-VB",cantidad:1,m3:0.59,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-VA",cantidad:1,m3:0.46,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-C",cantidad:1,m3:0.2,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-BA2",cantidad:1,m3:0.58,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-C2",cantidad:1,m3:0.2,inicio:"2026-11-05",fin:"2026-11-10"},
+
+{tipo:"ALC-A",cantidad:1,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"ALC-B",cantidad:18,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"ALC-C",cantidad:1,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
+
+{tipo:"TA-1",cantidad:1,m3:0.08,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"TA-2",cantidad:1,m3:0.1,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"TA-3",cantidad:2,m3:0.045,inicio:"2026-09-17",fin:"2026-09-29"},
+
+{tipo:"LO-1",cantidad:1,m3:0.44,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"LO-2",cantidad:1,m3:0.36,inicio:"2026-09-17",fin:"2026-09-29"},
+
+{tipo:"VI-1",cantidad:1,m3:0.07,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"VI-2",cantidad:1,m3:0.05,inicio:"2026-09-17",fin:"2026-09-29"},
+
+{tipo:"MO-1",cantidad:1,m3:3.64,inicio:"2026-09-18",fin:"2026-10-12"},
+{tipo:"MO-2",cantidad:1,m3:3.64,inicio:"2026-09-18",fin:"2026-10-12"},
+
+{tipo:"CD-516",cantidad:1,m3:0.2,inicio:"2026-09-07",fin:"2026-09-09"}
 
 ];
 
 
-/*
-PTS-A NO SE SUMA POR AHORA
-PORQUE NO TENEMOS CANTIDAD NI m³.
-*/
-
-
-
 /* =====================================================
-MAPA m³ POR TIPO
+MAPA m3
 ===================================================== */
 
 const M3_POR_TIPO={};
 
-
-PLAN_MONTAJE.forEach(
-item=>{
+BASE_PROYECTO.forEach(item=>{
 
 M3_POR_TIPO[
-normalizarTipo(
-item.tipo
-)
-]=
-item.m3;
+normalizarTipo(item.tipo)
+]=item.m3;
 
-}
-);
+});
 
-
-
-/* =====================================================
-VARIABLES
-===================================================== */
 
 let piezas=[];
-
 let chart=null;
-
-let timer=null;
-
 
 
 /* =====================================================
@@ -1702,19 +992,17 @@ UTILIDADES
 
 function normalizarTipo(tipo){
 
-return String(
-tipo || ""
-)
+return String(tipo||"")
 .trim()
 .toUpperCase();
 
 }
 
 
-function crearFechaISO(fecha){
+function crearFecha(texto){
 
 return new Date(
-fecha+"T12:00:00"
+texto+"T12:00:00"
 );
 
 }
@@ -1722,199 +1010,123 @@ fecha+"T12:00:00"
 
 function inicioDia(fecha){
 
-const d=
-new Date(fecha);
+const d=new Date(fecha);
 
-d.setHours(
-0,
-0,
-0,
-0
-);
+d.setHours(0,0,0,0);
 
 return d;
 
 }
 
 
-function formatoFecha(fecha){
-
-return fecha.toLocaleDateString(
-"es-AR",
-{
-day:"2-digit",
-month:"2-digit"
-}
-);
-
-}
-
-
-function formatoM3(numero){
-
-return Number(
-numero || 0
-)
-.toLocaleString(
-"es-AR",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-)+
-" m³";
-
-}
-
-
-function redondear3(numero){
-
-return Math.round(
-numero*1000
-)/1000;
-
-}
-
-
-function diasEntre(
-inicio,
-fin
-){
+function diasEntre(inicio,fin){
 
 return Math.round(
 (
 inicioDia(fin)-
 inicioDia(inicio)
-)/
-86400000
+)/86400000
 );
 
 }
 
 
+function formatoM3(valor){
 
-/* =====================================================
-VOLUMEN TOTAL PROYECTO
-===================================================== */
+return Number(valor||0)
+.toLocaleString(
+"es-AR",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:3
+}
+)+" m³";
+
+}
+
 
 function volumenTotalProyecto(){
 
-return PLAN_MONTAJE.reduce(
-(total,item)=>{
-
-return total+
-(
+return BASE_PROYECTO.reduce(
+(total,item)=>
+total+
 item.cantidad*
-item.m3
-);
-
-},
+item.m3,
 0
 );
 
 }
 
 
+function cantidadTotalProyecto(){
+
+return BASE_PROYECTO.reduce(
+(total,item)=>
+total+
+item.cantidad,
+0
+);
+
+}
+
 
 /* =====================================================
-PLANIFICADO ACUMULADO
+PLAN ACUMULADO
 ===================================================== */
 
-function planAcumuladoEnFecha(
-fecha
-){
+function planAcumuladoEnFecha(fecha){
 
 const objetivo=
 inicioDia(fecha);
 
-
 let total=0;
 
 
-PLAN_MONTAJE.forEach(
-item=>{
-
+BASE_PROYECTO.forEach(item=>{
 
 const inicio=
 inicioDia(
-crearFechaISO(
-item.inicio
-)
+crearFecha(item.inicio)
 );
-
 
 const fin=
 inicioDia(
-crearFechaISO(
-item.fin
-)
+crearFecha(item.fin)
 );
-
 
 const volumen=
 item.cantidad*
 item.m3;
 
 
-/*
-ANTES DEL INICIO:
-NO SUMA.
-*/
-
-if(
-objetivo<
-inicio
-){
+if(objetivo<inicio){
 
 return;
 
 }
 
 
-/*
-AL LLEGAR AL FIN:
-EL VOLUMEN ESTÁ 100% PLANIFICADO.
-*/
+if(objetivo>=fin){
 
-if(
-objetivo>=
-fin
-){
-
-total+=
-volumen;
+total+=volumen;
 
 return;
 
 }
 
-
-/*
-SI INICIO Y FIN SON EL MISMO DÍA.
-*/
 
 const duracion=
-diasEntre(
-inicio,
-fin
-);
+diasEntre(inicio,fin);
 
 
-if(
-duracion<=0
-){
+if(duracion<=0){
 
-total+=
-volumen;
+total+=volumen;
 
 return;
 
 }
 
-
-/*
-DISTRIBUCIÓN LINEAL ENTRE INICIO Y FIN.
-*/
 
 const transcurrido=
 diasEntre(
@@ -1928,8 +1140,7 @@ Math.max(
 0,
 Math.min(
 1,
-transcurrido/
-duracion
+transcurrido/duracion
 )
 );
 
@@ -1937,7 +1148,6 @@ duracion
 total+=
 volumen*
 fraccion;
-
 
 });
 
@@ -1947,58 +1157,34 @@ return total;
 }
 
 
-
 /* =====================================================
-VOLUMEN DE UNA PIEZA
+REAL ACUMULADO
 ===================================================== */
 
-function volumenPieza(
-pieza
-){
-
-const tipo=
-normalizarTipo(
-pieza.tipo
-);
-
+function volumenPieza(pieza){
 
 return Number(
-M3_POR_TIPO[tipo] ||
-0
+M3_POR_TIPO[
+normalizarTipo(
+pieza.tipo
+)
+]||0
 );
 
 }
 
 
-
-/* =====================================================
-REAL ACUMULADO
-===================================================== */
-
-function realAcumuladoEnFecha(
-fecha
-){
+function realAcumuladoEnFecha(fecha){
 
 const objetivo=
-inicioDia(
-fecha
-);
+inicioDia(fecha);
 
 
 return piezas.reduce(
 (total,pieza)=>{
 
-
 if(
-pieza.montada!==true
-){
-
-return total;
-
-}
-
-
-if(
+pieza.montada!==true ||
 !pieza.fecha_montaje
 ){
 
@@ -2026,10 +1212,7 @@ return total;
 
 
 return total+
-volumenPieza(
-pieza
-);
-
+volumenPieza(pieza);
 
 },
 0
@@ -2038,49 +1221,30 @@ pieza
 }
 
 
-
 /* =====================================================
-RANGO COMPLETO DE FECHAS
+FECHAS CURVA
 ===================================================== */
 
 function obtenerRangoFechas(){
 
-const inicios=
-PLAN_MONTAJE.map(
-item=>
-crearFechaISO(
-item.inicio
-)
-);
-
-
-const finales=
-PLAN_MONTAJE.map(
-item=>
-crearFechaISO(
-item.fin
-)
-);
-
-
-const fechaMin=
+const inicio=
 inicioDia(
 new Date(
 Math.min(
-...inicios.map(
-f=>f.getTime()
+...BASE_PROYECTO.map(
+x=>crearFecha(x.inicio).getTime()
 )
 )
 )
 );
 
 
-const fechaMax=
+const fin=
 inicioDia(
 new Date(
 Math.max(
-...finales.map(
-f=>f.getTime()
+...BASE_PROYECTO.map(
+x=>crearFecha(x.fin).getTime()
 )
 )
 )
@@ -2089,24 +1253,15 @@ f=>f.getTime()
 
 const fechas=[];
 
-
 const cursor=
-new Date(
-fechaMin
-);
+new Date(inicio);
 
 
-while(
-cursor<=
-fechaMax
-){
+while(cursor<=fin){
 
 fechas.push(
-new Date(
-cursor
-)
+new Date(cursor)
 );
-
 
 cursor.setDate(
 cursor.getDate()+1
@@ -2120,9 +1275,8 @@ return fechas;
 }
 
 
-
 /* =====================================================
-CARGAR SUPABASE
+SUPABASE
 ===================================================== */
 
 async function cargarDatos(){
@@ -2133,23 +1287,13 @@ document.getElementById(
 );
 
 
-conexion.textContent=
-"⏳ Actualizando...";
-
-
-conexion.className=
-"conexion";
-
-
 const {
 data,
 error
 }=
 await db
 
-.from(
-"premoldeados"
-)
+.from("premoldeados")
 
 .select(
 "id,codigo,tipo,modelo,etapa,montada,pintada,fecha_montaje,fecha,created_at"
@@ -2165,29 +1309,24 @@ ascending:true
 
 if(error){
 
-console.error(error);
-
-
 conexion.textContent=
 "❌ Error de conexión";
-
 
 conexion.className=
 "conexion error";
 
+console.error(error);
 
 return;
 
 }
 
 
-piezas=
-data || [];
+piezas=data||[];
 
 
 conexion.textContent=
 "● Base online conectada";
-
 
 conexion.className=
 "conexion ok";
@@ -2199,26 +1338,11 @@ dibujarCurva();
 
 dibujarFamilias();
 
-mostrarTiposSinVolumen();
-
-
-clearTimeout(
-timer
-);
-
-
-timer=
-setTimeout(
-cargarDatos,
-60000
-);
-
 }
 
 
-
 /* =====================================================
-RESUMEN
+FLUJO
 ===================================================== */
 
 function actualizarResumen(){
@@ -2229,180 +1353,89 @@ piezas.length;
 
 const taller=
 piezas.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=0
+p=>Number(p.etapa??0)>=0
 ).length;
 
 
 const liberadas=
 piezas.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=1
+p=>Number(p.etapa??0)>=1
 ).length;
 
 
 const obra=
 piezas.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=2
+p=>Number(p.etapa??0)>=2
 ).length;
 
 
 const qaqc=
 piezas.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=3
+p=>Number(p.etapa??0)>=3
 ).length;
 
 
 const montadas=
 piezas.filter(
-p=>
-p.montada===true
+p=>p.montada===true
 ).length;
 
 
 const pintadas=
 piezas.filter(
-p=>
-p.pintada===true
+p=>p.pintada===true
 ).length;
 
 
 const pctTotal=
-cantidad=>{
-
-if(
+cantidad=>
 total===0
-){
-
-return 0;
-
-}
-
-return Math.round(
-cantidad/
-total*
-100
+?
+0
+:
+Math.round(
+cantidad/total*100
 );
 
-};
 
-
-/*
-QA/QC SE MIDE SOBRE PIEZAS EN OBRA.
-*/
-
-const pctCalidad=
-
+const pctQA=
 obra===0
 ?
 0
 :
 Math.round(
-qaqc/
-obra*
-100
+qaqc/obra*100
 );
 
 
-document
-.getElementById("total")
-.textContent=
-total;
+document.getElementById("total").textContent=total;
 
+document.getElementById("taller").textContent=taller;
+document.getElementById("liberadas").textContent=liberadas;
+document.getElementById("obra").textContent=obra;
+document.getElementById("qaqc").textContent=qaqc;
+document.getElementById("montadas").textContent=montadas;
+document.getElementById("pintadas").textContent=pintadas;
 
-document
-.getElementById("taller")
-.textContent=
-taller;
+document.getElementById("pctTaller").textContent=
+pctTotal(taller)+"%";
 
+document.getElementById("pctLiberadas").textContent=
+pctTotal(liberadas)+"%";
 
-document
-.getElementById("liberadas")
-.textContent=
-liberadas;
+document.getElementById("pctObra").textContent=
+pctTotal(obra)+"%";
 
+document.getElementById("pctQaqc").textContent=
+pctQA+"%";
 
-document
-.getElementById("obra")
-.textContent=
-obra;
+document.getElementById("pctMontadas").textContent=
+pctTotal(montadas)+"%";
 
-
-document
-.getElementById("qaqc")
-.textContent=
-qaqc;
-
-
-document
-.getElementById("montadas")
-.textContent=
-montadas;
-
-
-document
-.getElementById("pintadas")
-.textContent=
-pintadas;
-
-
-document
-.getElementById("pctTaller")
-.textContent=
-pctTotal(
-taller
-)+"%";
-
-
-document
-.getElementById("pctLiberadas")
-.textContent=
-pctTotal(
-liberadas
-)+"%";
-
-
-document
-.getElementById("pctObra")
-.textContent=
-pctTotal(
-obra
-)+"%";
-
-
-document
-.getElementById("pctQaqc")
-.textContent=
-pctCalidad+"%";
-
-
-document
-.getElementById("pctMontadas")
-.textContent=
-pctTotal(
-montadas
-)+"%";
-
-
-document
-.getElementById("pctPintadas")
-.textContent=
-pctTotal(
-pintadas
-)+"%";
+document.getElementById("pctPintadas").textContent=
+pctTotal(pintadas)+"%";
 
 }
-
 
 
 /* =====================================================
@@ -2421,219 +1454,109 @@ new Date()
 );
 
 
-const planData=
+const labels=
 fechas.map(
-fecha=>{
-
-return redondear3(
-planAcumuladoEnFecha(
-fecha
+f=>
+f.toLocaleDateString(
+"es-AR",
+{
+day:"2-digit",
+month:"2-digit"
+}
 )
 );
 
-}
+
+const planData=
+fechas.map(
+f=>
+Math.round(
+planAcumuladoEnFecha(f)*
+1000
+)/1000
 );
 
 
 const realData=
 fechas.map(
-fecha=>{
+f=>{
 
-
-if(
-fecha>
-hoy
-){
+if(f>hoy){
 
 return null;
 
 }
 
+return Math.round(
+realAcumuladoEnFecha(f)*
+1000
+)/1000;
 
-return redondear3(
-realAcumuladoEnFecha(
-fecha
-)
-);
-
-}
-);
+});
 
 
-const labels=
-fechas.map(
-fecha=>
-formatoFecha(
-fecha
-)
-);
-
-
-const totalProyecto=
+const totalM3=
 volumenTotalProyecto();
 
 
 const planHoy=
-planAcumuladoEnFecha(
-hoy
-);
+planAcumuladoEnFecha(hoy);
 
 
 const realHoy=
-realAcumuladoEnFecha(
-hoy
-);
+realAcumuladoEnFecha(hoy);
 
 
 const desvio=
-realHoy-
-planHoy;
+realHoy-planHoy;
 
 
-const pctReal=
-
-totalProyecto===0
+const porcentaje=
+totalM3===0
 ?
 0
 :
-(
-realHoy/
-totalProyecto*
-100
-);
+realHoy/totalM3*100;
 
 
-/* ==============================
-KPIs
-============================== */
+document.getElementById("volumenProyecto").textContent=
+formatoM3(totalM3);
 
-document
-.getElementById(
-"volumenProyecto"
-)
-.textContent=
-formatoM3(
-totalProyecto
-);
+document.getElementById("m3Total").textContent=
+formatoM3(totalM3);
 
+document.getElementById("m3PlanHoy").textContent=
+formatoM3(planHoy);
 
-document
-.getElementById(
-"m3Total"
-)
-.textContent=
-formatoM3(
-totalProyecto
-);
+document.getElementById("m3RealHoy").textContent=
+formatoM3(realHoy);
 
+document.getElementById("m3Desvio").textContent=
+(desvio>=0?"+":"")+
+formatoM3(desvio);
 
-document
-.getElementById(
-"m3PlanHoy"
-)
-.textContent=
-formatoM3(
-planHoy
-);
+document.getElementById("estadoPlan").textContent=
+formatoM3(planHoy);
 
+document.getElementById("estadoReal").textContent=
+formatoM3(realHoy);
 
-document
-.getElementById(
-"m3RealHoy"
-)
-.textContent=
-formatoM3(
-realHoy
-);
+document.getElementById("estadoDesvio").textContent=
+(desvio>=0?"+":"")+
+formatoM3(desvio);
 
-
-document
-.getElementById(
-"m3Desvio"
-)
-.textContent=
-
-(
-desvio>=0
-?
-"+"
-:
-""
-)+
-formatoM3(
-desvio
-);
-
-
-document
-.getElementById(
-"estadoPlan"
-)
-.textContent=
-formatoM3(
-planHoy
-);
-
-
-document
-.getElementById(
-"estadoReal"
-)
-.textContent=
-formatoM3(
-realHoy
-);
-
-
-document
-.getElementById(
-"estadoDesvio"
-)
-.textContent=
-
-(
-desvio>=0
-?
-"+"
-:
-""
-)+
-formatoM3(
-desvio
-);
-
-
-document
-.getElementById(
-"estadoPct"
-)
-.textContent=
-
-pctReal.toLocaleString(
+document.getElementById("estadoPct").textContent=
+porcentaje.toLocaleString(
 "es-AR",
 {
 minimumFractionDigits:1,
 maximumFractionDigits:1
 }
-)+
-"%";
+)+"%";
 
+document.getElementById("fechaControl").textContent=
+hoy.toLocaleDateString("es-AR");
 
-document
-.getElementById(
-"fechaControl"
-)
-.textContent=
-
-hoy.toLocaleDateString(
-"es-AR"
-);
-
-
-
-/* ==============================
-ESTADO PROYECTO
-============================== */
 
 const estado=
 document.getElementById(
@@ -2645,18 +1568,10 @@ estado.className=
 "estado-grande";
 
 
-/*
-TOLERANCIA DE 5 m³ PARA
-CONSIDERAR EL PROYECTO EN LÍNEA.
-*/
-
-if(
-desvio>=5
-){
+if(desvio>=5){
 
 estado.textContent=
 "ADELANTADO";
-
 
 estado.classList.add(
 "estado-verde"
@@ -2664,13 +1579,10 @@ estado.classList.add(
 
 }
 
-else if(
-desvio>=-5
-){
+else if(desvio>=-5){
 
 estado.textContent=
 "EN LÍNEA";
-
 
 estado.classList.add(
 "estado-amarillo"
@@ -2683,23 +1595,11 @@ else{
 estado.textContent=
 "ATRASADO";
 
-
 estado.classList.add(
 "estado-rojo"
 );
 
 }
-
-
-
-/* ==============================
-GRÁFICO
-============================== */
-
-const ctx=
-document.getElementById(
-"curvaS"
-);
 
 
 if(chart){
@@ -2711,92 +1611,58 @@ chart.destroy();
 
 chart=
 new Chart(
-ctx,
+document.getElementById("curvaS"),
 {
 
 type:"line",
 
-
 data:{
 
-labels:
-labels,
-
+labels:labels,
 
 datasets:[
 
-
 {
 
-label:
-"BASE PLANIFICADA (m³)",
+label:"BASE PLANIFICADA (m³)",
 
-data:
-planData,
+data:planData,
 
-borderColor:
-"#255b88",
+borderColor:"#255b88",
 
-backgroundColor:
-"#255b8815",
+borderWidth:3,
 
-borderWidth:
-3,
+pointRadius:0,
 
-pointRadius:
-0,
+pointHoverRadius:4,
 
-pointHoverRadius:
-5,
-
-tension:
-0.22,
-
-fill:
-false
+tension:.2
 
 },
 
-
 {
 
-label:
-"REAL MONTADO (m³)",
+label:"REAL MONTADO (m³)",
 
-data:
-realData,
+data:realData,
 
-borderColor:
-"#28734b",
+borderColor:"#28734b",
 
-backgroundColor:
-"#28734b15",
+borderWidth:3,
 
-borderWidth:
-3,
+pointRadius:0,
 
-pointRadius:
-0,
+pointHoverRadius:4,
 
-pointHoverRadius:
-5,
+tension:.15,
 
-tension:
-0.15,
-
-fill:
-false,
-
-spanGaps:
-false
+spanGaps:false
 
 }
-
 
 ]
 
 },
-
 
 options:{
 
@@ -2804,92 +1670,38 @@ responsive:true,
 
 maintainAspectRatio:false,
 
-
 interaction:{
-
 mode:"index",
-
 intersect:false
-
 },
-
 
 plugins:{
 
-
 legend:{
-
 position:"top",
-
-align:"start",
-
-labels:{
-
-usePointStyle:true,
-
-boxWidth:8,
-
-font:{
-
-size:11,
-
-weight:"bold"
-
-}
-
-}
-
+align:"start"
 },
-
 
 tooltip:{
 
 callbacks:{
 
-title:function(items){
+label:function(ctx){
 
-if(
-!items.length
-){
+if(ctx.raw===null){
 
 return "";
 
 }
 
-
-const indice=
-items[0].dataIndex;
-
-
-return fechas[indice]
-.toLocaleDateString(
-"es-AR"
-);
-
-},
-
-
-label:function(context){
-
-if(
-context.raw===null
-){
-
-return "";
-
-}
-
-
-return context.dataset.label+
+return ctx.dataset.label+
 ": "+
-Number(
-context.raw
-)
+Number(ctx.raw)
 .toLocaleString(
 "es-AR",
 {
 minimumFractionDigits:2,
-maximumFractionDigits:2
+maximumFractionDigits:3
 }
 )+
 " m³";
@@ -2902,66 +1714,32 @@ maximumFractionDigits:2
 
 },
 
-
 scales:{
-
 
 x:{
 
 grid:{
-
 display:false
-
 },
 
 ticks:{
-
-maxRotation:0,
-
 autoSkip:true,
-
-maxTicksLimit:12
-
+maxTicksLimit:12,
+maxRotation:0
 }
 
 },
-
 
 y:{
 
 beginAtZero:true,
 
-
 title:{
-
 display:true,
-
-text:"m³ acumulados",
-
-font:{
-
-weight:"bold"
-
-}
-
-},
-
-
-ticks:{
-
-callback:function(
-value
-){
-
-return value+
-" m³";
-
+text:"m³ acumulados"
 }
 
 }
-
-}
-
 
 }
 
@@ -2971,107 +1749,23 @@ return value+
 );
 
 }
-
-
-
-/* =====================================================
-TIPOS SIN VOLUMEN DEFINIDO
-===================================================== */
-
-function mostrarTiposSinVolumen(){
-
-const tiposSinVolumen=
-[
-...new Set(
-
-piezas
-
-.filter(
-p=>
-p.montada===true
-)
-
-.map(
-p=>
-normalizarTipo(
-p.tipo
-)
-)
-
-.filter(
-tipo=>
-tipo &&
-!Object.prototype.hasOwnProperty.call(
-M3_POR_TIPO,
-tipo
-)
-)
-
-)
-];
-
-
-const caja=
-document.getElementById(
-"advertenciaTipos"
-);
-
-
-if(
-tiposSinVolumen.length===0
-){
-
-caja.style.display=
-"none";
-
-caja.innerHTML=
-"";
-
-return;
-
-}
-
-
-caja.style.display=
-"block";
-
-
-caja.innerHTML=
-
-"⚠️ Hay tipos montados sin m³ definidos: <strong>"+
-tiposSinVolumen
-.map(
-escapeHtml
-)
-.join(", ")+
-"</strong>. Esas piezas no se están sumando todavía al Real.";
-
-}
-
 
 
 /* =====================================================
 FAMILIAS
 ===================================================== */
 
-function obtenerFamilia(
-tipo
-){
+function obtenerFamilia(tipo){
 
 const limpio=
-String(
-tipo ||
-"SIN TIPO"
-)
+String(tipo||"SIN TIPO")
 .trim()
 .toUpperCase();
-
 
 const match=
 limpio.match(
 /[A-ZÁÉÍÓÚÑ]/
 );
-
 
 return match
 ?
@@ -3080,7 +1774,6 @@ match[0]
 "#";
 
 }
-
 
 
 function dibujarFamilias(){
@@ -3094,56 +1787,26 @@ document.getElementById(
 const grupos={};
 
 
-piezas.forEach(
-p=>{
-
+piezas.forEach(p=>{
 
 const familia=
-obtenerFamilia(
-p.tipo
-);
+obtenerFamilia(p.tipo);
 
-
-if(
-!grupos[familia]
-){
+if(!grupos[familia]){
 
 grupos[familia]=[];
 
 }
 
-
-grupos[familia].push(
-p
-);
+grupos[familia].push(p);
 
 });
 
 
-const familias=
-Object.keys(
-grupos
-)
-.sort();
-
-
-if(
-familias.length===0
-){
-
 contenedor.innerHTML=
-"<p>No hay datos.</p>";
-
-return;
-
-}
-
-
-contenedor.innerHTML=
-
-familias.map(
-familia=>{
-
+Object.keys(grupos)
+.sort()
+.map(familia=>{
 
 const lista=
 grupos[familia];
@@ -3155,109 +1818,74 @@ lista.length;
 
 const obra=
 lista.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=2
+p=>Number(p.etapa??0)>=2
 ).length;
 
 
 const montadas=
 lista.filter(
-p=>
-p.montada===true
+p=>p.montada===true
 ).length;
 
 
 const pctObra=
-
 total===0
 ?
 0
 :
 Math.round(
-obra/
-total*
-100
+obra/total*100
 );
 
 
-const pctMontaje=
-
+const pctMontadas=
 total===0
 ?
 0
 :
 Math.round(
-montadas/
-total*
-100
+montadas/total*100
 );
 
 
 const tipos={};
 
 
-lista.forEach(
-p=>{
-
+lista.forEach(p=>{
 
 const tipo=
-normalizarTipo(
-p.tipo ||
-"SIN TIPO"
-);
+normalizarTipo(p.tipo);
 
-
-if(
-!tipos[tipo]
-){
+if(!tipos[tipo]){
 
 tipos[tipo]=[];
 
 }
 
-
-tipos[tipo].push(
-p
-);
+tipos[tipo].push(p);
 
 });
 
 
 const detalle=
-
-Object.keys(
-tipos
-)
-
+Object.keys(tipos)
 .sort()
+.map(tipo=>{
 
-.map(
-tipo=>{
-
-
-const piezasTipo=
+const listaTipo=
 tipos[tipo];
 
+const t=
+listaTipo.length;
 
-const totalTipo=
-piezasTipo.length;
-
-
-const obraTipo=
-piezasTipo.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=2
+const o=
+listaTipo.filter(
+p=>Number(p.etapa??0)>=2
 ).length;
 
-
-const montajeTipo=
-piezasTipo.filter(
-p=>
-p.montada===true
+const m=
+listaTipo.filter(
+p=>p.montada===true
 ).length;
 
 
@@ -3266,21 +1894,21 @@ return `
 <div class="tipo-detalle">
 
 <div class="tipo-nombre">
-${escapeHtml(tipo)}
+${tipo}
 </div>
 
 <div class="tipo-stats">
 
 <span>
-Total ${totalTipo} unidades
+Total ${t} unidades
 </span>
 
 <span>
-En obra ${obraTipo} unidades
+En obra ${o} unidades
 </span>
 
 <span>
-Montados ${montajeTipo} unidades
+Montados ${m} unidades
 </span>
 
 </div>
@@ -3289,37 +1917,24 @@ Montados ${montajeTipo} unidades
 
 `;
 
-}
-)
-.join("");
+}).join("");
 
 
 return `
 
 <div class="familia">
 
-
 <div class="familia-cabecera">
 
 <div class="familia-icono">
-
-${escapeHtml(
-familia
-)}
-
+${familia}
 </div>
-
 
 <div>
 
 <h3>
-
-FAMILIA ${escapeHtml(
-familia
-)}
-
+FAMILIA ${familia}
 </h3>
-
 
 <div class="familia-total">
 
@@ -3336,7 +1951,6 @@ unidades
 </div>
 
 
-
 <div class="barra-label">
 
 <span>
@@ -3349,15 +1963,11 @@ ${obra} unidades · ${pctObra}%
 
 </div>
 
-
 <div class="barra">
 
-<div
-style="width:${pctObra}%">
-</div>
+<div style="width:${pctObra}%"></div>
 
 </div>
-
 
 
 <div class="barra-label">
@@ -3367,20 +1977,16 @@ Montados
 </span>
 
 <span>
-${montadas} unidades · ${pctMontaje}%
+${montadas} unidades · ${pctMontadas}%
 </span>
 
 </div>
 
-
 <div class="barra montaje">
 
-<div
-style="width:${pctMontaje}%">
-</div>
+<div style="width:${pctMontadas}%"></div>
 
 </div>
-
 
 
 <button
@@ -3398,39 +2004,30 @@ ${detalle}
 
 </div>
 
-
 </div>
 
 `;
 
-}
-)
-.join("");
+}).join("");
 
 }
-
 
 
 /* =====================================================
-DETALLE FAMILIA
+TOGGLES
 ===================================================== */
 
-function toggleDetalle(
-boton
-){
+function toggleDetalle(boton){
 
 const detalle=
 boton.nextElementSibling;
-
 
 const abierto=
 detalle.classList.toggle(
 "abierto"
 );
 
-
 boton.textContent=
-
 abierto
 ?
 "Ocultar detalle ▲"
@@ -3439,11 +2036,6 @@ abierto
 
 }
 
-
-
-/* =====================================================
-OCULTAR / MOSTRAR SECCIONES
-===================================================== */
 
 function toggleSeccion(
 contenidoId,
@@ -3455,21 +2047,17 @@ document.getElementById(
 contenidoId
 );
 
-
 const boton=
 document.getElementById(
 botonId
 );
-
 
 const cerrado=
 contenido.classList.toggle(
 "hidden"
 );
 
-
 boton.textContent=
-
 cerrado
 ?
 "Mostrar ▼"
@@ -3500,56 +2088,19 @@ chart.resize();
 }
 
 
-
 /* =====================================================
-ESCAPE HTML
-===================================================== */
-
-function escapeHtml(
-texto
-){
-
-return String(
-texto
-)
-
-.replace(
-/&/g,
-"&amp;"
-)
-
-.replace(
-/</g,
-"&lt;"
-)
-
-.replace(
-/>/g,
-"&gt;"
-)
-
-.replace(
-/"/g,
-"&quot;"
-)
-
-.replace(
-/'/g,
-"&#039;"
-);
-
-}
-
-
-
-/* =====================================================
-INICIO
+INICIAR
 ===================================================== */
 
 cargarDatos();
 
+setInterval(
+cargarDatos,
+60000
+);
 
 </script>
 
 </body>
+
 </html>
