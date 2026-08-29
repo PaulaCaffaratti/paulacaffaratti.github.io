@@ -139,11 +139,77 @@ color:#8a94a6;
 font-size:13px;
 }
 
-.kpis{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:16px;
+
+/* =========================
+TOTAL DESPLEGABLE
+========================= */
+
+.total-wrapper{
 margin-bottom:18px;
+}
+
+.total-card{
+background:#fff;
+border:1px solid #e8ebf1;
+border-left:4px solid #2855d9;
+border-radius:12px;
+padding:20px 22px;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
+transition:.2s;
+}
+
+.total-card:hover{
+background:#fafcff;
+border-color:#ced8eb;
+}
+
+.total-left{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.total-icon{
+font-size:30px;
+}
+
+.total-label{
+font-size:12px;
+color:#8a94a6;
+margin-bottom:6px;
+}
+
+.total-value{
+font-size:34px;
+font-weight:700;
+}
+
+.total-sub{
+font-size:11px;
+color:#8a94a6;
+margin-top:4px;
+}
+
+.total-action{
+font-size:12px;
+font-weight:700;
+color:#2855d9;
+white-space:nowrap;
+}
+
+.detalle-kpis{
+display:none;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+margin-top:12px;
+}
+
+.detalle-kpis.visible{
+display:grid;
 }
 
 .kpi{
@@ -170,10 +236,6 @@ font-size:11px;
 color:#8a94a6;
 }
 
-.kpi-main{
-border-left:4px solid #2855d9;
-}
-
 .kpi-green{
 border-left:4px solid #27ae60;
 }
@@ -185,6 +247,11 @@ border-left:4px solid #f2994a;
 .kpi-purple{
 border-left:4px solid #8e63ce;
 }
+
+
+/* =========================
+GENERAL
+========================= */
 
 .card{
 background:#fff;
@@ -262,6 +329,11 @@ font-size:11px;
 color:#7c8799;
 }
 
+
+/* =========================
+FLUJO
+========================= */
+
 .flow{
 margin-top:18px;
 }
@@ -300,6 +372,11 @@ font-size:10px;
 color:#8a94a6;
 margin-top:3px;
 }
+
+
+/* =========================
+TIPOS
+========================= */
 
 .tipo-card{
 margin-top:18px;
@@ -350,6 +427,11 @@ position:relative;
 .tabla-scroll{
 overflow-x:auto;
 }
+
+
+/* =========================
+TABLAS
+========================= */
 
 table{
 width:100%;
@@ -428,6 +510,11 @@ margin-bottom:18px;
 font-size:13px;
 }
 
+
+/* =========================
+RESPONSIVE
+========================= */
+
 @media(max-width:1100px){
 
 .flow-grid{
@@ -452,11 +539,11 @@ margin-left:70px;
 width:calc(100% - 70px);
 }
 
-.kpis{
-grid-template-columns:repeat(2,1fr);
+.dashboard-grid{
+grid-template-columns:1fr;
 }
 
-.dashboard-grid{
+.detalle-kpis{
 grid-template-columns:1fr;
 }
 
@@ -466,10 +553,6 @@ grid-template-columns:1fr;
 
 .content{
 padding:18px;
-}
-
-.kpis{
-grid-template-columns:1fr;
 }
 
 .flow-grid{
@@ -483,6 +566,14 @@ grid-template-columns:1fr;
 .card-header{
 align-items:flex-start;
 flex-direction:column;
+}
+
+.total-card{
+align-items:flex-start;
+}
+
+.total-action{
+white-space:normal;
 }
 
 }
@@ -540,46 +631,102 @@ Proyecto
 <div class="content">
 
 <div class="page-title">
-<h1>Resumen ejecutivo</h1>
-<p>Seguimiento general de fabricación, logística, calidad, montaje y pintura</p>
+
+<h1>
+Resumen ejecutivo
+</h1>
+
+<p>
+Seguimiento general de premoldeados: fabricación, logística, calidad, montaje y pintura
+</p>
+
 </div>
 
-<div class="error" id="errorBox"></div>
 
-
-<!-- KPIs -->
-
-<section class="kpis">
-
-<div class="kpi kpi-main">
-
-<div class="kpi-label">
-TOTAL DE PIEZAS
+<div
+class="error"
+id="errorBox">
 </div>
 
-<div class="kpi-value" id="total">
+
+<!-- =========================
+TOTAL PREMOLDEADOS
+========================= -->
+
+<section class="total-wrapper">
+
+<div
+class="total-card"
+onclick="toggleDetalleKpis()"
+role="button"
+tabindex="0"
+onkeydown="if(event.key==='Enter'||event.key===' '){toggleDetalleKpis()}">
+
+<div class="total-left">
+
+<div class="total-icon">
+🏗️
+</div>
+
+<div>
+
+<div class="total-label">
+PREMOLDEADOS TOTALES
+</div>
+
+<div
+class="total-value"
+id="total">
+
 0
+
 </div>
 
-<div class="kpi-sub">
+<div class="total-sub">
 Base de Ingeniería
 </div>
 
 </div>
 
+</div>
+
+
+<div
+class="total-action"
+id="textoDetalleKpi">
+
+Ver detalle ▼
+
+</div>
+
+</div>
+
+
+<div
+class="detalle-kpis"
+id="detalleKpis">
+
 
 <div class="kpi kpi-green">
 
 <div class="kpi-label">
-LIBERADAS EN TALLER
+LIBERADOS EN TALLER
 </div>
 
-<div class="kpi-value" id="liberadas">
+<div
+class="kpi-value"
+id="liberadas">
+
 0
+
 </div>
 
-<div class="kpi-sub" id="liberadasPct">
+<div
+class="kpi-sub"
+id="liberadasPct">
+
 0% del total
+
 </div>
 
 </div>
@@ -591,12 +738,20 @@ LIBERADAS EN TALLER
 EN OBRA
 </div>
 
-<div class="kpi-value" id="obra">
+<div
+class="kpi-value"
+id="obra">
+
 0
+
 </div>
 
-<div class="kpi-sub" id="obraPct">
+<div
+class="kpi-sub"
+id="obraPct">
+
 0% del total
+
 </div>
 
 </div>
@@ -605,23 +760,36 @@ EN OBRA
 <div class="kpi kpi-purple">
 
 <div class="kpi-label">
-MONTADAS
+MONTADOS
 </div>
 
-<div class="kpi-value" id="kpiMontadas">
+<div
+class="kpi-value"
+id="kpiMontadas">
+
 0
+
 </div>
 
-<div class="kpi-sub" id="kpiMontadasPct">
+<div
+class="kpi-sub"
+id="kpiMontadasPct">
+
 0% del total
+
 </div>
+
+</div>
+
 
 </div>
 
 </section>
 
 
-<!-- CURVA + ESTADO -->
+<!-- =========================
+CURVA + ESTADO
+========================= -->
 
 <div class="dashboard-grid">
 
@@ -643,11 +811,15 @@ Curva S — Planificado vs Real
 
 </div>
 
+
 <div class="chart-container">
+
 <canvas id="sCurve"></canvas>
+
 </div>
 
 </section>
+
 
 
 <section class="card">
@@ -671,17 +843,28 @@ Indicador ejecutivo
 
 <div class="status-box">
 
-<div class="status-big" id="statusText">
+<div
+class="status-big"
+id="statusText">
+
 CARGANDO
+
 </div>
 
 <div class="status-label">
 Estado general
 </div>
 
+
 <div class="progress">
-<div class="progress-bar" id="progressBar"></div>
+
+<div
+class="progress-bar"
+id="progressBar">
 </div>
+
+</div>
+
 
 <div class="progress-info">
 
@@ -700,8 +883,12 @@ Avance real
 
 <div class="status-box">
 
-<div class="status-big" id="deviation">
+<div
+class="status-big"
+id="deviation">
+
 0%
+
 </div>
 
 <div class="status-label">
@@ -732,7 +919,9 @@ style="font-weight:700;margin-top:5px">
 </div>
 
 
-<!-- FLUJO -->
+<!-- =========================
+FLUJO
+========================= -->
 
 <section class="card flow">
 
@@ -745,7 +934,7 @@ Flujo de premoldeados
 </div>
 
 <div class="card-subtitle">
-QA/QC se calcula contra las piezas en obra
+QA/QC se calcula contra los premoldeados en obra
 </div>
 
 </div>
@@ -766,12 +955,20 @@ QA/QC se calcula contra las piezas en obra
 En taller
 </div>
 
-<div class="flow-value" id="taller">
+<div
+class="flow-value"
+id="taller">
+
 0
+
 </div>
 
-<div class="flow-percent" id="tallerPct">
+<div
+class="flow-percent"
+id="tallerPct">
+
 0%
+
 </div>
 
 </div>
@@ -784,15 +981,23 @@ En taller
 </div>
 
 <div class="flow-name">
-Liberada
+Liberado
 </div>
 
-<div class="flow-value" id="flowLiberadas">
+<div
+class="flow-value"
+id="flowLiberadas">
+
 0
+
 </div>
 
-<div class="flow-percent" id="flowLiberadasPct">
+<div
+class="flow-percent"
+id="flowLiberadasPct">
+
 0%
+
 </div>
 
 </div>
@@ -808,12 +1013,20 @@ Liberada
 En obra
 </div>
 
-<div class="flow-value" id="flowObra">
+<div
+class="flow-value"
+id="flowObra">
+
 0
+
 </div>
 
-<div class="flow-percent" id="flowObraPct">
+<div
+class="flow-percent"
+id="flowObraPct">
+
 0%
+
 </div>
 
 </div>
@@ -829,12 +1042,20 @@ En obra
 QA/QC
 </div>
 
-<div class="flow-value" id="qaqc">
+<div
+class="flow-value"
+id="qaqc">
+
 0
+
 </div>
 
-<div class="flow-percent" id="qaqcPct">
+<div
+class="flow-percent"
+id="qaqcPct">
+
 0%
+
 </div>
 
 </div>
@@ -847,15 +1068,23 @@ QA/QC
 </div>
 
 <div class="flow-name">
-Montada
+Montado
 </div>
 
-<div class="flow-value" id="montadas">
+<div
+class="flow-value"
+id="montadas">
+
 0
+
 </div>
 
-<div class="flow-percent" id="montadasPctFlow">
+<div
+class="flow-percent"
+id="montadasPctFlow">
+
 0%
+
 </div>
 
 </div>
@@ -868,15 +1097,23 @@ Montada
 </div>
 
 <div class="flow-name">
-Pintada
+Pintado
 </div>
 
-<div class="flow-value" id="flowPintadas">
+<div
+class="flow-value"
+id="flowPintadas">
+
 0
+
 </div>
 
-<div class="flow-percent" id="flowPintadasPct">
+<div
+class="flow-percent"
+id="flowPintadasPct">
+
 0%
+
 </div>
 
 </div>
@@ -887,7 +1124,9 @@ Pintada
 </section>
 
 
-<!-- AVANCE POR TIPO -->
+<!-- =========================
+AVANCE POR TIPO
+========================= -->
 
 <section class="card tipo-card">
 
@@ -917,6 +1156,7 @@ onclick="mostrarDetalleTipos('grafico')">
 
 </button>
 
+
 <button
 id="btnTabla"
 class="tipo-btn"
@@ -925,6 +1165,7 @@ onclick="mostrarDetalleTipos('tabla')">
 📋 Tabla
 
 </button>
+
 
 <button
 class="tipo-btn"
@@ -938,8 +1179,6 @@ onclick="ocultarDetalleTipos()">
 
 </div>
 
-
-<!-- GRÁFICO OCULTO -->
 
 <div
 id="detalleGrafico"
@@ -955,8 +1194,6 @@ class="tipo-chart-wrap">
 
 </div>
 
-
-<!-- TABLA OCULTA -->
 
 <div
 id="detalleTabla"
@@ -978,7 +1215,7 @@ class="detalle-tipos">
 
 <th>EN OBRA</th>
 
-<th>MONTADAS</th>
+<th>MONTADOS</th>
 
 </tr>
 
@@ -1006,10 +1243,11 @@ Cargando...
 </section>
 
 
-<!-- INDICADORES -->
+<!-- =========================
+INDICADORES
+========================= -->
 
 <div class="bottom-grid">
-
 
 <section class="card">
 
@@ -1078,7 +1316,7 @@ id="tblTallerPct">
 <tr>
 
 <td>
-Liberada taller
+Liberado taller
 </td>
 
 <td id="tblLiberadas">
@@ -1153,7 +1391,7 @@ id="tblQAPct">
 <tr>
 
 <td>
-Montada
+Montado
 </td>
 
 <td id="tblMontadas">
@@ -1178,7 +1416,7 @@ id="tblMontadasPct">
 <tr>
 
 <td>
-Pintada
+Pintado
 </td>
 
 <td id="tblPintadas">
@@ -1207,7 +1445,9 @@ id="tblPintadasPct">
 </section>
 
 
-<!-- LECTURA EJECUTIVA -->
+<!-- =========================
+LECTURA EJECUTIVA
+========================= -->
 
 <section class="card">
 
@@ -1253,7 +1493,7 @@ El proyecto presenta un avance ponderado acumulado del
 
 <p>
 
-Liberadas en taller:
+Premoldeados liberados en taller:
 
 <strong id="executiveLiberadas">
 0
@@ -1271,13 +1511,13 @@ QA/QC:
 0
 </strong>.
 
-Montadas:
+Montados:
 
 <strong id="executiveMontadas">
 0
 </strong>.
 
-Pintadas:
+Pintados:
 
 <strong id="executivePintadas">
 0
@@ -1294,7 +1534,6 @@ Todos los indicadores se leen directamente desde Supabase.
 
 </section>
 
-
 </div>
 
 </div>
@@ -1305,6 +1544,7 @@ Todos los indicadores se leen directamente desde Supabase.
 
 
 <script>
+
 
 /* =====================================================
 SUPABASE
@@ -1364,7 +1604,41 @@ let datosTipos=[];
 
 
 /* =====================================================
-CARGAR DATOS
+DESPLEGAR DETALLE SUPERIOR
+===================================================== */
+
+function toggleDetalleKpis(){
+
+const detalle=
+document.getElementById(
+"detalleKpis"
+);
+
+const texto=
+document.getElementById(
+"textoDetalleKpi"
+);
+
+
+const abierto=
+detalle.classList.toggle(
+"visible"
+);
+
+
+texto.textContent=
+
+abierto
+?
+"Ocultar detalle ▲"
+:
+"Ver detalle ▼";
+
+}
+
+
+/* =====================================================
+CARGAR SUPABASE
 ===================================================== */
 
 async function cargarDatos(){
@@ -1424,7 +1698,9 @@ data || [];
 
 
 document
-.getElementById("errorBox")
+.getElementById(
+"errorBox"
+)
 .style.display=
 "none";
 
@@ -1461,14 +1737,12 @@ piezas.length;
 
 
 /*
-ETAPAS
-
-0 = EN TALLER
-1 = LIBERADA EN TALLER
+0 = TALLER
+1 = LIBERADO TALLER
 2 = EN OBRA
 3 = QA/QC
 
-MONTAJE Y PINTURA SON INDEPENDIENTES
+Montado y Pintado son independientes.
 */
 
 
@@ -1508,7 +1782,10 @@ p=>p.pintada===true
 ).length;
 
 
-/* PORCENTAJE SOBRE INGENIERÍA */
+/*
+PORCENTAJE CONTRA
+TOTAL DE PREMOLDEADOS
+*/
 
 const pctTotal=
 cantidad=>{
@@ -1527,12 +1804,10 @@ total *
 
 
 /*
-CALIDAD
+QA/QC
 
-LA BASE ES EN OBRA.
-
-90 QA/QC / 90 EN OBRA
-= 100%
+Se calcula contra los
+premoldeados EN OBRA.
 */
 
 const pctCalidad=
@@ -1542,9 +1817,7 @@ obra===0
 ?0
 
 :Math.round(
-
 (qaqc / obra) * 100
-
 );
 
 
@@ -1561,11 +1834,11 @@ total===0
 :Math.round(
 
 (
-taller +
-liberadas +
-obra +
-qaqc +
-montadas +
+taller+
+liberadas+
+obra+
+qaqc+
+montadas+
 pintadas
 )
 
@@ -1580,13 +1853,15 @@ pintadas
 );
 
 
-/* KPIs */
+/* TOTAL */
 
 setText(
 "total",
 total
 );
 
+
+/* DETALLE SUPERIOR */
 
 setText(
 "liberadas",
@@ -1671,12 +1946,6 @@ qaqc
 );
 
 
-/*
-IMPORTANTE:
-
-ACÁ QA/QC USA pctCalidad
-*/
-
 setText(
 "qaqcPct",
 pctCalidad+"%"
@@ -1753,9 +2022,7 @@ qaqc
 
 /*
 IMPORTANTE:
-
-TAMBIÉN ACÁ QA/QC USA
-EN OBRA COMO DENOMINADOR
+QA/QC / EN OBRA
 */
 
 setText(
@@ -1788,7 +2055,7 @@ pctTotal(pintadas)+"%"
 );
 
 
-/* AVANCE GENERAL */
+/* AVANCE */
 
 setText(
 "progressText",
@@ -1810,7 +2077,7 @@ document
 avanceGeneral+"%";
 
 
-/* EJECUTIVO */
+/* LECTURA */
 
 setText(
 "executiveLiberadas",
@@ -1842,7 +2109,7 @@ pintadas
 );
 
 
-/* POR TIPO */
+/* TIPOS */
 
 actualizarDatosTipos();
 
@@ -1863,7 +2130,7 @@ avanceGeneral
 
 
 /* =====================================================
-AGRUPAR POR TIPO
+DATOS POR TIPO
 ===================================================== */
 
 function actualizarDatosTipos(){
@@ -1873,9 +2140,11 @@ const agrupados={};
 
 piezas.forEach(p=>{
 
+
 const tipo=
 String(
-p.tipo || "SIN TIPO"
+p.tipo ||
+"SIN TIPO"
 )
 .trim()
 .toUpperCase();
@@ -1941,7 +2210,7 @@ b.tipo,
 actualizarTablaTipos();
 
 
-const graficoVisible=
+if(
 document
 .getElementById(
 "detalleGrafico"
@@ -1949,10 +2218,8 @@ document
 .classList
 .contains(
 "visible"
-);
-
-
-if(graficoVisible){
+)
+){
 
 actualizarGraficoTipos();
 
@@ -1980,9 +2247,7 @@ tbody.innerHTML=`
 <tr>
 
 <td colspan="5">
-
 No hay datos cargados.
-
 </td>
 
 </tr>
@@ -1996,57 +2261,43 @@ return;
 
 tbody.innerHTML=
 
-datosTipos.map(x=>`
+datosTipos.map(
+x=>`
 
 <tr>
 
 <td class="tipo-nombre">
-
 ${escapeHtml(x.tipo)}
-
 </td>
-
 
 <td class="tipo-total">
-
 ${x.total}
-
 </td>
 
-
 <td>
-
 ${x.taller}
-
 </td>
 
-
 <td>
-
 ${x.obra}
-
 </td>
 
-
 <td>
-
 <strong>
-
 ${x.montadas}
-
 </strong>
-
 </td>
 
 </tr>
 
-`).join("");
+`
+).join("");
 
 }
 
 
 /* =====================================================
-MOSTRAR / OCULTAR DETALLE
+MOSTRAR TIPOS
 ===================================================== */
 
 function mostrarDetalleTipos(
@@ -2081,16 +2332,13 @@ grafico.classList.remove(
 "visible"
 );
 
-
 tabla.classList.remove(
 "visible"
 );
 
-
 btnGrafico.classList.remove(
 "active"
 );
-
 
 btnTabla.classList.remove(
 "active"
@@ -2103,11 +2351,9 @@ grafico.classList.add(
 "visible"
 );
 
-
 btnGrafico.classList.add(
 "active"
 );
-
 
 setTimeout(
 actualizarGraficoTipos,
@@ -2122,7 +2368,6 @@ if(modo==="tabla"){
 tabla.classList.add(
 "visible"
 );
-
 
 btnTabla.classList.add(
 "active"
@@ -2193,14 +2438,6 @@ document.getElementById(
 "tipoChartWrap"
 );
 
-
-/*
-Altura dinámica.
-
-Si hay muchos tipos,
-el gráfico crece para que
-los nombres sean legibles.
-*/
 
 wrap.style.height=
 
@@ -2304,7 +2541,7 @@ borderRadius:
 {
 
 label:
-"Montadas",
+"Montados",
 
 data:
 datosTipos.map(
@@ -2350,28 +2587,6 @@ display:true,
 
 position:"top"
 
-},
-
-
-tooltip:{
-
-callbacks:{
-
-label:
-function(ctx){
-
-return (
-
-ctx.dataset.label+
-": "+
-ctx.raw
-
-);
-
-}
-
-}
-
 }
 
 },
@@ -2386,13 +2601,6 @@ beginAtZero:true,
 ticks:{
 
 precision:0
-
-},
-
-grid:{
-
-color:
-"#edf0f5"
 
 }
 
@@ -2421,14 +2629,13 @@ display:false
 
 
 /* =====================================================
-ESTADO DEL PROYECTO
+ESTADO PROYECTO
 ===================================================== */
 
 function obtenerPlanActual(){
 
 const hoy=
 new Date();
-
 
 let plan=0;
 
@@ -2474,6 +2681,7 @@ planActual;
 
 setText(
 "deviation",
+
 (desvio>0?"+":"")+
 desvio+
 "%"
