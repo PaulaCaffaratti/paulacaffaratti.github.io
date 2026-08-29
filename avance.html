@@ -23,11 +23,7 @@ padding:20px 35px
 
 header h1{margin:0 0 12px}
 
-nav{
-display:flex;
-gap:10px;
-flex-wrap:wrap
-}
+nav{display:flex;gap:10px;flex-wrap:wrap}
 
 nav a{
 color:white;
@@ -100,7 +96,8 @@ width:100%
 
 .logout{
 background:#a83232;
-color:white
+color:white;
+float:right
 }
 
 .actualizar{
@@ -170,10 +167,6 @@ border-radius:6px;
 font-weight:bold
 }
 
-.etapa option:disabled{
-color:#999
-}
-
 .contadores{
 display:flex;
 gap:12px;
@@ -201,22 +194,21 @@ padding:30px;
 color:#657487
 }
 
-.oculto{
-display:none!important
-}
+.oculto{display:none!important}
 
 .ayuda{
 font-size:12px;
 color:#657487;
 margin-top:12px
 }
+
+.clear{clear:both}
 </style>
 </head>
 
 <body>
 
 <header>
-
 <h1>🏗️ CONTROL DE PREMOLDEADOS</h1>
 
 <nav>
@@ -224,7 +216,6 @@ margin-top:12px
 <a href="base.html">📋 BASE DE INGENIERÍA</a>
 <a href="avance.html" class="activo">🚀 AVANCE</a>
 </nav>
-
 </header>
 
 <main>
@@ -235,29 +226,19 @@ margin-top:12px
 
 <h2>🔐 Iniciar sesión</h2>
 
-<p>
-Ingresá con el usuario que te creó el administrador.
-</p>
+<p>Ingresá con tu email y contraseña.</p>
 
 <div class="campo">
 <label>EMAIL</label>
-<input
-id="email"
-type="email"
-placeholder="tu@email.com">
+<input id="email" type="email" placeholder="tu@email.com">
 </div>
 
 <div class="campo">
 <label>CONTRASEÑA</label>
-<input
-id="password"
-type="password"
-placeholder="Contraseña">
+<input id="password" type="password" placeholder="Contraseña">
 </div>
 
-<button
-class="boton login-btn"
-onclick="iniciarSesion()">
+<button class="boton login-btn" onclick="iniciarSesion()">
 🔐 INICIAR SESIÓN
 </button>
 
@@ -270,22 +251,24 @@ onclick="iniciarSesion()">
 
 <section id="appPanel" class="oculto">
 
-<h2>🚀 Avance de Premoldeados</h2>
+<div class="panel">
 
-<p>
-Actualizá la etapa de cada premoldeado.
-</p>
-
-<div id="usuario" class="usuario"></div>
-
-<button
-class="boton logout"
-onclick="cerrarSesion()">
+<button class="boton logout" onclick="cerrarSesion()">
 🚪 CERRAR SESIÓN
 </button>
 
+<h2>🚀 Avance de Premoldeados</h2>
+
+<div class="clear"></div>
+
+<p>Actualización de etapas de los premoldeados.</p>
+
+<div id="usuario" class="usuario"></div>
+
 <div id="estado" class="estado">
 ⏳ Cargando...
+</div>
+
 </div>
 
 
@@ -314,12 +297,9 @@ oninput="mostrarTabla()">
 <option value="4">MONTADA</option>
 <option value="5">PINTADA</option>
 </select>
-
 </div>
 
-<button
-class="boton actualizar"
-onclick="cargarDatos()">
+<button class="boton actualizar" onclick="cargarDatos()">
 🔄 ACTUALIZAR
 </button>
 
@@ -345,7 +325,6 @@ onclick="cargarDatos()">
 <div class="tabla">
 
 <table>
-
 <thead>
 <tr>
 <th>ID</th>
@@ -409,41 +388,36 @@ let usuarioActual=null;
 let permisos=null;
 
 
-/* LOGIN */
+/* =========================
+LOGIN
+========================= */
 
 async function iniciarSesion(){
 
-const email=document
-.getElementById("email")
-.value
-.trim();
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+const error=document.getElementById("loginError");
 
-const password=document
-.getElementById("password")
-.value;
+if(!email || !password){
 
+error.textContent="❌ Completá email y contraseña.";
+return;
 
-const error=document
-.getElementById("loginError");
+}
 
 error.textContent="⏳ Iniciando sesión...";
-
 
 const {error:loginError}=await db.auth.signInWithPassword({
 email:email,
 password:password
 });
 
-
 if(loginError){
 
-error.textContent=
-"❌ "+loginError.message;
-
+error.textContent="❌ "+loginError.message;
 return;
 
 }
-
 
 error.textContent="";
 
@@ -451,6 +425,10 @@ await iniciarAplicacion();
 
 }
 
+
+/* =========================
+CERRAR SESIÓN
+========================= */
 
 async function cerrarSesion(){
 
@@ -465,10 +443,15 @@ document.getElementById("appPanel")
 document.getElementById("loginPanel")
 .classList.remove("oculto");
 
+document.getElementById("email").value="";
+document.getElementById("password").value="";
+
 }
 
 
-/* VERIFICAR SESIÓN */
+/* =========================
+INICIAR APLICACIÓN
+========================= */
 
 async function iniciarAplicacion(){
 
@@ -476,13 +459,7 @@ const {
 data:{user}
 }=await db.auth.getUser();
 
-
-if(!user){
-
-return;
-
-}
-
+if(!user)return;
 
 usuarioActual=user;
 
@@ -499,7 +476,7 @@ if(error){
 console.error(error);
 
 document.getElementById("loginError").textContent=
-"❌ Error consultando permisos.";
+"❌ Error consultando permisos: "+error.message;
 
 return;
 
@@ -520,7 +497,7 @@ if(permisos){
 
 document.getElementById("usuario").innerHTML=
 "👤 <strong>"+
-escapeHtml(permisos.nombre)+
+escapeHtml(permisos.nombre || user.email)+
 "</strong> — permisos cargados.";
 
 }else{
@@ -538,7 +515,9 @@ cargarDatos();
 }
 
 
-/* PERMISO */
+/* =========================
+PERMISOS
+========================= */
 
 function puedeCambiarEtapa(etapa){
 
@@ -559,7 +538,9 @@ permiso && permisos[permiso]
 }
 
 
-/* ESTADO */
+/* =========================
+ESTADO
+========================= */
 
 function estado(mensaje,tipo=""){
 
@@ -576,7 +557,9 @@ e.classList.add(tipo);
 }
 
 
-/* DATOS */
+/* =========================
+CARGAR DATOS
+========================= */
 
 async function cargarDatos(){
 
@@ -591,8 +574,7 @@ const {data,error}=await db
 if(error){
 
 estado(
-"❌ Error al cargar: "+
-error.message,
+"❌ Error al cargar: "+error.message,
 "error"
 );
 
@@ -600,11 +582,9 @@ return;
 
 }
 
-
 premoldeados=data||[];
 
 actualizarContadores();
-
 mostrarTabla();
 
 estado(
@@ -615,7 +595,9 @@ estado(
 }
 
 
-/* CONTADORES */
+/* =========================
+CONTADORES
+========================= */
 
 function actualizarContadores(){
 
@@ -630,7 +612,6 @@ cantidades[e]++;
 }
 
 });
-
 
 document.getElementById("total").textContent=
 premoldeados.length;
@@ -656,16 +637,15 @@ cantidades[5];
 }
 
 
-/* TABLA */
+/* =========================
+TABLA
+========================= */
 
 function mostrarTabla(){
 
 const tabla=document.getElementById("tabla");
 
-if(!tabla){
-return;
-}
-
+if(!tabla)return;
 
 const buscar=document
 .getElementById("buscar")
@@ -680,8 +660,7 @@ const filtro=document
 
 const lista=premoldeados.filter(p=>{
 
-const codigo=String(p.codigo??"")
-.toLowerCase();
+const codigo=String(p.codigo??"").toLowerCase();
 
 const coincideCodigo=
 !buscar||codigo.includes(buscar);
@@ -723,7 +702,7 @@ let opciones="";
 etapas.forEach((nombre,index)=>{
 
 const permitido=
-index===etapa||
+index===etapa ||
 puedeCambiarEtapa(index);
 
 
@@ -772,7 +751,9 @@ ${opciones}
 }
 
 
-/* CAMBIAR ETAPA */
+/* =========================
+CAMBIAR ETAPA
+========================= */
 
 async function cambiarEtapa(id,nuevaEtapa){
 
@@ -782,22 +763,16 @@ const pieza=premoldeados.find(
 p=>Number(p.id)===Number(id)
 );
 
-if(!pieza){
-return;
-}
+if(!pieza)return;
 
-
-const anterior=
-Number(pieza.etapa||0);
+const anterior=Number(pieza.etapa||0);
 
 
 /* NO RETROCEDER */
 
 if(etapa<anterior){
 
-alert(
-"❌ No se puede retroceder una pieza."
-);
+alert("❌ No se puede retroceder una pieza.");
 
 mostrarTabla();
 
@@ -809,7 +784,11 @@ return;
 /* SIN CAMBIO */
 
 if(etapa===anterior){
+
+mostrarTabla();
+
 return;
+
 }
 
 
@@ -844,8 +823,7 @@ if(error){
 console.error(error);
 
 estado(
-"❌ No se pudo guardar: "+
-error.message,
+"❌ No se pudo guardar: "+error.message,
 "error"
 );
 
@@ -859,18 +837,19 @@ return;
 pieza.etapa=etapa;
 
 actualizarContadores();
-
 mostrarTabla();
 
 estado(
-"✅ <strong>Cambio guardado.</strong>",
+"✅ <strong>Cambio guardado correctamente.</strong>",
 "ok"
 );
 
 }
 
 
-/* HTML */
+/* =========================
+ESCAPAR HTML
+========================= */
 
 function escapeHtml(text){
 
@@ -884,7 +863,9 @@ return String(text)
 }
 
 
-/* ARRANQUE */
+/* =========================
+ARRANQUE
+========================= */
 
 (async function(){
 
