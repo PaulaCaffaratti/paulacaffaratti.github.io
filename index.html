@@ -4,13 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Control de Premoldeados - Resumen</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     :root {
       --azul: #102f52;
@@ -78,7 +75,14 @@
       color: #657487;
     }
 
-    /* TARJETAS */
+    .estado-carga {
+      background: #fff8e9;
+      border: 1px solid #ead9a6;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 13px;
+    }
 
     .resumen {
       display: grid;
@@ -144,8 +148,6 @@
     .montada-card { background: #edf8f6; }
     .pintada-card { background: #fff0f5; }
 
-    /* CAMINO */
-
     .camino {
       background: white;
       border: 1px solid var(--borde);
@@ -199,8 +201,6 @@
       font-size: 22px;
       color: #8b98a5;
     }
-
-    /* MODAL */
 
     .modal-fondo {
       display: none;
@@ -318,50 +318,24 @@
     }
 
     @media(max-width: 1350px) {
-      .resumen {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .pasos {
-        flex-wrap: wrap;
-      }
-
-      .paso {
-        min-width: 30%;
-      }
-
-      .flecha {
-        display: none;
-      }
+      .resumen { grid-template-columns: repeat(4, 1fr); }
+      .pasos { flex-wrap: wrap; }
+      .paso { min-width: 30%; }
+      .flecha { display: none; }
     }
 
     @media(max-width: 700px) {
-
-      header {
-        padding: 18px;
-      }
-
-      main {
-        padding: 15px;
-      }
-
-      .resumen {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .paso {
-        min-width: 100%;
-      }
-
+      header { padding: 18px; }
+      main { padding: 15px; }
+      .resumen { grid-template-columns: repeat(2, 1fr); }
+      .paso { min-width: 100%; }
     }
-
   </style>
 </head>
 
 <body>
 
 <header>
-
   <h1>🏗️ CONTROL DE PREMOLDEADOS</h1>
 
   <nav>
@@ -369,25 +343,18 @@
     <a href="base.html">📋 BASE DE INGENIERÍA</a>
     <a href="avance.html">🚀 AVANCE</a>
   </nav>
-
 </header>
-
 
 <main>
 
   <section class="titulo-seccion">
-
     <h2>📊 Resumen General</h2>
-
-    <p>
-      Hacé clic en cualquier tarjeta para ver
-      el detalle por Tipo y Modelo.
-    </p>
-
+    <p>Hacé clic en cualquier tarjeta para ver el detalle por Tipo y Modelo.</p>
   </section>
 
-
-  <!-- TARJETAS -->
+  <div class="estado-carga" id="estadoCarga">
+    ⏳ Conectando con la base de datos...
+  </div>
 
   <section class="resumen">
 
@@ -449,16 +416,9 @@
 
   </section>
 
-
-  <!-- CAMINO DEL PREMOLDEADO -->
-
   <section class="camino">
-
     <h2>🧭 Camino del Premoldeado</h2>
-
-    <p>
-      Todas las piezas recorren estas etapas.
-    </p>
+    <p>Todas las piezas recorren estas etapas.</p>
 
     <div class="pasos">
 
@@ -509,36 +469,42 @@
       </div>
 
     </div>
-
   </section>
 
 </main>
 
-
-<!-- MODAL -->
-
 <div class="modal-fondo" id="modalFondo">
-
   <div class="modal">
 
     <div class="modal-header">
-
       <h2 id="tituloModal">DETALLE</h2>
-
-      <button class="cerrar" onclick="cerrarModal()">
-        ×
-      </button>
-
+      <button class="cerrar" onclick="cerrarModal()">×</button>
     </div>
 
     <div id="contenidoModal"></div>
 
   </div>
-
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+  /*
+    CONEXIÓN CON SUPABASE
+  */
+
+  const SUPABASE_URL = "https://tnnioleawbhuqjuykrsf.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
+
+  const { createClient } = supabase;
+
+  const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
 
   const etapas = [
     "EN TALLER",
@@ -550,48 +516,65 @@
   ];
 
 
-  let premoldeados =
-    JSON.parse(
-      localStorage.getItem("premoldeados")
-    ) || [];
+  let premoldeados = [];
 
 
   function porcentaje(cantidad, total) {
-
     if (total === 0) return 0;
+    return ((cantidad / total) * 100).toFixed(1);
+  }
 
-    return (
-      cantidad / total * 100
-    ).toFixed(1);
+
+  async function cargarDatos() {
+
+    document.getElementById("estadoCarga").textContent =
+      "⏳ Cargando datos online...";
+
+
+    const { data, error } =
+      await db
+        .from("premoldeados")
+        .select("*")
+        .order("id", { ascending: true });
+
+
+    if (error) {
+
+      console.error(error);
+
+      document.getElementById("estadoCarga").innerHTML =
+        "❌ Error al conectar con la base de datos: " +
+        error.message;
+
+      return;
+
+    }
+
+
+    premoldeados = data || [];
+
+
+    document.getElementById("estadoCarga").innerHTML =
+      "☁️ <strong>Base de datos online conectada.</strong> " +
+      "Los datos que ves son compartidos entre los usuarios.";
+
+
+    actualizarResumen();
 
   }
 
 
   function piezasDeTarjeta(tipoTarjeta) {
 
-    // TOTAL
     if (tipoTarjeta === 0) {
       return premoldeados;
     }
 
-    // EN TALLER:
-    // solamente las que todavía están allí
     if (tipoTarjeta === 1) {
-      return premoldeados.filter(
-        p => p.etapa === 0
-      );
+      return premoldeados.filter(p => p.etapa === 0);
     }
 
-    /*
-      ETAPAS ACUMULATIVAS
-
-      Una pieza pintada también cuenta
-      como liberada en taller, en obra,
-      QA/QC y montada.
-    */
-
-    const etapaMinima =
-      tipoTarjeta - 1;
+    const etapaMinima = tipoTarjeta - 1;
 
     return premoldeados.filter(
       p => p.etapa >= etapaMinima
@@ -602,81 +585,50 @@
 
   function actualizarResumen() {
 
-    const total =
-      premoldeados.length;
+    const total = premoldeados.length;
 
     const taller =
-      premoldeados.filter(
-        p => p.etapa === 0
-      ).length;
+      premoldeados.filter(p => p.etapa === 0).length;
 
     const libTaller =
-      premoldeados.filter(
-        p => p.etapa >= 1
-      ).length;
+      premoldeados.filter(p => p.etapa >= 1).length;
 
     const obra =
-      premoldeados.filter(
-        p => p.etapa >= 2
-      ).length;
+      premoldeados.filter(p => p.etapa >= 2).length;
 
     const qa =
-      premoldeados.filter(
-        p => p.etapa >= 3
-      ).length;
+      premoldeados.filter(p => p.etapa >= 3).length;
 
     const montada =
-      premoldeados.filter(
-        p => p.etapa >= 4
-      ).length;
+      premoldeados.filter(p => p.etapa >= 4).length;
 
     const pintada =
-      premoldeados.filter(
-        p => p.etapa >= 5
-      ).length;
+      premoldeados.filter(p => p.etapa >= 5).length;
 
 
-    document.getElementById("total").textContent =
-      total;
-
-    document.getElementById("enTaller").textContent =
-      taller;
-
-    document.getElementById("libTaller").textContent =
-      libTaller;
-
-    document.getElementById("enObra").textContent =
-      obra;
-
-    document.getElementById("qa").textContent =
-      qa;
-
-    document.getElementById("montada").textContent =
-      montada;
-
-    document.getElementById("pintada").textContent =
-      pintada;
+    document.getElementById("total").textContent = total;
+    document.getElementById("enTaller").textContent = taller;
+    document.getElementById("libTaller").textContent = libTaller;
+    document.getElementById("enObra").textContent = obra;
+    document.getElementById("qa").textContent = qa;
+    document.getElementById("montada").textContent = montada;
+    document.getElementById("pintada").textContent = pintada;
 
 
     document.getElementById("porcTaller").textContent =
       porcentaje(taller, total) + "% del total";
 
-
     document.getElementById("porcLibTaller").textContent =
       porcentaje(libTaller, total) + "% de avance";
-
 
     document.getElementById("porcObra").textContent =
       porcentaje(obra, total) + "% de avance";
 
-
     document.getElementById("porcQA").textContent =
       porcentaje(qa, total) + "% de avance";
 
-
     document.getElementById("porcMontada").textContent =
       porcentaje(montada, total) + "% de avance";
-
 
     document.getElementById("porcPintada").textContent =
       porcentaje(pintada, total) + "% de avance";
@@ -697,188 +649,128 @@
     ];
 
 
-    const piezas =
-      piezasDeTarjeta(tipoTarjeta);
+    const piezas = piezasDeTarjeta(tipoTarjeta);
 
 
     document.getElementById("tituloModal").textContent =
       titulos[tipoTarjeta];
 
 
-    /*
-      Primero agrupamos toda la base
-      para saber el TOTAL de cada modelo.
-    */
-
     const grupos = {};
 
 
     premoldeados.forEach(p => {
 
-      const clave =
-        p.tipo + "||" + p.modelo;
-
+      const clave = p.tipo + "||" + p.modelo;
 
       if (!grupos[clave]) {
-
         grupos[clave] = {
           tipo: p.tipo,
           modelo: p.modelo,
           total: 0,
           alcanzadas: 0
         };
-
       }
-
 
       grupos[clave].total++;
 
     });
 
 
-    /*
-      Ahora contamos las piezas
-      que alcanzaron la etapa.
-    */
-
     piezas.forEach(p => {
 
-      const clave =
-        p.tipo + "||" + p.modelo;
-
+      const clave = p.tipo + "||" + p.modelo;
 
       if (grupos[clave]) {
-
         grupos[clave].alcanzadas++;
-
       }
 
     });
 
 
     let html = `
-
       <p>
-        Avance por
-        <strong>Tipo y Modelo</strong>.
+        Avance por <strong>Tipo y Modelo</strong>.
       </p>
 
       <table class="detalle-tabla">
-
         <thead>
-
           <tr>
             <th>TIPO</th>
             <th>MODELO</th>
             <th>AVANCE</th>
           </tr>
-
         </thead>
-
         <tbody>
-
     `;
 
 
-    Object.values(grupos)
-      .forEach(grupo => {
+    Object.values(grupos).forEach(grupo => {
+
+      const porc =
+        porcentaje(
+          grupo.alcanzadas,
+          grupo.total
+        );
 
 
-        const porc =
-          porcentaje(
-            grupo.alcanzadas,
-            grupo.total
-          );
+      html += `
+        <tr class="dato"
+          onclick="mostrarCodigos(
+            '${grupo.tipo.replace(/'/g, "\\'")}',
+            '${grupo.modelo.replace(/'/g, "\\'")}',
+            ${tipoTarjeta}
+          )">
 
+          <td>${grupo.tipo}</td>
 
-        html += `
+          <td>${grupo.modelo}</td>
 
-          <tr class="dato"
-            onclick="mostrarCodigos(
-              '${grupo.tipo.replace(/'/g, "\\'")}',
-              '${grupo.modelo.replace(/'/g, "\\'")}',
-              ${tipoTarjeta}
-            )"
-          >
+          <td>
+            <strong>
+              ${grupo.alcanzadas} / ${grupo.total}
+              — ${porc}%
+            </strong>
 
-            <td>${grupo.tipo}</td>
+            <div class="barra">
+              <div
+                class="barra-interna"
+                style="width:${porc}%"
+              ></div>
+            </div>
+          </td>
 
-            <td>${grupo.modelo}</td>
+        </tr>
+      `;
 
-            <td>
-
-              <strong>
-                ${grupo.alcanzadas}
-                /
-                ${grupo.total}
-
-                — ${porc}%
-              </strong>
-
-              <div class="barra">
-
-                <div
-                  class="barra-interna"
-                  style="width:${porc}%"
-                ></div>
-
-              </div>
-
-            </td>
-
-          </tr>
-
-        `;
-
-      });
+    });
 
 
     html += `
-
         </tbody>
-
       </table>
 
-
       <div class="resumen-modal">
-
-        TOTAL:
-
-        ${piezas.length}
-
-        de
-
-        ${premoldeados.length}
-
+        TOTAL: ${piezas.length}
+        de ${premoldeados.length}
         premoldeados
-
         —
-
         ${porcentaje(
           piezas.length,
           premoldeados.length
         )}%
-
       </div>
 
-
-      <div
-        class="codigos"
-        id="zonaCodigos"
-      >
-
+      <div class="codigos" id="zonaCodigos">
         <p>
           💡 Hacé clic sobre una fila
           para ver los códigos individuales.
         </p>
-
       </div>
-
     `;
 
 
-    document.getElementById("contenidoModal")
-      .innerHTML =
+    document.getElementById("contenidoModal").innerHTML =
       html;
 
 
@@ -904,25 +796,19 @@
 
 
     let html = `
-
-      <h3>
-        ${tipo} — ${modelo}
-      </h3>
+      <h3>${tipo} — ${modelo}</h3>
 
       <p>
         Códigos que alcanzaron esta etapa:
       </p>
 
       <div class="lista-codigos">
-
     `;
 
 
     if (piezas.length === 0) {
 
-      html += `
-        No hay piezas en esta etapa.
-      `;
+      html += "No hay piezas en esta etapa.";
 
     } else {
 
@@ -939,38 +825,37 @@
     }
 
 
-    html += `</div>`;
+    html += "</div>";
 
 
     document.getElementById("zonaCodigos")
-      .innerHTML =
-      html;
+      .innerHTML = html;
 
   }
 
 
   function cerrarModal() {
-
     document.getElementById("modalFondo")
       .classList.remove("activo");
-
   }
 
 
   document.getElementById("modalFondo")
-    .addEventListener(
-      "click",
-      function(evento) {
-
-        if (evento.target === this) {
-          cerrarModal();
-        }
-
+    .addEventListener("click", function(evento) {
+      if (evento.target === this) {
+        cerrarModal();
       }
-    );
+    });
 
 
-  actualizarResumen();
+  /*
+    ACTUALIZACIÓN AUTOMÁTICA
+    Consulta nuevamente cada 10 segundos.
+  */
+
+  cargarDatos();
+
+  setInterval(cargarDatos, 10000);
 
 </script>
 
