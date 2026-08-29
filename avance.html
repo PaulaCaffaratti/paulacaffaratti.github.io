@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -160,6 +159,12 @@ border-radius:6px;
 font-weight:bold
 }
 
+.etapa:disabled{
+background:#eeeeee;
+color:#777;
+cursor:not-allowed
+}
+
 .contadores{
 display:flex;
 gap:12px;
@@ -186,6 +191,15 @@ text-align:center;
 padding:30px;
 color:#657487
 }
+
+.usuario{
+background:#eef5fc;
+border:1px solid #d3e1ef;
+padding:10px 14px;
+border-radius:8px;
+margin-bottom:15px;
+font-size:13px
+}
 </style>
 </head>
 
@@ -211,6 +225,10 @@ color:#657487
 Actualizá la etapa de cada premoldeado. Los cambios quedan guardados online.
 </p>
 
+<div id="usuario" class="usuario">
+⏳ Verificando usuario...
+</div>
+
 <div id="estado" class="estado">
 ⏳ Conectando con la base de datos...
 </div>
@@ -234,17 +252,11 @@ oninput="mostrarTabla()">
 <select id="filtroEtapa" onchange="mostrarTabla()">
 
 <option value="">TODAS</option>
-
 <option value="0">EN TALLER</option>
-
 <option value="1">LIBERADA EN TALLER</option>
-
 <option value="2">EN OBRA</option>
-
 <option value="3">LIBERADA QA/QC EN OBRA</option>
-
 <option value="4">MONTADA</option>
-
 <option value="5">PINTADA</option>
 
 </select>
@@ -307,7 +319,6 @@ Pintada
 <table>
 
 <thead>
-
 <tr>
 <th>ID</th>
 <th>CÓDIGO</th>
@@ -315,7 +326,6 @@ Pintada
 <th>MODELO</th>
 <th>ETAPA</th>
 </tr>
-
 </thead>
 
 <tbody id="tabla"></tbody>
@@ -343,6 +353,7 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
+
 const etapas = [
 "EN TALLER",
 "LIBERADA EN TALLER",
@@ -352,7 +363,32 @@ const etapas = [
 "PINTADA"
 ];
 
+
 let premoldeados = [];
+let usuarioActual = null;
+let permisos = null;
+
+
+/*
+========================================
+PERMISOS
+========================================
+*/
+
+const permisosEtapa = {
+1: "puede_liberar_taller",
+2: "puede_llevar_obra",
+3: "puede_liberar_qaqc",
+4: "puede_montar",
+5: "puede_pintar"
+};
+
+
+/*
+========================================
+ESTADO
+========================================
+*/
 
 function estado(mensaje,tipo=""){
 
@@ -368,14 +404,135 @@ e.classList.add(tipo);
 
 }
 
+
+/*
+========================================
+VERIFICAR USUARIO
+========================================
+*/
+
+async function verificarUsuario(){
+
+const {
+data: { user }
+} = await db.auth.getUser();
+
+
+if(!user){
+
+usuarioActual=null;
+permisos=null;
+
+document.getElementById("usuario").innerHTML =
+"🔒 <strong>No hay sesión iniciada.</strong> Ingresá con tu usuario para poder modificar etapas.";
+
+mostrarTabla();
+
+return false;
+
+}
+
+
+usuarioActual=user;
+
+
+const {data,error} =
+await db
+.from("permisos_usuarios")
+.select("*")
+.eq("email",user.email)
+.maybeSingle();
+
+
+if(error){
+
+console.error(error);
+
+document.getElementById("usuario").innerHTML =
+"❌ Error al consultar permisos.";
+
+return false;
+
+}
+
+
+if(!data){
+
+permisos=null;
+
+document.getElementById("usuario").innerHTML =
+"👁️ <strong>"+escapeHtml(user.email)+"</strong> — Solo visualización.";
+
+return true;
+
+}
+
+
+permisos=data;
+
+
+document.getElementById("usuario").innerHTML =
+"👤 <strong>"+escapeHtml(data.nombre)+"</strong> — Permisos cargados.";
+
+
+return true;
+
+}
+
+
+/*
+========================================
+¿PUEDE MODIFICAR?
+========================================
+*/
+
+function puedeCambiarEtapa(etapa){
+
+if(!usuarioActual){
+return false;
+}
+
+if(!permisos){
+return false;
+}
+
+if(permisos.es_admin){
+return true;
+}
+
+if(etapa===0){
+return false;
+}
+
+const permisoNecesario =
+permisosEtapa[etapa];
+
+return Boolean(
+permisoNecesario &&
+permisos[permisoNecesario]
+);
+
+}
+
+
+/*
+========================================
+CARGAR DATOS
+========================================
+*/
+
 async function cargarDatos(){
 
 estado("⏳ Cargando datos...");
+
+await verificarUsuario();
+
 
 const {data,error}=await db
 .from("premoldeados")
 .select("*")
 .order("id",{ascending:true});
+
 
 if(error){
 
@@ -392,6 +549,7 @@ return;
 
 premoldeados=data || [];
 
+
 estado(
 "☁️ <strong>Conectado.</strong> Los datos están sincronizados online.",
 "ok"
@@ -403,11 +561,16 @@ mostrarTabla();
 
 }
 
+
+/*
+========================================
+CONTADORES
+========================================
+*/
+
 function actualizarContadores(){
 
-const cantidades=[
-0,0,0,0,0,0
-];
+const cantidades=[0,0,0,0,0,0];
 
 premoldeados.forEach(p=>{
 
@@ -442,6 +605,13 @@ cantidades[5];
 
 }
 
+
+/*
+========================================
+TABLA
+========================================
+*/
+
 function mostrarTabla(){
 
 const tabla=document.getElementById("tabla");
@@ -455,6 +625,7 @@ const buscar=document
 const filtro=document
 .getElementById("filtroEtapa")
 .value;
+
 
 let lista=premoldeados.filter(p=>{
 
@@ -476,6 +647,7 @@ return coincideCodigo && coincideEtapa;
 
 });
 
+
 if(lista.length===0){
 
 tabla.innerHTML=`
@@ -490,9 +662,36 @@ return;
 
 }
 
+
 tabla.innerHTML=lista.map(p=>{
 
 const etapa=Number(p.etapa || 0);
+
+let opciones="";
+
+
+etapas.forEach((nombre,index)=>{
+
+const permitido =
+index===etapa ||
+puedeCambiarEtapa(index);
+
+
+opciones += `
+<option
+value="${index}"
+${index===etapa ? "selected" : ""}
+${permitido ? "" : "disabled"}>
+${nombre}
+</option>
+`;
+
+});
+
+
+const puedeEditar =
+puedeCambiarEtapa(etapa + 1);
+
 
 return `
 <tr>
@@ -517,15 +716,7 @@ ${escapeHtml(p.modelo ?? "")}
 class="etapa"
 onchange="cambiarEtapa(${p.id},this.value)">
 
-${etapas.map((nombre,index)=>`
-
-<option
-value="${index}"
-${index===etapa ? "selected" : ""}>
-${nombre}
-</option>
-
-`).join("")}
+${opciones}
 
 </select>
 
@@ -538,11 +729,76 @@ ${nombre}
 
 }
 
+
+/*
+========================================
+CAMBIAR ETAPA
+========================================
+*/
+
 async function cambiarEtapa(id,nuevaEtapa){
 
 const etapa=Number(nuevaEtapa);
 
+const pieza=premoldeados.find(
+p=>Number(p.id)===Number(id)
+);
+
+
+if(!pieza){
+return;
+}
+
+
+const etapaAnterior=
+Number(pieza.etapa || 0);
+
+
+/*
+No permitir retroceder
+*/
+
+if(etapa < etapaAnterior){
+
+alert(
+"❌ No se puede retroceder una pieza a una etapa anterior."
+);
+
+mostrarTabla();
+
+return;
+
+}
+
+
+/*
+Si no cambia, no hacer nada
+*/
+
+if(etapa === etapaAnterior){
+return;
+}
+
+
+/*
+Verificar permiso
+*/
+
+if(!puedeCambiarEtapa(etapa)){
+
+alert(
+"🔒 No tenés permiso para liberar esta etapa."
+);
+
+mostrarTabla();
+
+return;
+
+}
+
+
 estado("⏳ Guardando cambio...");
+
 
 const {error}=await db
 .from("premoldeados")
@@ -550,6 +806,7 @@ const {error}=await db
 etapa:etapa
 })
 .eq("id",id);
+
 
 if(error){
 
@@ -560,26 +817,34 @@ estado(
 "error"
 );
 
+mostrarTabla();
+
 return;
 
 }
 
-const pieza=premoldeados.find(
-p=>Number(p.id)===Number(id)
-);
 
-if(pieza){
 pieza.etapa=etapa;
-}
+
 
 actualizarContadores();
+
 
 estado(
 "✅ <strong>Cambio guardado.</strong> La etapa fue actualizada online.",
 "ok"
 );
 
+mostrarTabla();
+
 }
+
+
+/*
+========================================
+ESCAPAR HTML
+========================================
+*/
 
 function escapeHtml(text){
 
@@ -592,10 +857,16 @@ return String(text)
 
 }
 
+
+/*
+========================================
+INICIO
+========================================
+*/
+
 cargarDatos();
 
 </script>
 
 </body>
 </html>
-```
