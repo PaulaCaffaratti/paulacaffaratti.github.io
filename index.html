@@ -217,6 +217,30 @@ font-size:11px;
 margin-top:4px;
 }
 
+.section-toggle{
+border:1px solid #dce3ea;
+background:#fff;
+color:#45556d;
+padding:8px 12px;
+border-radius:8px;
+font-size:11px;
+font-weight:700;
+cursor:pointer;
+white-space:nowrap;
+}
+
+.section-toggle:hover{
+background:#f4f7fb;
+}
+
+.collapsible-content{
+display:block;
+}
+
+.collapsible-content.hidden{
+display:none;
+}
+
 /* FLUJO */
 
 .flow{
@@ -953,9 +977,7 @@ unidades
 
 <!-- CURVA + ESTADO -->
 
-<div class="dashboard-grid">
-
-<section class="card">
+<section class="card" style="margin-bottom:18px;">
 
 <div class="card-header">
 
@@ -966,7 +988,41 @@ Avance acumulado del proyecto
 </div>
 
 <div class="card-subtitle">
-Curva S — Planificado vs Real
+Curva S — Planificado vs Real + estado general
+</div>
+
+</div>
+
+<button
+id="btnAvance"
+class="section-toggle"
+onclick="toggleSeccion('contenidoAvance','btnAvance')">
+
+Ocultar ▲
+
+</button>
+
+</div>
+
+
+<div
+id="contenidoAvance"
+class="collapsible-content">
+
+<div class="dashboard-grid">
+
+<section class="card">
+
+<div class="card-header">
+
+<div>
+
+<div class="card-title">
+Curva S
+</div>
+
+<div class="card-subtitle">
+Planificado vs Real
 </div>
 
 </div>
@@ -1057,6 +1113,10 @@ Desvío contra planificación
 
 </div>
 
+</div>
+
+</section>
+
 
 <!-- FAMILIAS -->
 
@@ -1076,12 +1136,27 @@ Resumen agrupado por la primera letra del tipo
 
 </div>
 
+<button
+id="btnFamilias"
+class="section-toggle"
+onclick="toggleSeccion('contenidoFamilias','btnFamilias')">
+
+Ocultar ▲
+
+</button>
+
 </div>
 
 
 <div
+id="contenidoFamilias"
+class="collapsible-content">
+
+<div
 class="familia-grid"
 id="familiaGrid">
+
+</div>
 
 </div>
 
@@ -1129,9 +1204,7 @@ Resumen acumulado por etapa
 
 <tr>
 
-<td>
-Taller
-</td>
+<td>Taller</td>
 
 <td id="tblTaller">
 0
@@ -1148,9 +1221,7 @@ Taller
 
 <tr>
 
-<td>
-Liberado taller
-</td>
+<td>Liberado taller</td>
 
 <td id="tblLiberadas">
 0
@@ -1167,9 +1238,7 @@ Liberado taller
 
 <tr>
 
-<td>
-En obra
-</td>
+<td>En obra</td>
 
 <td id="tblObra">
 0
@@ -1186,9 +1255,7 @@ En obra
 
 <tr>
 
-<td>
-QA/QC
-</td>
+<td>QA/QC</td>
 
 <td id="tblQA">
 0
@@ -1205,9 +1272,7 @@ QA/QC
 
 <tr>
 
-<td>
-Montado
-</td>
+<td>Montado</td>
 
 <td id="tblMontadas">
 0
@@ -1224,9 +1289,7 @@ Montado
 
 <tr>
 
-<td>
-Pintado
-</td>
+<td>Pintado</td>
 
 <td id="tblPintadas">
 0
@@ -1356,7 +1419,7 @@ SUPABASE_KEY
 
 
 /* =====================================================
-PLANIFICACIÓN
+PLAN
 ===================================================== */
 
 const PLAN = [
@@ -1375,10 +1438,68 @@ const PLAN = [
 
 
 let piezas=[];
-
 let chart=null;
-
 let timer=null;
+
+
+/* =====================================================
+PLEGAR SECCIONES
+===================================================== */
+
+function toggleSeccion(
+contenidoId,
+botonId
+){
+
+const contenido=
+document.getElementById(
+contenidoId
+);
+
+const boton=
+document.getElementById(
+botonId
+);
+
+const cerrado=
+contenido.classList.toggle(
+"hidden"
+);
+
+boton.textContent=
+cerrado
+?
+"Mostrar ▼"
+:
+"Ocultar ▲";
+
+
+/*
+Si se vuelve a mostrar
+la Curva S, redibujamos
+para que Chart.js tome
+correctamente el tamaño.
+*/
+
+if(
+contenidoId==="contenidoAvance" &&
+!cerrado
+){
+
+setTimeout(
+()=>{
+
+if(chart){
+chart.resize();
+}
+
+},
+50
+);
+
+}
+
+}
 
 
 /* =====================================================
@@ -1414,20 +1535,14 @@ if(error){
 
 console.error(error);
 
-
 setConnection(
 "Error de conexión",
 "#eb5757"
 );
 
-
 mostrarError(
-
-"No se pudo leer la tabla premoldeados: "+
-error.message
-
+"No se pudo leer la tabla premoldeados: "+error.message
 );
-
 
 return;
 
@@ -1486,7 +1601,7 @@ ETAPAS ACUMULATIVAS
 3 = QA/QC
 
 MONTAJE Y PINTURA
-SON INDEPENDIENTES.
+SON INDEPENDIENTES
 */
 
 
@@ -1526,8 +1641,6 @@ p=>p.pintada===true
 ).length;
 
 
-/* PORCENTAJES */
-
 function pctTotal(cantidad){
 
 if(total===0){
@@ -1541,26 +1654,24 @@ return Math.round(
 }
 
 
-/*
-QA/QC SOBRE EN OBRA
-*/
-
 const pctCalidad=
 
 obra===0
-?0
-:Math.round(
+?
+0
+:
+Math.round(
 (qaqc/obra)*100
 );
 
 
-/* AVANCE GENERAL */
-
 const avanceGeneral=
 
 total===0
-?0
-:Math.round(
+?
+0
+:
+Math.round(
 
 (
 taller+
@@ -1733,7 +1844,6 @@ setText(
 avanceGeneral+"%"
 );
 
-
 setText(
 "executivePct",
 avanceGeneral+"%"
@@ -1748,7 +1858,7 @@ document
 avanceGeneral+"%";
 
 
-/* LECTURA */
+/* EJECUTIVO */
 
 setText(
 "executiveLiberadas",
@@ -1818,8 +1928,10 @@ limpio.match(
 
 
 return match
-?match[0]
-:"#";
+?
+match[0]
+:
+"#";
 
 }
 
@@ -1844,7 +1956,9 @@ const familia=
 obtenerFamilia(tipo);
 
 
-if(!familias[familia]){
+if(
+!familias[familia]
+){
 
 familias[familia]={
 
@@ -1863,7 +1977,7 @@ tipos:{}
 }
 
 
-/* FAMILIA */
+/* RESUMEN FAMILIA */
 
 familias[familia].total++;
 
@@ -1886,7 +2000,7 @@ familias[familia].montadas++;
 }
 
 
-/* DETALLE TIPO */
+/* DETALLE */
 
 if(
 !familias[familia]
@@ -2024,8 +2138,10 @@ colores.length
 const pctObra=
 
 x.total===0
-?0
-:Math.round(
+?
+0
+:
+Math.round(
 x.obra/
 x.total*
 100
@@ -2035,8 +2151,10 @@ x.total*
 const pctMontada=
 
 x.total===0
-?0
-:Math.round(
+?
+0
+:
+Math.round(
 x.montadas/
 x.total*
 100
@@ -2289,7 +2407,7 @@ ${detallesHtml}
 
 
 /* =====================================================
-MOSTRAR DETALLE FAMILIA
+DETALLE FAMILIA
 ===================================================== */
 
 function toggleFamilia(
@@ -2323,7 +2441,7 @@ abierto
 
 
 /* =====================================================
-PLAN
+PLAN ACTUAL
 ===================================================== */
 
 function obtenerPlanActual(){
