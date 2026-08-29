@@ -28,9 +28,7 @@ display:flex;
 min-height:100vh;
 }
 
-/* =========================
-SIDEBAR
-========================= */
+/* SIDEBAR */
 
 .sidebar{
 width:220px;
@@ -83,9 +81,7 @@ color:#1745d1;
 font-weight:700;
 }
 
-/* =========================
-MAIN
-========================= */
+/* MAIN */
 
 .main{
 margin-left:220px;
@@ -149,9 +145,7 @@ color:#8a94a6;
 font-size:13px;
 }
 
-/* =========================
-TOTAL PREMOLDEADOS
-========================= */
+/* TOTAL */
 
 .total-wrapper{
 margin-bottom:18px;
@@ -195,9 +189,7 @@ color:#8a94a6;
 margin-top:7px;
 }
 
-/* =========================
-CARDS GENERALES
-========================= */
+/* GENERAL */
 
 .card{
 background:#fff;
@@ -225,9 +217,7 @@ font-size:11px;
 margin-top:4px;
 }
 
-/* =========================
-FLUJO
-========================= */
+/* FLUJO */
 
 .flow{
 margin-bottom:18px;
@@ -281,9 +271,7 @@ color:#8a94a6;
 margin-top:3px;
 }
 
-/* =========================
-CURVA / ESTADO
-========================= */
+/* CURVA */
 
 .dashboard-grid{
 display:grid;
@@ -294,6 +282,8 @@ gap:18px;
 .chart-container{
 height:330px;
 }
+
+/* ESTADO */
 
 .status-box{
 background:#f7f9fc;
@@ -335,44 +325,49 @@ font-size:11px;
 color:#7c8799;
 }
 
-/* =========================
-TIPOS - TARJETAS
-========================= */
+/* FAMILIAS */
 
-.tipo-section{
+.familia-section{
 margin-top:18px;
 }
 
-.tipo-grid{
+.familia-grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:16px;
 }
 
-.tipo-kpi{
+.familia-card{
 background:#fff;
 border:1px solid #e6e8ed;
-border-left:5px solid var(--tipo-color);
+border-left:5px solid var(--familia-color);
 border-radius:12px;
 padding:20px;
 min-width:0;
 }
 
-.tipo-top{
+.familia-top{
 display:flex;
 align-items:flex-start;
 justify-content:space-between;
 gap:12px;
 }
 
-.tipo-nombre{
-font-size:15px;
+.familia-titulo{
+font-size:21px;
 font-weight:800;
-letter-spacing:.5px;
-color:#5f6b7d;
+color:#505d70;
 }
 
-.tipo-icon{
+.familia-subtitulo{
+font-size:10px;
+font-weight:700;
+color:#8a94a6;
+margin-top:3px;
+text-transform:uppercase;
+}
+
+.familia-icon{
 width:46px;
 height:46px;
 display:flex;
@@ -380,32 +375,30 @@ align-items:center;
 justify-content:center;
 border-radius:50%;
 font-size:22px;
-background:var(--tipo-soft);
+background:var(--familia-soft);
 flex-shrink:0;
 }
 
-.tipo-total-label{
+.familia-total-label{
 font-size:10px;
 font-weight:700;
 color:#8a94a6;
 margin-top:16px;
-text-transform:uppercase;
 }
 
-.tipo-total-numero{
+.familia-total-numero{
 font-size:30px;
 font-weight:800;
 margin-top:4px;
-color:#172033;
 }
 
-.tipo-total-numero span{
+.familia-total-numero span{
 font-size:11px;
 font-weight:500;
 color:#8a94a6;
 }
 
-.tipo-bar{
+.familia-bar{
 height:7px;
 background:#eef1f6;
 border-radius:20px;
@@ -413,27 +406,26 @@ overflow:hidden;
 margin:12px 0 14px;
 }
 
-.tipo-bar-fill{
+.familia-bar-fill{
 height:100%;
 width:100%;
-background:var(--tipo-color);
-border-radius:20px;
+background:var(--familia-color);
 }
 
-.tipo-separador{
+.familia-separador{
 border-top:1px solid #edf0f4;
 margin:14px 0;
 }
 
-.tipo-indicador{
+.familia-indicador{
 display:flex;
 align-items:center;
 justify-content:space-between;
 gap:10px;
-margin-top:9px;
+margin-top:10px;
 }
 
-.tipo-indicador-label{
+.familia-indicador-label{
 font-size:10px;
 font-weight:800;
 color:#7b8493;
@@ -441,19 +433,18 @@ text-transform:uppercase;
 letter-spacing:.5px;
 }
 
-.tipo-indicador-valor{
+.familia-indicador-valor{
 font-size:20px;
 font-weight:800;
-color:#172033;
 }
 
-.tipo-indicador-valor span{
+.familia-indicador-valor span{
 font-size:10px;
 font-weight:500;
 color:#8a94a6;
 }
 
-.tipo-mini-bar{
+.familia-mini-bar{
 height:6px;
 background:#eef1f6;
 border-radius:20px;
@@ -461,15 +452,77 @@ overflow:hidden;
 margin-top:7px;
 }
 
-.tipo-mini-bar div{
+.familia-mini-bar div{
 height:100%;
-background:var(--tipo-color);
+background:var(--familia-color);
 border-radius:20px;
 }
 
-/* =========================
-TABLA FINAL
-========================= */
+.detalle-btn{
+width:100%;
+border:1px solid #dce3ea;
+background:#fff;
+color:#45556d;
+padding:9px 12px;
+border-radius:8px;
+font-size:11px;
+font-weight:700;
+cursor:pointer;
+margin-top:16px;
+}
+
+.detalle-btn:hover{
+background:#f5f7fb;
+}
+
+.detalle-familia{
+display:none;
+margin-top:14px;
+padding-top:14px;
+border-top:1px solid #edf0f4;
+}
+
+.detalle-familia.visible{
+display:block;
+}
+
+.detalle-tipo{
+background:#f8fafc;
+border:1px solid #edf0f4;
+border-radius:8px;
+padding:10px;
+margin-bottom:8px;
+}
+
+.detalle-tipo:last-child{
+margin-bottom:0;
+}
+
+.detalle-tipo-nombre{
+font-size:12px;
+font-weight:800;
+margin-bottom:8px;
+}
+
+.detalle-tipo-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:6px;
+}
+
+.detalle-dato{
+font-size:9px;
+color:#8a94a6;
+}
+
+.detalle-dato strong{
+display:block;
+font-size:14px;
+color:#172033;
+margin-top:3px;
+}
+
+/* INDICADORES */
 
 .bottom-grid{
 display:grid;
@@ -535,13 +588,11 @@ margin-bottom:18px;
 font-size:13px;
 }
 
-/* =========================
-RESPONSIVE
-========================= */
+/* RESPONSIVE */
 
 @media(max-width:1200px){
 
-.tipo-grid{
+.familia-grid{
 grid-template-columns:repeat(3,1fr);
 }
 
@@ -575,7 +626,7 @@ width:calc(100% - 70px);
 grid-template-columns:1fr;
 }
 
-.tipo-grid{
+.familia-grid{
 grid-template-columns:repeat(2,1fr);
 }
 
@@ -591,7 +642,7 @@ padding:18px;
 grid-template-columns:1fr 1fr;
 }
 
-.tipo-grid{
+.familia-grid{
 grid-template-columns:1fr;
 }
 
@@ -612,8 +663,6 @@ flex-direction:column;
 <body>
 
 <div class="app">
-
-<!-- SIDEBAR -->
 
 <aside class="sidebar">
 
@@ -651,24 +700,14 @@ Proyecto
 </div>
 
 <div class="status-live">
-
-<span
-class="dot"
-id="connectionDot">
-</span>
-
-<span id="connectionText">
-Conectando...
-</span>
-
+<span class="dot" id="connectionDot"></span>
+<span id="connectionText">Conectando...</span>
 </div>
 
 </header>
 
 
 <div class="content">
-
-<!-- TITULO -->
 
 <div class="page-title">
 
@@ -683,15 +722,10 @@ Seguimiento general de premoldeados: fabricación, logística, calidad, montaje 
 </div>
 
 
-<div
-class="error"
-id="errorBox">
-</div>
+<div class="error" id="errorBox"></div>
 
 
-<!-- ==================================================
-TOTAL
-================================================== -->
+<!-- TOTAL -->
 
 <section class="total-wrapper">
 
@@ -709,12 +743,8 @@ TOTAL
 PREMOLDEADOS TOTALES
 </div>
 
-<div
-class="total-value"
-id="total">
-
+<div class="total-value" id="total">
 0
-
 </div>
 
 <div class="total-sub">
@@ -730,9 +760,7 @@ Base de Ingeniería
 </section>
 
 
-<!-- ==================================================
-FLUJO
-================================================== -->
+<!-- FLUJO -->
 
 <section class="card flow">
 
@@ -756,13 +784,9 @@ QA/QC se calcula contra los premoldeados en obra
 <div class="flow-grid">
 
 
-<!-- TALLER -->
-
 <div class="flow-step">
 
-<div class="flow-icon">
-🏭
-</div>
+<div class="flow-icon">🏭</div>
 
 <div class="flow-name">
 En taller
@@ -770,38 +794,26 @@ En taller
 
 <div class="flow-number">
 
-<div
-class="flow-value"
-id="taller">
-
+<div class="flow-value" id="taller">
 0
-
 </div>
 
 <div class="flow-unit">
-unidad
+unidades
 </div>
 
 </div>
 
-<div
-class="flow-percent"
-id="tallerPct">
-
+<div class="flow-percent" id="tallerPct">
 0%
-
 </div>
 
 </div>
 
-
-<!-- LIBERADO -->
 
 <div class="flow-step">
 
-<div class="flow-icon">
-✓
-</div>
+<div class="flow-icon">✓</div>
 
 <div class="flow-name">
 Liberado
@@ -809,38 +821,26 @@ Liberado
 
 <div class="flow-number">
 
-<div
-class="flow-value"
-id="flowLiberadas">
-
+<div class="flow-value" id="flowLiberadas">
 0
-
 </div>
 
 <div class="flow-unit">
-unidad
+unidades
 </div>
 
 </div>
 
-<div
-class="flow-percent"
-id="flowLiberadasPct">
-
+<div class="flow-percent" id="flowLiberadasPct">
 0%
-
 </div>
 
 </div>
 
-
-<!-- OBRA -->
 
 <div class="flow-step">
 
-<div class="flow-icon">
-🚧
-</div>
+<div class="flow-icon">🚧</div>
 
 <div class="flow-name">
 En obra
@@ -848,38 +848,26 @@ En obra
 
 <div class="flow-number">
 
-<div
-class="flow-value"
-id="flowObra">
-
+<div class="flow-value" id="flowObra">
 0
-
 </div>
 
 <div class="flow-unit">
-unidad
+unidades
 </div>
 
 </div>
 
-<div
-class="flow-percent"
-id="flowObraPct">
-
+<div class="flow-percent" id="flowObraPct">
 0%
-
 </div>
 
 </div>
 
-
-<!-- QA -->
 
 <div class="flow-step">
 
-<div class="flow-icon">
-✔
-</div>
+<div class="flow-icon">✔</div>
 
 <div class="flow-name">
 QA/QC
@@ -887,38 +875,26 @@ QA/QC
 
 <div class="flow-number">
 
-<div
-class="flow-value"
-id="qaqc">
-
+<div class="flow-value" id="qaqc">
 0
-
 </div>
 
 <div class="flow-unit">
-unidad
+unidades
 </div>
 
 </div>
 
-<div
-class="flow-percent"
-id="qaqcPct">
-
+<div class="flow-percent" id="qaqcPct">
 0%
-
 </div>
 
 </div>
 
-
-<!-- MONTADO -->
 
 <div class="flow-step">
 
-<div class="flow-icon">
-🏗️
-</div>
+<div class="flow-icon">🏗️</div>
 
 <div class="flow-name">
 Montado
@@ -926,38 +902,26 @@ Montado
 
 <div class="flow-number">
 
-<div
-class="flow-value"
-id="montadas">
-
+<div class="flow-value" id="montadas">
 0
-
 </div>
 
 <div class="flow-unit">
-unidad
+unidades
 </div>
 
 </div>
 
-<div
-class="flow-percent"
-id="montadasPctFlow">
-
+<div class="flow-percent" id="montadasPctFlow">
 0%
-
 </div>
 
 </div>
 
-
-<!-- PINTADO -->
 
 <div class="flow-step">
 
-<div class="flow-icon">
-🎨
-</div>
+<div class="flow-icon">🎨</div>
 
 <div class="flow-name">
 Pintado
@@ -965,41 +929,31 @@ Pintado
 
 <div class="flow-number">
 
-<div
-class="flow-value"
-id="flowPintadas">
-
+<div class="flow-value" id="flowPintadas">
 0
-
 </div>
 
 <div class="flow-unit">
-unidad
+unidades
 </div>
 
 </div>
 
-<div
-class="flow-percent"
-id="flowPintadasPct">
-
+<div class="flow-percent" id="flowPintadasPct">
 0%
-
 </div>
 
 </div>
+
 
 </div>
 
 </section>
 
 
-<!-- ==================================================
-CURVA + ESTADO
-================================================== -->
+<!-- CURVA + ESTADO -->
 
 <div class="dashboard-grid">
-
 
 <section class="card">
 
@@ -1047,12 +1001,8 @@ Indicador ejecutivo
 
 <div class="status-box">
 
-<div
-class="status-big"
-id="statusText">
-
+<div class="status-big" id="statusText">
 CARGANDO
-
 </div>
 
 <div class="status-label">
@@ -1060,12 +1010,7 @@ Estado general
 </div>
 
 <div class="progress">
-
-<div
-class="progress-bar"
-id="progressBar">
-</div>
-
+<div class="progress-bar" id="progressBar"></div>
 </div>
 
 <div class="progress-info">
@@ -1085,12 +1030,8 @@ Avance real
 
 <div class="status-box">
 
-<div
-class="status-big"
-id="deviation">
-
+<div class="status-big" id="deviation">
 0%
-
 </div>
 
 <div class="status-label">
@@ -1106,12 +1047,8 @@ Desvío contra planificación
 Última actualización
 </div>
 
-<div
-id="lastUpdate"
-style="font-weight:700;margin-top:5px">
-
+<div id="lastUpdate" style="font-weight:700;margin-top:5px">
 -
-
 </div>
 
 </div>
@@ -1121,22 +1058,20 @@ style="font-weight:700;margin-top:5px">
 </div>
 
 
-<!-- ==================================================
-AVANCE POR TIPO
-================================================== -->
+<!-- FAMILIAS -->
 
-<section class="card tipo-section">
+<section class="card familia-section">
 
 <div class="card-header">
 
 <div>
 
 <div class="card-title">
-Avance por tipo de premoldeado
+Avance por familia de premoldeados
 </div>
 
 <div class="card-subtitle">
-Total de premoldeados, premoldeados en obra y montados
+Resumen agrupado por la primera letra del tipo
 </div>
 
 </div>
@@ -1145,19 +1080,18 @@ Total de premoldeados, premoldeados en obra y montados
 
 
 <div
-class="tipo-grid"
-id="tipoGrid">
+class="familia-grid"
+id="familiaGrid">
 
 </div>
 
 </section>
 
 
-<!-- ==================================================
-INDICADORES + LECTURA
-================================================== -->
+<!-- INDICADORES -->
 
 <div class="bottom-grid">
+
 
 <section class="card">
 
@@ -1183,23 +1117,12 @@ Resumen acumulado por etapa
 <thead>
 
 <tr>
-
-<th>
-ETAPA
-</th>
-
-<th>
-CANTIDAD
-</th>
-
-<th>
-AVANCE
-</th>
-
+<th>ETAPA</th>
+<th>CANTIDAD</th>
+<th>AVANCE</th>
 </tr>
 
 </thead>
-
 
 <tbody>
 
@@ -1215,15 +1138,9 @@ Taller
 </td>
 
 <td>
-
-<span
-class="badge badge-gray"
-id="tblTallerPct">
-
+<span class="badge badge-gray" id="tblTallerPct">
 0%
-
 </span>
-
 </td>
 
 </tr>
@@ -1240,15 +1157,9 @@ Liberado taller
 </td>
 
 <td>
-
-<span
-class="badge badge-green"
-id="tblLiberadasPct">
-
+<span class="badge badge-green" id="tblLiberadasPct">
 0%
-
 </span>
-
 </td>
 
 </tr>
@@ -1265,15 +1176,9 @@ En obra
 </td>
 
 <td>
-
-<span
-class="badge badge-orange"
-id="tblObraPct">
-
+<span class="badge badge-orange" id="tblObraPct">
 0%
-
 </span>
-
 </td>
 
 </tr>
@@ -1290,15 +1195,9 @@ QA/QC
 </td>
 
 <td>
-
-<span
-class="badge badge-blue"
-id="tblQAPct">
-
+<span class="badge badge-blue" id="tblQAPct">
 0%
-
 </span>
-
 </td>
 
 </tr>
@@ -1315,15 +1214,9 @@ Montado
 </td>
 
 <td>
-
-<span
-class="badge badge-green"
-id="tblMontadasPct">
-
+<span class="badge badge-green" id="tblMontadasPct">
 0%
-
 </span>
-
 </td>
 
 </tr>
@@ -1340,15 +1233,9 @@ Pintado
 </td>
 
 <td>
-
-<span
-class="badge badge-green"
-id="tblPintadasPct">
-
+<span class="badge badge-green" id="tblPintadasPct">
 0%
-
 </span>
-
 </td>
 
 </tr>
@@ -1380,17 +1267,11 @@ Situación actual del proyecto
 </div>
 
 
-<div
-style="
-font-size:13px;
-line-height:1.7;
-color:#687386;
-">
+<div style="font-size:13px;line-height:1.7;color:#687386">
 
 <strong style="color:#172033">
 Avance general
 </strong>
-
 
 <p>
 
@@ -1464,10 +1345,8 @@ SUPABASE
 const SUPABASE_URL =
 "https://tnnioleawbhuqjuykrsf.supabase.co";
 
-
 const SUPABASE_KEY =
 "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
-
 
 const db =
 supabase.createClient(
@@ -1477,27 +1356,19 @@ SUPABASE_KEY
 
 
 /* =====================================================
-PLANIFICACION
+PLANIFICACIÓN
 ===================================================== */
 
 const PLAN = [
 
 {fecha:"2026-08-01",porcentaje:5},
-
 {fecha:"2026-09-01",porcentaje:15},
-
 {fecha:"2026-10-01",porcentaje:30},
-
 {fecha:"2026-11-01",porcentaje:48},
-
 {fecha:"2026-12-01",porcentaje:65},
-
 {fecha:"2027-01-01",porcentaje:78},
-
 {fecha:"2027-02-01",porcentaje:88},
-
 {fecha:"2027-03-01",porcentaje:95},
-
 {fecha:"2027-04-01",porcentaje:100}
 
 ];
@@ -1511,7 +1382,7 @@ let timer=null;
 
 
 /* =====================================================
-CARGAR
+CARGAR DATOS
 ===================================================== */
 
 async function cargarDatos(){
@@ -1522,10 +1393,7 @@ setConnection(
 );
 
 
-const {
-data,
-error
-}=
+const {data,error}=
 await db
 
 .from("premoldeados")
@@ -1614,7 +1482,7 @@ ETAPAS ACUMULATIVAS
 
 0 = TALLER
 1 = LIBERADO
-2 = OBRA
+2 = EN OBRA
 3 = QA/QC
 
 MONTAJE Y PINTURA
@@ -1673,15 +1541,15 @@ return Math.round(
 }
 
 
-/* CALIDAD SOBRE OBRA */
+/*
+QA/QC SOBRE EN OBRA
+*/
 
 const pctCalidad=
 
 obra===0
-?
-0
-:
-Math.round(
+?0
+:Math.round(
 (qaqc/obra)*100
 );
 
@@ -1691,10 +1559,8 @@ Math.round(
 const avanceGeneral=
 
 total===0
-?
-0
-:
-Math.round(
+?0
+:Math.round(
 
 (
 taller+
@@ -1867,6 +1733,7 @@ setText(
 avanceGeneral+"%"
 );
 
+
 setText(
 "executivePct",
 avanceGeneral+"%"
@@ -1909,12 +1776,12 @@ pintadas
 );
 
 
-/* TIPOS */
+/* FAMILIAS */
 
-actualizarTipos();
+actualizarFamilias();
 
 
-/* ESTADO */
+/* RESTO */
 
 actualizarEstado(
 avanceGeneral
@@ -1930,17 +1797,39 @@ avanceGeneral
 
 
 /* =====================================================
-TARJETAS POR TIPO
+FAMILIAS
 ===================================================== */
 
-function actualizarTipos(){
+function obtenerFamilia(tipo){
 
-const agrupados={};
+const limpio=
+String(
+tipo ||
+"SIN TIPO"
+)
+.trim()
+.toUpperCase();
 
 
-piezas.forEach(
-p=>{
+const match=
+limpio.match(
+/[A-ZÁÉÍÓÚÑ]/
+);
 
+
+return match
+?match[0]
+:"#";
+
+}
+
+
+function actualizarFamilias(){
+
+const familias={};
+
+
+piezas.forEach(p=>{
 
 const tipo=
 String(
@@ -1951,9 +1840,61 @@ p.tipo ||
 .toUpperCase();
 
 
-if(!agrupados[tipo]){
+const familia=
+obtenerFamilia(tipo);
 
-agrupados[tipo]={
+
+if(!familias[familia]){
+
+familias[familia]={
+
+familia:familia,
+
+total:0,
+
+obra:0,
+
+montadas:0,
+
+tipos:{}
+
+};
+
+}
+
+
+/* FAMILIA */
+
+familias[familia].total++;
+
+
+if(
+Number(p.etapa)>=2
+){
+
+familias[familia].obra++;
+
+}
+
+
+if(
+p.montada===true
+){
+
+familias[familia].montadas++;
+
+}
+
+
+/* DETALLE TIPO */
+
+if(
+!familias[familia]
+.tipos[tipo]
+){
+
+familias[familia]
+.tipos[tipo]={
 
 tipo:tipo,
 
@@ -1968,14 +1909,19 @@ montadas:0
 }
 
 
-agrupados[tipo].total++;
+const detalle=
+familias[familia]
+.tipos[tipo];
+
+
+detalle.total++;
 
 
 if(
 Number(p.etapa)>=2
 ){
 
-agrupados[tipo].obra++;
+detalle.obra++;
 
 }
 
@@ -1984,20 +1930,20 @@ if(
 p.montada===true
 ){
 
-agrupados[tipo].montadas++;
+detalle.montadas++;
 
 }
 
 });
 
 
-const tipos=
+const lista=
 Object
-.values(agrupados)
+.values(familias)
 .sort(
 (a,b)=>
-a.tipo.localeCompare(
-b.tipo,
+a.familia.localeCompare(
+b.familia,
 "es"
 )
 );
@@ -2005,11 +1951,13 @@ b.tipo,
 
 const grid=
 document.getElementById(
-"tipoGrid"
+"familiaGrid"
 );
 
 
-if(tipos.length===0){
+if(
+lista.length===0
+){
 
 grid.innerHTML=
 "No hay datos cargados.";
@@ -2018,10 +1966,6 @@ return;
 
 }
 
-
-/*
-COLORES ALTERNADOS
-*/
 
 const colores=[
 
@@ -2066,7 +2010,7 @@ icono:"✓"
 
 grid.innerHTML=
 
-tipos.map(
+lista.map(
 (x,index)=>{
 
 
@@ -2080,10 +2024,8 @@ colores.length
 const pctObra=
 
 x.total===0
-?
-0
-:
-Math.round(
+?0
+:Math.round(
 x.obra/
 x.total*
 100
@@ -2093,56 +2035,124 @@ x.total*
 const pctMontada=
 
 x.total===0
-?
-0
-:
-Math.round(
+?0
+:Math.round(
 x.montadas/
 x.total*
 100
 );
 
 
-return `
+const tipos=
+Object
+.values(
+x.tipos
+)
+.sort(
+(a,b)=>
+a.tipo.localeCompare(
+b.tipo,
+"es"
+)
+);
 
-<div
-class="tipo-kpi"
-style="
---tipo-color:${estilo.principal};
---tipo-soft:${estilo.suave};
-">
+
+const id=
+"detalleFamilia"+
+index;
 
 
-<div class="tipo-top">
+const detallesHtml=
 
-<div>
+tipos.map(
+t=>`
 
-<div class="tipo-nombre">
+<div class="detalle-tipo">
 
-${escapeHtml(x.tipo)}
+<div class="detalle-tipo-nombre">
+
+${escapeHtml(t.tipo)}
 
 </div>
 
-<div class="tipo-total-label">
+<div class="detalle-tipo-grid">
+
+<div class="detalle-dato">
 
 TOTAL
 
-</div>
+<strong>
+${t.total}
+</strong>
 
-<div class="tipo-total-numero">
-
-${x.total}
-
-<span>
-unidad
-</span>
-
-</div>
+unidades
 
 </div>
 
 
-<div class="tipo-icon">
+<div class="detalle-dato">
+
+EN OBRA
+
+<strong>
+${t.obra}
+</strong>
+
+unidades
+
+</div>
+
+
+<div class="detalle-dato">
+
+MONTADOS
+
+<strong>
+${t.montadas}
+</strong>
+
+unidades
+
+</div>
+
+</div>
+
+</div>
+
+`
+).join("");
+
+
+return `
+
+<div
+class="familia-card"
+style="
+--familia-color:${estilo.principal};
+--familia-soft:${estilo.suave};
+">
+
+
+<div class="familia-top">
+
+<div>
+
+<div class="familia-titulo">
+
+FAMILIA ${escapeHtml(x.familia)}
+
+</div>
+
+<div class="familia-subtitulo">
+
+PREMOLDEADOS ${escapeHtml(x.familia)}
+
+</div>
+
+</div>
+
+
+<div class="familia-icon">
 
 ${estilo.icono}
 
@@ -2151,32 +2161,50 @@ ${estilo.icono}
 </div>
 
 
-<div class="tipo-bar">
+<div class="familia-total-label">
 
-<div class="tipo-bar-fill">
+TOTAL
+
+</div>
+
+
+<div class="familia-total-numero">
+
+${x.total}
+
+<span>
+unidades
+</span>
+
+</div>
+
+
+<div class="familia-bar">
+
+<div class="familia-bar-fill">
 </div>
 
 </div>
 
 
-<div class="tipo-separador">
+<div class="familia-separador">
 </div>
 
 
-<div class="tipo-indicador">
+<div class="familia-indicador">
 
-<div class="tipo-indicador-label">
+<div class="familia-indicador-label">
 
 EN OBRA
 
 </div>
 
-<div class="tipo-indicador-valor">
+<div class="familia-indicador-valor">
 
 ${x.obra}
 
 <span>
-unidad
+unidades
 </span>
 
 </div>
@@ -2184,7 +2212,7 @@ unidad
 </div>
 
 
-<div class="tipo-mini-bar">
+<div class="familia-mini-bar">
 
 <div
 style="
@@ -2195,20 +2223,20 @@ width:${pctObra}%;
 </div>
 
 
-<div class="tipo-indicador">
+<div class="familia-indicador">
 
-<div class="tipo-indicador-label">
+<div class="familia-indicador-label">
 
 MONTADOS
 
 </div>
 
-<div class="tipo-indicador-valor">
+<div class="familia-indicador-valor">
 
 ${x.montadas}
 
 <span>
-unidad
+unidades
 </span>
 
 </div>
@@ -2216,7 +2244,7 @@ unidad
 </div>
 
 
-<div class="tipo-mini-bar">
+<div class="familia-mini-bar">
 
 <div
 style="
@@ -2227,12 +2255,69 @@ width:${pctMontada}%;
 </div>
 
 
+<button
+class="detalle-btn"
+onclick="
+toggleFamilia(
+'${id}',
+this
+)
+">
+
+Ver detalle ▼
+
+</button>
+
+
+<div
+class="detalle-familia"
+id="${id}">
+
+${detallesHtml}
+
+</div>
+
+
 </div>
 
 `;
 
 }
 ).join("");
+
+}
+
+
+/* =====================================================
+MOSTRAR DETALLE FAMILIA
+===================================================== */
+
+function toggleFamilia(
+id,
+boton
+){
+
+const detalle=
+document.getElementById(
+id
+);
+
+
+const abierto=
+detalle
+.classList
+.toggle(
+"visible"
+);
+
+
+boton.textContent=
+
+abierto
+?
+"Ocultar detalle ▲"
+:
+"Ver detalle ▼";
 
 }
 
@@ -2349,7 +2434,7 @@ status.style.color=
 
 
 /* =====================================================
-ULTIMA ACTUALIZACION
+FECHA
 ===================================================== */
 
 function actualizarFecha(){
@@ -2366,8 +2451,7 @@ p.created_at
 .filter(Boolean)
 
 .map(
-f=>
-new Date(f)
+f=>new Date(f)
 );
 
 
@@ -2391,8 +2475,7 @@ new Date(
 Math.max(
 
 ...fechas.map(
-f=>
-f.getTime()
+f=>f.getTime()
 )
 
 )
@@ -2445,8 +2528,7 @@ year:"2-digit"
 
 const planData=
 PLAN.map(
-p=>
-p.porcentaje
+p=>p.porcentaje
 );
 
 
@@ -2465,7 +2547,6 @@ let ultimoIndice=0;
 
 PLAN.forEach(
 (p,index)=>{
-
 
 const fecha=
 new Date(
@@ -2516,75 +2597,41 @@ ctx,
 
 type:"line",
 
-
 data:{
 
 labels:labels,
 
-
 datasets:[
 
 {
-
-label:
-"Planificado",
-
-data:
-planData,
-
-borderColor:
-"#b8c3d8",
-
-borderWidth:
-2,
-
-borderDash:
-[6,6],
-
-pointRadius:
-2,
-
-tension:
-0.35
-
+label:"Planificado",
+data:planData,
+borderColor:"#b8c3d8",
+borderWidth:2,
+borderDash:[6,6],
+pointRadius:2,
+tension:0.35
 },
 
 {
-
-label:
-"Real",
-
-data:
-realData,
-
-borderColor:
-"#2855d9",
-
-borderWidth:
-3,
-
-pointRadius:
-4,
-
-tension:
-0.35,
-
-spanGaps:
-false
-
+label:"Real",
+data:realData,
+borderColor:"#2855d9",
+borderWidth:3,
+pointRadius:4,
+tension:0.35,
+spanGaps:false
 }
 
 ]
 
 },
 
-
 options:{
 
 responsive:true,
 
 maintainAspectRatio:false,
-
 
 interaction:{
 
@@ -2594,17 +2641,13 @@ mode:"index"
 
 },
 
-
 plugins:{
 
 legend:{
-
 display:true
-
 }
 
 },
-
 
 scales:{
 
@@ -2627,13 +2670,10 @@ return value+"%";
 
 },
 
-
 x:{
 
 grid:{
-
 display:false
-
 }
 
 }
@@ -2750,7 +2790,7 @@ return String(text)
 
 
 /* =====================================================
-INICIO
+INICIAR
 ===================================================== */
 
 cargarDatos();
