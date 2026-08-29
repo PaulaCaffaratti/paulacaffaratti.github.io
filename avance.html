@@ -21,9 +21,7 @@ color:white;
 padding:20px 35px
 }
 
-header h1{
-margin:0 0 12px
-}
+header h1{margin:0 0 12px}
 
 nav{
 display:flex;
@@ -41,8 +39,7 @@ font-size:13px;
 font-weight:bold
 }
 
-nav a:hover,
-nav a.activo{
+nav a:hover,nav a.activo{
 background:white;
 color:#102f52
 }
@@ -53,14 +50,62 @@ margin:auto;
 padding:25px
 }
 
-h2{
-margin-bottom:5px
+.panel{
+background:white;
+border:1px solid #dce3ea;
+border-radius:14px;
+padding:20px;
+margin-bottom:20px
 }
 
-.subtitulo{
-color:#657487;
-margin-top:0;
-margin-bottom:20px
+.login{
+max-width:450px;
+margin:50px auto
+}
+
+.login h2{margin-top:0}
+
+.campo{
+display:flex;
+flex-direction:column;
+gap:6px;
+margin-bottom:14px
+}
+
+.campo label{
+font-size:12px;
+font-weight:bold
+}
+
+input,select{
+padding:10px;
+border:1px solid #cfd8e1;
+border-radius:7px;
+font-size:14px
+}
+
+.boton{
+border:0;
+border-radius:7px;
+padding:10px 16px;
+cursor:pointer;
+font-weight:bold
+}
+
+.login-btn{
+background:#102f52;
+color:white;
+width:100%
+}
+
+.logout{
+background:#a83232;
+color:white
+}
+
+.actualizar{
+background:#102f52;
+color:white
 }
 
 .estado{
@@ -82,12 +127,13 @@ background:#fff0f0;
 border-color:#e0b2b2
 }
 
-.panel{
-background:white;
-border:1px solid #dce3ea;
-border-radius:14px;
-padding:20px;
-margin-bottom:20px
+.usuario{
+background:#eef5fc;
+border:1px solid #d3e1ef;
+padding:12px;
+border-radius:8px;
+margin-bottom:15px;
+font-size:13px
 }
 
 .filtros{
@@ -97,41 +143,7 @@ flex-wrap:wrap;
 align-items:end
 }
 
-.campo{
-display:flex;
-flex-direction:column;
-gap:6px
-}
-
-.campo label{
-font-size:12px;
-font-weight:bold
-}
-
-input,
-select{
-padding:10px;
-border:1px solid #cfd8e1;
-border-radius:7px;
-font-size:14px
-}
-
-.boton{
-border:0;
-border-radius:7px;
-padding:10px 16px;
-cursor:pointer;
-font-weight:bold
-}
-
-.actualizar{
-background:#102f52;
-color:white
-}
-
-.tabla{
-overflow-x:auto
-}
+.tabla{overflow-x:auto}
 
 table{
 width:100%;
@@ -142,8 +154,7 @@ th{
 background:#f4f6f8;
 padding:12px;
 text-align:left;
-font-size:12px;
-white-space:nowrap
+font-size:12px
 }
 
 td{
@@ -159,10 +170,8 @@ border-radius:6px;
 font-weight:bold
 }
 
-.etapa:disabled{
-background:#eeeeee;
-color:#777;
-cursor:not-allowed
+.etapa option:disabled{
+color:#999
 }
 
 .contadores{
@@ -192,13 +201,14 @@ padding:30px;
 color:#657487
 }
 
-.usuario{
-background:#eef5fc;
-border:1px solid #d3e1ef;
-padding:10px 14px;
-border-radius:8px;
-margin-bottom:15px;
-font-size:13px
+.oculto{
+display:none!important
+}
+
+.ayuda{
+font-size:12px;
+color:#657487;
+margin-top:12px
 }
 </style>
 </head>
@@ -219,19 +229,65 @@ font-size:13px
 
 <main>
 
-<h2>🚀 Avance de Premoldeados</h2>
+<!-- LOGIN -->
 
-<p class="subtitulo">
-Actualizá la etapa de cada premoldeado. Los cambios quedan guardados online.
+<section id="loginPanel" class="panel login">
+
+<h2>🔐 Iniciar sesión</h2>
+
+<p>
+Ingresá con el usuario que te creó el administrador.
 </p>
 
-<div id="usuario" class="usuario">
-⏳ Verificando usuario...
+<div class="campo">
+<label>EMAIL</label>
+<input
+id="email"
+type="email"
+placeholder="tu@email.com">
 </div>
 
-<div id="estado" class="estado">
-⏳ Conectando con la base de datos...
+<div class="campo">
+<label>CONTRASEÑA</label>
+<input
+id="password"
+type="password"
+placeholder="Contraseña">
 </div>
+
+<button
+class="boton login-btn"
+onclick="iniciarSesion()">
+🔐 INICIAR SESIÓN
+</button>
+
+<div id="loginError" class="ayuda"></div>
+
+</section>
+
+
+<!-- APLICACIÓN -->
+
+<section id="appPanel" class="oculto">
+
+<h2>🚀 Avance de Premoldeados</h2>
+
+<p>
+Actualizá la etapa de cada premoldeado.
+</p>
+
+<div id="usuario" class="usuario"></div>
+
+<button
+class="boton logout"
+onclick="cerrarSesion()">
+🚪 CERRAR SESIÓN
+</button>
+
+<div id="estado" class="estado">
+⏳ Cargando...
+</div>
+
 
 <section class="panel">
 
@@ -250,7 +306,6 @@ oninput="mostrarTabla()">
 <label>FILTRAR ETAPA</label>
 
 <select id="filtroEtapa" onchange="mostrarTabla()">
-
 <option value="">TODAS</option>
 <option value="0">EN TALLER</option>
 <option value="1">LIBERADA EN TALLER</option>
@@ -258,7 +313,6 @@ oninput="mostrarTabla()">
 <option value="3">LIBERADA QA/QC EN OBRA</option>
 <option value="4">MONTADA</option>
 <option value="5">PINTADA</option>
-
 </select>
 
 </div>
@@ -273,44 +327,18 @@ onclick="cargarDatos()">
 
 </section>
 
+
 <section class="panel">
 
 <div class="contadores">
 
-<div class="card">
-Total
-<strong id="total">0</strong>
-</div>
-
-<div class="card">
-En taller
-<strong id="taller">0</strong>
-</div>
-
-<div class="card">
-Liberada taller
-<strong id="liberadaTaller">0</strong>
-</div>
-
-<div class="card">
-En obra
-<strong id="obra">0</strong>
-</div>
-
-<div class="card">
-QA/QC obra
-<strong id="qaqc">0</strong>
-</div>
-
-<div class="card">
-Montada
-<strong id="montada">0</strong>
-</div>
-
-<div class="card">
-Pintada
-<strong id="pintada">0</strong>
-</div>
+<div class="card">Total<strong id="total">0</strong></div>
+<div class="card">En taller<strong id="taller">0</strong></div>
+<div class="card">Liberada taller<strong id="liberadaTaller">0</strong></div>
+<div class="card">En obra<strong id="obra">0</strong></div>
+<div class="card">QA/QC obra<strong id="qaqc">0</strong></div>
+<div class="card">Montada<strong id="montada">0</strong></div>
+<div class="card">Pintada<strong id="pintada">0</strong></div>
 
 </div>
 
@@ -336,7 +364,10 @@ Pintada
 
 </section>
 
+</section>
+
 </main>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -364,31 +395,171 @@ const etapas = [
 ];
 
 
-let premoldeados = [];
-let usuarioActual = null;
-let permisos = null;
-
-
-/*
-========================================
-PERMISOS
-========================================
-*/
-
 const permisosEtapa = {
-1: "puede_liberar_taller",
-2: "puede_llevar_obra",
-3: "puede_liberar_qaqc",
-4: "puede_montar",
-5: "puede_pintar"
+1:"puede_liberar_taller",
+2:"puede_llevar_obra",
+3:"puede_liberar_qaqc",
+4:"puede_montar",
+5:"puede_pintar"
 };
 
 
-/*
-========================================
-ESTADO
-========================================
-*/
+let premoldeados=[];
+let usuarioActual=null;
+let permisos=null;
+
+
+/* LOGIN */
+
+async function iniciarSesion(){
+
+const email=document
+.getElementById("email")
+.value
+.trim();
+
+const password=document
+.getElementById("password")
+.value;
+
+
+const error=document
+.getElementById("loginError");
+
+error.textContent="⏳ Iniciando sesión...";
+
+
+const {error:loginError}=await db.auth.signInWithPassword({
+email:email,
+password:password
+});
+
+
+if(loginError){
+
+error.textContent=
+"❌ "+loginError.message;
+
+return;
+
+}
+
+
+error.textContent="";
+
+await iniciarAplicacion();
+
+}
+
+
+async function cerrarSesion(){
+
+await db.auth.signOut();
+
+usuarioActual=null;
+permisos=null;
+
+document.getElementById("appPanel")
+.classList.add("oculto");
+
+document.getElementById("loginPanel")
+.classList.remove("oculto");
+
+}
+
+
+/* VERIFICAR SESIÓN */
+
+async function iniciarAplicacion(){
+
+const {
+data:{user}
+}=await db.auth.getUser();
+
+
+if(!user){
+
+return;
+
+}
+
+
+usuarioActual=user;
+
+
+const {data,error}=await db
+.from("permisos_usuarios")
+.select("*")
+.eq("email",user.email)
+.maybeSingle();
+
+
+if(error){
+
+console.error(error);
+
+document.getElementById("loginError").textContent=
+"❌ Error consultando permisos.";
+
+return;
+
+}
+
+
+permisos=data;
+
+
+document.getElementById("loginPanel")
+.classList.add("oculto");
+
+document.getElementById("appPanel")
+.classList.remove("oculto");
+
+
+if(permisos){
+
+document.getElementById("usuario").innerHTML=
+"👤 <strong>"+
+escapeHtml(permisos.nombre)+
+"</strong> — permisos cargados.";
+
+}else{
+
+document.getElementById("usuario").innerHTML=
+"👁️ <strong>"+
+escapeHtml(user.email)+
+"</strong> — solo visualización.";
+
+}
+
+
+cargarDatos();
+
+}
+
+
+/* PERMISO */
+
+function puedeCambiarEtapa(etapa){
+
+if(!usuarioActual || !permisos){
+return false;
+}
+
+if(permisos.es_admin){
+return true;
+}
+
+const permiso=permisosEtapa[etapa];
+
+return Boolean(
+permiso && permisos[permiso]
+);
+
+}
+
+
+/* ESTADO */
 
 function estado(mensaje,tipo=""){
 
@@ -405,128 +576,11 @@ e.classList.add(tipo);
 }
 
 
-/*
-========================================
-VERIFICAR USUARIO
-========================================
-*/
-
-async function verificarUsuario(){
-
-const {
-data: { user }
-} = await db.auth.getUser();
-
-
-if(!user){
-
-usuarioActual=null;
-permisos=null;
-
-document.getElementById("usuario").innerHTML =
-"🔒 <strong>No hay sesión iniciada.</strong> Ingresá con tu usuario para poder modificar etapas.";
-
-mostrarTabla();
-
-return false;
-
-}
-
-
-usuarioActual=user;
-
-
-const {data,error} =
-await db
-.from("permisos_usuarios")
-.select("*")
-.eq("email",user.email)
-.maybeSingle();
-
-
-if(error){
-
-console.error(error);
-
-document.getElementById("usuario").innerHTML =
-"❌ Error al consultar permisos.";
-
-return false;
-
-}
-
-
-if(!data){
-
-permisos=null;
-
-document.getElementById("usuario").innerHTML =
-"👁️ <strong>"+escapeHtml(user.email)+"</strong> — Solo visualización.";
-
-return true;
-
-}
-
-
-permisos=data;
-
-
-document.getElementById("usuario").innerHTML =
-"👤 <strong>"+escapeHtml(data.nombre)+"</strong> — Permisos cargados.";
-
-
-return true;
-
-}
-
-
-/*
-========================================
-¿PUEDE MODIFICAR?
-========================================
-*/
-
-function puedeCambiarEtapa(etapa){
-
-if(!usuarioActual){
-return false;
-}
-
-if(!permisos){
-return false;
-}
-
-if(permisos.es_admin){
-return true;
-}
-
-if(etapa===0){
-return false;
-}
-
-const permisoNecesario =
-permisosEtapa[etapa];
-
-return Boolean(
-permisoNecesario &&
-permisos[permisoNecesario]
-);
-
-}
-
-
-/*
-========================================
-CARGAR DATOS
-========================================
-*/
+/* DATOS */
 
 async function cargarDatos(){
 
 estado("⏳ Cargando datos...");
-
-await verificarUsuario();
-
 
 const {data,error}=await db
 .from("premoldeados")
@@ -536,10 +590,9 @@ const {data,error}=await db
 
 if(error){
 
-console.error(error);
-
 estado(
-"❌ Error al cargar: "+error.message,
+"❌ Error al cargar: "+
+error.message,
 "error"
 );
 
@@ -547,26 +600,22 @@ return;
 
 }
 
-premoldeados=data || [];
 
-
-estado(
-"☁️ <strong>Conectado.</strong> Los datos están sincronizados online.",
-"ok"
-);
+premoldeados=data||[];
 
 actualizarContadores();
 
 mostrarTabla();
 
+estado(
+"☁️ <strong>Conectado.</strong> Datos sincronizados online.",
+"ok"
+);
+
 }
 
 
-/*
-========================================
-CONTADORES
-========================================
-*/
+/* CONTADORES */
 
 function actualizarContadores(){
 
@@ -574,13 +623,14 @@ const cantidades=[0,0,0,0,0,0];
 
 premoldeados.forEach(p=>{
 
-const etapa=Number(p.etapa || 0);
+const e=Number(p.etapa||0);
 
-if(etapa>=0 && etapa<6){
-cantidades[etapa]++;
+if(e>=0&&e<6){
+cantidades[e]++;
 }
 
 });
+
 
 document.getElementById("total").textContent=
 premoldeados.length;
@@ -606,15 +656,16 @@ cantidades[5];
 }
 
 
-/*
-========================================
-TABLA
-========================================
-*/
+/* TABLA */
 
 function mostrarTabla(){
 
 const tabla=document.getElementById("tabla");
+
+if(!tabla){
+return;
+}
+
 
 const buscar=document
 .getElementById("buscar")
@@ -627,23 +678,22 @@ const filtro=document
 .value;
 
 
-let lista=premoldeados.filter(p=>{
+const lista=premoldeados.filter(p=>{
 
-const codigo=String(
-p.codigo ?? ""
-).toLowerCase();
+const codigo=String(p.codigo??"")
+.toLowerCase();
 
 const coincideCodigo=
-!buscar || codigo.includes(buscar);
+!buscar||codigo.includes(buscar);
 
 const etapa=String(
-Number(p.etapa || 0)
+Number(p.etapa||0)
 );
 
 const coincideEtapa=
-!filtro || etapa===filtro;
+!filtro||etapa===filtro;
 
-return coincideCodigo && coincideEtapa;
+return coincideCodigo&&coincideEtapa;
 
 });
 
@@ -653,7 +703,7 @@ if(lista.length===0){
 tabla.innerHTML=`
 <tr>
 <td colspan="5" class="vacio">
-No hay premoldeados que coincidan con el filtro.
+No hay premoldeados que coincidan.
 </td>
 </tr>
 `;
@@ -665,23 +715,23 @@ return;
 
 tabla.innerHTML=lista.map(p=>{
 
-const etapa=Number(p.etapa || 0);
+const etapa=Number(p.etapa||0);
 
 let opciones="";
 
 
 etapas.forEach((nombre,index)=>{
 
-const permitido =
-index===etapa ||
+const permitido=
+index===etapa||
 puedeCambiarEtapa(index);
 
 
-opciones += `
+opciones+=`
 <option
 value="${index}"
-${index===etapa ? "selected" : ""}
-${permitido ? "" : "disabled"}>
+${index===etapa?"selected":""}
+${permitido?"":"disabled"}>
 ${nombre}
 </option>
 `;
@@ -689,26 +739,18 @@ ${nombre}
 });
 
 
-const puedeEditar =
-puedeCambiarEtapa(etapa + 1);
-
-
 return `
 <tr>
 
-<td>${p.id ?? ""}</td>
+<td>${p.id??""}</td>
 
 <td>
-<strong>${escapeHtml(p.codigo ?? "")}</strong>
+<strong>${escapeHtml(p.codigo??"")}</strong>
 </td>
 
-<td>
-${escapeHtml(p.tipo ?? "")}
-</td>
+<td>${escapeHtml(p.tipo??"")}</td>
 
-<td>
-${escapeHtml(p.modelo ?? "")}
-</td>
+<td>${escapeHtml(p.modelo??"")}</td>
 
 <td>
 
@@ -730,11 +772,7 @@ ${opciones}
 }
 
 
-/*
-========================================
-CAMBIAR ETAPA
-========================================
-*/
+/* CAMBIAR ETAPA */
 
 async function cambiarEtapa(id,nuevaEtapa){
 
@@ -744,24 +782,21 @@ const pieza=premoldeados.find(
 p=>Number(p.id)===Number(id)
 );
 
-
 if(!pieza){
 return;
 }
 
 
-const etapaAnterior=
-Number(pieza.etapa || 0);
+const anterior=
+Number(pieza.etapa||0);
 
 
-/*
-No permitir retroceder
-*/
+/* NO RETROCEDER */
 
-if(etapa < etapaAnterior){
+if(etapa<anterior){
 
 alert(
-"❌ No se puede retroceder una pieza a una etapa anterior."
+"❌ No se puede retroceder una pieza."
 );
 
 mostrarTabla();
@@ -771,18 +806,14 @@ return;
 }
 
 
-/*
-Si no cambia, no hacer nada
-*/
+/* SIN CAMBIO */
 
-if(etapa === etapaAnterior){
+if(etapa===anterior){
 return;
 }
 
 
-/*
-Verificar permiso
-*/
+/* PERMISO */
 
 if(!puedeCambiarEtapa(etapa)){
 
@@ -813,7 +844,8 @@ if(error){
 console.error(error);
 
 estado(
-"❌ No se pudo guardar: "+error.message,
+"❌ No se pudo guardar: "+
+error.message,
 "error"
 );
 
@@ -826,25 +858,19 @@ return;
 
 pieza.etapa=etapa;
 
-
 actualizarContadores();
 
+mostrarTabla();
 
 estado(
-"✅ <strong>Cambio guardado.</strong> La etapa fue actualizada online.",
+"✅ <strong>Cambio guardado.</strong>",
 "ok"
 );
-
-mostrarTabla();
 
 }
 
 
-/*
-========================================
-ESCAPAR HTML
-========================================
-*/
+/* HTML */
 
 function escapeHtml(text){
 
@@ -858,13 +884,21 @@ return String(text)
 }
 
 
-/*
-========================================
-INICIO
-========================================
-*/
+/* ARRANQUE */
 
-cargarDatos();
+(async function(){
+
+const {
+data:{session}
+}=await db.auth.getSession();
+
+if(session){
+
+await iniciarAplicacion();
+
+}
+
+})();
 
 </script>
 
