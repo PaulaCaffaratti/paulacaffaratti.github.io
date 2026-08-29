@@ -1,385 +1,1439 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Control de Premoldeados - Base</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Control de Premoldeados - Base
+</title>
+
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f4f6f8;color:#24364b}
-header{background:#102f52;color:white;padding:20px 35px}
-header h1{margin:0 0 12px}
-nav{display:flex;gap:10px;flex-wrap:wrap}
-nav a{color:white;text-decoration:none;padding:9px 14px;border-radius:7px;background:#ffffff20;font-weight:bold;font-size:13px}
-nav a:hover,nav a.activo{background:white;color:#102f52}
-main{max-width:1400px;margin:auto;padding:25px}
-.panel{background:white;border:1px solid #dce3ea;border-radius:14px;padding:25px;margin-bottom:20px}
-.formulario{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;align-items:end}
-.campo{display:flex;flex-direction:column;gap:7px}
-.campo label{font-size:12px;font-weight:bold}
-input{padding:11px;border:1px solid #cfd8e1;border-radius:7px}
-.boton{border:0;border-radius:7px;padding:11px 18px;cursor:pointer;font-weight:bold}
-.agregar{background:#102f52;color:white}
-.importar{background:#28734b;color:white}
-.estado{padding:12px 15px;border-radius:8px;margin-bottom:20px;background:#fff8e9;border:1px solid #ead9a6}
-.ok{background:#edf8f1;border-color:#b9dcc5}
-.error{background:#fff0f0;border-color:#e0b2b2}
-.contador{display:flex;gap:15px;margin-bottom:18px}
-.card{background:#eef5fc;border:1px solid #d3e1ef;border-radius:9px;padding:12px 18px;min-width:150px}
-.card strong{display:block;font-size:24px;margin-top:4px}
-.tabla{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th{background:#f4f6f8;text-align:left;padding:12px;font-size:12px}
-td{padding:11px 12px;border-top:1px solid #e6ebef;font-size:13px}
-.eliminar{background:#fff0f0;color:#a83232;border:1px solid #e3b8b8}
-.vacio{text-align:center;padding:30px;color:#657487}
-@media(max-width:900px){.formulario{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.formulario{grid-template-columns:1fr}}
+
+*{
+box-sizing:border-box
+}
+
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f4f6f8;
+color:#24364b
+}
+
+header{
+background:#102f52;
+color:white;
+padding:20px 35px
+}
+
+header h1{
+margin:0 0 12px
+}
+
+nav{
+display:flex;
+gap:10px;
+flex-wrap:wrap
+}
+
+nav a{
+color:white;
+text-decoration:none;
+padding:9px 14px;
+border-radius:7px;
+background:#ffffff20;
+font-weight:bold;
+font-size:13px
+}
+
+nav a:hover,
+nav a.activo{
+background:white;
+color:#102f52
+}
+
+main{
+max-width:1400px;
+margin:auto;
+padding:25px
+}
+
+.panel{
+background:white;
+border:1px solid #dce3ea;
+border-radius:14px;
+padding:25px;
+margin-bottom:20px
+}
+
+.formulario{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+align-items:end
+}
+
+.campo{
+display:flex;
+flex-direction:column;
+gap:7px
+}
+
+.campo label{
+font-size:12px;
+font-weight:bold
+}
+
+input{
+padding:11px;
+border:1px solid #cfd8e1;
+border-radius:7px;
+font-size:14px
+}
+
+.boton{
+border:0;
+border-radius:7px;
+padding:11px 18px;
+cursor:pointer;
+font-weight:bold
+}
+
+.agregar{
+background:#102f52;
+color:white
+}
+
+.importar{
+background:#28734b;
+color:white
+}
+
+.exportar{
+background:#18723f;
+color:white
+}
+
+.actualizar{
+background:#e9eef5;
+color:#24364b;
+border:1px solid #d2dae4
+}
+
+.estado{
+padding:12px 15px;
+border-radius:8px;
+margin-bottom:20px;
+background:#fff8e9;
+border:1px solid #ead9a6
+}
+
+.ok{
+background:#edf8f1;
+border-color:#b9dcc5
+}
+
+.error{
+background:#fff0f0;
+border-color:#e0b2b2
+}
+
+.contador{
+display:flex;
+gap:15px;
+margin-bottom:18px;
+flex-wrap:wrap
+}
+
+.card{
+background:#eef5fc;
+border:1px solid #d3e1ef;
+border-radius:9px;
+padding:12px 18px;
+min-width:150px
+}
+
+.card strong{
+display:block;
+font-size:24px;
+margin-top:4px
+}
+
+.herramientas{
+display:flex;
+justify-content:space-between;
+align-items:end;
+gap:15px;
+flex-wrap:wrap;
+margin-bottom:20px
+}
+
+.buscador{
+flex:1;
+min-width:260px;
+max-width:600px
+}
+
+.buscador label{
+display:block;
+font-size:12px;
+font-weight:bold;
+margin-bottom:7px
+}
+
+.buscador input{
+width:100%
+}
+
+.acciones{
+display:flex;
+gap:10px;
+flex-wrap:wrap
+}
+
+.resultados{
+font-size:12px;
+color:#657487;
+margin-top:7px
+}
+
+.tabla{
+overflow-x:auto
+}
+
+table{
+width:100%;
+border-collapse:collapse
+}
+
+th{
+background:#f4f6f8;
+text-align:left;
+padding:12px;
+font-size:12px
+}
+
+td{
+padding:11px 12px;
+border-top:1px solid #e6ebef;
+font-size:13px
+}
+
+.eliminar{
+background:#fff0f0;
+color:#a83232;
+border:1px solid #e3b8b8
+}
+
+.vacio{
+text-align:center;
+padding:30px;
+color:#657487
+}
+
+.estado-extra{
+font-size:11px;
+font-weight:bold;
+padding:5px 8px;
+border-radius:20px;
+display:inline-block
+}
+
+.si{
+background:#e8f7ee;
+color:#18723f
+}
+
+.no{
+background:#f1f3f6;
+color:#718096
+}
+
+@media(max-width:900px){
+
+.formulario{
+grid-template-columns:repeat(2,1fr)
+}
+
+}
+
+@media(max-width:600px){
+
+.formulario{
+grid-template-columns:1fr
+}
+
+main{
+padding:15px
+}
+
+header{
+padding:18px
+}
+
+.herramientas{
+align-items:stretch
+}
+
+.acciones{
+width:100%
+}
+
+.acciones button{
+flex:1
+}
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-<h1>🏗️ CONTROL DE PREMOLDEADOS</h1>
+
+<h1>
+🏗️ CONTROL DE PREMOLDEADOS
+</h1>
+
+
 <nav>
-<a href="index.html">📊 RESUMEN</a>
-<a href="base.html" class="activo">📋 BASE DE INGENIERÍA</a>
-<a href="avance.html">🚀 AVANCE</a>
+
+<a href="index.html">
+📊 RESUMEN
+</a>
+
+<a
+href="base.html"
+class="activo">
+📋 BASE DE INGENIERÍA
+</a>
+
+<a href="avance.html">
+🚀 AVANCE
+</a>
+
 </nav>
+
 </header>
+
 
 <main>
 
-<h2>📋 Base de Ingeniería</h2>
-<p>Cargá los premoldeados individualmente o importalos desde Excel.</p>
 
-<div id="estado" class="estado">
+<h2>
+📋 Base de Ingeniería
+</h2>
+
+<p>
+Cargá los premoldeados individualmente o importalos desde Excel.
+</p>
+
+
+<div
+id="estado"
+class="estado">
+
 ⏳ Conectando con la base de datos...
+
 </div>
+
+
+
+<!-- =========================
+AGREGAR PREMOLDEADO
+========================= -->
 
 <section class="panel">
 
-<h3>➕ Agregar premoldeado</h3>
+
+<h3>
+➕ Agregar premoldeado
+</h3>
+
 
 <div class="formulario">
 
-<div class="campo">
-<label>CÓDIGO</label>
-<input id="codigo" type="text" placeholder="Ej: 281218">
-</div>
 
 <div class="campo">
-<label>TIPO</label>
-<input id="tipo" type="text" placeholder="Ej: B1">
+
+<label>
+CÓDIGO
+</label>
+
+<input
+id="codigo"
+type="text"
+placeholder="Ej: 281218">
+
 </div>
+
 
 <div class="campo">
-<label>MODELO</label>
-<input id="modelo" type="text" placeholder="Ej: Base lateral">
+
+<label>
+TIPO
+</label>
+
+<input
+id="tipo"
+type="text"
+placeholder="Ej: B1">
+
 </div>
 
-<button class="boton agregar" onclick="agregarPremoldeado()">
+
+<div class="campo">
+
+<label>
+MODELO
+</label>
+
+<input
+id="modelo"
+type="text"
+placeholder="Ej: Base lateral">
+
+</div>
+
+
+<button
+class="boton agregar"
+onclick="agregarPremoldeado()">
+
 ➕ AGREGAR
+
 </button>
+
 
 </div>
 
 </section>
 
+
+
+<!-- =========================
+IMPORTAR EXCEL
+========================= -->
+
 <section class="panel">
 
-<h3>📥 Importar Excel</h3>
+
+<h3>
+📥 Importar Excel
+</h3>
+
 
 <p>
+
 El Excel debe tener estas columnas:
-<strong>codigo</strong>, <strong>tipo</strong> y <strong>modelo</strong>.
+
+<strong>codigo</strong>,
+
+<strong>tipo</strong>
+
+y
+
+<strong>modelo</strong>.
+
 </p>
 
-<input type="file" id="excel" accept=".xlsx,.xls,.csv">
 
-<button class="boton importar" onclick="importarExcel()">
+<input
+type="file"
+id="excel"
+accept=".xlsx,.xls,.csv">
+
+
+<button
+class="boton importar"
+onclick="importarExcel()">
+
 📥 IMPORTAR EXCEL
+
 </button>
 
+
 <p>
+
 Todos los registros importados comenzarán automáticamente en
+
 <strong>EN TALLER</strong>.
+
 </p>
 
 </section>
 
+
+
+<!-- =========================
+BASE
+========================= -->
+
 <section class="panel">
 
-<h3>📦 Premoldeados cargados</h3>
+
+<h3>
+📦 Premoldeados cargados
+</h3>
+
 
 <div class="contador">
-<div class="card">
-Total
-<strong id="total">0</strong>
-</div>
+
 
 <div class="card">
+
+Total
+
+<strong id="total">
+0
+</strong>
+
+</div>
+
+
+<div class="card">
+
 En taller
-<strong id="taller">0</strong>
+
+<strong id="taller">
+0
+</strong>
+
 </div>
+
+
 </div>
+
+
+
+<!-- BUSCADOR + EXPORTAR -->
+
+<div class="herramientas">
+
+
+<div class="buscador">
+
+<label>
+🔎 BUSCAR PREMOLDEADO
+</label>
+
+<input
+id="buscar"
+type="text"
+placeholder="Buscar por código, tipo o modelo..."
+oninput="mostrarTabla()">
+
+
+<div
+class="resultados"
+id="cantidadResultados">
+
+Mostrando todos los premoldeados.
+
+</div>
+
+</div>
+
+
+<div class="acciones">
+
+
+<button
+class="boton actualizar"
+onclick="limpiarBusqueda()">
+
+✖ LIMPIAR
+
+</button>
+
+
+<button
+class="boton exportar"
+onclick="exportarExcel()">
+
+📥 EXPORTAR EXCEL
+
+</button>
+
+
+</div>
+
+</div>
+
+
+
+<!-- TABLA -->
 
 <div class="tabla">
+
 <table>
 
+
 <thead>
+
 <tr>
-<th>ID</th>
-<th>CÓDIGO</th>
-<th>TIPO</th>
-<th>MODELO</th>
-<th>ETAPA</th>
-<th>ACCIÓN</th>
+
+<th>
+ID
+</th>
+
+<th>
+CÓDIGO
+</th>
+
+<th>
+TIPO
+</th>
+
+<th>
+MODELO
+</th>
+
+<th>
+ETAPA
+</th>
+
+<th>
+MONTAJE
+</th>
+
+<th>
+PINTURA
+</th>
+
+<th>
+ACCIÓN
+</th>
+
 </tr>
+
 </thead>
 
-<tbody id="tabla"></tbody>
+
+<tbody id="tabla">
+</tbody>
+
 
 </table>
+
 </div>
 
+
 </section>
+
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
+<script
+src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
+</script>
+
 
 <script>
+
+
+/* =====================================================
+SUPABASE
+===================================================== */
 
 const SUPABASE_URL =
 "https://tnnioleawbhuqjuykrsf.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
 
-const { createClient } = supabase;
 
-const db = createClient(
+const {
+createClient
+}=
+supabase;
+
+
+const db=
+createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
 
-const etapas = [
+
+
+/* =====================================================
+VARIABLES
+===================================================== */
+
+let premoldeados=[];
+
+let listaVisible=[];
+
+
+/*
+ETAPA SECUENCIAL
+
+0 = EN TALLER
+1 = LIBERADA EN TALLER
+2 = EN OBRA
+3 = LIBERADA QA/QC EN OBRA
+
+Montaje y Pintura ahora
+son campos independientes.
+*/
+
+const etapas=[
+
 "EN TALLER",
+
 "LIBERADA EN TALLER",
+
 "EN OBRA",
-"LIBERADA QA/QC EN OBRA",
-"MONTADA",
-"PINTADA"
+
+"LIBERADA QA/QC EN OBRA"
+
 ];
 
-function estado(mensaje,tipo=""){
 
-const e=document.getElementById("estado");
 
-e.innerHTML=mensaje;
-e.className="estado";
+/* =====================================================
+ESTADO
+===================================================== */
 
-if(tipo)e.classList.add(tipo);
+function estado(
+mensaje,
+tipo=""
+){
+
+const e=
+document.getElementById(
+"estado"
+);
+
+
+e.innerHTML=
+mensaje;
+
+
+e.className=
+"estado";
+
+
+if(tipo){
+
+e.classList.add(
+tipo
+);
 
 }
 
+}
+
+
+
+/* =====================================================
+CARGAR DATOS
+===================================================== */
+
 async function cargarDatos(){
 
-const {data,error}=await db
+const {
+data,
+error
+}=
+await db
+
 .from("premoldeados")
+
 .select("*")
-.order("id",{ascending:true});
+
+.order(
+"id",
+{
+ascending:true
+}
+);
+
 
 if(error){
 
 console.error(error);
 
-estado("❌ Error: "+error.message,"error");
+
+estado(
+"❌ Error: "+
+error.message,
+"error"
+);
+
 
 return;
 
 }
+
+
+premoldeados=
+data || [];
+
 
 estado(
 "☁️ <strong>Base online conectada.</strong>",
 "ok"
 );
 
-mostrarTabla(data || []);
+
+actualizarContadores();
+
+
+mostrarTabla();
 
 }
 
-function mostrarTabla(lista){
 
-const tabla=document.getElementById("tabla");
 
-document.getElementById("total").textContent=lista.length;
+/* =====================================================
+CONTADORES
+===================================================== */
 
-const taller=lista.filter(
-p=>Number(p.etapa || 0)===0
+function actualizarContadores(){
+
+document
+.getElementById(
+"total"
+)
+.textContent=
+premoldeados.length;
+
+
+const taller=
+premoldeados.filter(
+p=>
+Number(
+p.etapa || 0
+)===0
 ).length;
 
-document.getElementById("taller").textContent=taller;
 
-if(lista.length===0){
-
-tabla.innerHTML=`
-<tr>
-<td colspan="6" class="vacio">
-Todavía no hay premoldeados cargados.
-</td>
-</tr>`;
-
-return;
+document
+.getElementById(
+"taller"
+)
+.textContent=
+taller;
 
 }
 
-tabla.innerHTML=lista.map(p=>{
 
-const etapa=Number(p.etapa || 0);
 
-return `
+/* =====================================================
+BUSCAR POR CÓDIGO / TIPO / MODELO
+===================================================== */
+
+function obtenerListaFiltrada(){
+
+const buscar=
+document
+.getElementById(
+"buscar"
+)
+.value
+.trim()
+.toLowerCase();
+
+
+if(!buscar){
+
+return [
+...premoldeados
+];
+
+}
+
+
+return premoldeados.filter(
+p=>{
+
+
+const codigo=
+String(
+p.codigo ?? ""
+)
+.toLowerCase();
+
+
+const tipo=
+String(
+p.tipo ?? ""
+)
+.toLowerCase();
+
+
+const modelo=
+String(
+p.modelo ?? ""
+)
+.toLowerCase();
+
+
+return (
+
+codigo.includes(
+buscar
+)
+
+||
+
+tipo.includes(
+buscar
+)
+
+||
+
+modelo.includes(
+buscar
+)
+
+);
+
+});
+
+}
+
+
+
+/* =====================================================
+MOSTRAR TABLA
+===================================================== */
+
+function mostrarTabla(){
+
+const tabla=
+document.getElementById(
+"tabla"
+);
+
+
+listaVisible=
+obtenerListaFiltrada();
+
+
+const buscar=
+document
+.getElementById(
+"buscar"
+)
+.value
+.trim();
+
+
+const cantidadResultados=
+document
+.getElementById(
+"cantidadResultados"
+);
+
+
+if(buscar){
+
+cantidadResultados.textContent=
+
+"Mostrando "+
+listaVisible.length+
+" de "+
+premoldeados.length+
+" premoldeados.";
+
+}
+
+else{
+
+cantidadResultados.textContent=
+
+"Mostrando los "+
+premoldeados.length+
+" premoldeados.";
+
+}
+
+
+if(
+listaVisible.length===0
+){
+
+tabla.innerHTML=`
+
 <tr>
 
-<td>${p.id ?? ""}</td>
+<td
+colspan="8"
+class="vacio">
 
-<td><strong>${escapeHtml(p.codigo ?? "")}</strong></td>
+No hay premoldeados que coincidan con la búsqueda.
 
-<td>${escapeHtml(p.tipo ?? "")}</td>
-
-<td>${escapeHtml(p.modelo ?? "")}</td>
-
-<td>${etapas[etapa] ?? "EN TALLER"}</td>
-
-<td>
-<button
-class="boton eliminar"
-onclick="eliminarPremoldeado(${p.id})">
-🗑️ Eliminar
-</button>
 </td>
 
 </tr>
+
 `;
 
-}).join("");
-
-}
-
-async function agregarPremoldeado(){
-
-const codigo=document.getElementById("codigo").value.trim();
-const tipo=document.getElementById("tipo").value.trim();
-const modelo=document.getElementById("modelo").value.trim();
-
-if(!codigo || !tipo || !modelo){
-
-alert("Completá CÓDIGO, TIPO y MODELO.");
 return;
 
 }
 
-estado("⏳ Guardando...");
 
-const {error}=await db
-.from("premoldeados")
-.insert([{
-codigo:codigo,
-tipo:tipo,
-modelo:modelo,
-etapa:0
-}]);
+tabla.innerHTML=
 
-if(error){
+listaVisible.map(
+p=>{
 
-console.error(error);
 
-estado(
-"❌ No se pudo guardar: "+error.message,
-"error"
+let etapa=
+Number(
+p.etapa || 0
+);
+
+
+/*
+COMPATIBILIDAD CON DATOS ANTIGUOS
+*/
+
+let textoEtapa;
+
+
+if(etapa===4){
+
+textoEtapa=
+"MONTADA";
+
+}
+
+else if(etapa===5){
+
+textoEtapa=
+"PINTADA";
+
+}
+
+else{
+
+textoEtapa=
+etapas[etapa] ??
+"EN TALLER";
+
+}
+
+
+const montaje=
+p.montada===true;
+
+
+const pintura=
+p.pintada===true;
+
+
+return `
+
+<tr>
+
+
+<td>
+
+${p.id ?? ""}
+
+</td>
+
+
+<td>
+
+<strong>
+
+${escapeHtml(
+p.codigo ?? ""
+)}
+
+</strong>
+
+</td>
+
+
+<td>
+
+${escapeHtml(
+p.tipo ?? ""
+)}
+
+</td>
+
+
+<td>
+
+${escapeHtml(
+p.modelo ?? ""
+)}
+
+</td>
+
+
+<td>
+
+${escapeHtml(
+textoEtapa
+)}
+
+</td>
+
+
+<td>
+
+<span class="
+estado-extra
+${montaje ? "si" : "no"}
+">
+
+${montaje ? "✓ SÍ" : "—"}
+
+</span>
+
+</td>
+
+
+<td>
+
+<span class="
+estado-extra
+${pintura ? "si" : "no"}
+">
+
+${pintura ? "✓ SÍ" : "—"}
+
+</span>
+
+</td>
+
+
+<td>
+
+<button
+class="boton eliminar"
+onclick="
+eliminarPremoldeado(
+${p.id}
+)
+">
+
+🗑️ Eliminar
+
+</button>
+
+</td>
+
+
+</tr>
+
+`;
+
+}
+).join("");
+
+}
+
+
+
+/* =====================================================
+LIMPIAR BÚSQUEDA
+===================================================== */
+
+function limpiarBusqueda(){
+
+document
+.getElementById(
+"buscar"
+)
+.value="";
+
+
+mostrarTabla();
+
+}
+
+
+
+/* =====================================================
+AGREGAR
+===================================================== */
+
+async function agregarPremoldeado(){
+
+const codigo=
+document
+.getElementById(
+"codigo"
+)
+.value
+.trim();
+
+
+const tipo=
+document
+.getElementById(
+"tipo"
+)
+.value
+.trim();
+
+
+const modelo=
+document
+.getElementById(
+"modelo"
+)
+.value
+.trim();
+
+
+if(
+!codigo ||
+!tipo ||
+!modelo
+){
+
+alert(
+"Completá CÓDIGO, TIPO y MODELO."
 );
 
 return;
 
 }
 
-document.getElementById("codigo").value="";
-document.getElementById("tipo").value="";
-document.getElementById("modelo").value="";
+
+estado(
+"⏳ Guardando..."
+);
+
+
+const {
+error
+}=
+await db
+
+.from(
+"premoldeados"
+)
+
+.insert([{
+
+codigo:
+codigo,
+
+tipo:
+tipo,
+
+modelo:
+modelo,
+
+etapa:
+0,
+
+montada:
+false,
+
+pintada:
+false
+
+}]);
+
+
+if(error){
+
+console.error(error);
+
+
+estado(
+
+"❌ No se pudo guardar: "+
+error.message,
+
+"error"
+
+);
+
+
+return;
+
+}
+
+
+document
+.getElementById(
+"codigo"
+)
+.value="";
+
+
+document
+.getElementById(
+"tipo"
+)
+.value="";
+
+
+document
+.getElementById(
+"modelo"
+)
+.value="";
+
 
 estado(
 "✅ Premoldeado guardado correctamente.",
 "ok"
 );
 
+
 cargarDatos();
 
 }
 
+
+
+/* =====================================================
+IMPORTAR EXCEL
+===================================================== */
+
 async function importarExcel(){
 
-const archivo=document.getElementById("excel").files[0];
+const archivo=
+document
+.getElementById(
+"excel"
+)
+.files[0];
+
 
 if(!archivo){
 
-alert("Primero seleccioná el archivo Excel.");
+alert(
+"Primero seleccioná el archivo Excel."
+);
+
 return;
 
 }
 
-estado("⏳ Leyendo Excel...");
+
+estado(
+"⏳ Leyendo Excel..."
+);
+
 
 try{
 
-const datos=await archivo.arrayBuffer();
 
-const libro=XLSX.read(datos,{
+const datos=
+await archivo.arrayBuffer();
+
+
+const libro=
+XLSX.read(
+datos,
+{
 type:"array"
-});
+}
+);
 
-const hoja=libro.Sheets[libro.SheetNames[0]];
 
-const filas=XLSX.utils.sheet_to_json(hoja,{
+const hoja=
+libro.Sheets[
+libro.SheetNames[0]
+];
+
+
+const filas=
+XLSX.utils.sheet_to_json(
+hoja,
+{
 defval:""
-});
+}
+);
 
-if(!filas.length){
 
-alert("El Excel está vacío.");
+if(
+!filas.length
+){
+
+alert(
+"El Excel está vacío."
+);
+
 return;
 
 }
 
+
 const registros=[];
 
-for(let i=0;i<filas.length;i++){
 
-const fila=filas[i];
+for(
+let i=0;
+i<filas.length;
+i++
+){
+
+
+const fila=
+filas[i];
+
 
 const codigo=
+
 fila.codigo ??
+
 fila.CODIGO ??
+
 fila.Código ??
+
 fila["Código"] ??
+
 fila["CODIGO"] ??
+
 "";
+
 
 const tipo=
+
 fila.tipo ??
+
 fila.TIPO ??
+
 fila.Tipo ??
+
 "";
 
+
 const modelo=
+
 fila.modelo ??
+
 fila.MODELO ??
+
 fila.Modelo ??
+
 "";
+
 
 if(!codigo){
 
@@ -393,131 +1447,515 @@ continue;
 
 }
 
+
 registros.push({
 
-codigo:String(codigo).trim(),
-tipo:String(tipo).trim(),
-modelo:String(modelo).trim(),
-etapa:0
+codigo:
+String(
+codigo
+)
+.trim(),
+
+tipo:
+String(
+tipo
+)
+.trim(),
+
+modelo:
+String(
+modelo
+)
+.trim(),
+
+etapa:
+0,
+
+montada:
+false,
+
+pintada:
+false
 
 });
 
 }
 
-if(!registros.length){
+
+if(
+!registros.length
+){
 
 alert(
+
 "No encontré registros. Revisá que las columnas se llamen codigo, tipo y modelo."
+
 );
 
 return;
 
 }
 
+
 estado(
-"⏳ Subiendo "+registros.length+" premoldeados..."
+
+"⏳ Subiendo "+
+registros.length+
+" premoldeados..."
+
 );
 
-const tamaño=500;
 
-let cargados=0;
+const tamaño=
+500;
 
-for(let i=0;i<registros.length;i+=tamaño){
 
-const lote=registros.slice(i,i+tamaño);
+let cargados=
+0;
 
-const {error}=await db
-.from("premoldeados")
-.insert(lote);
+
+for(
+let i=0;
+i<registros.length;
+i+=tamaño
+){
+
+
+const lote=
+registros.slice(
+i,
+i+tamaño
+);
+
+
+const {
+error
+}=
+await db
+
+.from(
+"premoldeados"
+)
+
+.insert(
+lote
+);
+
 
 if(error){
 
 console.error(error);
 
+
 estado(
-"❌ Error al importar: "+error.message,
+
+"❌ Error al importar: "+
+error.message,
+
 "error"
+
 );
+
 
 return;
 
 }
 
-cargados+=lote.length;
+
+cargados+=
+lote.length;
 
 }
 
+
 estado(
+
 "✅ <strong>Importación terminada.</strong> "+
-cargados+" premoldeados cargados.",
+cargados+
+" premoldeados cargados.",
+
 "ok"
+
 );
 
-document.getElementById("excel").value="";
+
+document
+.getElementById(
+"excel"
+)
+.value="";
+
 
 cargarDatos();
 
-}catch(error){
+
+}
+catch(error){
+
 
 console.error(error);
 
+
 estado(
-"❌ No se pudo leer el Excel: "+error.message,
+
+"❌ No se pudo leer el Excel: "+
+error.message,
+
 "error"
+
 );
 
 }
 
 }
 
-async function eliminarPremoldeado(id){
 
-if(!confirm(
-"¿Seguro que querés eliminar este premoldeado?"
-))return;
 
-estado("⏳ Eliminando...");
+/* =====================================================
+EXPORTAR EXCEL
+===================================================== */
 
-const {error}=await db
-.from("premoldeados")
-.delete()
-.eq("id",id);
+function exportarExcel(){
 
-if(error){
+if(
+listaVisible.length===0
+){
 
-estado(
-"❌ No se pudo eliminar: "+error.message,
-"error"
+alert(
+"No hay premoldeados para exportar."
 );
 
 return;
 
 }
+
+
+/*
+EXPORTA LA LISTA QUE EL USUARIO
+ESTÁ VIENDO EN PANTALLA.
+
+Si no hay búsqueda:
+exporta toda la Base.
+
+Si buscó B1:
+exporta solamente los B1 encontrados.
+*/
+
+
+const datosExcel=
+listaVisible.map(
+p=>{
+
+
+const etapa=
+Number(
+p.etapa || 0
+);
+
+
+let textoEtapa;
+
+
+if(etapa===4){
+
+textoEtapa=
+"MONTADA";
+
+}
+else if(etapa===5){
+
+textoEtapa=
+"PINTADA";
+
+}
+else{
+
+textoEtapa=
+etapas[etapa] ??
+"EN TALLER";
+
+}
+
+
+return {
+
+ID:
+p.id ?? "",
+
+CODIGO:
+p.codigo ?? "",
+
+TIPO:
+p.tipo ?? "",
+
+MODELO:
+p.modelo ?? "",
+
+ETAPA:
+textoEtapa,
+
+MONTAJE:
+p.montada===true
+?
+"SI"
+:
+"NO",
+
+PINTURA:
+p.pintada===true
+?
+"SI"
+:
+"NO"
+
+};
+
+});
+
+
+const hoja=
+XLSX.utils.json_to_sheet(
+datosExcel
+);
+
+
+/*
+ANCHO DE COLUMNAS
+*/
+
+hoja["!cols"]=[
+
+{
+wch:10
+},
+
+{
+wch:16
+},
+
+{
+wch:12
+},
+
+{
+wch:35
+},
+
+{
+wch:28
+},
+
+{
+wch:12
+},
+
+{
+wch:12
+}
+
+];
+
+
+const libro=
+XLSX.utils.book_new();
+
+
+XLSX.utils.book_append_sheet(
+
+libro,
+
+hoja,
+
+"Base Ingeniería"
+
+);
+
+
+/*
+FECHA EN EL NOMBRE DEL ARCHIVO
+*/
+
+const hoy=
+new Date();
+
+
+const fecha=
+
+String(
+hoy.getDate()
+)
+.padStart(
+2,
+"0"
+)
+
++"-"
+
++
+
+String(
+hoy.getMonth()+1
+)
+.padStart(
+2,
+"0"
+)
+
++"-"
+
++
+
+hoy.getFullYear();
+
+
+const nombre=
+
+"Base_Ingenieria_Premoldeados_"+
+fecha+
+".xlsx";
+
+
+XLSX.writeFile(
+libro,
+nombre
+);
+
+
+estado(
+
+"✅ Excel exportado correctamente: "+
+listaVisible.length+
+" premoldeados.",
+
+"ok"
+
+);
+
+}
+
+
+
+/* =====================================================
+ELIMINAR
+===================================================== */
+
+async function eliminarPremoldeado(
+id
+){
+
+if(
+!confirm(
+
+"¿Seguro que querés eliminar este premoldeado?"
+
+)
+){
+
+return;
+
+}
+
+
+estado(
+"⏳ Eliminando..."
+);
+
+
+const {
+error
+}=
+await db
+
+.from(
+"premoldeados"
+)
+
+.delete()
+
+.eq(
+"id",
+id
+);
+
+
+if(error){
+
+estado(
+
+"❌ No se pudo eliminar: "+
+error.message,
+
+"error"
+
+);
+
+
+return;
+
+}
+
 
 estado(
 "✅ Premoldeado eliminado.",
 "ok"
 );
 
+
 cargarDatos();
 
 }
 
-function escapeHtml(text){
 
-return String(text)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+
+/* =====================================================
+ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+text
+){
+
+return String(
+text
+)
+
+.replace(
+/&/g,
+"&amp;"
+)
+
+.replace(
+/</g,
+"&lt;"
+)
+
+.replace(
+/>/g,
+"&gt;"
+)
+
+.replace(
+/"/g,
+"&quot;"
+)
+
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
 
+
+
+/* =====================================================
+INICIAR
+===================================================== */
+
 cargarDatos();
+
 
 </script>
 
 </body>
 </html>
-```
