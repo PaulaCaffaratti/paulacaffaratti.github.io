@@ -277,18 +277,22 @@ margin-top:12px
 <div class="filtros">
 
 <div class="campo">
-<label>BUSCAR CÓDIGO</label>
+<label>BUSCAR</label>
+
 <input
 id="buscar"
 type="text"
-placeholder="Ej: 281218"
+placeholder="Código, tipo o modelo..."
 oninput="mostrarTabla()">
+
 </div>
 
 <div class="campo">
+
 <label>FILTRAR ETAPA</label>
 
 <select id="filtroEtapa" onchange="mostrarTabla()">
+
 <option value="">TODAS</option>
 <option value="0">EN TALLER</option>
 <option value="1">LIBERADA EN TALLER</option>
@@ -296,7 +300,9 @@ oninput="mostrarTabla()">
 <option value="3">LIBERADA QA/QC EN OBRA</option>
 <option value="4">MONTADA</option>
 <option value="5">PINTADA</option>
+
 </select>
+
 </div>
 
 <button class="boton actualizar" onclick="cargarDatos()">
@@ -312,19 +318,48 @@ oninput="mostrarTabla()">
 
 <div class="contadores">
 
-<div class="card">Total<strong id="total">0</strong></div>
-<div class="card">En taller<strong id="taller">0</strong></div>
-<div class="card">Liberada taller<strong id="liberadaTaller">0</strong></div>
-<div class="card">En obra<strong id="obra">0</strong></div>
-<div class="card">QA/QC obra<strong id="qaqc">0</strong></div>
-<div class="card">Montada<strong id="montada">0</strong></div>
-<div class="card">Pintada<strong id="pintada">0</strong></div>
+<div class="card">
+Total
+<strong id="total">0</strong>
+</div>
+
+<div class="card">
+En taller
+<strong id="taller">0</strong>
+</div>
+
+<div class="card">
+Liberada taller
+<strong id="liberadaTaller">0</strong>
+</div>
+
+<div class="card">
+En obra
+<strong id="obra">0</strong>
+</div>
+
+<div class="card">
+QA/QC obra
+<strong id="qaqc">0</strong>
+</div>
+
+<div class="card">
+Montada
+<strong id="montada">0</strong>
+</div>
+
+<div class="card">
+Pintada
+<strong id="pintada">0</strong>
+</div>
 
 </div>
+
 
 <div class="tabla">
 
 <table>
+
 <thead>
 <tr>
 <th>ID</th>
@@ -364,6 +399,10 @@ SUPABASE_KEY
 );
 
 
+/* =========================
+ETAPAS
+========================= */
+
 const etapas = [
 "EN TALLER",
 "LIBERADA EN TALLER",
@@ -373,6 +412,10 @@ const etapas = [
 "PINTADA"
 ];
 
+
+/* =========================
+PERMISOS
+========================= */
 
 const permisosEtapa = {
 1:"puede_liberar_taller",
@@ -394,30 +437,48 @@ LOGIN
 
 async function iniciarSesion(){
 
-const email=document.getElementById("email").value.trim();
-const password=document.getElementById("password").value;
-const error=document.getElementById("loginError");
+const email=
+document.getElementById("email").value.trim();
+
+const password=
+document.getElementById("password").value;
+
+const error=
+document.getElementById("loginError");
+
 
 if(!email || !password){
 
-error.textContent="❌ Completá email y contraseña.";
+error.textContent=
+"❌ Completá email y contraseña.";
+
 return;
 
 }
 
-error.textContent="⏳ Iniciando sesión...";
 
-const {error:loginError}=await db.auth.signInWithPassword({
+error.textContent=
+"⏳ Iniciando sesión...";
+
+
+const {error:loginError}=
+await db.auth.signInWithPassword({
+
 email:email,
 password:password
+
 });
+
 
 if(loginError){
 
-error.textContent="❌ "+loginError.message;
+error.textContent=
+"❌ "+loginError.message;
+
 return;
 
 }
+
 
 error.textContent="";
 
@@ -437,10 +498,12 @@ await db.auth.signOut();
 usuarioActual=null;
 permisos=null;
 
-document.getElementById("appPanel")
+document
+.getElementById("appPanel")
 .classList.add("oculto");
 
-document.getElementById("loginPanel")
+document
+.getElementById("loginPanel")
 .classList.remove("oculto");
 
 document.getElementById("email").value="";
@@ -486,10 +549,12 @@ return;
 permisos=data;
 
 
-document.getElementById("loginPanel")
+document
+.getElementById("loginPanel")
 .classList.add("oculto");
 
-document.getElementById("appPanel")
+document
+.getElementById("appPanel")
 .classList.remove("oculto");
 
 
@@ -529,7 +594,27 @@ if(permisos.es_admin){
 return true;
 }
 
-const permiso=permisosEtapa[etapa];
+/*
+EN TALLER (0)
+
+Permitimos volver a EN TALLER si el usuario
+tiene al menos algún permiso de avance.
+*/
+
+if(etapa===0){
+
+return Boolean(
+permisos.puede_liberar_taller ||
+permisos.puede_llevar_obra ||
+permisos.puede_liberar_qaqc ||
+permisos.puede_montar ||
+permisos.puede_pintar
+);
+
+}
+
+const permiso=
+permisosEtapa[etapa];
 
 return Boolean(
 permiso && permisos[permiso]
@@ -544,7 +629,8 @@ ESTADO
 
 function estado(mensaje,tipo=""){
 
-const e=document.getElementById("estado");
+const e=
+document.getElementById("estado");
 
 e.innerHTML=mensaje;
 
@@ -582,9 +668,11 @@ return;
 
 }
 
+
 premoldeados=data||[];
 
 actualizarContadores();
+
 mostrarTabla();
 
 estado(
@@ -607,11 +695,12 @@ premoldeados.forEach(p=>{
 
 const e=Number(p.etapa||0);
 
-if(e>=0&&e<6){
+if(e>=0 && e<6){
 cantidades[e]++;
 }
 
 });
+
 
 document.getElementById("total").textContent=
 premoldeados.length;
@@ -638,41 +727,71 @@ cantidades[5];
 
 
 /* =========================
-TABLA
+TABLA Y BUSCADOR
 ========================= */
 
 function mostrarTabla(){
 
-const tabla=document.getElementById("tabla");
+const tabla=
+document.getElementById("tabla");
 
 if(!tabla)return;
 
-const buscar=document
+
+const buscar=
+document
 .getElementById("buscar")
 .value
 .trim()
 .toLowerCase();
 
-const filtro=document
+
+const filtro=
+document
 .getElementById("filtroEtapa")
 .value;
 
 
-const lista=premoldeados.filter(p=>{
+/*
+BUSCAR POR:
+- código
+- tipo
+- modelo
+*/
 
-const codigo=String(p.codigo??"").toLowerCase();
+const lista=
+premoldeados.filter(p=>{
 
-const coincideCodigo=
-!buscar||codigo.includes(buscar);
+const codigo=
+String(p.codigo??"").toLowerCase();
 
-const etapa=String(
-Number(p.etapa||0)
-);
+const tipo=
+String(p.tipo??"").toLowerCase();
+
+const modelo=
+String(p.modelo??"").toLowerCase();
+
+
+const coincideBusqueda=
+!buscar ||
+codigo.includes(buscar) ||
+tipo.includes(buscar) ||
+modelo.includes(buscar);
+
+
+const etapa=
+String(Number(p.etapa||0));
+
 
 const coincideEtapa=
-!filtro||etapa===filtro;
+!filtro ||
+etapa===filtro;
 
-return coincideCodigo&&coincideEtapa;
+
+return (
+coincideBusqueda &&
+coincideEtapa
+);
 
 });
 
@@ -680,11 +799,17 @@ return coincideCodigo&&coincideEtapa;
 if(lista.length===0){
 
 tabla.innerHTML=`
+
 <tr>
+
 <td colspan="5" class="vacio">
+
 No hay premoldeados que coincidan.
+
 </td>
+
 </tr>
+
 `;
 
 return;
@@ -692,14 +817,17 @@ return;
 }
 
 
-tabla.innerHTML=lista.map(p=>{
+tabla.innerHTML=
+lista.map(p=>{
 
-const etapa=Number(p.etapa||0);
+const etapa=
+Number(p.etapa||0);
 
 let opciones="";
 
 
-etapas.forEach((nombre,index)=>{
+etapas.forEach(
+(nombre,index)=>{
 
 const permitido=
 index===etapa ||
@@ -707,29 +835,42 @@ puedeCambiarEtapa(index);
 
 
 opciones+=`
+
 <option
 value="${index}"
-${index===etapa?"selected":""}
-${permitido?"":"disabled"}>
+${index===etapa ? "selected" : ""}
+${permitido ? "" : "disabled"}>
+
 ${nombre}
+
 </option>
+
 `;
 
 });
 
 
 return `
+
 <tr>
 
-<td>${p.id??""}</td>
-
 <td>
-<strong>${escapeHtml(p.codigo??"")}</strong>
+${p.id??""}
 </td>
 
-<td>${escapeHtml(p.tipo??"")}</td>
+<td>
+<strong>
+${escapeHtml(p.codigo??"")}
+</strong>
+</td>
 
-<td>${escapeHtml(p.modelo??"")}</td>
+<td>
+${escapeHtml(p.tipo??"")}
+</td>
+
+<td>
+${escapeHtml(p.modelo??"")}
+</td>
 
 <td>
 
@@ -744,6 +885,7 @@ ${opciones}
 </td>
 
 </tr>
+
 `;
 
 }).join("");
@@ -753,35 +895,37 @@ ${opciones}
 
 /* =========================
 CAMBIAR ETAPA
+
+IMPORTANTE:
+SE PUEDE AVANZAR O RETROCEDER
 ========================= */
 
-async function cambiarEtapa(id,nuevaEtapa){
+async function cambiarEtapa(
+id,
+nuevaEtapa
+){
 
-const etapa=Number(nuevaEtapa);
+const etapa=
+Number(nuevaEtapa);
 
-const pieza=premoldeados.find(
+
+const pieza=
+premoldeados.find(
 p=>Number(p.id)===Number(id)
 );
 
+
 if(!pieza)return;
 
-const anterior=Number(pieza.etapa||0);
+
+const anterior=
+Number(pieza.etapa||0);
 
 
-/* NO RETROCEDER */
-
-if(etapa<anterior){
-
-alert("❌ No se puede retroceder una pieza.");
-
-mostrarTabla();
-
-return;
-
-}
-
-
-/* SIN CAMBIO */
+/*
+Si seleccionó la misma etapa,
+no hacemos nada.
+*/
 
 if(etapa===anterior){
 
@@ -792,12 +936,18 @@ return;
 }
 
 
-/* PERMISO */
+/*
+Comprobamos permiso para
+la etapa elegida.
+
+NO importa si está avanzando
+o retrocediendo.
+*/
 
 if(!puedeCambiarEtapa(etapa)){
 
 alert(
-"🔒 No tenés permiso para liberar esta etapa."
+"🔒 No tenés permiso para seleccionar esta etapa."
 );
 
 mostrarTabla();
@@ -807,13 +957,49 @@ return;
 }
 
 
-estado("⏳ Guardando cambio...");
+/*
+CONFIRMACIÓN
+*/
 
+const confirmar=
+confirm(
+
+"¿Cambiar la pieza "+
+(pieza.codigo||"")+
+" de \""+
+etapas[anterior]+
+"\" a \""+
+etapas[etapa]+
+"\"?"
+
+);
+
+
+if(!confirmar){
+
+mostrarTabla();
+
+return;
+
+}
+
+
+estado(
+"⏳ Guardando cambio..."
+);
+
+
+/*
+GUARDAR EN SUPABASE
+*/
 
 const {error}=await db
 .from("premoldeados")
 .update({
-etapa:etapa
+
+etapa:etapa,
+fecha:new Date().toISOString()
+
 })
 .eq("id",id);
 
@@ -823,7 +1009,8 @@ if(error){
 console.error(error);
 
 estado(
-"❌ No se pudo guardar: "+error.message,
+"❌ No se pudo guardar: "+
+error.message,
 "error"
 );
 
@@ -834,10 +1021,18 @@ return;
 }
 
 
+/*
+ACTUALIZAR EN PANTALLA
+*/
+
 pieza.etapa=etapa;
+pieza.fecha=
+new Date().toISOString();
 
 actualizarContadores();
+
 mostrarTabla();
+
 
 estado(
 "✅ <strong>Cambio guardado correctamente.</strong>",
@@ -872,6 +1067,7 @@ ARRANQUE
 const {
 data:{session}
 }=await db.auth.getSession();
+
 
 if(session){
 
