@@ -21,9 +21,7 @@ background:#f4f6f8;
 color:#24364b;
 }
 
-/* =========================
-SIDEBAR
-========================= */
+/* SIDEBAR */
 
 .sidebar{
 position:fixed;
@@ -61,9 +59,7 @@ background:white;
 color:#102f52;
 }
 
-/* =========================
-MAIN
-========================= */
+/* MAIN */
 
 .main{
 margin-left:235px;
@@ -148,9 +144,7 @@ color:#45596f;
 display:none!important;
 }
 
-/* =========================
-TOTAL
-========================= */
+/* TOTAL */
 
 .total-principal{
 display:flex;
@@ -190,9 +184,7 @@ font-size:12px;
 opacity:.8;
 }
 
-/* =========================
-FLUJO
-========================= */
+/* FLUJO */
 
 .flujo{
 display:grid;
@@ -238,13 +230,11 @@ font-weight:bold;
 color:#28734b;
 }
 
-/* =========================
-CURVA S
-========================= */
+/* CURVA */
 
 .metricas-m3{
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(5,1fr);
 gap:12px;
 margin-bottom:20px;
 }
@@ -266,8 +256,20 @@ text-transform:uppercase;
 
 .metrica strong{
 display:block;
-font-size:24px;
+font-size:22px;
 margin-top:6px;
+}
+
+.metrica.desvio-positivo{
+border-left:5px solid #198754;
+}
+
+.metrica.desvio-negativo{
+border-left:5px solid #c23838;
+}
+
+.metrica.desvio-neutro{
+border-left:5px solid #d59a20;
 }
 
 .grid-curva{
@@ -300,9 +302,17 @@ font-weight:800;
 margin:10px 0 17px;
 }
 
-.estado-verde{color:#198754;}
-.estado-amarillo{color:#c17c00;}
-.estado-rojo{color:#c23838;}
+.estado-verde{
+color:#198754;
+}
+
+.estado-amarillo{
+color:#c17c00;
+}
+
+.estado-rojo{
+color:#c23838;
+}
 
 .estado-fila{
 display:flex;
@@ -313,6 +323,14 @@ border-bottom:1px solid #e5eaf0;
 font-size:12px;
 }
 
+.desvio-porcentaje-positivo{
+color:#198754;
+}
+
+.desvio-porcentaje-negativo{
+color:#c23838;
+}
+
 .nota{
 font-size:11px;
 line-height:1.55;
@@ -320,9 +338,7 @@ color:#7a8898;
 margin-top:15px;
 }
 
-/* =========================
-FAMILIAS
-========================= */
+/* FAMILIAS */
 
 .familias{
 display:grid;
@@ -437,6 +453,14 @@ flex-wrap:wrap;
 color:#68798c;
 }
 
+@media(max-width:1200px){
+
+.metricas-m3{
+grid-template-columns:repeat(3,1fr);
+}
+
+}
+
 @media(max-width:1150px){
 
 .flujo{
@@ -444,10 +468,6 @@ grid-template-columns:repeat(3,1fr);
 }
 
 .familias{
-grid-template-columns:repeat(2,1fr);
-}
-
-.metricas-m3{
 grid-template-columns:repeat(2,1fr);
 }
 
@@ -474,6 +494,10 @@ grid-template-columns:repeat(2,1fr);
 
 .familias{
 grid-template-columns:1fr;
+}
+
+.metricas-m3{
+grid-template-columns:repeat(2,1fr);
 }
 
 }
@@ -537,7 +561,7 @@ Seguimiento general de premoldeados: fabricación, logística, calidad, montaje 
 <div>
 
 <small>
-PREMOLDEADOS CARGADOS EN INGENIERÍA
+PREMOLDEADOS TOTALES
 </small>
 
 <div class="total-numero" id="total">
@@ -655,16 +679,13 @@ Base de Ingeniería
 id="btnAvance"
 class="btn-toggle"
 onclick="toggleSeccion('contenidoAvance','btnAvance')">
-
 Ocultar ▲
-
 </button>
 
 </div>
 
 
 <div id="contenidoAvance">
-
 
 <div class="metricas-m3">
 
@@ -707,14 +728,27 @@ Real montado
 </div>
 
 
-<div class="metrica">
+<div class="metrica" id="cardDesvioM3">
 
 <span>
-Desvío
+Desvío m³
 </span>
 
 <strong id="m3Desvio">
 0,00 m³
+</strong>
+
+</div>
+
+
+<div class="metrica" id="cardDesvioPct">
+
+<span>
+Desvío %
+</span>
+
+<strong id="pctDesvio">
+0,0%
 </strong>
 
 </div>
@@ -741,9 +775,7 @@ Estado del proyecto
 <div
 id="estadoProyecto"
 class="estado-grande">
-
 —
-
 </div>
 
 
@@ -776,7 +808,7 @@ Real
 <div class="estado-fila">
 
 <span>
-Desvío
+Desvío m³
 </span>
 
 <strong id="estadoDesvio">
@@ -789,7 +821,20 @@ Desvío
 <div class="estado-fila">
 
 <span>
-Avance real
+Desvío %
+</span>
+
+<strong id="estadoDesvioPct">
+0,0%
+</strong>
+
+</div>
+
+
+<div class="estado-fila">
+
+<span>
+Avance real proyecto
 </span>
 
 <strong id="estadoPct">
@@ -820,6 +865,16 @@ La línea <strong>BASE</strong> representa los m³ de montaje planificados acumu
 
 La línea <strong>REAL</strong> suma los m³ de cada pieza marcada como montada según su <strong>fecha_montaje</strong> en Supabase.
 
+<br><br>
+
+El <strong>desvío %</strong> se calcula contra lo planificado a la fecha:
+
+<br>
+
+<strong>
+(Real − Planificado) / Planificado × 100
+</strong>
+
 </div>
 
 </div>
@@ -843,9 +898,7 @@ La línea <strong>REAL</strong> suma los m³ de cada pieza marcada como montada 
 id="btnFamilias"
 class="btn-toggle"
 onclick="toggleSeccion('contenidoFamilias','btnFamilias')">
-
 Ocultar ▲
-
 </button>
 
 </div>
@@ -886,7 +939,7 @@ SUPABASE_KEY
 
 
 /* =====================================================
-BASE PLANIFICADA DEFINITIVA
+BASE PLANIFICADA
 ===================================================== */
 
 const BASE_PROYECTO=[
@@ -968,19 +1021,14 @@ const BASE_PROYECTO=[
 
 
 /* =====================================================
-MAPA m3
+MAPA m³
 ===================================================== */
 
 const M3_POR_TIPO={};
 
 BASE_PROYECTO.forEach(item=>{
-
-M3_POR_TIPO[
-normalizarTipo(item.tipo)
-]=item.m3;
-
+M3_POR_TIPO[normalizarTipo(item.tipo)]=item.m3;
 });
-
 
 let piezas=[];
 let chart=null;
@@ -1045,6 +1093,27 @@ maximumFractionDigits:3
 }
 
 
+function formatoPorcentaje(valor){
+
+const signo=
+valor>0
+?
+"+"
+:
+"";
+
+return signo+
+Number(valor||0).toLocaleString(
+"es-AR",
+{
+minimumFractionDigits:1,
+maximumFractionDigits:1
+}
+)+"%";
+
+}
+
+
 function volumenTotalProyecto(){
 
 return BASE_PROYECTO.reduce(
@@ -1052,18 +1121,6 @@ return BASE_PROYECTO.reduce(
 total+
 item.cantidad*
 item.m3,
-0
-);
-
-}
-
-
-function cantidadTotalProyecto(){
-
-return BASE_PROYECTO.reduce(
-(total,item)=>
-total+
-item.cantidad,
 0
 );
 
@@ -1511,7 +1568,19 @@ const desvio=
 realHoy-planHoy;
 
 
-const porcentaje=
+/* DESVÍO PORCENTUAL CONTRA EL PLAN */
+
+const desvioPct=
+planHoy===0
+?
+0
+:
+(desvio/planHoy)*100;
+
+
+/* AVANCE REAL SOBRE EL TOTAL DEL PROYECTO */
+
+const porcentajeReal=
 totalM3===0
 ?
 0
@@ -1532,8 +1601,12 @@ document.getElementById("m3RealHoy").textContent=
 formatoM3(realHoy);
 
 document.getElementById("m3Desvio").textContent=
-(desvio>=0?"+":"")+
+(desvio>0?"+":"")+
 formatoM3(desvio);
+
+document.getElementById("pctDesvio").textContent=
+formatoPorcentaje(desvioPct);
+
 
 document.getElementById("estadoPlan").textContent=
 formatoM3(planHoy);
@@ -1542,11 +1615,14 @@ document.getElementById("estadoReal").textContent=
 formatoM3(realHoy);
 
 document.getElementById("estadoDesvio").textContent=
-(desvio>=0?"+":"")+
+(desvio>0?"+":"")+
 formatoM3(desvio);
 
+document.getElementById("estadoDesvioPct").textContent=
+formatoPorcentaje(desvioPct);
+
 document.getElementById("estadoPct").textContent=
-porcentaje.toLocaleString(
+porcentajeReal.toLocaleString(
 "es-AR",
 {
 minimumFractionDigits:1,
@@ -1558,6 +1634,71 @@ document.getElementById("fechaControl").textContent=
 hoy.toLocaleDateString("es-AR");
 
 
+/* COLORES DEL DESVÍO */
+
+const cardM3=
+document.getElementById("cardDesvioM3");
+
+const cardPct=
+document.getElementById("cardDesvioPct");
+
+const estadoPctDesvio=
+document.getElementById("estadoDesvioPct");
+
+
+cardM3.classList.remove(
+"desvio-positivo",
+"desvio-negativo",
+"desvio-neutro"
+);
+
+cardPct.classList.remove(
+"desvio-positivo",
+"desvio-negativo",
+"desvio-neutro"
+);
+
+estadoPctDesvio.classList.remove(
+"desvio-porcentaje-positivo",
+"desvio-porcentaje-negativo"
+);
+
+
+if(desvio>0){
+
+cardM3.classList.add("desvio-positivo");
+
+cardPct.classList.add("desvio-positivo");
+
+estadoPctDesvio.classList.add(
+"desvio-porcentaje-positivo"
+);
+
+}
+
+else if(desvio<0){
+
+cardM3.classList.add("desvio-negativo");
+
+cardPct.classList.add("desvio-negativo");
+
+estadoPctDesvio.classList.add(
+"desvio-porcentaje-negativo"
+);
+
+}
+
+else{
+
+cardM3.classList.add("desvio-neutro");
+
+cardPct.classList.add("desvio-neutro");
+
+}
+
+
+/* ESTADO */
+
 const estado=
 document.getElementById(
 "estadoProyecto"
@@ -1568,7 +1709,7 @@ estado.className=
 "estado-grande";
 
 
-if(desvio>=5){
+if(desvio>0){
 
 estado.textContent=
 "ADELANTADO";
@@ -1579,18 +1720,7 @@ estado.classList.add(
 
 }
 
-else if(desvio>=-5){
-
-estado.textContent=
-"EN LÍNEA";
-
-estado.classList.add(
-"estado-amarillo"
-);
-
-}
-
-else{
+else if(desvio<0){
 
 estado.textContent=
 "ATRASADO";
@@ -1601,6 +1731,19 @@ estado.classList.add(
 
 }
 
+else{
+
+estado.textContent=
+"EN LÍNEA";
+
+estado.classList.add(
+"estado-amarillo"
+);
+
+}
+
+
+/* GRÁFICO */
 
 if(chart){
 
@@ -1630,6 +1773,8 @@ data:planData,
 
 borderColor:"#255b88",
 
+backgroundColor:"rgba(37,91,136,.08)",
+
 borderWidth:3,
 
 pointRadius:0,
@@ -1647,6 +1792,8 @@ label:"REAL MONTADO (m³)",
 data:realData,
 
 borderColor:"#28734b",
+
+backgroundColor:"rgba(40,115,75,.08)",
 
 borderWidth:3,
 
