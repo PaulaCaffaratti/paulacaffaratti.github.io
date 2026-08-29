@@ -5,10 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Control de Premoldeados</title>
+  <title>Control de Premoldeados - Resumen</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     :root {
       --azul: #102f52;
@@ -27,24 +29,53 @@
     header {
       background: linear-gradient(135deg, #102f52, #183f68);
       color: white;
-      padding: 22px 35px;
+      padding: 20px 35px;
     }
 
     header h1 {
-      margin: 0;
-      font-size: 27px;
+      margin: 0 0 12px;
+      font-size: 26px;
     }
 
-    header p {
-      margin: 6px 0 0;
-      opacity: .8;
-      font-size: 14px;
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 9px 14px;
+      border-radius: 7px;
+      background: rgba(255,255,255,.12);
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    nav a:hover,
+    nav a.activo {
+      background: white;
+      color: var(--azul);
     }
 
     main {
       max-width: 1600px;
       margin: auto;
       padding: 25px;
+    }
+
+    .titulo-seccion {
+      margin-bottom: 18px;
+    }
+
+    .titulo-seccion h2 {
+      margin: 0 0 5px;
+    }
+
+    .titulo-seccion p {
+      margin: 0;
+      color: #657487;
     }
 
     /* TARJETAS */
@@ -58,14 +89,14 @@
 
     .tarjeta {
       position: relative;
+      background: white;
       border: 1px solid var(--borde);
       border-radius: 12px;
       padding: 17px;
-      min-height: 165px;
+      min-height: 160px;
       cursor: pointer;
       transition: .2s;
       overflow: hidden;
-      background: white;
     }
 
     .tarjeta:hover {
@@ -101,8 +132,8 @@
       position: absolute;
       bottom: 12px;
       right: 14px;
-      font-size: 28px;
-      opacity: .7;
+      font-size: 27px;
+      opacity: .75;
     }
 
     .total-card { background: #eef5fc; }
@@ -113,194 +144,61 @@
     .montada-card { background: #edf8f6; }
     .pintada-card { background: #fff0f5; }
 
-
     /* CAMINO */
 
     .camino {
       background: white;
       border: 1px solid var(--borde);
       border-radius: 14px;
-      padding: 22px;
-      margin-bottom: 25px;
+      padding: 25px;
+      margin-top: 20px;
     }
 
-    .camino h2 { margin: 0; }
+    .camino h2 {
+      margin: 0;
+    }
 
-    .camino p {
+    .camino > p {
       color: #657487;
+      margin-bottom: 22px;
     }
 
     .pasos {
       display: flex;
+      align-items: stretch;
       justify-content: space-between;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 8px;
     }
 
     .paso {
       flex: 1;
       text-align: center;
-      padding: 12px;
+      padding: 14px 8px;
+      border-radius: 10px;
+      background: #f7f9fb;
+      min-width: 110px;
     }
 
     .paso-icono {
-      font-size: 35px;
+      font-size: 34px;
     }
 
     .paso h3 {
-      font-size: 13px;
+      font-size: 12px;
       margin: 8px 0;
     }
 
     .paso p {
+      margin: 0;
+      color: #6c7986;
       font-size: 11px;
     }
 
     .flecha {
       align-self: center;
       font-size: 22px;
-      color: #8895a3;
+      color: #8b98a5;
     }
-
-
-    /* HERRAMIENTAS */
-
-    .herramientas {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-
-    .buscador {
-      width: 350px;
-      padding: 13px;
-      border: 1px solid #ccd6df;
-      border-radius: 8px;
-    }
-
-    button {
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .btn-principal {
-      background: var(--azul);
-      color: white;
-      border: none;
-      padding: 13px 18px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-
-    /* FORMULARIO */
-
-    .formulario {
-      display: none;
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 20px;
-    }
-
-    .formulario.activo {
-      display: block;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-    }
-
-    input, textarea {
-      padding: 13px;
-      border: 1px solid #ccd6df;
-      border-radius: 8px;
-      width: 100%;
-      font-family: inherit;
-    }
-
-    textarea {
-      min-height: 120px;
-    }
-
-    .btn-guardar {
-      background: #1b6b4a;
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 8px;
-      margin-top: 12px;
-      font-weight: bold;
-    }
-
-
-    /* TABLA */
-
-    .tabla-contenedor {
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 1050px;
-    }
-
-    th {
-      background: #f4f6f8;
-      text-align: left;
-      padding: 14px;
-      font-size: 12px;
-    }
-
-    td {
-      padding: 13px 14px;
-      border-top: 1px solid #e6ebef;
-      font-size: 13px;
-    }
-
-    .estado {
-      padding: 7px 10px;
-      border-radius: 7px;
-      font-size: 11px;
-      font-weight: bold;
-      display: inline-block;
-    }
-
-    .estado-0 { background: #e5f0fa; color: #28649a; }
-    .estado-1 { background: #e5f5ea; color: #28734b; }
-    .estado-2 { background: #fff0df; color: #c86c00; }
-    .estado-3 { background: #f0edfb; color: #6953a8; }
-    .estado-4 { background: #e5f5ef; color: #28765c; }
-    .estado-5 { background: #fdebf2; color: #b23f6b; }
-
-    .btn-accion {
-      padding: 8px 11px;
-      border-radius: 7px;
-      border: 1px solid #cfd8e1;
-      background: white;
-      font-weight: bold;
-      margin-right: 4px;
-    }
-
-    .btn-eliminar {
-      color: #b43c3c;
-      border-color: #e5bbbb;
-    }
-
-    .vacio {
-      padding: 35px;
-      text-align: center;
-      color: #778595;
-    }
-
 
     /* MODAL */
 
@@ -348,19 +246,32 @@
       font-size: 20px;
       width: 35px;
       height: 35px;
+      cursor: pointer;
     }
 
     .detalle-tabla {
       width: 100%;
-      min-width: auto;
+      border-collapse: collapse;
       margin-top: 18px;
     }
 
-    .detalle-tabla tr {
+    .detalle-tabla th {
+      background: #f4f6f8;
+      text-align: left;
+      padding: 12px;
+      font-size: 12px;
+    }
+
+    .detalle-tabla td {
+      padding: 12px;
+      border-top: 1px solid #e6ebef;
+    }
+
+    .detalle-tabla tr.dato {
       cursor: pointer;
     }
 
-    .detalle-tabla tr:hover {
+    .detalle-tabla tr.dato:hover {
       background: #f7f9fb;
     }
 
@@ -370,7 +281,7 @@
       background: #e8edf1;
       border-radius: 20px;
       overflow: hidden;
-      margin-top: 5px;
+      margin-top: 6px;
     }
 
     .barra-interna {
@@ -378,9 +289,17 @@
       background: #28734b;
     }
 
+    .resumen-modal {
+      margin-top: 18px;
+      background: #f4f7fa;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
     .codigos {
       margin-top: 20px;
-      padding-top: 15px;
+      padding-top: 18px;
       border-top: 1px solid #e5e9ed;
     }
 
@@ -392,20 +311,11 @@
     }
 
     .codigo {
-      padding: 8px 10px;
-      background: #f3f5f7;
+      padding: 8px 11px;
+      background: #f2f4f6;
       border-radius: 7px;
       font-size: 12px;
     }
-
-    .resumen-modal {
-      margin-top: 15px;
-      background: #f4f7fa;
-      padding: 14px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
 
     @media(max-width: 1350px) {
       .resumen {
@@ -427,6 +337,10 @@
 
     @media(max-width: 700px) {
 
+      header {
+        padding: 18px;
+      }
+
       main {
         padding: 15px;
       }
@@ -435,21 +349,10 @@
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .herramientas {
-        flex-direction: column;
-      }
-
-      .buscador {
-        width: 100%;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
       .paso {
         min-width: 100%;
       }
+
     }
 
   </style>
@@ -458,12 +361,31 @@
 <body>
 
 <header>
+
   <h1>🏗️ CONTROL DE PREMOLDEADOS</h1>
-  <p>Seguimiento y avance de producción y obra</p>
+
+  <nav>
+    <a href="index.html" class="activo">📊 RESUMEN</a>
+    <a href="base.html">📋 BASE DE INGENIERÍA</a>
+    <a href="avance.html">🚀 AVANCE</a>
+  </nav>
+
 </header>
 
 
 <main>
+
+  <section class="titulo-seccion">
+
+    <h2>📊 Resumen General</h2>
+
+    <p>
+      Hacé clic en cualquier tarjeta para ver
+      el detalle por Tipo y Modelo.
+    </p>
+
+  </section>
+
 
   <!-- TARJETAS -->
 
@@ -473,10 +395,9 @@
       <h3>TOTAL</h3>
       <div class="numero" id="total">0</div>
       <p>premoldeados</p>
-      <div class="porcentaje">100% cargado</div>
+      <div class="porcentaje">100% base de Ingeniería</div>
       <div class="icono">🧱</div>
     </div>
-
 
     <div class="tarjeta taller-card" onclick="abrirDetalle(1)">
       <h3>EN TALLER</h3>
@@ -486,7 +407,6 @@
       <div class="icono">🏭</div>
     </div>
 
-
     <div class="tarjeta lib-taller-card" onclick="abrirDetalle(2)">
       <h3>LIBERADAS<br>EN TALLER</h3>
       <div class="numero" id="libTaller">0</div>
@@ -494,7 +414,6 @@
       <div class="porcentaje" id="porcLibTaller">0%</div>
       <div class="icono">✓</div>
     </div>
-
 
     <div class="tarjeta obra-card" onclick="abrirDetalle(3)">
       <h3>EN OBRA</h3>
@@ -504,7 +423,6 @@
       <div class="icono">🚧</div>
     </div>
 
-
     <div class="tarjeta qa-card" onclick="abrirDetalle(4)">
       <h3>LIBERADA QA/QC<br>EN OBRA</h3>
       <div class="numero" id="qa">0</div>
@@ -513,7 +431,6 @@
       <div class="icono">✔</div>
     </div>
 
-
     <div class="tarjeta montada-card" onclick="abrirDetalle(5)">
       <h3>MONTADA</h3>
       <div class="numero" id="montada">0</div>
@@ -521,7 +438,6 @@
       <div class="porcentaje" id="porcMontada">0%</div>
       <div class="icono">🏗️</div>
     </div>
-
 
     <div class="tarjeta pintada-card" onclick="abrirDetalle(6)">
       <h3>PINTADA</h3>
@@ -534,20 +450,22 @@
   </section>
 
 
-  <!-- CAMINO -->
+  <!-- CAMINO DEL PREMOLDEADO -->
 
   <section class="camino">
 
-    <h2>CAMINO DEL PREMOLDEADO</h2>
+    <h2>🧭 Camino del Premoldeado</h2>
 
-    <p>Recorrido de cada pieza durante el proceso.</p>
+    <p>
+      Todas las piezas recorren estas etapas.
+    </p>
 
     <div class="pasos">
 
       <div class="paso">
         <div class="paso-icono">🏭</div>
         <h3>EN TALLER</h3>
-        <p>La pieza fue cargada por Ingeniería.</p>
+        <p>Base cargada por Ingeniería.</p>
       </div>
 
       <div class="flecha">→</div>
@@ -555,7 +473,7 @@
       <div class="paso">
         <div class="paso-icono">✓</div>
         <h3>LIBERADA EN TALLER</h3>
-        <p>El responsable libera la pieza.</p>
+        <p>Producción libera la pieza.</p>
       </div>
 
       <div class="flecha">→</div>
@@ -579,7 +497,7 @@
       <div class="paso">
         <div class="paso-icono">🏗️</div>
         <h3>MONTADA</h3>
-        <p>La pieza está instalada.</p>
+        <p>La pieza fue instalada.</p>
       </div>
 
       <div class="flecha">→</div>
@@ -594,140 +512,24 @@
 
   </section>
 
-
-  <!-- HERRAMIENTAS -->
-
-  <section class="herramientas">
-
-    <input
-      class="buscador"
-      id="buscador"
-      placeholder="🔎 Buscar por código, tipo o modelo..."
-    >
-
-    <button
-      class="btn-principal"
-      onclick="mostrarFormulario()"
-    >
-      + AGREGAR PREMOLDEADO
-    </button>
-
-  </section>
-
-
-  <!-- FORMULARIO -->
-
-  <section class="formulario" id="formulario">
-
-    <h2>Agregar premoldeado</h2>
-
-    <p>
-      La pieza será cargada inicialmente como
-      <strong>EN TALLER</strong>.
-    </p>
-
-    <div class="form-grid">
-
-      <input id="codigo" placeholder="Código">
-
-      <input id="tipo" placeholder="Tipo">
-
-      <input id="modelo" placeholder="Modelo / Descripción">
-
-    </div>
-
-    <button
-      class="btn-guardar"
-      onclick="agregarPremoldeado()"
-    >
-      AGREGAR
-    </button>
-
-
-    <hr style="margin:30px 0;border:.5px solid #e5e9ed">
-
-    <h2>Carga masiva</h2>
-
-    <p>
-      Formato:
-      <strong>CÓDIGO | TIPO | MODELO</strong>
-    </p>
-
-    <textarea
-      id="cargaMasiva"
-      placeholder="S1-001 | Sleeper | S1
-S1-002 | Sleeper | S1
-C1-001 | Cámara | C1"
-    ></textarea>
-
-    <button
-      class="btn-guardar"
-      onclick="cargarMasivamente()"
-    >
-      CARGAR LISTADO
-    </button>
-
-  </section>
-
-
-  <!-- TABLA -->
-
-  <section class="tabla-contenedor">
-
-    <table>
-
-      <thead>
-        <tr>
-          <th>CÓDIGO</th>
-          <th>TIPO</th>
-          <th>MODELO</th>
-          <th>ESTADO ACTUAL</th>
-          <th>FECHA</th>
-          <th>RESPONSABLE</th>
-          <th>ACCIÓN</th>
-        </tr>
-      </thead>
-
-      <tbody id="tabla"></tbody>
-
-    </table>
-
-    <div
-      class="vacio"
-      id="mensajeVacio"
-    >
-      Todavía no hay premoldeados cargados.
-    </div>
-
-  </section>
-
 </main>
 
 
-<!-- MODAL DETALLE -->
+<!-- MODAL -->
 
-<div
-  class="modal-fondo"
-  id="modalFondo"
->
+<div class="modal-fondo" id="modalFondo">
 
   <div class="modal">
 
     <div class="modal-header">
 
-      <h2 id="tituloModal">
-        DETALLE
-      </h2>
+      <h2 id="tituloModal">DETALLE</h2>
 
-      <button
-        class="cerrar"
-        onclick="cerrarModal()"
-      >
+      <button class="cerrar" onclick="cerrarModal()">
         ×
       </button>
 
     </div>
-
 
     <div id="contenidoModal"></div>
 
@@ -737,17 +539,6 @@ C1-001 | Cámara | C1"
 
 
 <script>
-
-  /*
-    ETAPAS
-
-    0 EN TALLER
-    1 LIBERADA EN TALLER
-    2 EN OBRA
-    3 LIBERADA QA/QC
-    4 MONTADA
-    5 PINTADA
-  */
 
   const etapas = [
     "EN TALLER",
@@ -761,343 +552,13 @@ C1-001 | Cámara | C1"
 
   let premoldeados =
     JSON.parse(
-      localStorage.getItem(
-        "premoldeados"
-      )
+      localStorage.getItem("premoldeados")
     ) || [];
 
 
-  function guardar() {
+  function porcentaje(cantidad, total) {
 
-    localStorage.setItem(
-      "premoldeados",
-      JSON.stringify(premoldeados)
-    );
-
-  }
-
-
-  function mostrarFormulario() {
-
-    document
-      .getElementById("formulario")
-      .classList.toggle("activo");
-
-  }
-
-
-  function agregarPremoldeado() {
-
-    const codigo =
-      document
-        .getElementById("codigo")
-        .value
-        .trim();
-
-    const tipo =
-      document
-        .getElementById("tipo")
-        .value
-        .trim();
-
-    const modelo =
-      document
-        .getElementById("modelo")
-        .value
-        .trim();
-
-
-    if (!codigo || !tipo || !modelo) {
-
-      alert(
-        "Completá Código, Tipo y Modelo."
-      );
-
-      return;
-
-    }
-
-
-    const existe =
-      premoldeados.some(
-        p =>
-          p.codigo.toLowerCase() ===
-          codigo.toLowerCase()
-      );
-
-
-    if (existe) {
-
-      alert(
-        "Ya existe una pieza con ese código."
-      );
-
-      return;
-
-    }
-
-
-    premoldeados.push({
-
-      codigo: codigo,
-      tipo: tipo,
-      modelo: modelo,
-
-      etapa: 0,
-
-      responsable: "",
-
-      fecha: "",
-
-      historial: []
-
-    });
-
-
-    guardar();
-
-
-    document
-      .getElementById("codigo")
-      .value = "";
-
-    document
-      .getElementById("tipo")
-      .value = "";
-
-    document
-      .getElementById("modelo")
-      .value = "";
-
-
-    renderizar();
-
-  }
-
-
-  function cargarMasivamente() {
-
-    const texto =
-      document
-        .getElementById("cargaMasiva")
-        .value
-        .trim();
-
-
-    if (!texto) {
-
-      alert(
-        "Pegá el listado."
-      );
-
-      return;
-
-    }
-
-
-    let agregados = 0;
-
-
-    texto
-      .split("\n")
-      .forEach(linea => {
-
-        const partes =
-          linea.split("|");
-
-
-        if (
-          partes.length >= 3
-        ) {
-
-          const codigo =
-            partes[0].trim();
-
-          const tipo =
-            partes[1].trim();
-
-          const modelo =
-            partes[2].trim();
-
-
-          if (
-            codigo &&
-            tipo &&
-            modelo
-          ) {
-
-            const existe =
-              premoldeados.some(
-                p =>
-                  p.codigo.toLowerCase() ===
-                  codigo.toLowerCase()
-              );
-
-
-            if (!existe) {
-
-              premoldeados.push({
-
-                codigo,
-                tipo,
-                modelo,
-
-                etapa: 0,
-
-                responsable: "",
-
-                fecha: "",
-
-                historial: []
-
-              });
-
-
-              agregados++;
-
-            }
-
-          }
-
-        }
-
-      });
-
-
-    guardar();
-
-
-    document
-      .getElementById("cargaMasiva")
-      .value = "";
-
-
-    renderizar();
-
-
-    alert(
-      "Se agregaron " +
-      agregados +
-      " premoldeados."
-    );
-
-  }
-
-
-  function actualizar(indice) {
-
-    const pieza =
-      premoldeados[indice];
-
-
-    if (
-      pieza.etapa >= 5
-    ) {
-
-      alert(
-        "La pieza ya está PINTADA."
-      );
-
-      return;
-
-    }
-
-
-    const nuevaEtapa =
-      pieza.etapa + 1;
-
-
-    const responsable =
-      prompt(
-        "Responsable que confirma:\n\n" +
-        etapas[nuevaEtapa]
-      );
-
-
-    if (
-      !responsable ||
-      !responsable.trim()
-    ) {
-
-      return;
-
-    }
-
-
-    pieza.etapa =
-      nuevaEtapa;
-
-
-    pieza.responsable =
-      responsable.trim();
-
-
-    pieza.fecha =
-      new Date()
-      .toLocaleString("es-AR");
-
-
-    if (!pieza.historial) {
-
-      pieza.historial = [];
-
-    }
-
-
-    pieza.historial.push({
-
-      etapa:
-        nuevaEtapa,
-
-      responsable:
-        pieza.responsable,
-
-      fecha:
-        pieza.fecha
-
-    });
-
-
-    guardar();
-
-    renderizar();
-
-  }
-
-
-  function eliminar(indice) {
-
-    if (
-      confirm(
-        "¿Eliminar " +
-        premoldeados[indice].codigo +
-        "?"
-      )
-    ) {
-
-      premoldeados.splice(
-        indice,
-        1
-      );
-
-
-      guardar();
-
-      renderizar();
-
-    }
-
-  }
-
-
-  function porcentaje(
-    cantidad,
-    total
-  ) {
-
-    if (total === 0) {
-      return 0;
-    }
+    if (total === 0) return 0;
 
     return (
       cantidad / total * 100
@@ -1106,45 +567,34 @@ C1-001 | Cámara | C1"
   }
 
 
-  /*
-    FILTRO ACUMULATIVO
-
-    Para las etapas:
-    1 en adelante:
-
-    incluye todas las piezas que
-    llegaron a esa etapa o la superaron.
-
-    EN TALLER es especial:
-    muestra las que todavía
-    están en etapa 0.
-  */
-
   function piezasDeTarjeta(tipoTarjeta) {
 
+    // TOTAL
     if (tipoTarjeta === 0) {
-
       return premoldeados;
-
     }
 
-
+    // EN TALLER:
+    // solamente las que todavía están allí
     if (tipoTarjeta === 1) {
-
       return premoldeados.filter(
         p => p.etapa === 0
       );
-
     }
 
+    /*
+      ETAPAS ACUMULATIVAS
+
+      Una pieza pintada también cuenta
+      como liberada en taller, en obra,
+      QA/QC y montada.
+    */
 
     const etapaMinima =
       tipoTarjeta - 1;
 
-
     return premoldeados.filter(
-      p =>
-        p.etapa >= etapaMinima
+      p => p.etapa >= etapaMinima
     );
 
   }
@@ -1155,36 +605,30 @@ C1-001 | Cámara | C1"
     const total =
       premoldeados.length;
 
-
     const taller =
       premoldeados.filter(
         p => p.etapa === 0
       ).length;
-
 
     const libTaller =
       premoldeados.filter(
         p => p.etapa >= 1
       ).length;
 
-
     const obra =
       premoldeados.filter(
         p => p.etapa >= 2
       ).length;
-
 
     const qa =
       premoldeados.filter(
         p => p.etapa >= 3
       ).length;
 
-
     const montada =
       premoldeados.filter(
         p => p.etapa >= 4
       ).length;
-
 
     const pintada =
       premoldeados.filter(
@@ -1192,274 +636,78 @@ C1-001 | Cámara | C1"
       ).length;
 
 
-    document
-      .getElementById("total")
-      .textContent =
+    document.getElementById("total").textContent =
       total;
 
-
-    document
-      .getElementById("enTaller")
-      .textContent =
+    document.getElementById("enTaller").textContent =
       taller;
 
-
-    document
-      .getElementById("libTaller")
-      .textContent =
+    document.getElementById("libTaller").textContent =
       libTaller;
 
-
-    document
-      .getElementById("enObra")
-      .textContent =
+    document.getElementById("enObra").textContent =
       obra;
 
-
-    document
-      .getElementById("qa")
-      .textContent =
+    document.getElementById("qa").textContent =
       qa;
 
-
-    document
-      .getElementById("montada")
-      .textContent =
+    document.getElementById("montada").textContent =
       montada;
 
-
-    document
-      .getElementById("pintada")
-      .textContent =
+    document.getElementById("pintada").textContent =
       pintada;
 
 
-    document
-      .getElementById("porcTaller")
-      .textContent =
-      porcentaje(taller, total) +
-      "%";
+    document.getElementById("porcTaller").textContent =
+      porcentaje(taller, total) + "% del total";
 
 
-    document
-      .getElementById("porcLibTaller")
-      .textContent =
-      porcentaje(libTaller, total) +
-      "% de avance";
+    document.getElementById("porcLibTaller").textContent =
+      porcentaje(libTaller, total) + "% de avance";
 
 
-    document
-      .getElementById("porcObra")
-      .textContent =
-      porcentaje(obra, total) +
-      "% de avance";
+    document.getElementById("porcObra").textContent =
+      porcentaje(obra, total) + "% de avance";
 
 
-    document
-      .getElementById("porcQA")
-      .textContent =
-      porcentaje(qa, total) +
-      "% de avance";
+    document.getElementById("porcQA").textContent =
+      porcentaje(qa, total) + "% de avance";
 
 
-    document
-      .getElementById("porcMontada")
-      .textContent =
-      porcentaje(montada, total) +
-      "% de avance";
+    document.getElementById("porcMontada").textContent =
+      porcentaje(montada, total) + "% de avance";
 
 
-    document
-      .getElementById("porcPintada")
-      .textContent =
-      porcentaje(pintada, total) +
-      "% de avance";
+    document.getElementById("porcPintada").textContent =
+      porcentaje(pintada, total) + "% de avance";
 
   }
 
-
-  function renderizar() {
-
-    const tabla =
-      document.getElementById(
-        "tabla"
-      );
-
-
-    const busqueda =
-      document
-        .getElementById("buscador")
-        .value
-        .toLowerCase();
-
-
-    tabla.innerHTML = "";
-
-
-    const filtrados =
-      premoldeados.filter(p =>
-
-        p.codigo
-          .toLowerCase()
-          .includes(busqueda)
-
-        ||
-
-        p.tipo
-          .toLowerCase()
-          .includes(busqueda)
-
-        ||
-
-        p.modelo
-          .toLowerCase()
-          .includes(busqueda)
-
-      );
-
-
-    document
-      .getElementById("mensajeVacio")
-      .style.display =
-
-      filtrados.length === 0
-        ? "block"
-        : "none";
-
-
-    filtrados.forEach(
-      pieza => {
-
-        const indice =
-          premoldeados.indexOf(
-            pieza
-          );
-
-
-        tabla.innerHTML += `
-
-          <tr>
-
-            <td>
-              <strong>
-                ${pieza.codigo}
-              </strong>
-            </td>
-
-            <td>
-              ${pieza.tipo}
-            </td>
-
-            <td>
-              ${pieza.modelo}
-            </td>
-
-            <td>
-
-              <span
-                class="estado estado-${pieza.etapa}"
-              >
-
-                ${etapas[
-                  pieza.etapa
-                ]}
-
-              </span>
-
-            </td>
-
-            <td>
-              ${pieza.fecha || "-"}
-            </td>
-
-            <td>
-              ${pieza.responsable || "-"}
-            </td>
-
-            <td>
-
-              ${
-                pieza.etapa < 5
-
-                ?
-
-                `<button
-                  class="btn-accion"
-                  onclick="actualizar(${indice})"
-                >
-                  AVANZAR
-                </button>`
-
-                :
-
-                `<strong>
-                  COMPLETADA
-                </strong>`
-              }
-
-
-              <button
-                class="btn-accion btn-eliminar"
-                onclick="eliminar(${indice})"
-              >
-                🗑
-              </button>
-
-            </td>
-
-          </tr>
-
-        `;
-
-      }
-    );
-
-
-    actualizarResumen();
-
-  }
-
-
-  /*
-    DETALLE AL TOCAR TARJETA
-  */
 
   function abrirDetalle(tipoTarjeta) {
 
     const titulos = [
-
       "TOTAL DE PREMOLDEADOS",
-
       "EN TALLER",
-
       "LIBERADAS EN TALLER",
-
       "EN OBRA",
-
       "LIBERADAS QA/QC EN OBRA",
-
       "MONTADAS",
-
       "PINTADAS"
-
     ];
 
 
     const piezas =
-      piezasDeTarjeta(
-        tipoTarjeta
-      );
+      piezasDeTarjeta(tipoTarjeta);
 
 
-    document
-      .getElementById("tituloModal")
-      .textContent =
+    document.getElementById("tituloModal").textContent =
       titulos[tipoTarjeta];
 
 
     /*
-      AGRUPAR POR
-      TIPO + MODELO
+      Primero agrupamos toda la base
+      para saber el TOTAL de cada modelo.
     */
 
     const grupos = {};
@@ -1468,56 +716,40 @@ C1-001 | Cámara | C1"
     premoldeados.forEach(p => {
 
       const clave =
-        p.tipo +
-        "||" +
-        p.modelo;
+        p.tipo + "||" + p.modelo;
 
 
       if (!grupos[clave]) {
 
         grupos[clave] = {
-
           tipo: p.tipo,
-
           modelo: p.modelo,
-
           total: 0,
-
-          alcanzadas: 0,
-
-          codigos: []
-
+          alcanzadas: 0
         };
 
       }
 
 
-      grupos[clave]
-        .total++;
-
+      grupos[clave].total++;
 
     });
 
 
+    /*
+      Ahora contamos las piezas
+      que alcanzaron la etapa.
+    */
+
     piezas.forEach(p => {
 
       const clave =
-        p.tipo +
-        "||" +
-        p.modelo;
+        p.tipo + "||" + p.modelo;
 
 
-      if (
-        grupos[clave]
-      ) {
+      if (grupos[clave]) {
 
-        grupos[clave]
-          .alcanzadas++;
-
-
-        grupos[clave]
-          .codigos
-          .push(p);
+        grupos[clave].alcanzadas++;
 
       }
 
@@ -1527,7 +759,7 @@ C1-001 | Cámara | C1"
     let html = `
 
       <p>
-        Detalle del avance por
+        Avance por
         <strong>Tipo y Modelo</strong>.
       </p>
 
@@ -1536,13 +768,9 @@ C1-001 | Cámara | C1"
         <thead>
 
           <tr>
-
             <th>TIPO</th>
-
             <th>MODELO</th>
-
             <th>AVANCE</th>
-
           </tr>
 
         </thead>
@@ -1565,43 +793,33 @@ C1-001 | Cámara | C1"
 
         html += `
 
-          <tr
-            onclick="
-              mostrarCodigos(
-                '${grupo.tipo.replace(/'/g, "\\'")}',
-                '${grupo.modelo.replace(/'/g, "\\'")}',
-                ${tipoTarjeta}
-              )
-            "
+          <tr class="dato"
+            onclick="mostrarCodigos(
+              '${grupo.tipo.replace(/'/g, "\\'")}',
+              '${grupo.modelo.replace(/'/g, "\\'")}',
+              ${tipoTarjeta}
+            )"
           >
 
-            <td>
-              ${grupo.tipo}
-            </td>
+            <td>${grupo.tipo}</td>
 
-            <td>
-              ${grupo.modelo}
-            </td>
+            <td>${grupo.modelo}</td>
 
             <td>
 
               <strong>
-
                 ${grupo.alcanzadas}
                 /
                 ${grupo.total}
 
                 — ${porc}%
-
               </strong>
 
               <div class="barra">
 
                 <div
                   class="barra-interna"
-                  style="
-                    width:${porc}%
-                  "
+                  style="width:${porc}%"
                 ></div>
 
               </div>
@@ -1651,7 +869,7 @@ C1-001 | Cámara | C1"
 
         <p>
           💡 Hacé clic sobre una fila
-          para ver los códigos.
+          para ver los códigos individuales.
         </p>
 
       </div>
@@ -1659,22 +877,16 @@ C1-001 | Cámara | C1"
     `;
 
 
-    document
-      .getElementById("contenidoModal")
+    document.getElementById("contenidoModal")
       .innerHTML =
       html;
 
 
-    document
-      .getElementById("modalFondo")
+    document.getElementById("modalFondo")
       .classList.add("activo");
 
   }
 
-
-  /*
-    MOSTRAR CÓDIGOS
-  */
 
   function mostrarCodigos(
     tipo,
@@ -1683,18 +895,12 @@ C1-001 | Cámara | C1"
   ) {
 
     const piezas =
-      piezasDeTarjeta(
-        tipoTarjeta
-      )
-      .filter(
-        p =>
-
-          p.tipo === tipo
-
-          &&
-
-          p.modelo === modelo
-      );
+      piezasDeTarjeta(tipoTarjeta)
+        .filter(
+          p =>
+            p.tipo === tipo &&
+            p.modelo === modelo
+        );
 
 
     let html = `
@@ -1704,8 +910,7 @@ C1-001 | Cámara | C1"
       </h3>
 
       <p>
-        ${piezas.length}
-        pieza(s) en esta etapa.
+        Códigos que alcanzaron esta etapa:
       </p>
 
       <div class="lista-codigos">
@@ -1713,30 +918,31 @@ C1-001 | Cámara | C1"
     `;
 
 
-    piezas.forEach(p => {
+    if (piezas.length === 0) {
 
       html += `
-
-        <div class="codigo">
-
-          ${p.codigo}
-
-        </div>
-
+        No hay piezas en esta etapa.
       `;
 
-    });
+    } else {
+
+      piezas.forEach(p => {
+
+        html += `
+          <div class="codigo">
+            ${p.codigo}
+          </div>
+        `;
+
+      });
+
+    }
 
 
-    html += `
-
-      </div>
-
-    `;
+    html += `</div>`;
 
 
-    document
-      .getElementById("zonaCodigos")
+    document.getElementById("zonaCodigos")
       .innerHTML =
       html;
 
@@ -1745,40 +951,26 @@ C1-001 | Cámara | C1"
 
   function cerrarModal() {
 
-    document
-      .getElementById("modalFondo")
+    document.getElementById("modalFondo")
       .classList.remove("activo");
 
   }
 
 
-  document
-    .getElementById("modalFondo")
+  document.getElementById("modalFondo")
     .addEventListener(
       "click",
       function(evento) {
 
-        if (
-          evento.target === this
-        ) {
-
+        if (evento.target === this) {
           cerrarModal();
-
         }
 
       }
     );
 
 
-  document
-    .getElementById("buscador")
-    .addEventListener(
-      "input",
-      renderizar
-    );
-
-
-  renderizar();
+  actualizarResumen();
 
 </script>
 
