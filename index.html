@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,483 +13,596 @@
 <style>
 
 *{
-    box-sizing:border-box;
+box-sizing:border-box;
 }
 
 body{
-    margin:0;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#f5f7fb;
-    color:#172033;
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f5f7fb;
+color:#172033;
 }
 
 .app{
-    display:flex;
-    min-height:100vh;
+display:flex;
+min-height:100vh;
 }
 
-/* SIDEBAR */
+/* =========================
+SIDEBAR
+========================= */
 
 .sidebar{
-    width:220px;
-    background:#fff;
-    border-right:1px solid #e7eaf0;
-    padding:22px 14px;
-    position:fixed;
-    top:0;
-    bottom:0;
-    z-index:10;
+width:220px;
+background:#fff;
+border-right:1px solid #e7eaf0;
+padding:22px 14px;
+position:fixed;
+top:0;
+bottom:0;
+z-index:10;
 }
 
 .logo{
-    padding:8px 12px 25px;
-    font-size:18px;
-    font-weight:700;
-    color:#173b8f;
+padding:8px 12px 25px;
+font-size:18px;
+font-weight:700;
+color:#173b8f;
 }
 
 .logo span{
-    display:block;
-    font-size:11px;
-    color:#8a94a6;
-    margin-top:5px;
-    font-weight:400;
+display:block;
+font-size:11px;
+color:#8a94a6;
+margin-top:5px;
+font-weight:400;
 }
 
 .menu{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
+display:flex;
+flex-direction:column;
+gap:6px;
 }
 
 .menu a{
-    text-decoration:none;
-    color:#697386;
-    padding:12px 13px;
-    border-radius:9px;
-    font-size:14px;
+text-decoration:none;
+color:#697386;
+padding:12px 13px;
+border-radius:9px;
+font-size:14px;
 }
 
 .menu a:hover{
-    background:#f1f4fa;
-    color:#1745d1;
+background:#f1f4fa;
+color:#1745d1;
 }
 
 .menu a.active{
-    background:#edf3ff;
-    color:#1745d1;
-    font-weight:700;
+background:#edf3ff;
+color:#1745d1;
+font-weight:700;
 }
 
-/* MAIN */
+/* =========================
+MAIN
+========================= */
 
 .main{
-    margin-left:220px;
-    width:calc(100% - 220px);
+margin-left:220px;
+width:calc(100% - 220px);
 }
 
 .topbar{
-    height:70px;
-    background:#fff;
-    border-bottom:1px solid #e7eaf0;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 30px;
+height:70px;
+background:#fff;
+border-bottom:1px solid #e7eaf0;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
 }
 
 .project-title{
-    font-size:13px;
-    color:#8a94a6;
+font-size:13px;
+color:#8a94a6;
 }
 
 .project-title strong{
-    color:#172033;
-    font-size:16px;
-    margin-left:8px;
+color:#172033;
+font-size:16px;
+margin-left:8px;
 }
 
 .status-live{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    font-size:12px;
-    color:#657084;
+display:flex;
+align-items:center;
+gap:7px;
+font-size:12px;
+color:#657084;
 }
 
 .dot{
-    width:8px;
-    height:8px;
-    background:#f2994a;
-    border-radius:50%;
+width:8px;
+height:8px;
+background:#f2994a;
+border-radius:50%;
 }
 
 .content{
-    padding:28px 32px 50px;
-    max-width:1500px;
-    margin:auto;
+padding:28px 32px 50px;
+max-width:1500px;
+margin:auto;
 }
 
 .page-title{
-    margin-bottom:18px;
+margin-bottom:18px;
 }
 
 .page-title h1{
-    margin:0;
-    font-size:25px;
+margin:0;
+font-size:25px;
 }
 
 .page-title p{
-    margin:6px 0 0;
-    color:#8a94a6;
-    font-size:13px;
+margin:6px 0 0;
+color:#8a94a6;
+font-size:13px;
 }
 
-/* TOTAL PREMOLDEADOS */
+/* =========================
+TOTAL PREMOLDEADOS
+========================= */
 
 .total-wrapper{
-    margin-bottom:18px;
+margin-bottom:18px;
 }
 
 .total-card{
-    background:#fff;
-    border:1px solid #dfe5ef;
-    border-left:4px solid #2855d9;
-    border-radius:12px;
-    padding:18px 22px;
-    display:flex;
-    align-items:center;
+background:#fff;
+border:1px solid #dfe5ef;
+border-left:4px solid #2855d9;
+border-radius:12px;
+padding:18px 22px;
+display:flex;
+align-items:center;
 }
 
 .total-left{
-    display:flex;
-    align-items:center;
-    gap:18px;
+display:flex;
+align-items:center;
+gap:18px;
 }
 
 .total-icon{
-    font-size:29px;
+font-size:29px;
 }
 
 .total-label{
-    font-size:12px;
-    color:#8a94a6;
-    margin-bottom:5px;
+font-size:12px;
+color:#8a94a6;
+margin-bottom:5px;
 }
 
 .total-value{
-    font-size:34px;
-    font-weight:700;
-    line-height:1;
+font-size:34px;
+font-weight:700;
+line-height:1;
 }
 
 .total-sub{
-    font-size:11px;
-    color:#8a94a6;
-    margin-top:7px;
+font-size:11px;
+color:#8a94a6;
+margin-top:7px;
 }
 
-/* CARDS */
+/* =========================
+CARDS GENERALES
+========================= */
 
 .card{
-    background:#fff;
-    border:1px solid #e8ebf1;
-    border-radius:12px;
-    padding:20px;
+background:#fff;
+border:1px solid #e8ebf1;
+border-radius:12px;
+padding:20px;
 }
 
 .card-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    margin-bottom:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:18px;
 }
 
 .card-title{
-    font-size:15px;
-    font-weight:700;
+font-size:15px;
+font-weight:700;
 }
 
 .card-subtitle{
-    color:#929bad;
-    font-size:11px;
-    margin-top:4px;
+color:#929bad;
+font-size:11px;
+margin-top:4px;
 }
 
-/* FLUJO */
+/* =========================
+FLUJO
+========================= */
 
 .flow{
-    margin-bottom:18px;
+margin-bottom:18px;
 }
 
 .flow-grid{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:10px;
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:10px;
 }
 
 .flow-step{
-    border:1px solid #e7eaf0;
-    border-radius:10px;
-    padding:16px 12px;
-    background:#fff;
+border:1px solid #e7eaf0;
+border-radius:10px;
+padding:16px 12px;
+background:#fff;
 }
 
 .flow-icon{
-    font-size:21px;
-    margin-bottom:9px;
+font-size:21px;
+margin-bottom:9px;
 }
 
 .flow-name{
-    font-size:12px;
-    font-weight:700;
+font-size:12px;
+font-weight:700;
+}
+
+.flow-number{
+margin-top:7px;
+display:flex;
+align-items:baseline;
+gap:5px;
+flex-wrap:wrap;
 }
 
 .flow-value{
-    font-size:22px;
-    font-weight:700;
-    margin-top:7px;
+font-size:22px;
+font-weight:700;
+}
+
+.flow-unit{
+font-size:10px;
+font-weight:600;
+color:#8a94a6;
 }
 
 .flow-percent{
-    font-size:10px;
-    color:#8a94a6;
-    margin-top:3px;
+font-size:10px;
+color:#8a94a6;
+margin-top:3px;
 }
 
-/* CURVA */
+/* =========================
+CURVA / ESTADO
+========================= */
 
 .dashboard-grid{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:18px;
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:18px;
 }
 
 .chart-container{
-    height:330px;
+height:330px;
 }
 
-/* ESTADO */
-
 .status-box{
-    background:#f7f9fc;
-    border-radius:10px;
-    padding:18px;
-    margin-bottom:15px;
+background:#f7f9fc;
+border-radius:10px;
+padding:18px;
+margin-bottom:15px;
 }
 
 .status-big{
-    font-size:26px;
-    font-weight:700;
+font-size:26px;
+font-weight:700;
 }
 
 .status-label{
-    color:#8a94a6;
-    font-size:11px;
-    margin-top:4px;
+color:#8a94a6;
+font-size:11px;
+margin-top:4px;
 }
 
 .progress{
-    height:8px;
-    background:#e8edf5;
-    border-radius:20px;
-    overflow:hidden;
-    margin:15px 0 8px;
+height:8px;
+background:#e8edf5;
+border-radius:20px;
+overflow:hidden;
+margin:15px 0 8px;
 }
 
 .progress-bar{
-    height:100%;
-    width:0;
-    background:#2855d9;
-    border-radius:20px;
+height:100%;
+width:0;
+background:#2855d9;
+border-radius:20px;
 }
 
 .progress-info{
-    display:flex;
-    justify-content:space-between;
-    font-size:11px;
-    color:#7c8799;
+display:flex;
+justify-content:space-between;
+font-size:11px;
+color:#7c8799;
 }
 
-/* AVANCE POR TIPO */
+/* =========================
+TIPOS - TARJETAS
+========================= */
 
-.tipo-card{
-    margin-top:18px;
+.tipo-section{
+margin-top:18px;
 }
 
-.tipo-actions{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
+.tipo-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:16px;
 }
 
-.tipo-btn{
-    border:1px solid #dce3ea;
-    background:#fff;
-    color:#45556d;
-    padding:8px 12px;
-    border-radius:8px;
-    font-size:12px;
-    font-weight:700;
-    cursor:pointer;
+.tipo-kpi{
+background:#fff;
+border:1px solid #e6e8ed;
+border-left:5px solid var(--tipo-color);
+border-radius:12px;
+padding:20px;
+min-width:0;
 }
 
-.tipo-btn:hover{
-    background:#f4f7fb;
+.tipo-top{
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:12px;
 }
 
-.tipo-btn.active{
-    background:#edf3ff;
-    border-color:#bfd0ff;
-    color:#1745d1;
+.tipo-nombre{
+font-size:15px;
+font-weight:800;
+letter-spacing:.5px;
+color:#5f6b7d;
 }
 
-.detalle-tipos{
-    display:none;
-    margin-top:10px;
+.tipo-icon{
+width:46px;
+height:46px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+font-size:22px;
+background:var(--tipo-soft);
+flex-shrink:0;
 }
 
-.detalle-tipos.visible{
-    display:block;
+.tipo-total-label{
+font-size:10px;
+font-weight:700;
+color:#8a94a6;
+margin-top:16px;
+text-transform:uppercase;
 }
 
-.tipo-chart-wrap{
-    width:100%;
-    min-height:400px;
-    position:relative;
+.tipo-total-numero{
+font-size:30px;
+font-weight:800;
+margin-top:4px;
+color:#172033;
 }
 
-.tabla-scroll{
-    overflow-x:auto;
+.tipo-total-numero span{
+font-size:11px;
+font-weight:500;
+color:#8a94a6;
 }
 
-/* TABLAS */
+.tipo-bar{
+height:7px;
+background:#eef1f6;
+border-radius:20px;
+overflow:hidden;
+margin:12px 0 14px;
+}
+
+.tipo-bar-fill{
+height:100%;
+width:100%;
+background:var(--tipo-color);
+border-radius:20px;
+}
+
+.tipo-separador{
+border-top:1px solid #edf0f4;
+margin:14px 0;
+}
+
+.tipo-indicador{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-top:9px;
+}
+
+.tipo-indicador-label{
+font-size:10px;
+font-weight:800;
+color:#7b8493;
+text-transform:uppercase;
+letter-spacing:.5px;
+}
+
+.tipo-indicador-valor{
+font-size:20px;
+font-weight:800;
+color:#172033;
+}
+
+.tipo-indicador-valor span{
+font-size:10px;
+font-weight:500;
+color:#8a94a6;
+}
+
+.tipo-mini-bar{
+height:6px;
+background:#eef1f6;
+border-radius:20px;
+overflow:hidden;
+margin-top:7px;
+}
+
+.tipo-mini-bar div{
+height:100%;
+background:var(--tipo-color);
+border-radius:20px;
+}
+
+/* =========================
+TABLA FINAL
+========================= */
+
+.bottom-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+margin-top:18px;
+}
 
 table{
-    width:100%;
-    border-collapse:collapse;
+width:100%;
+border-collapse:collapse;
 }
 
 th{
-    text-align:left;
-    color:#929bad;
-    font-size:10px;
-    padding:11px 8px;
-    border-bottom:1px solid #edf0f4;
+text-align:left;
+color:#929bad;
+font-size:10px;
+padding:11px 8px;
+border-bottom:1px solid #edf0f4;
 }
 
 td{
-    padding:12px 8px;
-    font-size:12px;
-    border-bottom:1px solid #f0f2f6;
-}
-
-.tipo-table th:not(:first-child),
-.tipo-table td:not(:first-child){
-    text-align:center;
-}
-
-.tipo-nombre,
-.tipo-total{
-    font-weight:700;
-}
-
-.bottom-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-    margin-top:18px;
+padding:12px 8px;
+font-size:12px;
+border-bottom:1px solid #f0f2f6;
 }
 
 .badge{
-    padding:5px 8px;
-    border-radius:20px;
-    font-size:10px;
-    font-weight:700;
+padding:5px 8px;
+border-radius:20px;
+font-size:10px;
+font-weight:700;
 }
 
 .badge-green{
-    background:#e9f8ef;
-    color:#239653;
+background:#e9f8ef;
+color:#239653;
 }
 
 .badge-blue{
-    background:#edf3ff;
-    color:#2855d9;
+background:#edf3ff;
+color:#2855d9;
 }
 
 .badge-orange{
-    background:#fff3e8;
-    color:#d97924;
+background:#fff3e8;
+color:#d97924;
 }
 
 .badge-gray{
-    background:#eef1f5;
-    color:#687386;
+background:#eef1f5;
+color:#687386;
 }
 
 .error{
-    display:none;
-    background:#fff0f0;
-    border:1px solid #ffc7c7;
-    color:#a32121;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:18px;
-    font-size:13px;
+display:none;
+background:#fff0f0;
+border:1px solid #ffc7c7;
+color:#a32121;
+padding:12px;
+border-radius:8px;
+margin-bottom:18px;
+font-size:13px;
 }
 
-/* RESPONSIVE */
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:1200px){
+
+.tipo-grid{
+grid-template-columns:repeat(3,1fr);
+}
+
+}
 
 @media(max-width:1100px){
 
-    .flow-grid{
-        grid-template-columns:repeat(3,1fr);
-    }
+.flow-grid{
+grid-template-columns:repeat(3,1fr);
+}
 
 }
 
 @media(max-width:1000px){
 
-    .sidebar{
-        width:70px;
-    }
+.sidebar{
+width:70px;
+}
 
-    .logo span,
-    .menu a span{
-        display:none;
-    }
+.logo span,
+.menu a span{
+display:none;
+}
 
-    .main{
-        margin-left:70px;
-        width:calc(100% - 70px);
-    }
+.main{
+margin-left:70px;
+width:calc(100% - 70px);
+}
 
-    .dashboard-grid{
-        grid-template-columns:1fr;
-    }
+.dashboard-grid{
+grid-template-columns:1fr;
+}
+
+.tipo-grid{
+grid-template-columns:repeat(2,1fr);
+}
 
 }
 
 @media(max-width:700px){
 
-    .content{
-        padding:18px;
-    }
+.content{
+padding:18px;
+}
 
-    .flow-grid{
-        grid-template-columns:1fr 1fr;
-    }
+.flow-grid{
+grid-template-columns:1fr 1fr;
+}
 
-    .bottom-grid{
-        grid-template-columns:1fr;
-    }
+.tipo-grid{
+grid-template-columns:1fr;
+}
 
-    .card-header{
-        align-items:flex-start;
-        flex-direction:column;
-    }
+.bottom-grid{
+grid-template-columns:1fr;
+}
+
+.card-header{
+align-items:flex-start;
+flex-direction:column;
+}
 
 }
 
@@ -527,8 +641,6 @@ td{
 </aside>
 
 
-<!-- MAIN -->
-
 <main class="main">
 
 <header class="topbar">
@@ -539,15 +651,22 @@ Proyecto
 </div>
 
 <div class="status-live">
-<span class="dot" id="connectionDot"></span>
-<span id="connectionText">Conectando...</span>
+
+<span
+class="dot"
+id="connectionDot">
+</span>
+
+<span id="connectionText">
+Conectando...
+</span>
+
 </div>
 
 </header>
 
 
 <div class="content">
-
 
 <!-- TITULO -->
 
@@ -564,12 +683,14 @@ Seguimiento general de premoldeados: fabricación, logística, calidad, montaje 
 </div>
 
 
-<div class="error" id="errorBox"></div>
+<div
+class="error"
+id="errorBox">
+</div>
 
 
 <!-- ==================================================
-TOTAL PREMOLDEADOS
-PRIMERO DE TODO
+TOTAL
 ================================================== -->
 
 <section class="total-wrapper">
@@ -588,8 +709,12 @@ PRIMERO DE TODO
 PREMOLDEADOS TOTALES
 </div>
 
-<div class="total-value" id="total">
+<div
+class="total-value"
+id="total">
+
 0
+
 </div>
 
 <div class="total-sub">
@@ -631,119 +756,238 @@ QA/QC se calcula contra los premoldeados en obra
 <div class="flow-grid">
 
 
+<!-- TALLER -->
+
 <div class="flow-step">
 
-<div class="flow-icon">🏭</div>
+<div class="flow-icon">
+🏭
+</div>
 
 <div class="flow-name">
 En taller
 </div>
 
-<div class="flow-value" id="taller">
+<div class="flow-number">
+
+<div
+class="flow-value"
+id="taller">
+
 0
+
 </div>
 
-<div class="flow-percent" id="tallerPct">
+<div class="flow-unit">
+unidad
+</div>
+
+</div>
+
+<div
+class="flow-percent"
+id="tallerPct">
+
 0%
-</div>
 
 </div>
 
+</div>
+
+
+<!-- LIBERADO -->
 
 <div class="flow-step">
 
-<div class="flow-icon">✓</div>
+<div class="flow-icon">
+✓
+</div>
 
 <div class="flow-name">
 Liberado
 </div>
 
-<div class="flow-value" id="flowLiberadas">
+<div class="flow-number">
+
+<div
+class="flow-value"
+id="flowLiberadas">
+
 0
+
 </div>
 
-<div class="flow-percent" id="flowLiberadasPct">
+<div class="flow-unit">
+unidad
+</div>
+
+</div>
+
+<div
+class="flow-percent"
+id="flowLiberadasPct">
+
 0%
-</div>
 
 </div>
 
+</div>
+
+
+<!-- OBRA -->
 
 <div class="flow-step">
 
-<div class="flow-icon">🚧</div>
+<div class="flow-icon">
+🚧
+</div>
 
 <div class="flow-name">
 En obra
 </div>
 
-<div class="flow-value" id="flowObra">
+<div class="flow-number">
+
+<div
+class="flow-value"
+id="flowObra">
+
 0
+
 </div>
 
-<div class="flow-percent" id="flowObraPct">
+<div class="flow-unit">
+unidad
+</div>
+
+</div>
+
+<div
+class="flow-percent"
+id="flowObraPct">
+
 0%
-</div>
 
 </div>
 
+</div>
+
+
+<!-- QA -->
 
 <div class="flow-step">
 
-<div class="flow-icon">✔</div>
+<div class="flow-icon">
+✔
+</div>
 
 <div class="flow-name">
 QA/QC
 </div>
 
-<div class="flow-value" id="qaqc">
+<div class="flow-number">
+
+<div
+class="flow-value"
+id="qaqc">
+
 0
+
 </div>
 
-<div class="flow-percent" id="qaqcPct">
+<div class="flow-unit">
+unidad
+</div>
+
+</div>
+
+<div
+class="flow-percent"
+id="qaqcPct">
+
 0%
-</div>
 
 </div>
 
+</div>
+
+
+<!-- MONTADO -->
 
 <div class="flow-step">
 
-<div class="flow-icon">🏗️</div>
+<div class="flow-icon">
+🏗️
+</div>
 
 <div class="flow-name">
 Montado
 </div>
 
-<div class="flow-value" id="montadas">
+<div class="flow-number">
+
+<div
+class="flow-value"
+id="montadas">
+
 0
+
 </div>
 
-<div class="flow-percent" id="montadasPctFlow">
+<div class="flow-unit">
+unidad
+</div>
+
+</div>
+
+<div
+class="flow-percent"
+id="montadasPctFlow">
+
 0%
-</div>
 
 </div>
 
+</div>
+
+
+<!-- PINTADO -->
 
 <div class="flow-step">
 
-<div class="flow-icon">🎨</div>
+<div class="flow-icon">
+🎨
+</div>
 
 <div class="flow-name">
 Pintado
 </div>
 
-<div class="flow-value" id="flowPintadas">
+<div class="flow-number">
+
+<div
+class="flow-value"
+id="flowPintadas">
+
 0
+
 </div>
 
-<div class="flow-percent" id="flowPintadasPct">
+<div class="flow-unit">
+unidad
+</div>
+
+</div>
+
+<div
+class="flow-percent"
+id="flowPintadasPct">
+
 0%
-</div>
 
 </div>
 
+</div>
 
 </div>
 
@@ -751,7 +995,7 @@ Pintado
 
 
 <!-- ==================================================
-CURVA S + ESTADO
+CURVA + ESTADO
 ================================================== -->
 
 <div class="dashboard-grid">
@@ -774,7 +1018,6 @@ Curva S — Planificado vs Real
 </div>
 
 </div>
-
 
 <div class="chart-container">
 <canvas id="sCurve"></canvas>
@@ -804,19 +1047,26 @@ Indicador ejecutivo
 
 <div class="status-box">
 
-<div class="status-big" id="statusText">
+<div
+class="status-big"
+id="statusText">
+
 CARGANDO
+
 </div>
 
 <div class="status-label">
 Estado general
 </div>
 
-
 <div class="progress">
-<div class="progress-bar" id="progressBar"></div>
+
+<div
+class="progress-bar"
+id="progressBar">
 </div>
 
+</div>
 
 <div class="progress-info">
 
@@ -835,8 +1085,12 @@ Avance real
 
 <div class="status-box">
 
-<div class="status-big" id="deviation">
+<div
+class="status-big"
+id="deviation">
+
 0%
+
 </div>
 
 <div class="status-label">
@@ -852,8 +1106,12 @@ Desvío contra planificación
 Última actualización
 </div>
 
-<div id="lastUpdate" style="font-weight:700;margin-top:5px">
+<div
+id="lastUpdate"
+style="font-weight:700;margin-top:5px">
+
 -
+
 </div>
 
 </div>
@@ -867,7 +1125,7 @@ Desvío contra planificación
 AVANCE POR TIPO
 ================================================== -->
 
-<section class="card tipo-card">
+<section class="card tipo-section">
 
 <div class="card-header">
 
@@ -878,79 +1136,17 @@ Avance por tipo de premoldeado
 </div>
 
 <div class="card-subtitle">
-Detalle agrupado según tipo cargado por Ingeniería
+Total de premoldeados, premoldeados en obra y montados
 </div>
-
-</div>
-
-
-<div class="tipo-actions">
-
-<button
-id="btnGrafico"
-class="tipo-btn"
-onclick="mostrarDetalleTipos('grafico')">
-📊 Gráfico
-</button>
-
-<button
-id="btnTabla"
-class="tipo-btn"
-onclick="mostrarDetalleTipos('tabla')">
-📋 Tabla
-</button>
-
-<button
-class="tipo-btn"
-onclick="ocultarDetalleTipos()">
-🙈 Ocultar
-</button>
 
 </div>
 
 </div>
 
 
-<div id="detalleGrafico" class="detalle-tipos">
-
-<div id="tipoChartWrap" class="tipo-chart-wrap">
-<canvas id="graficoTipos"></canvas>
-</div>
-
-</div>
-
-
-<div id="detalleTabla" class="detalle-tipos">
-
-<div class="tabla-scroll">
-
-<table class="tipo-table">
-
-<thead>
-
-<tr>
-<th>TIPO</th>
-<th>TOTAL INGENIERÍA</th>
-<th>EN TALLER</th>
-<th>EN OBRA</th>
-<th>MONTADOS</th>
-</tr>
-
-</thead>
-
-<tbody id="tablaTipos">
-
-<tr>
-<td colspan="5">
-Cargando...
-</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
+<div
+class="tipo-grid"
+id="tipoGrid">
 
 </div>
 
@@ -958,11 +1154,10 @@ Cargando...
 
 
 <!-- ==================================================
-INDICADORES
+INDICADORES + LECTURA
 ================================================== -->
 
 <div class="bottom-grid">
-
 
 <section class="card">
 
@@ -988,28 +1183,47 @@ Resumen acumulado por etapa
 <thead>
 
 <tr>
-<th>ETAPA</th>
-<th>CANTIDAD</th>
-<th>AVANCE</th>
+
+<th>
+ETAPA
+</th>
+
+<th>
+CANTIDAD
+</th>
+
+<th>
+AVANCE
+</th>
+
 </tr>
 
 </thead>
+
 
 <tbody>
 
 
 <tr>
 
-<td>Taller</td>
+<td>
+Taller
+</td>
 
 <td id="tblTaller">
 0
 </td>
 
 <td>
-<span class="badge badge-gray" id="tblTallerPct">
+
+<span
+class="badge badge-gray"
+id="tblTallerPct">
+
 0%
+
 </span>
+
 </td>
 
 </tr>
@@ -1017,16 +1231,24 @@ Resumen acumulado por etapa
 
 <tr>
 
-<td>Liberado taller</td>
+<td>
+Liberado taller
+</td>
 
 <td id="tblLiberadas">
 0
 </td>
 
 <td>
-<span class="badge badge-green" id="tblLiberadasPct">
+
+<span
+class="badge badge-green"
+id="tblLiberadasPct">
+
 0%
+
 </span>
+
 </td>
 
 </tr>
@@ -1034,16 +1256,24 @@ Resumen acumulado por etapa
 
 <tr>
 
-<td>En obra</td>
+<td>
+En obra
+</td>
 
 <td id="tblObra">
 0
 </td>
 
 <td>
-<span class="badge badge-orange" id="tblObraPct">
+
+<span
+class="badge badge-orange"
+id="tblObraPct">
+
 0%
+
 </span>
+
 </td>
 
 </tr>
@@ -1051,16 +1281,24 @@ Resumen acumulado por etapa
 
 <tr>
 
-<td>QA/QC</td>
+<td>
+QA/QC
+</td>
 
 <td id="tblQA">
 0
 </td>
 
 <td>
-<span class="badge badge-blue" id="tblQAPct">
+
+<span
+class="badge badge-blue"
+id="tblQAPct">
+
 0%
+
 </span>
+
 </td>
 
 </tr>
@@ -1068,16 +1306,24 @@ Resumen acumulado por etapa
 
 <tr>
 
-<td>Montado</td>
+<td>
+Montado
+</td>
 
 <td id="tblMontadas">
 0
 </td>
 
 <td>
-<span class="badge badge-green" id="tblMontadasPct">
+
+<span
+class="badge badge-green"
+id="tblMontadasPct">
+
 0%
+
 </span>
+
 </td>
 
 </tr>
@@ -1085,19 +1331,28 @@ Resumen acumulado por etapa
 
 <tr>
 
-<td>Pintado</td>
+<td>
+Pintado
+</td>
 
 <td id="tblPintadas">
 0
 </td>
 
 <td>
-<span class="badge badge-green" id="tblPintadasPct">
+
+<span
+class="badge badge-green"
+id="tblPintadasPct">
+
 0%
+
 </span>
+
 </td>
 
 </tr>
+
 
 </tbody>
 
@@ -1105,8 +1360,6 @@ Resumen acumulado por etapa
 
 </section>
 
-
-<!-- LECTURA EJECUTIVA -->
 
 <section class="card">
 
@@ -1127,7 +1380,12 @@ Situación actual del proyecto
 </div>
 
 
-<div style="font-size:13px;line-height:1.7;color:#687386">
+<div
+style="
+font-size:13px;
+line-height:1.7;
+color:#687386;
+">
 
 <strong style="color:#172033">
 Avance general
@@ -1206,8 +1464,10 @@ SUPABASE
 const SUPABASE_URL =
 "https://tnnioleawbhuqjuykrsf.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
+
 
 const db =
 supabase.createClient(
@@ -1223,27 +1483,35 @@ PLANIFICACION
 const PLAN = [
 
 {fecha:"2026-08-01",porcentaje:5},
+
 {fecha:"2026-09-01",porcentaje:15},
+
 {fecha:"2026-10-01",porcentaje:30},
+
 {fecha:"2026-11-01",porcentaje:48},
+
 {fecha:"2026-12-01",porcentaje:65},
+
 {fecha:"2027-01-01",porcentaje:78},
+
 {fecha:"2027-02-01",porcentaje:88},
+
 {fecha:"2027-03-01",porcentaje:95},
+
 {fecha:"2027-04-01",porcentaje:100}
 
 ];
 
 
 let piezas=[];
+
 let chart=null;
-let chartTipos=null;
+
 let timer=null;
-let datosTipos=[];
 
 
 /* =====================================================
-CARGAR DATOS
+CARGAR
 ===================================================== */
 
 async function cargarDatos(){
@@ -1254,15 +1522,23 @@ setConnection(
 );
 
 
-const {data,error}=
+const {
+data,
+error
+}=
 await db
+
 .from("premoldeados")
+
 .select(
 "id,codigo,tipo,modelo,etapa,montada,pintada,responsable,fecha,created_at"
 )
+
 .order(
 "id",
-{ascending:true}
+{
+ascending:true
+}
 );
 
 
@@ -1270,14 +1546,20 @@ if(error){
 
 console.error(error);
 
+
 setConnection(
 "Error de conexión",
 "#eb5757"
 );
 
+
 mostrarError(
-"No se pudo leer la tabla premoldeados: "+error.message
+
+"No se pudo leer la tabla premoldeados: "+
+error.message
+
 );
+
 
 return;
 
@@ -1289,8 +1571,11 @@ data || [];
 
 
 document
-.getElementById("errorBox")
-.style.display="none";
+.getElementById(
+"errorBox"
+)
+.style.display=
+"none";
 
 
 setConnection(
@@ -1303,6 +1588,7 @@ actualizarDashboard();
 
 
 clearTimeout(timer);
+
 
 timer=
 setTimeout(
@@ -1328,7 +1614,7 @@ ETAPAS ACUMULATIVAS
 
 0 = TALLER
 1 = LIBERADO
-2 = EN OBRA
+2 = OBRA
 3 = QA/QC
 
 MONTAJE Y PINTURA
@@ -1372,7 +1658,7 @@ p=>p.pintada===true
 ).length;
 
 
-/* PORCENTAJE TOTAL */
+/* PORCENTAJES */
 
 function pctTotal(cantidad){
 
@@ -1387,13 +1673,15 @@ return Math.round(
 }
 
 
-/* QA/QC SOBRE EN OBRA */
+/* CALIDAD SOBRE OBRA */
 
 const pctCalidad=
 
 obra===0
-? 0
-: Math.round(
+?
+0
+:
+Math.round(
 (qaqc/obra)*100
 );
 
@@ -1403,8 +1691,10 @@ obra===0
 const avanceGeneral=
 
 total===0
-? 0
-: Math.round(
+?
+0
+:
+Math.round(
 
 (
 taller+
@@ -1542,11 +1832,6 @@ setText(
 qaqc
 );
 
-
-/*
-CALIDAD = QA/QC / EN OBRA
-*/
-
 setText(
 "tblQAPct",
 pctCalidad+"%"
@@ -1575,7 +1860,7 @@ pctTotal(pintadas)+"%"
 );
 
 
-/* AVANCE GENERAL */
+/* AVANCE */
 
 setText(
 "progressText",
@@ -1589,12 +1874,14 @@ avanceGeneral+"%"
 
 
 document
-.getElementById("progressBar")
+.getElementById(
+"progressBar"
+)
 .style.width=
 avanceGeneral+"%";
 
 
-/* LECTURA EJECUTIVA */
+/* LECTURA */
 
 setText(
 "executiveLiberadas",
@@ -1622,9 +1909,12 @@ pintadas
 );
 
 
-/* ACTUALIZACIONES */
+/* TIPOS */
 
-actualizarDatosTipos();
+actualizarTipos();
+
+
+/* ESTADO */
 
 actualizarEstado(
 avanceGeneral
@@ -1640,19 +1930,22 @@ avanceGeneral
 
 
 /* =====================================================
-AGRUPAR POR TIPO
+TARJETAS POR TIPO
 ===================================================== */
 
-function actualizarDatosTipos(){
+function actualizarTipos(){
 
 const agrupados={};
 
 
-piezas.forEach(p=>{
+piezas.forEach(
+p=>{
+
 
 const tipo=
 String(
-p.tipo || "SIN TIPO"
+p.tipo ||
+"SIN TIPO"
 )
 .trim()
 .toUpperCase();
@@ -1661,11 +1954,15 @@ p.tipo || "SIN TIPO"
 if(!agrupados[tipo]){
 
 agrupados[tipo]={
+
 tipo:tipo,
+
 total:0,
-taller:0,
+
 obra:0,
+
 montadas:0
+
 };
 
 }
@@ -1674,24 +1971,27 @@ montadas:0
 agrupados[tipo].total++;
 
 
-if(Number(p.etapa)>=0){
-agrupados[tipo].taller++;
-}
+if(
+Number(p.etapa)>=2
+){
 
-
-if(Number(p.etapa)>=2){
 agrupados[tipo].obra++;
+
 }
 
 
-if(p.montada===true){
+if(
+p.montada===true
+){
+
 agrupados[tipo].montadas++;
+
 }
 
 });
 
 
-datosTipos=
+const tipos=
 Object
 .values(agrupados)
 .sort(
@@ -1703,294 +2003,242 @@ b.tipo,
 );
 
 
-actualizarTablaTipos();
+const grid=
+document.getElementById(
+"tipoGrid"
+);
 
 
-if(
-document
-.getElementById("detalleGrafico")
-.classList
-.contains("visible")
-){
+if(tipos.length===0){
 
-actualizarGraficoTipos();
+grid.innerHTML=
+"No hay datos cargados.";
+
+return;
 
 }
 
+
+/*
+COLORES ALTERNADOS
+*/
+
+const colores=[
+
+{
+principal:"#3b82f6",
+suave:"#eaf2ff",
+icono:"🏗️"
+},
+
+{
+principal:"#eab308",
+suave:"#fff7dc",
+icono:"⚡"
+},
+
+{
+principal:"#64748b",
+suave:"#eef1f4",
+icono:"🔧"
+},
+
+{
+principal:"#6366f1",
+suave:"#eef0ff",
+icono:"◎"
+},
+
+{
+principal:"#f97316",
+suave:"#fff0e7",
+icono:"🛠️"
+},
+
+{
+principal:"#10b981",
+suave:"#e7f8f2",
+icono:"✓"
 }
 
-
-/* =====================================================
-TABLA POR TIPO
-===================================================== */
-
-function actualizarTablaTipos(){
-
-const tbody=
-document.getElementById("tablaTipos");
+];
 
 
-if(datosTipos.length===0){
+grid.innerHTML=
 
-tbody.innerHTML=`
+tipos.map(
+(x,index)=>{
 
-<tr>
 
-<td colspan="5">
-No hay datos cargados.
-</td>
+const estilo=
+colores[
+index %
+colores.length
+];
 
-</tr>
+
+const pctObra=
+
+x.total===0
+?
+0
+:
+Math.round(
+x.obra/
+x.total*
+100
+);
+
+
+const pctMontada=
+
+x.total===0
+?
+0
+:
+Math.round(
+x.montadas/
+x.total*
+100
+);
+
+
+return `
+
+<div
+class="tipo-kpi"
+style="
+--tipo-color:${estilo.principal};
+--tipo-soft:${estilo.suave};
+">
+
+
+<div class="tipo-top">
+
+<div>
+
+<div class="tipo-nombre">
+
+${escapeHtml(x.tipo)}
+
+</div>
+
+<div class="tipo-total-label">
+
+TOTAL
+
+</div>
+
+<div class="tipo-total-numero">
+
+${x.total}
+
+<span>
+unidad
+</span>
+
+</div>
+
+</div>
+
+
+<div class="tipo-icon">
+
+${estilo.icono}
+
+</div>
+
+</div>
+
+
+<div class="tipo-bar">
+
+<div class="tipo-bar-fill">
+</div>
+
+</div>
+
+
+<div class="tipo-separador">
+</div>
+
+
+<div class="tipo-indicador">
+
+<div class="tipo-indicador-label">
+
+EN OBRA
+
+</div>
+
+<div class="tipo-indicador-valor">
+
+${x.obra}
+
+<span>
+unidad
+</span>
+
+</div>
+
+</div>
+
+
+<div class="tipo-mini-bar">
+
+<div
+style="
+width:${pctObra}%;
+">
+</div>
+
+</div>
+
+
+<div class="tipo-indicador">
+
+<div class="tipo-indicador-label">
+
+MONTADOS
+
+</div>
+
+<div class="tipo-indicador-valor">
+
+${x.montadas}
+
+<span>
+unidad
+</span>
+
+</div>
+
+</div>
+
+
+<div class="tipo-mini-bar">
+
+<div
+style="
+width:${pctMontada}%;
+">
+</div>
+
+</div>
+
+
+</div>
 
 `;
 
-return;
-
 }
-
-
-tbody.innerHTML=
-
-datosTipos.map(x=>`
-
-<tr>
-
-<td class="tipo-nombre">
-${escapeHtml(x.tipo)}
-</td>
-
-<td class="tipo-total">
-${x.total}
-</td>
-
-<td>
-${x.taller}
-</td>
-
-<td>
-${x.obra}
-</td>
-
-<td>
-<strong>
-${x.montadas}
-</strong>
-</td>
-
-</tr>
-
-`).join("");
+).join("");
 
 }
 
 
 /* =====================================================
-MOSTRAR DETALLE POR TIPO
-===================================================== */
-
-function mostrarDetalleTipos(modo){
-
-const grafico=
-document.getElementById("detalleGrafico");
-
-const tabla=
-document.getElementById("detalleTabla");
-
-const btnGrafico=
-document.getElementById("btnGrafico");
-
-const btnTabla=
-document.getElementById("btnTabla");
-
-
-grafico.classList.remove("visible");
-tabla.classList.remove("visible");
-
-btnGrafico.classList.remove("active");
-btnTabla.classList.remove("active");
-
-
-if(modo==="grafico"){
-
-grafico.classList.add("visible");
-btnGrafico.classList.add("active");
-
-setTimeout(
-actualizarGraficoTipos,
-50
-);
-
-}
-
-
-if(modo==="tabla"){
-
-tabla.classList.add("visible");
-btnTabla.classList.add("active");
-
-}
-
-}
-
-
-function ocultarDetalleTipos(){
-
-document
-.getElementById("detalleGrafico")
-.classList.remove("visible");
-
-document
-.getElementById("detalleTabla")
-.classList.remove("visible");
-
-document
-.getElementById("btnGrafico")
-.classList.remove("active");
-
-document
-.getElementById("btnTabla")
-.classList.remove("active");
-
-}
-
-
-/* =====================================================
-GRAFICO POR TIPO
-===================================================== */
-
-function actualizarGraficoTipos(){
-
-if(datosTipos.length===0){
-return;
-}
-
-
-const wrap=
-document.getElementById("tipoChartWrap");
-
-
-wrap.style.height=
-
-Math.max(
-400,
-datosTipos.length*42
-)+"px";
-
-
-const ctx=
-document
-.getElementById("graficoTipos")
-.getContext("2d");
-
-
-if(chartTipos){
-chartTipos.destroy();
-}
-
-
-chartTipos=
-new Chart(
-ctx,
-{
-
-type:"bar",
-
-data:{
-
-labels:
-datosTipos.map(
-x=>x.tipo
-),
-
-datasets:[
-
-{
-label:"Total Ingeniería",
-data:datosTipos.map(x=>x.total),
-backgroundColor:"#c9d2e3",
-borderRadius:4
-},
-
-{
-label:"En taller",
-data:datosTipos.map(x=>x.taller),
-backgroundColor:"#8ea9df",
-borderRadius:4
-},
-
-{
-label:"En obra",
-data:datosTipos.map(x=>x.obra),
-backgroundColor:"#f1a55b",
-borderRadius:4
-},
-
-{
-label:"Montados",
-data:datosTipos.map(x=>x.montadas),
-backgroundColor:"#55b77a",
-borderRadius:4
-}
-
-]
-
-},
-
-options:{
-
-indexAxis:"y",
-
-responsive:true,
-
-maintainAspectRatio:false,
-
-interaction:{
-mode:"index",
-intersect:false
-},
-
-plugins:{
-
-legend:{
-display:true,
-position:"top"
-}
-
-},
-
-scales:{
-
-x:{
-
-beginAtZero:true,
-
-ticks:{
-precision:0
-}
-
-},
-
-y:{
-
-grid:{
-display:false
-}
-
-}
-
-}
-
-}
-
-}
-
-);
-
-}
-
-
-/* =====================================================
-PLAN ACTUAL
+PLAN
 ===================================================== */
 
 function obtenerPlanActual(){
@@ -2001,16 +2249,24 @@ new Date();
 let plan=0;
 
 
-for(const punto of PLAN){
+for(
+const punto of PLAN
+){
 
 const fecha=
 new Date(
-punto.fecha+"T00:00:00"
+punto.fecha+
+"T00:00:00"
 );
 
 
-if(fecha<=hoy){
-plan=punto.porcentaje;
+if(
+fecha<=hoy
+){
+
+plan=
+punto.porcentaje;
+
 }
 
 }
@@ -2025,29 +2281,39 @@ return plan;
 ESTADO
 ===================================================== */
 
-function actualizarEstado(avanceReal){
+function actualizarEstado(
+avanceReal
+){
 
 const planActual=
 obtenerPlanActual();
 
 
 const desvio=
-avanceReal-planActual;
+avanceReal-
+planActual;
 
 
 setText(
+
 "deviation",
+
 (desvio>0?"+":"")+
 desvio+
 "%"
+
 );
 
 
 const status=
-document.getElementById("statusText");
+document.getElementById(
+"statusText"
+);
 
 
-if(desvio>=-3){
+if(
+desvio>=-3
+){
 
 status.textContent=
 "EN LÍNEA";
@@ -2057,7 +2323,9 @@ status.style.color=
 
 }
 
-else if(desvio>=-10){
+else if(
+desvio>=-10
+){
 
 status.textContent=
 "ATENCIÓN";
@@ -2081,7 +2349,7 @@ status.style.color=
 
 
 /* =====================================================
-FECHA
+ULTIMA ACTUALIZACION
 ===================================================== */
 
 function actualizarFecha(){
@@ -2090,17 +2358,22 @@ const fechas=
 piezas
 
 .map(
-p=>p.fecha || p.created_at
+p=>
+p.fecha ||
+p.created_at
 )
 
 .filter(Boolean)
 
 .map(
-f=>new Date(f)
+f=>
+new Date(f)
 );
 
 
-if(fechas.length===0){
+if(
+fechas.length===0
+){
 
 setText(
 "lastUpdate",
@@ -2118,7 +2391,8 @@ new Date(
 Math.max(
 
 ...fechas.map(
-f=>f.getTime()
+f=>
+f.getTime()
 )
 
 )
@@ -2127,8 +2401,13 @@ f=>f.getTime()
 
 
 setText(
+
 "lastUpdate",
-ultima.toLocaleString("es-AR")
+
+ultima.toLocaleString(
+"es-AR"
+)
+
 );
 
 }
@@ -2138,14 +2417,17 @@ ultima.toLocaleString("es-AR")
 CURVA S
 ===================================================== */
 
-function actualizarCurva(avanceActual){
+function actualizarCurva(
+avanceActual
+){
 
 const labels=
 PLAN.map(
 p=>
 
 new Date(
-p.fecha+"T00:00:00"
+p.fecha+
+"T00:00:00"
 )
 
 .toLocaleDateString(
@@ -2163,7 +2445,8 @@ year:"2-digit"
 
 const planData=
 PLAN.map(
-p=>p.porcentaje
+p=>
+p.porcentaje
 );
 
 
@@ -2183,32 +2466,47 @@ let ultimoIndice=0;
 PLAN.forEach(
 (p,index)=>{
 
+
 const fecha=
 new Date(
-p.fecha+"T00:00:00"
+p.fecha+
+"T00:00:00"
 );
 
 
-if(fecha<=hoy){
-ultimoIndice=index;
+if(
+fecha<=hoy
+){
+
+ultimoIndice=
+index;
+
 }
 
 });
 
 
-realData[ultimoIndice]=
+realData[
+ultimoIndice
+]=
 avanceActual;
 
 
 if(chart){
+
 chart.destroy();
+
 }
 
 
 const ctx=
 document
-.getElementById("sCurve")
-.getContext("2d");
+.getElementById(
+"sCurve"
+)
+.getContext(
+"2d"
+);
 
 
 chart=
@@ -2218,75 +2516,124 @@ ctx,
 
 type:"line",
 
+
 data:{
 
 labels:labels,
 
+
 datasets:[
 
 {
-label:"Planificado",
-data:planData,
-borderColor:"#b8c3d8",
-borderWidth:2,
-borderDash:[6,6],
-pointRadius:2,
-tension:0.35
+
+label:
+"Planificado",
+
+data:
+planData,
+
+borderColor:
+"#b8c3d8",
+
+borderWidth:
+2,
+
+borderDash:
+[6,6],
+
+pointRadius:
+2,
+
+tension:
+0.35
+
 },
 
 {
-label:"Real",
-data:realData,
-borderColor:"#2855d9",
-borderWidth:3,
-pointRadius:4,
-tension:0.35,
-spanGaps:false
+
+label:
+"Real",
+
+data:
+realData,
+
+borderColor:
+"#2855d9",
+
+borderWidth:
+3,
+
+pointRadius:
+4,
+
+tension:
+0.35,
+
+spanGaps:
+false
+
 }
 
 ]
 
 },
 
+
 options:{
 
 responsive:true,
+
 maintainAspectRatio:false,
 
+
 interaction:{
+
 intersect:false,
+
 mode:"index"
+
 },
+
 
 plugins:{
 
 legend:{
+
 display:true
+
 }
 
 },
+
 
 scales:{
 
 y:{
 
 min:0,
+
 max:100,
 
 ticks:{
 
-callback:function(value){
+callback:
+function(value){
+
 return value+"%";
+
 }
 
 }
 
 },
 
+
 x:{
 
 grid:{
+
 display:false
+
 }
 
 }
@@ -2306,39 +2653,61 @@ display:false
 UTILIDADES
 ===================================================== */
 
-function setText(id,value){
+function setText(
+id,
+value
+){
 
 const el=
-document.getElementById(id);
+document.getElementById(
+id
+);
+
 
 if(el){
-el.textContent=value;
-}
+
+el.textContent=
+value;
 
 }
 
+}
 
-function setConnection(text,color){
+
+function setConnection(
+text,
+color
+){
 
 setText(
 "connectionText",
 text
 );
 
+
 document
-.getElementById("connectionDot")
-.style.background=color;
+.getElementById(
+"connectionDot"
+)
+.style.background=
+color;
 
 }
 
 
-function mostrarError(mensaje){
+function mostrarError(
+mensaje
+){
 
 const box=
-document.getElementById("errorBox");
+document.getElementById(
+"errorBox"
+);
+
 
 box.textContent=
 mensaje;
+
 
 box.style.display=
 "block";
@@ -2346,21 +2715,42 @@ box.style.display=
 }
 
 
-function escapeHtml(text){
+function escapeHtml(
+text
+){
 
 return String(text)
 
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+.replace(
+/&/g,
+"&amp;"
+)
+
+.replace(
+/</g,
+"&lt;"
+)
+
+.replace(
+/>/g,
+"&gt;"
+)
+
+.replace(
+/"/g,
+"&quot;"
+)
+
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
 
 
 /* =====================================================
-INICIAR
+INICIO
 ===================================================== */
 
 cargarDatos();
