@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Control de Premoldeados | Dashboard</title>
+<title>Control de Premoldeados | Resumen Ejecutivo</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -21,18 +22,10 @@ body{
     color:#172033;
 }
 
-/* =========================
-   LAYOUT
-========================= */
-
 .app{
     display:flex;
     min-height:100vh;
 }
-
-/* =========================
-   SIDEBAR
-========================= */
 
 .sidebar{
     width:220px;
@@ -84,18 +77,10 @@ body{
     font-weight:700;
 }
 
-/* =========================
-   MAIN
-========================= */
-
 .main{
     margin-left:220px;
     width:calc(100% - 220px);
 }
-
-/* =========================
-   TOPBAR
-========================= */
 
 .topbar{
     height:70px;
@@ -133,10 +118,6 @@ body{
     border-radius:50%;
 }
 
-/* =========================
-   CONTENT
-========================= */
-
 .content{
     padding:28px 32px 50px;
     max-width:1500px;
@@ -157,10 +138,6 @@ body{
     color:#8a94a6;
     font-size:13px;
 }
-
-/* =========================
-   KPI
-========================= */
 
 .kpis{
     display:grid;
@@ -193,35 +170,16 @@ body{
     color:#8a94a6;
 }
 
-.kpi-main{
-    border-left:4px solid #2855d9;
-}
-
-.kpi-green{
-    border-left:4px solid #27ae60;
-}
-
-.kpi-orange{
-    border-left:4px solid #f2994a;
-}
-
-.kpi-purple{
-    border-left:4px solid #8e63ce;
-}
-
-/* =========================
-   GRID
-========================= */
+.kpi-main{ border-left:4px solid #2855d9; }
+.kpi-green{ border-left:4px solid #27ae60; }
+.kpi-orange{ border-left:4px solid #f2994a; }
+.kpi-purple{ border-left:4px solid #8e63ce; }
 
 .dashboard-grid{
     display:grid;
     grid-template-columns:2fr 1fr;
     gap:18px;
 }
-
-/* =========================
-   CARD
-========================= */
 
 .card{
     background:#fff;
@@ -247,10 +205,6 @@ body{
     font-size:11px;
     margin-top:4px;
 }
-
-/* =========================
-   CURVA S
-========================= */
 
 .chart-container{
     height:330px;
@@ -279,10 +233,6 @@ body{
 .legend-line.plan{
     background:#b8c3d8;
 }
-
-/* =========================
-   PROJECT STATUS
-========================= */
 
 .status-box{
     background:#f7f9fc;
@@ -325,17 +275,13 @@ body{
     color:#7c8799;
 }
 
-/* =========================
-   FLOW
-========================= */
-
 .flow{
     margin-top:18px;
 }
 
 .flow-grid{
     display:grid;
-    grid-template-columns:repeat(5,1fr);
+    grid-template-columns:repeat(6,1fr);
     gap:10px;
 }
 
@@ -345,22 +291,6 @@ body{
     padding:16px 12px;
     position:relative;
     background:white;
-}
-
-.flow-step:not(:last-child)::after{
-    content:"›";
-    position:absolute;
-    right:-9px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#aab3c2;
-    background:#f5f7fb;
-    width:18px;
-    height:18px;
-    text-align:center;
-    line-height:17px;
-    border-radius:50%;
-    z-index:2;
 }
 
 .flow-icon{
@@ -385,20 +315,12 @@ body{
     margin-top:3px;
 }
 
-/* =========================
-   BOTTOM GRID
-========================= */
-
 .bottom-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:18px;
     margin-top:18px;
 }
-
-/* =========================
-   TABLE
-========================= */
 
 table{
     width:100%;
@@ -446,15 +368,25 @@ td{
     color:#687386;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+.error{
+    display:none;
+    background:#fff0f0;
+    border:1px solid #ffc7c7;
+    color:#a32121;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:18px;
+    font-size:13px;
+}
+
+@media(max-width:1100px){
+    .flow-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
 
 @media(max-width:1000px){
-
-    .sidebar{
-        width:70px;
-    }
+    .sidebar{ width:70px; }
 
     .logo span,
     .menu a span{
@@ -473,31 +405,23 @@ td{
     .dashboard-grid{
         grid-template-columns:1fr;
     }
-
 }
 
 @media(max-width:700px){
 
-    .content{
-        padding:18px;
-    }
+    .content{ padding:18px; }
 
     .kpis{
         grid-template-columns:1fr;
     }
 
     .flow-grid{
-        grid-template-columns:1fr;
-    }
-
-    .flow-step:not(:last-child)::after{
-        display:none;
+        grid-template-columns:1fr 1fr;
     }
 
     .bottom-grid{
         grid-template-columns:1fr;
     }
-
 }
 
 </style>
@@ -506,8 +430,6 @@ td{
 <body>
 
 <div class="app">
-
-<!-- SIDEBAR -->
 
 <aside class="sidebar">
 
@@ -535,8 +457,6 @@ td{
 </aside>
 
 
-<!-- MAIN -->
-
 <main class="main">
 
 <header class="topbar">
@@ -547,8 +467,8 @@ Proyecto
 </div>
 
 <div class="status-live">
-<span class="dot"></span>
-Datos actualizados
+<span class="dot" id="connectionDot"></span>
+<span id="connectionText">Conectando...</span>
 </div>
 
 </header>
@@ -556,91 +476,54 @@ Datos actualizados
 
 <div class="content">
 
-
 <div class="page-title">
-
 <h1>Resumen ejecutivo</h1>
-
 <p>Seguimiento general de fabricación, logística, calidad y montaje</p>
-
 </div>
 
-
-<!-- KPIs -->
+<div class="error" id="errorBox"></div>
 
 <section class="kpis">
 
 <div class="kpi kpi-main">
-
 <div class="kpi-label">TOTAL DE PIEZAS</div>
-
 <div class="kpi-value" id="total">0</div>
-
 <div class="kpi-sub">Base de ingeniería</div>
-
 </div>
-
 
 <div class="kpi kpi-green">
-
 <div class="kpi-label">LIBERADAS EN TALLER</div>
-
 <div class="kpi-value" id="liberadas">0</div>
-
 <div class="kpi-sub" id="liberadasPct">0% del total</div>
-
 </div>
-
 
 <div class="kpi kpi-orange">
-
 <div class="kpi-label">EN OBRA</div>
-
 <div class="kpi-value" id="obra">0</div>
-
 <div class="kpi-sub" id="obraPct">0% del total</div>
-
 </div>
 
-
 <div class="kpi kpi-purple">
-
-<div class="kpi-label">MONTADAS</div>
-
-<div class="kpi-value" id="montadas">0</div>
-
-<div class="kpi-sub" id="montadasPct">0% del total</div>
-
+<div class="kpi-label">PINTADAS</div>
+<div class="kpi-value" id="pintadas">0</div>
+<div class="kpi-sub" id="pintadasPct">0% del total</div>
 </div>
 
 </section>
 
 
-<!-- MAIN DASHBOARD -->
-
 <div class="dashboard-grid">
-
-
-<!-- CURVA S -->
 
 <section class="card">
 
 <div class="card-header">
 
 <div>
-
-<div class="card-title">
-Avance acumulado del proyecto
-</div>
-
-<div class="card-subtitle">
-Curva S — Planificado vs Real
-</div>
-
+<div class="card-title">Avance acumulado del proyecto</div>
+<div class="card-subtitle">Curva S — Planificado vs Real</div>
 </div>
 
 <div class="legend">
-
 <div class="legend-item">
 <span class="legend-line"></span>
 Real
@@ -650,46 +533,30 @@ Real
 <span class="legend-line plan"></span>
 Planificado
 </div>
-
 </div>
 
 </div>
-
 
 <div class="chart-container">
-
 <canvas id="sCurve"></canvas>
-
 </div>
 
 </section>
 
 
-<!-- ESTADO -->
-
 <section class="card">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Estado del proyecto
+<div class="card-title">Estado del proyecto</div>
+<div class="card-subtitle">Indicador ejecutivo</div>
 </div>
-
-<div class="card-subtitle">
-Indicador ejecutivo
 </div>
-
-</div>
-
-</div>
-
 
 <div class="status-box">
 
 <div class="status-big" id="statusText">
-EN LÍNEA
+CARGANDO
 </div>
 
 <div class="status-label">
@@ -697,26 +564,21 @@ Estado general
 </div>
 
 <div class="progress">
-
 <div class="progress-bar" id="progressBar"></div>
-
 </div>
 
 <div class="progress-info">
-
 <span>Avance real</span>
-
 <strong id="progressText">0%</strong>
-
 </div>
 
 </div>
-
 
 <div class="status-box">
 
 <div class="status-big" id="deviation">
-+0%</div>
+0%
+</div>
 
 <div class="status-label">
 Desvío contra planificación
@@ -724,15 +586,14 @@ Desvío contra planificación
 
 </div>
 
-
 <div class="status-box">
 
 <div class="status-label">
 Última actualización
 </div>
 
-<div style="font-weight:700;margin-top:5px">
-29/08/2026
+<div id="lastUpdate" style="font-weight:700;margin-top:5px">
+-
 </div>
 
 </div>
@@ -741,113 +602,58 @@ Desvío contra planificación
 
 </div>
 
-
-<!-- FLOW -->
 
 <section class="card flow">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Flujo de premoldeados
+<div class="card-title">Flujo de premoldeados</div>
+<div class="card-subtitle">Piezas que alcanzaron cada etapa</div>
 </div>
-
-<div class="card-subtitle">
-Estado actual de las piezas
 </div>
-
-</div>
-
-</div>
-
 
 <div class="flow-grid">
 
-
 <div class="flow-step">
-
 <div class="flow-icon">🏭</div>
-
-<div class="flow-name">
-En taller
-</div>
-
+<div class="flow-name">En taller</div>
 <div class="flow-value" id="taller">0</div>
-
-<div class="flow-percent" id="tallerPct">
-0%
+<div class="flow-percent" id="tallerPct">0%</div>
 </div>
-
-</div>
-
 
 <div class="flow-step">
-
 <div class="flow-icon">✓</div>
-
-<div class="flow-name">
-Liberada taller
-</div>
-
+<div class="flow-name">Liberada</div>
 <div class="flow-value" id="flowLiberadas">0</div>
-
-<div class="flow-percent">
-Producción
+<div class="flow-percent" id="flowLiberadasPct">0%</div>
 </div>
-
-</div>
-
 
 <div class="flow-step">
-
 <div class="flow-icon">🚧</div>
-
-<div class="flow-name">
-En obra
-</div>
-
+<div class="flow-name">En obra</div>
 <div class="flow-value" id="flowObra">0</div>
-
-<div class="flow-percent">
-Logística
+<div class="flow-percent" id="flowObraPct">0%</div>
 </div>
-
-</div>
-
 
 <div class="flow-step">
-
 <div class="flow-icon">✔</div>
-
-<div class="flow-name">
-QA/QC
-</div>
-
+<div class="flow-name">QA/QC</div>
 <div class="flow-value" id="qaqc">0</div>
-
-<div class="flow-percent">
-Calidad
+<div class="flow-percent" id="qaqcPct">0%</div>
 </div>
-
-</div>
-
 
 <div class="flow-step">
-
 <div class="flow-icon">🏗️</div>
-
-<div class="flow-name">
-Montada
+<div class="flow-name">Montada</div>
+<div class="flow-value" id="montadas">0</div>
+<div class="flow-percent" id="montadasPctFlow">0%</div>
 </div>
 
-<div class="flow-value" id="flowMontadas">0</div>
-
-<div class="flow-percent">
-Instalación
-</div>
-
+<div class="flow-step">
+<div class="flow-icon">🎨</div>
+<div class="flow-name">Pintada</div>
+<div class="flow-value" id="flowPintadas">0</div>
+<div class="flow-percent" id="flowPintadasPct">0%</div>
 </div>
 
 </div>
@@ -855,46 +661,31 @@ Instalación
 </section>
 
 
-<!-- BOTTOM -->
-
 <div class="bottom-grid">
-
 
 <section class="card">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Indicadores de avance
+<div class="card-title">Indicadores de avance</div>
+<div class="card-subtitle">Resumen acumulado por etapa</div>
 </div>
-
-<div class="card-subtitle">
-Resumen por etapa
 </div>
-
-</div>
-
-</div>
-
 
 <table>
 
 <thead>
-
 <tr>
 <th>ETAPA</th>
 <th>CANTIDAD</th>
 <th>AVANCE</th>
 </tr>
-
 </thead>
 
 <tbody>
 
 <tr>
-<td>En taller</td>
+<td>Taller</td>
 <td id="tblTaller">0</td>
 <td><span class="badge badge-gray" id="tblTallerPct">0%</span></td>
 </tr>
@@ -923,6 +714,12 @@ Resumen por etapa
 <td><span class="badge badge-green" id="tblMontadasPct">0%</span></td>
 </tr>
 
+<tr>
+<td>Pintada</td>
+<td id="tblPintadas">0</td>
+<td><span class="badge badge-green" id="tblPintadasPct">0%</span></td>
+</tr>
+
 </tbody>
 
 </table>
@@ -933,21 +730,11 @@ Resumen por etapa
 <section class="card">
 
 <div class="card-header">
-
 <div>
-
-<div class="card-title">
-Lectura ejecutiva
+<div class="card-title">Lectura ejecutiva</div>
+<div class="card-subtitle">Situación actual del proyecto</div>
 </div>
-
-<div class="card-subtitle">
-Situación actual del proyecto
 </div>
-
-</div>
-
-</div>
-
 
 <div style="font-size:13px;line-height:1.7;color:#687386">
 
@@ -956,18 +743,23 @@ Avance general
 </strong>
 
 <p>
-El proyecto presenta un avance acumulado del
+El proyecto presenta un avance ponderado acumulado del
 <strong id="executivePct">0%</strong>.
 </p>
 
 <p>
-La curva S permite visualizar rápidamente la diferencia
-entre el avance planificado y el avance real.
+Liberadas en taller:
+<strong id="executiveLiberadas">0</strong>.
+En obra:
+<strong id="executiveObra">0</strong>.
+Montadas:
+<strong id="executiveMontadas">0</strong>.
+Pintadas:
+<strong id="executivePintadas">0</strong>.
 </p>
 
 <p>
-El tablero se encuentra preparado para que los indicadores
-se alimenten automáticamente de la base de datos.
+Todos los indicadores se leen directamente desde Supabase.
 </p>
 
 </div>
@@ -975,7 +767,6 @@ se alimenten automáticamente de la base de datos.
 </section>
 
 </div>
-
 
 </div>
 
@@ -987,187 +778,575 @@ se alimenten automáticamente de la base de datos.
 <script>
 
 /* =====================================================
-   DATOS ACTUALES
-   =====================================================
-
-   Esta estructura mantiene las mismas 5 etapas que
-   tiene actualmente tu sistema.
-
-   Después la conectamos directamente con Supabase.
+   SUPABASE
 ===================================================== */
 
-let pieces = [
+const SUPABASE_URL =
+"https://tnnioleawbhuqjuykrsf.supabase.co";
 
-{
-    id:"PM-00125",
-    type:"Viga V-25",
-    steps:[true,true,true,true,false]
-},
+const SUPABASE_KEY =
+"sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
 
-{
-    id:"PM-00126",
-    type:"Columna C-12",
-    steps:[true,true,false,false,false]
-},
-
-{
-    id:"PM-00127",
-    type:"Panel P-08",
-    steps:[true,false,false,false,false]
-}
-
-];
+const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 /* =====================================================
-   CALCULAR INDICADORES
+   PLANIFICACIÓN CURVA S
+
+   Podés cambiar estos porcentajes más adelante.
 ===================================================== */
 
-function calculate(){
+const PLAN = [
+    { fecha:"2026-08-01", porcentaje:5 },
+    { fecha:"2026-09-01", porcentaje:15 },
+    { fecha:"2026-10-01", porcentaje:30 },
+    { fecha:"2026-11-01", porcentaje:48 },
+    { fecha:"2026-12-01", porcentaje:65 },
+    { fecha:"2027-01-01", porcentaje:78 },
+    { fecha:"2027-02-01", porcentaje:88 },
+    { fecha:"2027-03-01", porcentaje:95 },
+    { fecha:"2027-04-01", porcentaje:100 }
+];
 
-    const total = pieces.length;
 
-    if(total === 0) return;
+let piezas = [];
+let chart = null;
+
+
+/* =====================================================
+   CARGAR SUPABASE
+===================================================== */
+
+async function cargarDatos(){
+
+    setConnection(
+        "Conectando...",
+        "#f2994a"
+    );
+
+    const { data, error } = await db
+        .from("premoldeados")
+        .select(
+            "id,codigo,tipo,modelo,etapa,responsable,fecha,created_at"
+        )
+        .order("id", {
+            ascending:true
+        });
+
+
+    if(error){
+
+        console.error(error);
+
+        setConnection(
+            "Error de conexión",
+            "#eb5757"
+        );
+
+        mostrarError(
+            "No se pudo leer la tabla premoldeados: " +
+            error.message
+        );
+
+        return;
+    }
+
+
+    piezas = data || [];
+
+    setConnection(
+        "Datos actualizados",
+        "#27ae60"
+    );
+
+    actualizarDashboard();
+
+
+    /*
+       Actualización automática cada 30 segundos
+    */
+
+    setTimeout(
+        cargarDatos,
+        30000
+    );
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function actualizarDashboard(){
+
+    const total = piezas.length;
+
+
+    /*
+       Como las etapas son secuenciales usamos >=.
+
+       Por ejemplo:
+       etapa 5 = la pieza también pasó por
+       Taller, Liberada, Obra y QA/QC.
+    */
 
     const taller =
-        pieces.filter(p =>
-            p.steps[0] &&
-            !p.steps[1]
+        piezas.filter(p =>
+            Number(p.etapa) >= 1
         ).length;
 
     const liberadas =
-        pieces.filter(p =>
-            p.steps[0]
+        piezas.filter(p =>
+            Number(p.etapa) >= 2
         ).length;
 
     const obra =
-        pieces.filter(p =>
-            p.steps[2] &&
-            !p.steps[4]
+        piezas.filter(p =>
+            Number(p.etapa) >= 3
         ).length;
 
     const qaqc =
-        pieces.filter(p =>
-            p.steps[3]
+        piezas.filter(p =>
+            Number(p.etapa) >= 4
         ).length;
 
     const montadas =
-        pieces.filter(p =>
-            p.steps[4]
+        piezas.filter(p =>
+            Number(p.etapa) >= 5
+        ).length;
+
+    const pintadas =
+        piezas.filter(p =>
+            Number(p.etapa) >= 6
         ).length;
 
 
-    /* avance general */
+    const pct = cantidad => {
 
-    const avance =
-        Math.round(
-            (montadas / total) * 100
+        if(total === 0){
+            return 0;
+        }
+
+        return Math.round(
+            cantidad / total * 100
         );
 
+    };
 
-    /* porcentajes */
 
-    const pct = value =>
-        Math.round(
-            (value / total) * 100
+    /*
+       AVANCE GENERAL PONDERADO
+
+       etapa 0 = 0%
+       etapa 1 = 16.7%
+       etapa 2 = 33.3%
+       etapa 3 = 50%
+       etapa 4 = 66.7%
+       etapa 5 = 83.3%
+       etapa 6 = 100%
+    */
+
+    let sumaAvance = 0;
+
+    piezas.forEach(p => {
+
+        let etapa =
+            Number(p.etapa) || 0;
+
+        etapa =
+            Math.max(
+                0,
+                Math.min(6, etapa)
+            );
+
+        sumaAvance +=
+            etapa / 6;
+
+    });
+
+
+    const avanceGeneral =
+        total === 0
+        ? 0
+        : Math.round(
+            sumaAvance /
+            total *
+            100
         );
 
 
     /* KPIs */
 
-    document.getElementById("total").textContent =
-        total;
+    setText("total", total);
 
-    document.getElementById("liberadas").textContent =
-        liberadas;
+    setText(
+        "liberadas",
+        liberadas
+    );
 
-    document.getElementById("obra").textContent =
-        obra;
+    setText(
+        "liberadasPct",
+        pct(liberadas) +
+        "% del total"
+    );
 
-    document.getElementById("montadas").textContent =
-        montadas;
+    setText(
+        "obra",
+        obra
+    );
 
+    setText(
+        "obraPct",
+        pct(obra) +
+        "% del total"
+    );
 
-    document.getElementById("liberadasPct").textContent =
-        pct(liberadas) + "% del total";
+    setText(
+        "pintadas",
+        pintadas
+    );
 
-    document.getElementById("obraPct").textContent =
-        pct(obra) + "% del total";
-
-    document.getElementById("montadasPct").textContent =
-        pct(montadas) + "% del total";
-
-
-    /* FLOW */
-
-    document.getElementById("taller").textContent =
-        taller;
-
-    document.getElementById("flowLiberadas").textContent =
-        liberadas;
-
-    document.getElementById("flowObra").textContent =
-        obra;
-
-    document.getElementById("qaqc").textContent =
-        qaqc;
-
-    document.getElementById("flowMontadas").textContent =
-        montadas;
+    setText(
+        "pintadasPct",
+        pct(pintadas) +
+        "% del total"
+    );
 
 
-    document.getElementById("tallerPct").textContent =
-        pct(taller) + "%";
+    /* FLUJO */
+
+    setText("taller", taller);
+    setText("tallerPct", pct(taller) + "%");
+
+    setText(
+        "flowLiberadas",
+        liberadas
+    );
+
+    setText(
+        "flowLiberadasPct",
+        pct(liberadas) + "%"
+    );
+
+    setText(
+        "flowObra",
+        obra
+    );
+
+    setText(
+        "flowObraPct",
+        pct(obra) + "%"
+    );
+
+    setText(
+        "qaqc",
+        qaqc
+    );
+
+    setText(
+        "qaqcPct",
+        pct(qaqc) + "%"
+    );
+
+    setText(
+        "montadas",
+        montadas
+    );
+
+    setText(
+        "montadasPctFlow",
+        pct(montadas) + "%"
+    );
+
+    setText(
+        "flowPintadas",
+        pintadas
+    );
+
+    setText(
+        "flowPintadasPct",
+        pct(pintadas) + "%"
+    );
 
 
+    /* TABLA */
 
-    /* STATUS */
+    setText(
+        "tblTaller",
+        taller
+    );
 
-    document.getElementById("progressBar").style.width =
-        avance + "%";
+    setText(
+        "tblTallerPct",
+        pct(taller) + "%"
+    );
 
-    document.getElementById("progressText").textContent =
-        avance + "%";
+    setText(
+        "tblLiberadas",
+        liberadas
+    );
 
-    document.getElementById("executivePct").textContent =
-        avance + "%";
+    setText(
+        "tblLiberadasPct",
+        pct(liberadas) + "%"
+    );
+
+    setText(
+        "tblObra",
+        obra
+    );
+
+    setText(
+        "tblObraPct",
+        pct(obra) + "%"
+    );
+
+    setText(
+        "tblQA",
+        qaqc
+    );
+
+    setText(
+        "tblQAPct",
+        pct(qaqc) + "%"
+    );
+
+    setText(
+        "tblMontadas",
+        montadas
+    );
+
+    setText(
+        "tblMontadasPct",
+        pct(montadas) + "%"
+    );
+
+    setText(
+        "tblPintadas",
+        pintadas
+    );
+
+    setText(
+        "tblPintadasPct",
+        pct(pintadas) + "%"
+    );
 
 
-    /* Tabla */
+    /* AVANCE */
 
-    document.getElementById("tblTaller").textContent =
-        taller;
+    setText(
+        "progressText",
+        avanceGeneral + "%"
+    );
 
-    document.getElementById("tblLiberadas").textContent =
-        liberadas;
+    setText(
+        "executivePct",
+        avanceGeneral + "%"
+    );
 
-    document.getElementById("tblObra").textContent =
-        obra;
-
-    document.getElementById("tblQA").textContent =
-        qaqc;
-
-    document.getElementById("tblMontadas").textContent =
-        montadas;
-
-
-    document.getElementById("tblTallerPct").textContent =
-        pct(taller) + "%";
-
-    document.getElementById("tblLiberadasPct").textContent =
-        pct(liberadas) + "%";
-
-    document.getElementById("tblObraPct").textContent =
-        pct(obra) + "%";
-
-    document.getElementById("tblQAPct").textContent =
-        pct(qaqc) + "%";
-
-    document.getElementById("tblMontadasPct").textContent =
-        pct(montadas) + "%";
+    document
+    .getElementById("progressBar")
+    .style.width =
+        avanceGeneral + "%";
 
 
-    updateChart(avance);
+    /* TEXTO EJECUTIVO */
+
+    setText(
+        "executiveLiberadas",
+        liberadas
+    );
+
+    setText(
+        "executiveObra",
+        obra
+    );
+
+    setText(
+        "executiveMontadas",
+        montadas
+    );
+
+    setText(
+        "executivePintadas",
+        pintadas
+    );
+
+
+    actualizarEstado(
+        avanceGeneral
+    );
+
+
+    actualizarFecha();
+
+
+    actualizarCurva(
+        avanceGeneral
+    );
+
+}
+
+
+/* =====================================================
+   ESTADO DEL PROYECTO
+===================================================== */
+
+function obtenerPlanActual(){
+
+    const hoy =
+        new Date();
+
+    let plan = 0;
+
+    for(
+        const punto of PLAN
+    ){
+
+        const fecha =
+            new Date(
+                punto.fecha +
+                "T00:00:00"
+            );
+
+        if(fecha <= hoy){
+            plan =
+                punto.porcentaje;
+        }
+
+    }
+
+    return plan;
+
+}
+
+
+function actualizarEstado(
+    avanceReal
+){
+
+    const planActual =
+        obtenerPlanActual();
+
+    const desvio =
+        avanceReal -
+        planActual;
+
+
+    const textoDesvio =
+        (desvio > 0 ? "+" : "") +
+        desvio +
+        "%";
+
+
+    setText(
+        "deviation",
+        textoDesvio
+    );
+
+
+    const status =
+        document.getElementById(
+            "statusText"
+        );
+
+
+    if(desvio >= -3){
+
+        status.textContent =
+            "EN LÍNEA";
+
+        status.style.color =
+            "#27ae60";
+
+    }
+
+    else if(desvio >= -10){
+
+        status.textContent =
+            "ATENCIÓN";
+
+        status.style.color =
+            "#f2994a";
+
+    }
+
+    else{
+
+        status.textContent =
+            "ATRASADO";
+
+        status.style.color =
+            "#eb5757";
+
+    }
+
+}
+
+
+/* =====================================================
+   ÚLTIMA ACTUALIZACIÓN
+===================================================== */
+
+function actualizarFecha(){
+
+    if(piezas.length === 0){
+
+        setText(
+            "lastUpdate",
+            "-"
+        );
+
+        return;
+    }
+
+
+    const fechas =
+        piezas
+        .map(p =>
+            p.fecha ||
+            p.created_at
+        )
+        .filter(Boolean)
+        .map(f =>
+            new Date(f)
+        );
+
+
+    if(
+        fechas.length === 0
+    ){
+
+        setText(
+            "lastUpdate",
+            "-"
+        );
+
+        return;
+    }
+
+
+    const ultima =
+        new Date(
+            Math.max(
+                ...fechas
+                .map(f =>
+                    f.getTime()
+                )
+            )
+        );
+
+
+    setText(
+        "lastUpdate",
+        ultima.toLocaleString(
+            "es-AR"
+        )
+    );
 
 }
 
@@ -1176,57 +1355,177 @@ function calculate(){
    CURVA S
 ===================================================== */
 
-let chart;
+function actualizarCurva(
+    avanceActual
+){
+
+    const labels =
+        PLAN.map(p => {
+
+            return new Date(
+                p.fecha +
+                "T00:00:00"
+            )
+            .toLocaleDateString(
+                "es-AR",
+                {
+                    month:"short",
+                    year:"2-digit"
+                }
+            )
+            .toUpperCase();
+
+        });
 
 
-function updateChart(realActual){
-
-    const ctx =
-        document
-        .getElementById("sCurve")
-        .getContext("2d");
-
-
-    /*
-       PLANIFICADO
-
-       Estos valores son solamente de ejemplo.
-       Después podemos cargarlos desde Supabase.
-    */
-
-    const planificado = [
-        3,
-        8,
-        15,
-        25,
-        38,
-        52,
-        67,
-        81,
-        92,
-        100
-    ];
+    const planData =
+        PLAN.map(
+            p => p.porcentaje
+        );
 
 
     /*
-       REAL
+       Construcción del REAL:
 
-       Se genera progresivamente para mostrar
-       la curva con el avance actual.
+       Usa las fechas registradas en la tabla.
+
+       Como actualmente existe una sola columna
+       "fecha" por pieza y no un historial de
+       cambios de etapa, la curva histórica es
+       una aproximación basada en la información
+       disponible.
+
+       El KPI de avance ACTUAL sí es exacto según
+       las etapas existentes en Supabase.
     */
 
-    const real = [
-        2,
-        5,
-        10,
-        17,
-        25,
-        34,
-        43,
-        51,
-        57,
-        realActual
-    ];
+
+    const realData =
+        PLAN.map(
+            punto => {
+
+                const limite =
+                    new Date(
+                        punto.fecha +
+                        "T23:59:59"
+                    );
+
+
+                const piezasFecha =
+                    piezas.filter(
+                        p => {
+
+                            if(
+                                !p.fecha &&
+                                !p.created_at
+                            ){
+                                return false;
+                            }
+
+                            const fecha =
+                                new Date(
+                                    p.fecha ||
+                                    p.created_at
+                                );
+
+                            return fecha <= limite;
+
+                        }
+                    );
+
+
+                if(
+                    piezas.length === 0
+                ){
+                    return 0;
+                }
+
+
+                let suma = 0;
+
+                piezasFecha.forEach(
+                    p => {
+
+                        let etapa =
+                            Number(
+                                p.etapa
+                            ) || 0;
+
+                        etapa =
+                            Math.max(
+                                0,
+                                Math.min(
+                                    6,
+                                    etapa
+                                )
+                            );
+
+                        suma +=
+                            etapa / 6;
+
+                    }
+                );
+
+
+                return Math.round(
+                    suma /
+                    piezas.length *
+                    100
+                );
+
+            }
+        );
+
+
+    /*
+       Mostrar siempre el avance actual en
+       el último punto alcanzado.
+    */
+
+    const hoy =
+        new Date();
+
+    let ultimoIndice = 0;
+
+    PLAN.forEach(
+        (p,index) => {
+
+            const f =
+                new Date(
+                    p.fecha +
+                    "T00:00:00"
+                );
+
+            if(f <= hoy){
+                ultimoIndice =
+                    index;
+            }
+
+        }
+    );
+
+
+    realData[
+        ultimoIndice
+    ] = avanceActual;
+
+
+    /*
+       Ocultar futuro de la curva real
+    */
+
+    for(
+        let i =
+            ultimoIndice + 1;
+        i <
+            realData.length;
+        i++
+    ){
+
+        realData[i] =
+            null;
+
+    }
 
 
     if(chart){
@@ -1234,114 +1533,224 @@ function updateChart(realActual){
     }
 
 
-    chart = new Chart(ctx,{
+    const ctx =
+        document
+        .getElementById(
+            "sCurve"
+        )
+        .getContext("2d");
 
-        type:"line",
 
-        data:{
+    chart =
+        new Chart(
+            ctx,
+            {
 
-            labels:[
-                "AGO",
-                "SEP",
-                "OCT",
-                "NOV",
-                "DIC",
-                "ENE",
-                "FEB",
-                "MAR",
-                "ABR",
-                "MAY"
-            ],
+                type:"line",
 
-            datasets:[
+                data:{
 
-                {
-                    label:"Planificado",
-                    data:planificado,
-                    borderColor:"#b8c3d8",
-                    borderWidth:2,
-                    borderDash:[6,6],
-                    pointRadius:0,
-                    tension:.35
-                },
+                    labels:labels,
 
-                {
-                    label:"Real",
-                    data:real,
-                    borderColor:"#2855d9",
-                    borderWidth:3,
-                    pointRadius:3,
-                    pointBackgroundColor:"#2855d9",
-                    tension:.35
-                }
+                    datasets:[
 
-            ]
+                        {
+                            label:
+                                "Planificado",
 
-        },
+                            data:
+                                planData,
 
-        options:{
+                            borderColor:
+                                "#b8c3d8",
 
-            responsive:true,
+                            borderWidth:2,
 
-            maintainAspectRatio:false,
+                            borderDash:
+                                [6,6],
 
-            plugins:{
+                            pointRadius:2,
 
-                legend:{
-                    display:false
-                }
-
-            },
-
-            scales:{
-
-                y:{
-                    min:0,
-                    max:100,
-
-                    ticks:{
-                        callback:function(value){
-                            return value + "%";
+                            tension:.35
                         },
 
-                        font:{
-                            size:10
-                        }
-                    },
+                        {
+                            label:"Real",
 
-                    grid:{
-                        color:"#edf0f5"
-                    }
+                            data:
+                                realData,
+
+                            borderColor:
+                                "#2855d9",
+
+                            borderWidth:3,
+
+                            pointRadius:4,
+
+                            tension:.35,
+
+                            spanGaps:false
+                        }
+
+                    ]
+
                 },
 
-                x:{
+                options:{
 
-                    grid:{
-                        display:false
+                    responsive:true,
+
+                    maintainAspectRatio:
+                        false,
+
+                    interaction:{
+                        intersect:false,
+                        mode:"index"
                     },
 
-                    ticks:{
-                        font:{
-                            size:10
+                    plugins:{
+
+                        legend:{
+                            display:false
+                        },
+
+                        tooltip:{
+
+                            callbacks:{
+
+                                label:
+                                    function(ctx){
+
+                                        return (
+                                            ctx
+                                            .dataset
+                                            .label +
+                                            ": " +
+                                            ctx
+                                            .parsed
+                                            .y +
+                                            "%"
+                                        );
+
+                                    }
+
+                            }
+
                         }
+
+                    },
+
+                    scales:{
+
+                        y:{
+
+                            min:0,
+                            max:100,
+
+                            ticks:{
+
+                                callback:
+                                    function(value){
+
+                                        return (
+                                            value +
+                                            "%"
+                                        );
+
+                                    }
+
+                            },
+
+                            grid:{
+                                color:
+                                    "#edf0f5"
+                            }
+
+                        },
+
+                        x:{
+
+                            grid:{
+                                display:false
+                            }
+
+                        }
+
                     }
 
                 }
 
             }
-
-        }
-
-    });
+        );
 
 }
 
 
 /* =====================================================
-   ARRANQUE
+   UTILIDADES
 ===================================================== */
 
-calculate();
+function setText(
+    id,
+    value
+){
+
+    const el =
+        document
+        .getElementById(id);
+
+    if(el){
+        el.textContent =
+            value;
+    }
+
+}
+
+
+function setConnection(
+    text,
+    color
+){
+
+    setText(
+        "connectionText",
+        text
+    );
+
+    document
+        .getElementById(
+            "connectionDot"
+        )
+        .style.background =
+            color;
+
+}
+
+
+function mostrarError(
+    mensaje
+){
+
+    const box =
+        document
+        .getElementById(
+            "errorBox"
+        );
+
+    box.textContent =
+        mensaje;
+
+    box.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   INICIAR
+===================================================== */
+
+cargarDatos();
 
 </script>
 
