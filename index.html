@@ -170,10 +170,21 @@ body{
     color:#8a94a6;
 }
 
-.kpi-main{ border-left:4px solid #2855d9; }
-.kpi-green{ border-left:4px solid #27ae60; }
-.kpi-orange{ border-left:4px solid #f2994a; }
-.kpi-purple{ border-left:4px solid #8e63ce; }
+.kpi-main{
+    border-left:4px solid #2855d9;
+}
+
+.kpi-green{
+    border-left:4px solid #27ae60;
+}
+
+.kpi-orange{
+    border-left:4px solid #f2994a;
+}
+
+.kpi-purple{
+    border-left:4px solid #8e63ce;
+}
 
 .dashboard-grid{
     display:grid;
@@ -289,7 +300,6 @@ body{
     border:1px solid #e7eaf0;
     border-radius:10px;
     padding:16px 12px;
-    position:relative;
     background:white;
 }
 
@@ -322,6 +332,14 @@ body{
     margin-top:18px;
 }
 
+.tipo-card{
+    margin-top:18px;
+}
+
+.tabla-scroll{
+    overflow-x:auto;
+}
+
 table{
     width:100%;
     border-collapse:collapse;
@@ -331,14 +349,28 @@ th{
     text-align:left;
     color:#929bad;
     font-size:10px;
-    padding:10px 6px;
+    padding:11px 8px;
     border-bottom:1px solid #edf0f4;
 }
 
 td{
-    padding:12px 6px;
+    padding:12px 8px;
     font-size:12px;
     border-bottom:1px solid #f0f2f6;
+}
+
+.tipo-table th:not(:first-child),
+.tipo-table td:not(:first-child){
+    text-align:center;
+}
+
+.tipo-nombre{
+    font-weight:700;
+    color:#172033;
+}
+
+.tipo-total{
+    font-weight:700;
 }
 
 .badge{
@@ -380,13 +412,18 @@ td{
 }
 
 @media(max-width:1100px){
+
     .flow-grid{
         grid-template-columns:repeat(3,1fr);
     }
+
 }
 
 @media(max-width:1000px){
-    .sidebar{ width:70px; }
+
+    .sidebar{
+        width:70px;
+    }
 
     .logo span,
     .menu a span{
@@ -405,11 +442,14 @@ td{
     .dashboard-grid{
         grid-template-columns:1fr;
     }
+
 }
 
 @media(max-width:700px){
 
-    .content{ padding:18px; }
+    .content{
+        padding:18px;
+    }
 
     .kpis{
         grid-template-columns:1fr;
@@ -422,6 +462,7 @@ td{
     .bottom-grid{
         grid-template-columns:1fr;
     }
+
 }
 
 </style>
@@ -477,40 +518,97 @@ Proyecto
 <div class="content">
 
 <div class="page-title">
-<h1>Resumen ejecutivo</h1>
-<p>Seguimiento general de fabricación, logística, calidad y montaje</p>
+
+<h1>
+Resumen ejecutivo
+</h1>
+
+<p>
+Seguimiento general de fabricación, logística, calidad, montaje y pintura
+</p>
+
 </div>
 
+
 <div class="error" id="errorBox"></div>
+
+
+<!-- KPI -->
 
 <section class="kpis">
 
 <div class="kpi kpi-main">
-<div class="kpi-label">TOTAL DE PIEZAS</div>
-<div class="kpi-value" id="total">0</div>
-<div class="kpi-sub">Base de ingeniería</div>
+
+<div class="kpi-label">
+TOTAL DE PIEZAS
 </div>
+
+<div class="kpi-value" id="total">
+0
+</div>
+
+<div class="kpi-sub">
+Base de Ingeniería
+</div>
+
+</div>
+
 
 <div class="kpi kpi-green">
-<div class="kpi-label">LIBERADAS EN TALLER</div>
-<div class="kpi-value" id="liberadas">0</div>
-<div class="kpi-sub" id="liberadasPct">0% del total</div>
+
+<div class="kpi-label">
+LIBERADAS EN TALLER
 </div>
+
+<div class="kpi-value" id="liberadas">
+0
+</div>
+
+<div class="kpi-sub" id="liberadasPct">
+0% del total
+</div>
+
+</div>
+
 
 <div class="kpi kpi-orange">
-<div class="kpi-label">EN OBRA</div>
-<div class="kpi-value" id="obra">0</div>
-<div class="kpi-sub" id="obraPct">0% del total</div>
+
+<div class="kpi-label">
+EN OBRA
 </div>
 
+<div class="kpi-value" id="obra">
+0
+</div>
+
+<div class="kpi-sub" id="obraPct">
+0% del total
+</div>
+
+</div>
+
+
 <div class="kpi kpi-purple">
-<div class="kpi-label">PINTADAS</div>
-<div class="kpi-value" id="pintadas">0</div>
-<div class="kpi-sub" id="pintadasPct">0% del total</div>
+
+<div class="kpi-label">
+MONTADAS
+</div>
+
+<div class="kpi-value" id="kpiMontadas">
+0
+</div>
+
+<div class="kpi-sub" id="kpiMontadasPct">
+0% del total
+</div>
+
 </div>
 
 </section>
 
+
+
+<!-- CURVA + ESTADO -->
 
 <div class="dashboard-grid">
 
@@ -519,23 +617,40 @@ Proyecto
 <div class="card-header">
 
 <div>
-<div class="card-title">Avance acumulado del proyecto</div>
-<div class="card-subtitle">Curva S — Planificado vs Real</div>
+
+<div class="card-title">
+Avance acumulado del proyecto
 </div>
+
+<div class="card-subtitle">
+Curva S — Planificado vs Real
+</div>
+
+</div>
+
 
 <div class="legend">
+
 <div class="legend-item">
+
 <span class="legend-line"></span>
+
 Real
+
 </div>
 
 <div class="legend-item">
+
 <span class="legend-line plan"></span>
+
 Planificado
-</div>
+
 </div>
 
 </div>
+
+</div>
+
 
 <div class="chart-container">
 <canvas id="sCurve"></canvas>
@@ -544,14 +659,25 @@ Planificado
 </section>
 
 
+
 <section class="card">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Estado del proyecto</div>
-<div class="card-subtitle">Indicador ejecutivo</div>
+
+<div class="card-title">
+Estado del proyecto
 </div>
+
+<div class="card-subtitle">
+Indicador ejecutivo
 </div>
+
+</div>
+
+</div>
+
 
 <div class="status-box">
 
@@ -564,15 +690,29 @@ Estado general
 </div>
 
 <div class="progress">
-<div class="progress-bar" id="progressBar"></div>
+
+<div
+class="progress-bar"
+id="progressBar">
 </div>
+
+</div>
+
 
 <div class="progress-info">
-<span>Avance real</span>
-<strong id="progressText">0%</strong>
+
+<span>
+Avance real
+</span>
+
+<strong id="progressText">
+0%
+</strong>
+
 </div>
 
 </div>
+
 
 <div class="status-box">
 
@@ -586,13 +726,16 @@ Desvío contra planificación
 
 </div>
 
+
 <div class="status-box">
 
 <div class="status-label">
 Última actualización
 </div>
 
-<div id="lastUpdate" style="font-weight:700;margin-top:5px">
+<div
+id="lastUpdate"
+style="font-weight:700;margin-top:5px">
 -
 </div>
 
@@ -603,122 +746,445 @@ Desvío contra planificación
 </div>
 
 
+
+<!-- FLUJO -->
+
 <section class="card flow">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Flujo de premoldeados</div>
-<div class="card-subtitle">Piezas que alcanzaron cada etapa</div>
+
+<div class="card-title">
+Flujo de premoldeados
 </div>
+
+<div class="card-subtitle">
+Etapas acumulativas + montaje y pintura independientes
 </div>
+
+</div>
+
+</div>
+
 
 <div class="flow-grid">
 
-<div class="flow-step">
-<div class="flow-icon">🏭</div>
-<div class="flow-name">En taller</div>
-<div class="flow-value" id="taller">0</div>
-<div class="flow-percent" id="tallerPct">0%</div>
-</div>
 
 <div class="flow-step">
-<div class="flow-icon">✓</div>
-<div class="flow-name">Liberada</div>
-<div class="flow-value" id="flowLiberadas">0</div>
-<div class="flow-percent" id="flowLiberadasPct">0%</div>
+
+<div class="flow-icon">
+🏭
 </div>
 
-<div class="flow-step">
-<div class="flow-icon">🚧</div>
-<div class="flow-name">En obra</div>
-<div class="flow-value" id="flowObra">0</div>
-<div class="flow-percent" id="flowObraPct">0%</div>
+<div class="flow-name">
+En taller
 </div>
 
-<div class="flow-step">
-<div class="flow-icon">✔</div>
-<div class="flow-name">QA/QC</div>
-<div class="flow-value" id="qaqc">0</div>
-<div class="flow-percent" id="qaqcPct">0%</div>
+<div class="flow-value" id="taller">
+0
 </div>
 
-<div class="flow-step">
-<div class="flow-icon">🏗️</div>
-<div class="flow-name">Montada</div>
-<div class="flow-value" id="montadas">0</div>
-<div class="flow-percent" id="montadasPctFlow">0%</div>
+<div class="flow-percent" id="tallerPct">
+0%
 </div>
 
-<div class="flow-step">
-<div class="flow-icon">🎨</div>
-<div class="flow-name">Pintada</div>
-<div class="flow-value" id="flowPintadas">0</div>
-<div class="flow-percent" id="flowPintadasPct">0%</div>
 </div>
+
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+✓
+</div>
+
+<div class="flow-name">
+Liberada
+</div>
+
+<div class="flow-value" id="flowLiberadas">
+0
+</div>
+
+<div class="flow-percent" id="flowLiberadasPct">
+0%
+</div>
+
+</div>
+
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+🚧
+</div>
+
+<div class="flow-name">
+En obra
+</div>
+
+<div class="flow-value" id="flowObra">
+0
+</div>
+
+<div class="flow-percent" id="flowObraPct">
+0%
+</div>
+
+</div>
+
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+✔
+</div>
+
+<div class="flow-name">
+QA/QC
+</div>
+
+<div class="flow-value" id="qaqc">
+0
+</div>
+
+<div class="flow-percent" id="qaqcPct">
+0%
+</div>
+
+</div>
+
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+🏗️
+</div>
+
+<div class="flow-name">
+Montada
+</div>
+
+<div class="flow-value" id="montadas">
+0
+</div>
+
+<div class="flow-percent" id="montadasPctFlow">
+0%
+</div>
+
+</div>
+
+
+
+<div class="flow-step">
+
+<div class="flow-icon">
+🎨
+</div>
+
+<div class="flow-name">
+Pintada
+</div>
+
+<div class="flow-value" id="flowPintadas">
+0
+</div>
+
+<div class="flow-percent" id="flowPintadasPct">
+0%
+</div>
+
+</div>
+
 
 </div>
 
 </section>
 
 
+
+<!-- TABLA POR TIPO -->
+
+<section class="card tipo-card">
+
+<div class="card-header">
+
+<div>
+
+<div class="card-title">
+Avance por tipo de premoldeado
+</div>
+
+<div class="card-subtitle">
+Comparación contra el total cargado por Ingeniería
+</div>
+
+</div>
+
+</div>
+
+
+<div class="tabla-scroll">
+
+<table class="tipo-table">
+
+<thead>
+
+<tr>
+
+<th>
+TIPO
+</th>
+
+<th>
+TOTAL INGENIERÍA
+</th>
+
+<th>
+EN TALLER
+</th>
+
+<th>
+EN OBRA
+</th>
+
+<th>
+MONTADAS
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaTipos">
+
+<tr>
+
+<td colspan="5">
+Cargando...
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+
+<!-- INDICADORES + LECTURA -->
+
 <div class="bottom-grid">
+
 
 <section class="card">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Indicadores de avance</div>
-<div class="card-subtitle">Resumen acumulado por etapa</div>
+
+<div class="card-title">
+Indicadores de avance
 </div>
+
+<div class="card-subtitle">
+Resumen acumulado por etapa
 </div>
+
+</div>
+
+</div>
+
 
 <table>
 
 <thead>
+
 <tr>
-<th>ETAPA</th>
-<th>CANTIDAD</th>
-<th>AVANCE</th>
+
+<th>
+ETAPA
+</th>
+
+<th>
+CANTIDAD
+</th>
+
+<th>
+AVANCE
+</th>
+
 </tr>
+
 </thead>
+
 
 <tbody>
 
-<tr>
-<td>Taller</td>
-<td id="tblTaller">0</td>
-<td><span class="badge badge-gray" id="tblTallerPct">0%</span></td>
-</tr>
 
 <tr>
-<td>Liberada taller</td>
-<td id="tblLiberadas">0</td>
-<td><span class="badge badge-green" id="tblLiberadasPct">0%</span></td>
+
+<td>
+Taller
+</td>
+
+<td id="tblTaller">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-gray"
+id="tblTallerPct">
+
+0%
+
+</span>
+
+</td>
+
 </tr>
 
-<tr>
-<td>En obra</td>
-<td id="tblObra">0</td>
-<td><span class="badge badge-orange" id="tblObraPct">0%</span></td>
-</tr>
+
 
 <tr>
-<td>QA/QC</td>
-<td id="tblQA">0</td>
-<td><span class="badge badge-blue" id="tblQAPct">0%</span></td>
+
+<td>
+Liberada taller
+</td>
+
+<td id="tblLiberadas">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-green"
+id="tblLiberadasPct">
+
+0%
+
+</span>
+
+</td>
+
 </tr>
 
-<tr>
-<td>Montada</td>
-<td id="tblMontadas">0</td>
-<td><span class="badge badge-green" id="tblMontadasPct">0%</span></td>
-</tr>
+
 
 <tr>
-<td>Pintada</td>
-<td id="tblPintadas">0</td>
-<td><span class="badge badge-green" id="tblPintadasPct">0%</span></td>
+
+<td>
+En obra
+</td>
+
+<td id="tblObra">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-orange"
+id="tblObraPct">
+
+0%
+
+</span>
+
+</td>
+
 </tr>
+
+
+
+<tr>
+
+<td>
+QA/QC
+</td>
+
+<td id="tblQA">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-blue"
+id="tblQAPct">
+
+0%
+
+</span>
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+Montada
+</td>
+
+<td id="tblMontadas">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-green"
+id="tblMontadasPct">
+
+0%
+
+</span>
+
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>
+Pintada
+</td>
+
+<td id="tblPintadas">
+0
+</td>
+
+<td>
+
+<span
+class="badge badge-green"
+id="tblPintadasPct">
+
+0%
+
+</span>
+
+</td>
+
+</tr>
+
 
 </tbody>
 
@@ -727,44 +1193,96 @@ Desvío contra planificación
 </section>
 
 
+
 <section class="card">
 
 <div class="card-header">
+
 <div>
-<div class="card-title">Lectura ejecutiva</div>
-<div class="card-subtitle">Situación actual del proyecto</div>
-</div>
+
+<div class="card-title">
+Lectura ejecutiva
 </div>
 
-<div style="font-size:13px;line-height:1.7;color:#687386">
+<div class="card-subtitle">
+Situación actual del proyecto
+</div>
+
+</div>
+
+</div>
+
+
+<div
+style="
+font-size:13px;
+line-height:1.7;
+color:#687386;
+">
 
 <strong style="color:#172033">
+
 Avance general
+
 </strong>
 
+
 <p>
+
 El proyecto presenta un avance ponderado acumulado del
-<strong id="executivePct">0%</strong>.
+
+<strong id="executivePct">
+0%
+</strong>.
+
 </p>
 
+
 <p>
+
 Liberadas en taller:
-<strong id="executiveLiberadas">0</strong>.
+
+<strong id="executiveLiberadas">
+0
+</strong>.
+
 En obra:
-<strong id="executiveObra">0</strong>.
+
+<strong id="executiveObra">
+0
+</strong>.
+
+QA/QC:
+
+<strong id="executiveQA">
+0
+</strong>.
+
 Montadas:
-<strong id="executiveMontadas">0</strong>.
+
+<strong id="executiveMontadas">
+0
+</strong>.
+
 Pintadas:
-<strong id="executivePintadas">0</strong>.
+
+<strong id="executivePintadas">
+0
+</strong>.
+
 </p>
 
+
 <p>
+
 Todos los indicadores se leen directamente desde Supabase.
+
 </p>
 
 </div>
 
 </section>
+
 
 </div>
 
@@ -775,979 +1293,1352 @@ Todos los indicadores se leen directamente desde Supabase.
 </div>
 
 
+
 <script>
 
+
 /* =====================================================
-   SUPABASE
+SUPABASE
 ===================================================== */
 
 const SUPABASE_URL =
 "https://tnnioleawbhuqjuykrsf.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
 
-const db = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
+
+const db =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 
-/* =====================================================
-   PLANIFICACIÓN CURVA S
 
-   Podés cambiar estos porcentajes más adelante.
+/* =====================================================
+PLANIFICACIÓN
 ===================================================== */
 
 const PLAN = [
-    { fecha:"2026-08-01", porcentaje:5 },
-    { fecha:"2026-09-01", porcentaje:15 },
-    { fecha:"2026-10-01", porcentaje:30 },
-    { fecha:"2026-11-01", porcentaje:48 },
-    { fecha:"2026-12-01", porcentaje:65 },
-    { fecha:"2027-01-01", porcentaje:78 },
-    { fecha:"2027-02-01", porcentaje:88 },
-    { fecha:"2027-03-01", porcentaje:95 },
-    { fecha:"2027-04-01", porcentaje:100 }
+
+{fecha:"2026-08-01",porcentaje:5},
+
+{fecha:"2026-09-01",porcentaje:15},
+
+{fecha:"2026-10-01",porcentaje:30},
+
+{fecha:"2026-11-01",porcentaje:48},
+
+{fecha:"2026-12-01",porcentaje:65},
+
+{fecha:"2027-01-01",porcentaje:78},
+
+{fecha:"2027-02-01",porcentaje:88},
+
+{fecha:"2027-03-01",porcentaje:95},
+
+{fecha:"2027-04-01",porcentaje:100}
+
 ];
 
 
-let piezas = [];
-let chart = null;
+let piezas=[];
+
+let chart=null;
+
+let timer=null;
+
 
 
 /* =====================================================
-   CARGAR SUPABASE
+CARGAR DATOS
 ===================================================== */
 
 async function cargarDatos(){
 
-    setConnection(
-        "Conectando...",
-        "#f2994a"
-    );
 
-    const { data, error } = await db
-        .from("premoldeados")
-        .select(
-            "id,codigo,tipo,modelo,etapa,responsable,fecha,created_at"
-        )
-        .order("id", {
-            ascending:true
-        });
+setConnection(
+"Conectando...",
+"#f2994a"
+);
 
 
-    if(error){
+const {
+data,
+error
+}=
+await db
 
-        console.error(error);
+.from("premoldeados")
 
-        setConnection(
-            "Error de conexión",
-            "#eb5757"
-        );
+.select(
+"id,codigo,tipo,modelo,etapa,montada,pintada,responsable,fecha,created_at"
+)
 
-        mostrarError(
-            "No se pudo leer la tabla premoldeados: " +
-            error.message
-        );
-
-        return;
-    }
-
-
-    piezas = data || [];
-
-    setConnection(
-        "Datos actualizados",
-        "#27ae60"
-    );
-
-    actualizarDashboard();
+.order(
+"id",
+{
+ascending:true
+}
+);
 
 
-    /*
-       Actualización automática cada 30 segundos
-    */
 
-    setTimeout(
-        cargarDatos,
-        30000
-    );
+if(error){
+
+console.error(error);
+
+
+setConnection(
+"Error de conexión",
+"#eb5757"
+);
+
+
+mostrarError(
+
+"No se pudo leer la tabla premoldeados: "+
+error.message
+
+);
+
+
+return;
 
 }
 
 
+
+piezas=
+data || [];
+
+
+document
+.getElementById("errorBox")
+.style.display=
+"none";
+
+
+setConnection(
+"Datos actualizados",
+"#27ae60"
+);
+
+
+actualizarDashboard();
+
+
+
+clearTimeout(timer);
+
+
+timer=
+setTimeout(
+cargarDatos,
+30000
+);
+
+}
+
+
+
 /* =====================================================
-   DASHBOARD
+DASHBOARD
 ===================================================== */
 
 function actualizarDashboard(){
 
-    const total = piezas.length;
 
+const total=
+piezas.length;
 
-    /*
-       Como las etapas son secuenciales usamos >=.
 
-       Por ejemplo:
-       etapa 5 = la pieza también pasó por
-       Taller, Liberada, Obra y QA/QC.
-    */
 
-    const taller =
-        piezas.filter(p =>
-            Number(p.etapa) >= 1
-        ).length;
+/*
+ETAPAS ACTUALES
 
-    const liberadas =
-        piezas.filter(p =>
-            Number(p.etapa) >= 2
-        ).length;
+0 = EN TALLER
+1 = LIBERADA EN TALLER
+2 = EN OBRA
+3 = QA/QC
 
-    const obra =
-        piezas.filter(p =>
-            Number(p.etapa) >= 3
-        ).length;
+MONTAJE Y PINTURA SON BOOLEANOS
+INDEPENDIENTES.
+*/
 
-    const qaqc =
-        piezas.filter(p =>
-            Number(p.etapa) >= 4
-        ).length;
 
-    const montadas =
-        piezas.filter(p =>
-            Number(p.etapa) >= 5
-        ).length;
+const taller=
+piezas.filter(
+p=>Number(p.etapa)>=0
+).length;
 
-    const pintadas =
-        piezas.filter(p =>
-            Number(p.etapa) >= 6
-        ).length;
 
+const liberadas=
+piezas.filter(
+p=>Number(p.etapa)>=1
+).length;
 
-    const pct = cantidad => {
 
-        if(total === 0){
-            return 0;
-        }
+const obra=
+piezas.filter(
+p=>Number(p.etapa)>=2
+).length;
 
-        return Math.round(
-            cantidad / total * 100
-        );
 
-    };
+const qaqc=
+piezas.filter(
+p=>Number(p.etapa)>=3
+).length;
 
 
-    /*
-       AVANCE GENERAL PONDERADO
+const montadas=
+piezas.filter(
+p=>p.montada===true
+).length;
 
-       etapa 0 = 0%
-       etapa 1 = 16.7%
-       etapa 2 = 33.3%
-       etapa 3 = 50%
-       etapa 4 = 66.7%
-       etapa 5 = 83.3%
-       etapa 6 = 100%
-    */
 
-    let sumaAvance = 0;
+const pintadas=
+piezas.filter(
+p=>p.pintada===true
+).length;
 
-    piezas.forEach(p => {
 
-        let etapa =
-            Number(p.etapa) || 0;
 
-        etapa =
-            Math.max(
-                0,
-                Math.min(6, etapa)
-            );
+const pct=
+cantidad=>{
 
-        sumaAvance +=
-            etapa / 6;
+if(total===0){
+return 0;
+}
 
-    });
+return Math.round(
+cantidad /
+total *
+100
+);
 
+};
 
-    const avanceGeneral =
-        total === 0
-        ? 0
-        : Math.round(
-            sumaAvance /
-            total *
-            100
-        );
 
 
-    /* KPIs */
+/*
+AVANCE GENERAL
 
-    setText("total", total);
+6 HITOS:
 
-    setText(
-        "liberadas",
-        liberadas
-    );
-
-    setText(
-        "liberadasPct",
-        pct(liberadas) +
-        "% del total"
-    );
-
-    setText(
-        "obra",
-        obra
-    );
-
-    setText(
-        "obraPct",
-        pct(obra) +
-        "% del total"
-    );
-
-    setText(
-        "pintadas",
-        pintadas
-    );
-
-    setText(
-        "pintadasPct",
-        pct(pintadas) +
-        "% del total"
-    );
-
-
-    /* FLUJO */
-
-    setText("taller", taller);
-    setText("tallerPct", pct(taller) + "%");
-
-    setText(
-        "flowLiberadas",
-        liberadas
-    );
-
-    setText(
-        "flowLiberadasPct",
-        pct(liberadas) + "%"
-    );
-
-    setText(
-        "flowObra",
-        obra
-    );
-
-    setText(
-        "flowObraPct",
-        pct(obra) + "%"
-    );
-
-    setText(
-        "qaqc",
-        qaqc
-    );
-
-    setText(
-        "qaqcPct",
-        pct(qaqc) + "%"
-    );
-
-    setText(
-        "montadas",
-        montadas
-    );
-
-    setText(
-        "montadasPctFlow",
-        pct(montadas) + "%"
-    );
-
-    setText(
-        "flowPintadas",
-        pintadas
-    );
-
-    setText(
-        "flowPintadasPct",
-        pct(pintadas) + "%"
-    );
-
-
-    /* TABLA */
-
-    setText(
-        "tblTaller",
-        taller
-    );
-
-    setText(
-        "tblTallerPct",
-        pct(taller) + "%"
-    );
-
-    setText(
-        "tblLiberadas",
-        liberadas
-    );
-
-    setText(
-        "tblLiberadasPct",
-        pct(liberadas) + "%"
-    );
-
-    setText(
-        "tblObra",
-        obra
-    );
-
-    setText(
-        "tblObraPct",
-        pct(obra) + "%"
-    );
-
-    setText(
-        "tblQA",
-        qaqc
-    );
-
-    setText(
-        "tblQAPct",
-        pct(qaqc) + "%"
-    );
-
-    setText(
-        "tblMontadas",
-        montadas
-    );
-
-    setText(
-        "tblMontadasPct",
-        pct(montadas) + "%"
-    );
-
-    setText(
-        "tblPintadas",
-        pintadas
-    );
-
-    setText(
-        "tblPintadasPct",
-        pct(pintadas) + "%"
-    );
-
-
-    /* AVANCE */
-
-    setText(
-        "progressText",
-        avanceGeneral + "%"
-    );
-
-    setText(
-        "executivePct",
-        avanceGeneral + "%"
-    );
-
-    document
-    .getElementById("progressBar")
-    .style.width =
-        avanceGeneral + "%";
-
-
-    /* TEXTO EJECUTIVO */
-
-    setText(
-        "executiveLiberadas",
-        liberadas
-    );
-
-    setText(
-        "executiveObra",
-        obra
-    );
-
-    setText(
-        "executiveMontadas",
-        montadas
-    );
-
-    setText(
-        "executivePintadas",
-        pintadas
-    );
-
-
-    actualizarEstado(
-        avanceGeneral
-    );
-
-
-    actualizarFecha();
-
-
-    actualizarCurva(
-        avanceGeneral
-    );
+Taller
+Liberada
+Obra
+QA/QC
+Montada
+Pintada
+
+Montada y Pintada son independientes.
+*/
+
+
+const hitosCompletados=
+
+taller +
+
+liberadas +
+
+obra +
+
+qaqc +
+
+montadas +
+
+pintadas;
+
+
+
+const avanceGeneral=
+
+total===0
+
+?0
+
+:Math.round(
+
+hitosCompletados /
+
+(total*6) *
+
+100
+
+);
+
+
+
+/* KPI */
+
+
+setText(
+"total",
+total
+);
+
+
+setText(
+"liberadas",
+liberadas
+);
+
+
+setText(
+"liberadasPct",
+pct(liberadas)+
+"% del total"
+);
+
+
+setText(
+"obra",
+obra
+);
+
+
+setText(
+"obraPct",
+pct(obra)+
+"% del total"
+);
+
+
+setText(
+"kpiMontadas",
+montadas
+);
+
+
+setText(
+"kpiMontadasPct",
+pct(montadas)+
+"% del total"
+);
+
+
+
+/* FLUJO */
+
+
+setText(
+"taller",
+taller
+);
+
+
+setText(
+"tallerPct",
+pct(taller)+"%"
+);
+
+
+setText(
+"flowLiberadas",
+liberadas
+);
+
+
+setText(
+"flowLiberadasPct",
+pct(liberadas)+"%"
+);
+
+
+setText(
+"flowObra",
+obra
+);
+
+
+setText(
+"flowObraPct",
+pct(obra)+"%"
+);
+
+
+setText(
+"qaqc",
+qaqc
+);
+
+
+setText(
+"qaqcPct",
+pct(qaqc)+"%"
+);
+
+
+setText(
+"montadas",
+montadas
+);
+
+
+setText(
+"montadasPctFlow",
+pct(montadas)+"%"
+);
+
+
+setText(
+"flowPintadas",
+pintadas
+);
+
+
+setText(
+"flowPintadasPct",
+pct(pintadas)+"%"
+);
+
+
+
+/* INDICADORES */
+
+
+setText(
+"tblTaller",
+taller
+);
+
+
+setText(
+"tblTallerPct",
+pct(taller)+"%"
+);
+
+
+setText(
+"tblLiberadas",
+liberadas
+);
+
+
+setText(
+"tblLiberadasPct",
+pct(liberadas)+"%"
+);
+
+
+setText(
+"tblObra",
+obra
+);
+
+
+setText(
+"tblObraPct",
+pct(obra)+"%"
+);
+
+
+setText(
+"tblQA",
+qaqc
+);
+
+
+setText(
+"tblQAPct",
+pct(qaqc)+"%"
+);
+
+
+setText(
+"tblMontadas",
+montadas
+);
+
+
+setText(
+"tblMontadasPct",
+pct(montadas)+"%"
+);
+
+
+setText(
+"tblPintadas",
+pintadas
+);
+
+
+setText(
+"tblPintadasPct",
+pct(pintadas)+"%"
+);
+
+
+
+/* AVANCE GENERAL */
+
+
+setText(
+"progressText",
+avanceGeneral+"%"
+);
+
+
+setText(
+"executivePct",
+avanceGeneral+"%"
+);
+
+
+document
+.getElementById(
+"progressBar"
+)
+.style.width=
+avanceGeneral+"%";
+
+
+
+/* LECTURA EJECUTIVA */
+
+
+setText(
+"executiveLiberadas",
+liberadas
+);
+
+
+setText(
+"executiveObra",
+obra
+);
+
+
+setText(
+"executiveQA",
+qaqc
+);
+
+
+setText(
+"executiveMontadas",
+montadas
+);
+
+
+setText(
+"executivePintadas",
+pintadas
+);
+
+
+
+/* TABLA POR TIPO */
+
+
+actualizarTablaTipos();
+
+
+
+actualizarEstado(
+avanceGeneral
+);
+
+
+actualizarFecha();
+
+
+actualizarCurva(
+avanceGeneral
+);
 
 }
 
 
+
 /* =====================================================
-   ESTADO DEL PROYECTO
+TABLA POR TIPO
+===================================================== */
+
+function actualizarTablaTipos(){
+
+
+const tbody=
+document.getElementById(
+"tablaTipos"
+);
+
+
+const agrupados={};
+
+
+
+piezas.forEach(p=>{
+
+
+const tipo=
+
+String(
+p.tipo || "SIN TIPO"
+)
+.trim()
+.toUpperCase();
+
+
+
+if(!agrupados[tipo]){
+
+agrupados[tipo]={
+
+tipo:tipo,
+
+total:0,
+
+taller:0,
+
+obra:0,
+
+montadas:0
+
+};
+
+}
+
+
+
+agrupados[tipo].total++;
+
+
+
+if(Number(p.etapa)>=0){
+
+agrupados[tipo].taller++;
+
+}
+
+
+
+if(Number(p.etapa)>=2){
+
+agrupados[tipo].obra++;
+
+}
+
+
+
+if(p.montada===true){
+
+agrupados[tipo].montadas++;
+
+}
+
+});
+
+
+
+const lista=
+Object
+.values(agrupados)
+.sort(
+(a,b)=>
+a.tipo.localeCompare(
+b.tipo,
+"es"
+)
+);
+
+
+
+if(lista.length===0){
+
+tbody.innerHTML=`
+
+<tr>
+
+<td colspan="5">
+
+No hay datos cargados.
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+
+tbody.innerHTML=
+
+lista.map(x=>{
+
+
+return `
+
+<tr>
+
+<td class="tipo-nombre">
+
+${escapeHtml(x.tipo)}
+
+</td>
+
+
+<td class="tipo-total">
+
+${x.total}
+
+</td>
+
+
+<td>
+
+${x.taller}
+
+</td>
+
+
+<td>
+
+${x.obra}
+
+</td>
+
+
+<td>
+
+<strong>
+
+${x.montadas}
+
+</strong>
+
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+
+/* =====================================================
+ESTADO DEL PROYECTO
 ===================================================== */
 
 function obtenerPlanActual(){
 
-    const hoy =
-        new Date();
 
-    let plan = 0;
+const hoy=
+new Date();
 
-    for(
-        const punto of PLAN
-    ){
 
-        const fecha =
-            new Date(
-                punto.fecha +
-                "T00:00:00"
-            );
+let plan=0;
 
-        if(fecha <= hoy){
-            plan =
-                punto.porcentaje;
-        }
 
-    }
 
-    return plan;
+for(
+const punto of PLAN
+){
+
+
+const fecha=
+new Date(
+punto.fecha+
+"T00:00:00"
+);
+
+
+if(fecha<=hoy){
+
+plan=
+punto.porcentaje;
 
 }
+
+}
+
+
+return plan;
+
+}
+
 
 
 function actualizarEstado(
-    avanceReal
+avanceReal
 ){
 
-    const planActual =
-        obtenerPlanActual();
 
-    const desvio =
-        avanceReal -
-        planActual;
+const planActual=
+obtenerPlanActual();
 
 
-    const textoDesvio =
-        (desvio > 0 ? "+" : "") +
-        desvio +
-        "%";
+const desvio=
+avanceReal-
+planActual;
 
 
-    setText(
-        "deviation",
-        textoDesvio
-    );
+const textoDesvio=
+
+(desvio>0?"+":"")+
+
+desvio+
+
+"%";
 
 
-    const status =
-        document.getElementById(
-            "statusText"
-        );
+setText(
+"deviation",
+textoDesvio
+);
 
 
-    if(desvio >= -3){
 
-        status.textContent =
-            "EN LÍNEA";
+const status=
+document.getElementById(
+"statusText"
+);
 
-        status.style.color =
-            "#27ae60";
 
-    }
 
-    else if(desvio >= -10){
+if(desvio>=-3){
 
-        status.textContent =
-            "ATENCIÓN";
 
-        status.style.color =
-            "#f2994a";
+status.textContent=
+"EN LÍNEA";
 
-    }
 
-    else{
+status.style.color=
+"#27ae60";
 
-        status.textContent =
-            "ATRASADO";
+}
 
-        status.style.color =
-            "#eb5757";
+else if(desvio>=-10){
 
-    }
+
+status.textContent=
+"ATENCIÓN";
+
+
+status.style.color=
+"#f2994a";
+
+}
+
+else{
+
+
+status.textContent=
+"ATRASADO";
+
+
+status.style.color=
+"#eb5757";
+
+}
 
 }
 
 
+
 /* =====================================================
-   ÚLTIMA ACTUALIZACIÓN
+FECHA
 ===================================================== */
 
 function actualizarFecha(){
 
-    if(piezas.length === 0){
 
-        setText(
-            "lastUpdate",
-            "-"
-        );
+if(piezas.length===0){
 
-        return;
-    }
+setText(
+"lastUpdate",
+"-"
+);
 
-
-    const fechas =
-        piezas
-        .map(p =>
-            p.fecha ||
-            p.created_at
-        )
-        .filter(Boolean)
-        .map(f =>
-            new Date(f)
-        );
-
-
-    if(
-        fechas.length === 0
-    ){
-
-        setText(
-            "lastUpdate",
-            "-"
-        );
-
-        return;
-    }
-
-
-    const ultima =
-        new Date(
-            Math.max(
-                ...fechas
-                .map(f =>
-                    f.getTime()
-                )
-            )
-        );
-
-
-    setText(
-        "lastUpdate",
-        ultima.toLocaleString(
-            "es-AR"
-        )
-    );
+return;
 
 }
 
 
+
+const fechas=
+piezas
+
+.map(
+p=>
+p.fecha ||
+p.created_at
+)
+
+.filter(Boolean)
+
+.map(
+f=>new Date(f)
+);
+
+
+
+if(fechas.length===0){
+
+setText(
+"lastUpdate",
+"-"
+);
+
+return;
+
+}
+
+
+
+const ultima=
+new Date(
+
+Math.max(
+
+...fechas.map(
+f=>f.getTime()
+)
+
+)
+
+);
+
+
+
+setText(
+
+"lastUpdate",
+
+ultima.toLocaleString(
+"es-AR"
+)
+
+);
+
+}
+
+
+
 /* =====================================================
-   CURVA S
+CURVA S
 ===================================================== */
 
 function actualizarCurva(
-    avanceActual
+avanceActual
 ){
 
-    const labels =
-        PLAN.map(p => {
 
-            return new Date(
-                p.fecha +
-                "T00:00:00"
-            )
-            .toLocaleDateString(
-                "es-AR",
-                {
-                    month:"short",
-                    year:"2-digit"
-                }
-            )
-            .toUpperCase();
+const labels=
+PLAN.map(
+p=>
 
-        });
+new Date(
+p.fecha+
+"T00:00:00"
+)
 
+.toLocaleDateString(
+"es-AR",
+{
+month:"short",
+year:"2-digit"
+}
+)
 
-    const planData =
-        PLAN.map(
-            p => p.porcentaje
-        );
+.toUpperCase()
 
+);
 
-    /*
-       Construcción del REAL:
 
-       Usa las fechas registradas en la tabla.
 
-       Como actualmente existe una sola columna
-       "fecha" por pieza y no un historial de
-       cambios de etapa, la curva histórica es
-       una aproximación basada en la información
-       disponible.
+const planData=
+PLAN.map(
+p=>p.porcentaje
+);
 
-       El KPI de avance ACTUAL sí es exacto según
-       las etapas existentes en Supabase.
-    */
 
 
-    const realData =
-        PLAN.map(
-            punto => {
+/*
+La tabla actual tiene una sola fecha
+por premoldeado.
 
-                const limite =
-                    new Date(
-                        punto.fecha +
-                        "T23:59:59"
-                    );
+Por eso el histórico anterior a hoy
+es aproximado.
 
+El valor de avance actual sí usa
+los datos actuales de Supabase.
+*/
 
-                const piezasFecha =
-                    piezas.filter(
-                        p => {
 
-                            if(
-                                !p.fecha &&
-                                !p.created_at
-                            ){
-                                return false;
-                            }
+const realData=
+PLAN.map(
+p=>null
+);
 
-                            const fecha =
-                                new Date(
-                                    p.fecha ||
-                                    p.created_at
-                                );
 
-                            return fecha <= limite;
 
-                        }
-                    );
+const hoy=
+new Date();
 
 
-                if(
-                    piezas.length === 0
-                ){
-                    return 0;
-                }
+let ultimoIndice=0;
 
 
-                let suma = 0;
 
-                piezasFecha.forEach(
-                    p => {
+PLAN.forEach(
+(p,index)=>{
 
-                        let etapa =
-                            Number(
-                                p.etapa
-                            ) || 0;
 
-                        etapa =
-                            Math.max(
-                                0,
-                                Math.min(
-                                    6,
-                                    etapa
-                                )
-                            );
+const f=
+new Date(
+p.fecha+
+"T00:00:00"
+);
 
-                        suma +=
-                            etapa / 6;
 
-                    }
-                );
+if(f<=hoy){
 
+ultimoIndice=
+index;
 
-                return Math.round(
-                    suma /
-                    piezas.length *
-                    100
-                );
+}
 
-            }
-        );
+});
 
 
-    /*
-       Mostrar siempre el avance actual en
-       el último punto alcanzado.
-    */
 
-    const hoy =
-        new Date();
+realData[
+ultimoIndice
+]=
+avanceActual;
 
-    let ultimoIndice = 0;
 
-    PLAN.forEach(
-        (p,index) => {
 
-            const f =
-                new Date(
-                    p.fecha +
-                    "T00:00:00"
-                );
+if(chart){
 
-            if(f <= hoy){
-                ultimoIndice =
-                    index;
-            }
-
-        }
-    );
-
-
-    realData[
-        ultimoIndice
-    ] = avanceActual;
-
-
-    /*
-       Ocultar futuro de la curva real
-    */
-
-    for(
-        let i =
-            ultimoIndice + 1;
-        i <
-            realData.length;
-        i++
-    ){
-
-        realData[i] =
-            null;
-
-    }
-
-
-    if(chart){
-        chart.destroy();
-    }
-
-
-    const ctx =
-        document
-        .getElementById(
-            "sCurve"
-        )
-        .getContext("2d");
-
-
-    chart =
-        new Chart(
-            ctx,
-            {
-
-                type:"line",
-
-                data:{
-
-                    labels:labels,
-
-                    datasets:[
-
-                        {
-                            label:
-                                "Planificado",
-
-                            data:
-                                planData,
-
-                            borderColor:
-                                "#b8c3d8",
-
-                            borderWidth:2,
-
-                            borderDash:
-                                [6,6],
-
-                            pointRadius:2,
-
-                            tension:.35
-                        },
-
-                        {
-                            label:"Real",
-
-                            data:
-                                realData,
-
-                            borderColor:
-                                "#2855d9",
-
-                            borderWidth:3,
-
-                            pointRadius:4,
-
-                            tension:.35,
-
-                            spanGaps:false
-                        }
-
-                    ]
-
-                },
-
-                options:{
-
-                    responsive:true,
-
-                    maintainAspectRatio:
-                        false,
-
-                    interaction:{
-                        intersect:false,
-                        mode:"index"
-                    },
-
-                    plugins:{
-
-                        legend:{
-                            display:false
-                        },
-
-                        tooltip:{
-
-                            callbacks:{
-
-                                label:
-                                    function(ctx){
-
-                                        return (
-                                            ctx
-                                            .dataset
-                                            .label +
-                                            ": " +
-                                            ctx
-                                            .parsed
-                                            .y +
-                                            "%"
-                                        );
-
-                                    }
-
-                            }
-
-                        }
-
-                    },
-
-                    scales:{
-
-                        y:{
-
-                            min:0,
-                            max:100,
-
-                            ticks:{
-
-                                callback:
-                                    function(value){
-
-                                        return (
-                                            value +
-                                            "%"
-                                        );
-
-                                    }
-
-                            },
-
-                            grid:{
-                                color:
-                                    "#edf0f5"
-                            }
-
-                        },
-
-                        x:{
-
-                            grid:{
-                                display:false
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-        );
+chart.destroy();
 
 }
 
 
+
+const ctx=
+document
+
+.getElementById(
+"sCurve"
+)
+
+.getContext(
+"2d"
+);
+
+
+
+chart=
+new Chart(
+ctx,
+{
+
+
+type:"line",
+
+
+data:{
+
+
+labels:labels,
+
+
+datasets:[
+
+
+{
+
+label:
+"Planificado",
+
+data:
+planData,
+
+borderColor:
+"#b8c3d8",
+
+borderWidth:
+2,
+
+borderDash:
+[6,6],
+
+pointRadius:
+2,
+
+tension:
+0.35
+
+},
+
+
+{
+
+label:
+"Real",
+
+data:
+realData,
+
+borderColor:
+"#2855d9",
+
+borderWidth:
+3,
+
+pointRadius:
+4,
+
+tension:
+0.35,
+
+spanGaps:
+false
+
+}
+
+
+]
+
+},
+
+
+options:{
+
+
+responsive:
+true,
+
+
+maintainAspectRatio:
+false,
+
+
+interaction:{
+
+intersect:
+false,
+
+mode:
+"index"
+
+},
+
+
+plugins:{
+
+
+legend:{
+display:false
+},
+
+
+tooltip:{
+
+callbacks:{
+
+label:
+function(ctx){
+
+if(ctx.parsed.y===null){
+
+return "";
+
+}
+
+return (
+
+ctx.dataset.label+
+
+": "+
+
+ctx.parsed.y+
+
+"%"
+
+);
+
+}
+
+}
+
+}
+
+},
+
+
+scales:{
+
+
+y:{
+
+min:0,
+
+max:100,
+
+ticks:{
+
+callback:
+function(value){
+
+return value+"%";
+
+}
+
+},
+
+grid:{
+
+color:
+"#edf0f5"
+
+}
+
+},
+
+
+x:{
+
+grid:{
+
+display:false
+
+}
+
+}
+
+}
+
+}
+
+}
+
+);
+
+}
+
+
+
 /* =====================================================
-   UTILIDADES
+UTILIDADES
 ===================================================== */
 
 function setText(
-    id,
-    value
+id,
+value
 ){
 
-    const el =
-        document
-        .getElementById(id);
 
-    if(el){
-        el.textContent =
-            value;
-    }
+const el=
+document.getElementById(id);
+
+
+if(el){
+
+el.textContent=
+value;
 
 }
+
+}
+
 
 
 function setConnection(
-    text,
-    color
+text,
+color
 ){
 
-    setText(
-        "connectionText",
-        text
-    );
 
-    document
-        .getElementById(
-            "connectionDot"
-        )
-        .style.background =
-            color;
+setText(
+"connectionText",
+text
+);
+
+
+document
+.getElementById(
+"connectionDot"
+)
+.style.background=
+color;
 
 }
+
 
 
 function mostrarError(
-    mensaje
+mensaje
 ){
 
-    const box =
-        document
-        .getElementById(
-            "errorBox"
-        );
 
-    box.textContent =
-        mensaje;
+const box=
+document.getElementById(
+"errorBox"
+);
 
-    box.style.display =
-        "block";
+
+box.textContent=
+mensaje;
+
+
+box.style.display=
+"block";
 
 }
 
 
+
+function escapeHtml(text){
+
+
+return String(text)
+
+.replace(
+/&/g,
+"&amp;"
+)
+
+.replace(
+/</g,
+"&lt;"
+)
+
+.replace(
+/>/g,
+"&gt;"
+)
+
+.replace(
+/"/g,
+"&quot;"
+)
+
+.replace(
+/'/g,
+"&#039;"
+);
+
+}
+
+
+
 /* =====================================================
-   INICIAR
+INICIAR
 ===================================================== */
 
 cargarDatos();
