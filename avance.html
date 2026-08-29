@@ -5,38 +5,42 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Avance - Premoldeados</title>
+<title>
+Avance - Premoldeados
+</title>
+
 
 <style>
 
 *{
-box-sizing:border-box
+box-sizing:border-box;
 }
 
 body{
 margin:0;
 font-family:Arial,Helvetica,sans-serif;
 background:#f4f6f8;
-color:#24364b
+color:#172033;
 }
 
 header{
 background:#102f52;
 color:white;
-padding:20px 35px
+padding:20px 35px;
 }
 
 header h1{
-margin:0 0 12px
+margin:0 0 12px;
 }
 
 nav{
 display:flex;
 gap:10px;
-flex-wrap:wrap
+flex-wrap:wrap;
 }
 
 nav a{
@@ -46,19 +50,19 @@ padding:9px 14px;
 border-radius:7px;
 background:#ffffff20;
 font-size:13px;
-font-weight:bold
+font-weight:bold;
 }
 
 nav a:hover,
 nav a.activo{
 background:white;
-color:#102f52
+color:#102f52;
 }
 
 main{
-max-width:1500px;
+max-width:1800px;
 margin:auto;
-padding:25px
+padding:25px;
 }
 
 .panel{
@@ -66,28 +70,28 @@ background:white;
 border:1px solid #dce3ea;
 border-radius:14px;
 padding:20px;
-margin-bottom:20px
+margin-bottom:20px;
 }
 
 .login{
 max-width:450px;
-margin:50px auto
+margin:50px auto;
 }
 
 .login h2{
-margin-top:0
+margin-top:0;
 }
 
 .campo{
 display:flex;
 flex-direction:column;
 gap:6px;
-margin-bottom:14px
+margin-bottom:14px;
 }
 
 .campo label{
 font-size:12px;
-font-weight:bold
+font-weight:bold;
 }
 
 input,
@@ -95,7 +99,7 @@ select{
 padding:10px;
 border:1px solid #cfd8e1;
 border-radius:7px;
-font-size:14px
+font-size:14px;
 }
 
 .boton{
@@ -103,24 +107,24 @@ border:0;
 border-radius:7px;
 padding:10px 16px;
 cursor:pointer;
-font-weight:bold
+font-weight:bold;
 }
 
 .login-btn{
 background:#102f52;
 color:white;
-width:100%
+width:100%;
 }
 
 .logout{
 background:#a83232;
 color:white;
-float:right
+float:right;
 }
 
 .actualizar{
 background:#102f52;
-color:white
+color:white;
 }
 
 .estado{
@@ -129,17 +133,17 @@ border:1px solid #ead9a6;
 padding:12px 15px;
 border-radius:8px;
 margin-bottom:20px;
-font-size:13px
+font-size:13px;
 }
 
 .estado.ok{
 background:#edf8f1;
-border-color:#b9dcc5
+border-color:#b9dcc5;
 }
 
 .estado.error{
 background:#fff0f0;
-border-color:#e0b2b2
+border-color:#e0b2b2;
 }
 
 .usuario{
@@ -148,51 +152,21 @@ border:1px solid #d3e1ef;
 padding:12px;
 border-radius:8px;
 margin-bottom:15px;
-font-size:13px
+font-size:13px;
 }
 
 .filtros{
 display:flex;
 gap:12px;
 flex-wrap:wrap;
-align-items:end
-}
-
-.tabla{
-overflow-x:auto
-}
-
-table{
-width:100%;
-border-collapse:collapse
-}
-
-th{
-background:#f4f6f8;
-padding:12px;
-text-align:left;
-font-size:12px
-}
-
-td{
-padding:10px 12px;
-border-top:1px solid #e6ebef;
-font-size:13px
-}
-
-.etapa{
-padding:8px;
-border:1px solid #cfd8e1;
-border-radius:6px;
-font-weight:bold;
-min-width:210px
+align-items:end;
 }
 
 .contadores{
 display:flex;
 gap:12px;
 flex-wrap:wrap;
-margin-bottom:20px
+margin-bottom:20px;
 }
 
 .card{
@@ -200,72 +174,152 @@ background:#eef5fc;
 border:1px solid #d3e1ef;
 border-radius:9px;
 padding:12px 18px;
-min-width:150px
+min-width:145px;
 }
 
 .card strong{
 display:block;
 font-size:23px;
-margin-top:4px
+margin-top:4px;
 }
 
-.checks{
+.tabla{
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:1300px;
+}
+
+th{
+background:#f4f6f8;
+padding:13px 12px;
+text-align:left;
+font-size:12px;
+white-space:nowrap;
+}
+
+td{
+padding:14px 12px;
+border-top:1px solid #e6ebef;
+font-size:13px;
+vertical-align:middle;
+}
+
+.codigo{
+font-weight:800;
+}
+
+.etapas-checks{
 display:flex;
-gap:10px;
-flex-wrap:wrap
+gap:7px;
+flex-wrap:wrap;
+min-width:610px;
 }
 
-.checkEstado{
+.check-etapa{
 display:flex;
 align-items:center;
 gap:6px;
-padding:8px 10px;
-border:1px solid #dce3ea;
-border-radius:7px;
+padding:9px 10px;
+border:1px solid #d9e1ea;
 background:#f8fafc;
-white-space:nowrap
+border-radius:8px;
+font-size:11px;
+font-weight:700;
+white-space:nowrap;
+transition:.15s;
 }
 
-.checkEstado input{
+.check-etapa.completa{
+background:#edf7f1;
+border-color:#b9dfc7;
+color:#17683b;
+}
+
+.check-etapa.actual{
+border-color:#3b82f6;
+box-shadow:0 0 0 1px #3b82f633;
+}
+
+.check-etapa input{
 width:18px;
 height:18px;
-cursor:pointer
+cursor:pointer;
+accent-color:#15803d;
+margin:0;
 }
 
-.checkEstado label{
-font-size:12px;
-font-weight:bold;
-cursor:pointer
+.check-etapa input:disabled{
+cursor:not-allowed;
+}
+
+.finales{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+min-width:300px;
+}
+
+.check-final{
+display:flex;
+align-items:center;
+gap:7px;
+padding:10px 12px;
+border:1px solid #d9e1ea;
+border-radius:9px;
+background:#f8fafc;
+font-weight:700;
+white-space:nowrap;
+}
+
+.check-final.activo{
+background:#edf6ff;
+border-color:#bfd6f6;
+}
+
+.check-final input{
+width:19px;
+height:19px;
+cursor:pointer;
+accent-color:#087df0;
+margin:0;
+}
+
+.check-final input:disabled{
+cursor:not-allowed;
 }
 
 .vacio{
 text-align:center;
 padding:30px;
-color:#657487
+color:#657487;
 }
 
 .oculto{
-display:none!important
+display:none!important;
 }
 
 .ayuda{
 font-size:12px;
 color:#657487;
-margin-top:12px
+margin-top:12px;
 }
 
 .clear{
-clear:both
+clear:both;
 }
 
-@media(max-width:700px){
+@media(max-width:800px){
 
 main{
-padding:12px
+padding:12px;
 }
 
 header{
-padding:18px
+padding:18px;
 }
 
 }
@@ -273,6 +327,7 @@ padding:18px
 </style>
 
 </head>
+
 
 <body>
 
@@ -293,7 +348,8 @@ padding:18px
 📋 BASE DE INGENIERÍA
 </a>
 
-<a href="avance.html"
+<a
+href="avance.html"
 class="activo">
 🚀 AVANCE
 </a>
@@ -319,6 +375,7 @@ class="panel login">
 <p>
 Ingresá con tu email y contraseña.
 </p>
+
 
 <div class="campo">
 
@@ -356,6 +413,7 @@ onclick="iniciarSesion()">
 
 </button>
 
+
 <div
 id="loginError"
 class="ayuda">
@@ -382,6 +440,7 @@ onclick="cerrarSesion()">
 
 </button>
 
+
 <h2>
 🚀 Avance de Premoldeados
 </h2>
@@ -389,14 +448,17 @@ onclick="cerrarSesion()">
 <div class="clear">
 </div>
 
+
 <p>
-Actualización de avance de los premoldeados.
+Marcá con una tilde las etapas cumplidas de cada premoldeado.
 </p>
+
 
 <div
 id="usuario"
 class="usuario">
 </div>
+
 
 <div
 id="estado"
@@ -488,6 +550,7 @@ onclick="cargarDatos()">
 
 <div class="contadores">
 
+
 <div class="card">
 
 Total
@@ -512,7 +575,7 @@ En taller
 
 <div class="card">
 
-Liberada taller
+Liberados
 
 <strong id="liberadaTaller">
 0
@@ -534,7 +597,7 @@ En obra
 
 <div class="card">
 
-QA/QC obra
+QA/QC
 
 <strong id="qaqc">
 0
@@ -545,7 +608,7 @@ QA/QC obra
 
 <div class="card">
 
-Montada
+Montados
 
 <strong id="montada">
 0
@@ -556,13 +619,14 @@ Montada
 
 <div class="card">
 
-Pintada
+Pintados
 
 <strong id="pintada">
 0
 </strong>
 
 </div>
+
 
 </div>
 
@@ -595,7 +659,7 @@ MODELO
 </th>
 
 <th>
-ETAPA
+AVANCE DE ETAPAS
 </th>
 
 <th>
@@ -606,6 +670,7 @@ MONTAJE / PINTURA
 
 </thead>
 
+
 <tbody id="tabla">
 </tbody>
 
@@ -614,6 +679,7 @@ MONTAJE / PINTURA
 </div>
 
 </section>
+
 
 </section>
 
@@ -628,6 +694,10 @@ MONTAJE / PINTURA
 
 <script>
 
+
+/* =====================================================
+SUPABASE
+===================================================== */
 
 const SUPABASE_URL =
 "https://tnnioleawbhuqjuykrsf.supabase.co";
@@ -645,11 +715,11 @@ SUPABASE_KEY
 
 
 
-/* =========================
-ETAPAS SECUENCIALES
-========================= */
+/* =====================================================
+ETAPAS
+===================================================== */
 
-const etapas = [
+const etapas=[
 
 "EN TALLER",
 
@@ -662,12 +732,20 @@ const etapas = [
 ];
 
 
+const nombresCortos=[
 
-/* =========================
-PERMISOS
-========================= */
+"🏭 En taller",
 
-const permisosEtapa = {
+"✅ Liberado",
+
+"🚧 En obra",
+
+"✔️ QA/QC"
+
+];
+
+
+const permisosEtapa={
 
 1:"puede_liberar_taller",
 
@@ -678,7 +756,6 @@ const permisosEtapa = {
 };
 
 
-
 let premoldeados=[];
 
 let usuarioActual=null;
@@ -687,9 +764,9 @@ let permisos=null;
 
 
 
-/* =========================
+/* =====================================================
 LOGIN
-========================= */
+===================================================== */
 
 async function iniciarSesion(){
 
@@ -711,7 +788,10 @@ document
 .getElementById("loginError");
 
 
-if(!email || !password){
+if(
+!email ||
+!password
+){
 
 error.textContent=
 "❌ Completá email y contraseña.";
@@ -756,9 +836,9 @@ await iniciarAplicacion();
 
 
 
-/* =========================
+/* =====================================================
 LOGOUT
-========================= */
+===================================================== */
 
 async function cerrarSesion(){
 
@@ -795,9 +875,9 @@ document
 
 
 
-/* =========================
-INICIAR APP
-========================= */
+/* =====================================================
+INICIAR APLICACIÓN
+===================================================== */
 
 async function iniciarAplicacion(){
 
@@ -815,7 +895,6 @@ return;
 usuarioActual=user;
 
 
-
 const {
 data,
 error
@@ -826,10 +905,12 @@ await db
 
 .select("*")
 
-.eq("email",user.email)
+.eq(
+"email",
+user.email
+)
 
 .maybeSingle();
-
 
 
 if(error){
@@ -850,9 +931,7 @@ return;
 }
 
 
-
 permisos=data;
-
 
 
 document
@@ -865,7 +944,6 @@ document
 .getElementById("appPanel")
 .classList
 .remove("oculto");
-
 
 
 if(permisos){
@@ -902,9 +980,9 @@ await cargarDatos();
 
 
 
-/* =========================
+/* =====================================================
 PERMISOS
-========================= */
+===================================================== */
 
 function tienePermisoEdicion(){
 
@@ -943,9 +1021,8 @@ permisos.puede_pintar
 
 
 
-function puedeSeleccionarEtapa(
-nuevaEtapa,
-etapaActual
+function puedeAvanzarA(
+etapa
 ){
 
 if(
@@ -965,42 +1042,17 @@ return true;
 }
 
 
-
-/*
-RETROCESO:
-
-Si el usuario tiene algún permiso
-de edición, puede volver hacia atrás.
-*/
-
-if(nuevaEtapa < etapaActual){
+if(etapa===0){
 
 return tienePermisoEdicion();
 
 }
 
-
-
-/*
-VOLVER O SELECCIONAR EN TALLER
-*/
-
-if(nuevaEtapa===0){
-
-return tienePermisoEdicion();
-
-}
-
-
-
-/*
-AVANZAR:
-
-Respeta los permisos de cada etapa.
-*/
 
 const permiso=
-permisosEtapa[nuevaEtapa];
+permisosEtapa[
+etapa
+];
 
 
 return Boolean(
@@ -1009,6 +1061,14 @@ permiso &&
 permisos[permiso]
 
 );
+
+}
+
+
+
+function puedeRetroceder(){
+
+return tienePermisoEdicion();
 
 }
 
@@ -1052,9 +1112,9 @@ permisos.puede_pintar
 
 
 
-/* =========================
+/* =====================================================
 ESTADO
-========================= */
+===================================================== */
 
 function estado(
 mensaje,
@@ -1084,9 +1144,9 @@ e.classList.add(tipo);
 
 
 
-/* =========================
+/* =====================================================
 CARGAR DATOS
-========================= */
+===================================================== */
 
 async function cargarDatos(){
 
@@ -1113,7 +1173,6 @@ ascending:true
 );
 
 
-
 if(error){
 
 estado(
@@ -1130,52 +1189,8 @@ return;
 }
 
 
-
 premoldeados=
 data || [];
-
-
-
-/*
-COMPATIBILIDAD CON DATOS VIEJOS
-
-Si todavía existe alguna pieza
-en etapa 4 o 5:
-
-4 = Montada
-5 = Pintada
-
-La mostramos correctamente.
-
-Luego al modificarla queda
-guardada con el nuevo sistema.
-*/
-
-premoldeados.forEach(p=>{
-
-const e=
-Number(p.etapa || 0);
-
-
-if(e===4){
-
-p.montada=true;
-
-p.etapa=3;
-
-}
-
-
-if(e===5){
-
-p.pintada=true;
-
-p.etapa=3;
-
-}
-
-});
-
 
 
 actualizarContadores();
@@ -1195,22 +1210,15 @@ estado(
 
 
 
-/* =========================
+/* =====================================================
 CONTADORES ACUMULATIVOS
-========================= */
+===================================================== */
 
 function actualizarContadores(){
 
 const total=
 premoldeados.length;
 
-
-/*
-ACUMULATIVO:
-
-etapa 3 cuenta también
-como 0, 1 y 2.
-*/
 
 const taller=
 premoldeados.filter(
@@ -1246,7 +1254,6 @@ const pintada=
 premoldeados.filter(
 p=>p.pintada===true
 ).length;
-
 
 
 document
@@ -1294,9 +1301,9 @@ pintada;
 
 
 
-/* =========================
-TABLA / BUSCADOR
-========================= */
+/* =====================================================
+TABLA
+===================================================== */
 
 function mostrarTabla(){
 
@@ -1310,7 +1317,6 @@ return;
 }
 
 
-
 const buscar=
 document
 .getElementById("buscar")
@@ -1319,16 +1325,15 @@ document
 .toLowerCase();
 
 
-
 const filtro=
 document
 .getElementById("filtroEtapa")
 .value;
 
 
-
 const lista=
-premoldeados.filter(p=>{
+premoldeados.filter(
+p=>{
 
 
 const codigo=
@@ -1352,7 +1357,6 @@ p.modelo ?? ""
 .toLowerCase();
 
 
-
 const coincideBusqueda=
 
 !buscar ||
@@ -1364,12 +1368,10 @@ tipo.includes(buscar) ||
 modelo.includes(buscar);
 
 
-
 const etapa=
 String(
 Number(p.etapa || 0)
 );
-
 
 
 const coincideEtapa=
@@ -1377,7 +1379,6 @@ const coincideEtapa=
 !filtro ||
 
 etapa===filtro;
-
 
 
 return (
@@ -1391,8 +1392,9 @@ coincideEtapa
 });
 
 
-
-if(lista.length===0){
+if(
+lista.length===0
+){
 
 tabla.innerHTML=`
 
@@ -1415,65 +1417,108 @@ return;
 }
 
 
-
 tabla.innerHTML=
-lista.map(p=>{
+
+lista.map(
+p=>{
 
 
 const etapaActual=
-Number(p.etapa || 0);
+Number(
+p.etapa || 0
+);
 
 
-let opciones="";
-
+let checksEtapas="";
 
 
 etapas.forEach(
 (nombre,index)=>{
 
 
-const permitido=
-
-index===etapaActual ||
-
-puedeSeleccionarEtapa(
-index,
-etapaActual
-);
+const completa=
+index<=etapaActual;
 
 
+const esActual=
+index===etapaActual;
 
-opciones+=`
 
-<option
+/*
+SI ESTÁ COMPLETA:
+permite destildar si puede retroceder.
 
-value="${index}"
+SI NO ESTÁ COMPLETA:
+permite marcar si tiene permiso
+para esa etapa.
+*/
 
-${index===etapaActual
-?"selected"
-:""}
+let habilitado=false;
 
-${permitido
-?""
-:"disabled"}>
 
-${nombre}
+if(completa){
 
-</option>
+habilitado=
+index===0
+?
+false
+:
+puedeRetroceder();
+
+}
+
+else{
+
+habilitado=
+puedeAvanzarA(index);
+
+}
+
+
+checksEtapas+=`
+
+<label
+class="
+check-etapa
+${completa ? "completa" : ""}
+${esActual ? "actual" : ""}
+">
+
+<input
+
+type="checkbox"
+
+${completa ? "checked" : ""}
+
+${habilitado ? "" : "disabled"}
+
+onchange="
+cambiarEtapaCheck(
+${p.id},
+${index},
+this.checked
+)
+">
+
+<span>
+
+${nombresCortos[index]}
+
+</span>
+
+</label>
 
 `;
 
 });
 
 
+const idMontaje=
+"montaje_"+p.id;
 
-const idMontada=
-"montada_"+p.id;
 
-
-const idPintada=
-"pintada_"+p.id;
-
+const idPintura=
+"pintura_"+p.id;
 
 
 return `
@@ -1488,15 +1533,11 @@ ${p.id ?? ""}
 </td>
 
 
-<td>
-
-<strong>
+<td class="codigo">
 
 ${escapeHtml(
 p.codigo ?? ""
 )}
-
-</strong>
 
 </td>
 
@@ -1521,44 +1562,35 @@ p.modelo ?? ""
 
 <td>
 
-<select
+<div class="etapas-checks">
 
-class="etapa"
+${checksEtapas}
 
-onchange="
-cambiarEtapa(
-${p.id},
-this.value
-)
-">
-
-${opciones}
-
-</select>
+</div>
 
 </td>
 
 
 <td>
 
-<div class="checks">
+<div class="finales">
 
 
-<div class="checkEstado">
+<label
+class="
+check-final
+${p.montada ? "activo" : ""}
+">
 
 <input
 
-id="${idMontada}"
+id="${idMontaje}"
 
 type="checkbox"
 
-${p.montada
-?"checked"
-:""}
+${p.montada ? "checked" : ""}
 
-${puedeMontar()
-?""
-:"disabled"}
+${puedeMontar() ? "" : "disabled"}
 
 onchange="
 cambiarEstadoFinal(
@@ -1568,32 +1600,31 @@ this.checked
 )
 ">
 
-<label
-for="${idMontada}">
+<span>
 
-🏗️ Montada
+🏗️ Montaje
+
+</span>
 
 </label>
 
-</div>
 
 
-
-<div class="checkEstado">
+<label
+class="
+check-final
+${p.pintada ? "activo" : ""}
+">
 
 <input
 
-id="${idPintada}"
+id="${idPintura}"
 
 type="checkbox"
 
-${p.pintada
-?"checked"
-:""}
+${p.pintada ? "checked" : ""}
 
-${puedePintar()
-?""
-:"disabled"}
+${puedePintar() ? "" : "disabled"}
 
 onchange="
 cambiarEstadoFinal(
@@ -1603,14 +1634,13 @@ this.checked
 )
 ">
 
-<label
-for="${idPintada}">
+<span>
 
-🎨 Pintada
+🎨 Pintura
+
+</span>
 
 </label>
-
-</div>
 
 
 </div>
@@ -1622,27 +1652,22 @@ for="${idPintada}">
 
 `;
 
-}).join("");
+}
+).join("");
 
 }
 
 
 
-/* =========================
-CAMBIAR ETAPA
+/* =====================================================
+CAMBIO DE ETAPA POR TILDE
+===================================================== */
 
-SE PUEDE AVANZAR
-Y RETROCEDER
-========================= */
-
-async function cambiarEtapa(
+async function cambiarEtapaCheck(
 id,
-nuevaEtapa
+etapaClic,
+marcado
 ){
-
-const etapa=
-Number(nuevaEtapa);
-
 
 const pieza=
 premoldeados.find(
@@ -1665,8 +1690,32 @@ pieza.etapa || 0
 );
 
 
+let nuevaEtapa;
 
-if(etapa===anterior){
+
+/*
+MARCAR:
+
+La nueva etapa pasa a ser
+la etapa marcada.
+
+Ejemplo:
+
+está en 1
+marca QA/QC (3)
+=> pasa a 3
+=> las anteriores quedan cumplidas.
+*/
+
+if(marcado){
+
+nuevaEtapa=
+etapaClic;
+
+
+if(
+nuevaEtapa<=anterior
+){
 
 mostrarTabla();
 
@@ -1675,25 +1724,47 @@ return;
 }
 
 
-
-/*
-IMPORTANTE:
-
-NO EXISTE MÁS EL BLOQUE
-"NO SE PUEDE RETROCEDER".
-*/
-
 if(
-!puedeSeleccionarEtapa(
-etapa,
-anterior
+!puedeAvanzarA(
+nuevaEtapa
 )
 ){
 
 alert(
+"🔒 No tenés permiso para liberar esta etapa."
+);
 
-"🔒 No tenés permiso para seleccionar esta etapa."
+mostrarTabla();
 
+return;
+
+}
+
+}
+
+
+/*
+DESTILDAR:
+
+Retrocede a la etapa anterior
+a la que se destildó.
+
+Ejemplo:
+
+está en QA/QC = 3
+destilda EN OBRA = 2
+
+=> vuelve a LIBERADO = 1.
+*/
+
+else{
+
+if(
+etapaClic===0
+){
+
+alert(
+"ℹ️ Todo premoldeado permanece como mínimo EN TALLER."
 );
 
 mostrarTabla();
@@ -1703,22 +1774,65 @@ return;
 }
 
 
+if(
+!puedeRetroceder()
+){
+
+alert(
+"🔒 No tenés permiso para retroceder etapas."
+);
+
+mostrarTabla();
+
+return;
+
+}
+
+
+nuevaEtapa=
+etapaClic-1;
+
+}
+
+
+/*
+SEGURIDAD
+*/
+
+if(
+nuevaEtapa<0
+){
+
+nuevaEtapa=0;
+
+}
+
+
+if(
+nuevaEtapa>3
+){
+
+nuevaEtapa=3;
+
+}
+
+
+/*
+CONFIRMACIÓN
+*/
 
 const confirmar=
 confirm(
 
-"¿Cambiar la pieza "+
+"¿Cambiar el premoldeado "+
 (pieza.codigo || "")+
-
 " de \""+
 etapas[anterior]+
-
 "\" a \""+
-etapas[etapa]+
+etapas[nuevaEtapa]+
 "\"?"
 
 );
-
 
 
 if(!confirmar){
@@ -1730,11 +1844,14 @@ return;
 }
 
 
-
 estado(
 "⏳ Guardando cambio..."
 );
 
+
+const fechaActual=
+new Date()
+.toISOString();
 
 
 const {
@@ -1746,11 +1863,11 @@ await db
 
 .update({
 
-etapa:etapa,
+etapa:
+nuevaEtapa,
 
 fecha:
-new Date()
-.toISOString()
+fechaActual
 
 })
 
@@ -1758,7 +1875,6 @@ new Date()
 "id",
 id
 );
-
 
 
 if(error){
@@ -1783,21 +1899,17 @@ return;
 }
 
 
-
 pieza.etapa=
-etapa;
+nuevaEtapa;
 
 
 pieza.fecha=
-new Date()
-.toISOString();
-
+fechaActual;
 
 
 actualizarContadores();
 
 mostrarTabla();
-
 
 
 estado(
@@ -1812,10 +1924,9 @@ estado(
 
 
 
-/* =========================
-MONTADA / PINTADA
-INDEPENDIENTES
-========================= */
+/* =====================================================
+MONTAJE / PINTURA
+===================================================== */
 
 async function cambiarEstadoFinal(
 id,
@@ -1838,18 +1949,13 @@ return;
 }
 
 
-
-/*
-VALIDAR PERMISOS
-*/
-
 if(
 campo==="montada" &&
 !puedeMontar()
 ){
 
 alert(
-"🔒 No tenés permiso para modificar Montada."
+"🔒 No tenés permiso para modificar Montaje."
 );
 
 mostrarTabla();
@@ -1857,7 +1963,6 @@ mostrarTabla();
 return;
 
 }
-
 
 
 if(
@@ -1866,7 +1971,7 @@ campo==="pintada" &&
 ){
 
 alert(
-"🔒 No tenés permiso para modificar Pintada."
+"🔒 No tenés permiso para modificar Pintura."
 );
 
 mostrarTabla();
@@ -1875,14 +1980,6 @@ return;
 
 }
 
-
-
-/*
-GUARDAR SOLO EL CAMPO
-QUE CAMBIÓ.
-
-Uno NO modifica al otro.
-*/
 
 const cambios={};
 
@@ -1896,11 +1993,9 @@ new Date()
 .toISOString();
 
 
-
 estado(
 "⏳ Guardando cambio..."
 );
-
 
 
 const {
@@ -1918,7 +2013,6 @@ cambios
 "id",
 id
 );
-
 
 
 if(error){
@@ -1943,7 +2037,6 @@ return;
 }
 
 
-
 pieza[campo]=
 valor;
 
@@ -1952,11 +2045,9 @@ pieza.fecha=
 cambios.fecha;
 
 
-
 actualizarContadores();
 
 mostrarTabla();
-
 
 
 estado(
@@ -1971,9 +2062,9 @@ estado(
 
 
 
-/* =========================
+/* =====================================================
 ESCAPAR HTML
-========================= */
+===================================================== */
 
 function escapeHtml(text){
 
@@ -2008,9 +2099,9 @@ return String(text)
 
 
 
-/* =========================
+/* =====================================================
 ARRANQUE
-========================= */
+===================================================== */
 
 (async function(){
 
@@ -2034,7 +2125,6 @@ await iniciarAplicacion();
 
 
 </script>
-
 
 </body>
 
