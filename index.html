@@ -10,540 +10,496 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+    box-sizing:border-box;
+}
 
 body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#f5f7fb;
-color:#172033;
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fb;
+    color:#172033;
 }
 
 .app{
-display:flex;
-min-height:100vh;
+    display:flex;
+    min-height:100vh;
 }
 
+/* SIDEBAR */
+
 .sidebar{
-width:220px;
-background:#fff;
-border-right:1px solid #e7eaf0;
-padding:22px 14px;
-position:fixed;
-top:0;
-bottom:0;
-z-index:10;
+    width:220px;
+    background:#fff;
+    border-right:1px solid #e7eaf0;
+    padding:22px 14px;
+    position:fixed;
+    top:0;
+    bottom:0;
+    z-index:10;
 }
 
 .logo{
-padding:8px 12px 25px;
-font-size:18px;
-font-weight:700;
-color:#173b8f;
+    padding:8px 12px 25px;
+    font-size:18px;
+    font-weight:700;
+    color:#173b8f;
 }
 
 .logo span{
-display:block;
-font-size:11px;
-color:#8a94a6;
-margin-top:5px;
-font-weight:400;
+    display:block;
+    font-size:11px;
+    color:#8a94a6;
+    margin-top:5px;
+    font-weight:400;
 }
 
 .menu{
-display:flex;
-flex-direction:column;
-gap:6px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
 }
 
 .menu a{
-text-decoration:none;
-color:#697386;
-padding:12px 13px;
-border-radius:9px;
-font-size:14px;
+    text-decoration:none;
+    color:#697386;
+    padding:12px 13px;
+    border-radius:9px;
+    font-size:14px;
 }
 
 .menu a:hover{
-background:#f1f4fa;
-color:#1745d1;
+    background:#f1f4fa;
+    color:#1745d1;
 }
 
 .menu a.active{
-background:#edf3ff;
-color:#1745d1;
-font-weight:700;
+    background:#edf3ff;
+    color:#1745d1;
+    font-weight:700;
 }
 
+/* MAIN */
+
 .main{
-margin-left:220px;
-width:calc(100% - 220px);
+    margin-left:220px;
+    width:calc(100% - 220px);
 }
 
 .topbar{
-height:70px;
-background:#fff;
-border-bottom:1px solid #e7eaf0;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 30px;
+    height:70px;
+    background:#fff;
+    border-bottom:1px solid #e7eaf0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
 }
 
 .project-title{
-font-size:13px;
-color:#8a94a6;
+    font-size:13px;
+    color:#8a94a6;
 }
 
 .project-title strong{
-color:#172033;
-font-size:16px;
-margin-left:8px;
+    color:#172033;
+    font-size:16px;
+    margin-left:8px;
 }
 
 .status-live{
-display:flex;
-align-items:center;
-gap:7px;
-font-size:12px;
-color:#657084;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:12px;
+    color:#657084;
 }
 
 .dot{
-width:8px;
-height:8px;
-background:#f2994a;
-border-radius:50%;
+    width:8px;
+    height:8px;
+    background:#f2994a;
+    border-radius:50%;
 }
 
 .content{
-padding:28px 32px 50px;
-max-width:1500px;
-margin:auto;
+    padding:28px 32px 50px;
+    max-width:1500px;
+    margin:auto;
 }
 
 .page-title{
-margin-bottom:18px;
+    margin-bottom:18px;
 }
 
 .page-title h1{
-margin:0;
-font-size:25px;
+    margin:0;
+    font-size:25px;
 }
 
 .page-title p{
-margin:6px 0 0;
-color:#8a94a6;
-font-size:13px;
+    margin:6px 0 0;
+    color:#8a94a6;
+    font-size:13px;
 }
 
+/* TOTAL PREMOLDEADOS */
+
+.total-wrapper{
+    margin-bottom:18px;
+}
+
+.total-card{
+    background:#fff;
+    border:1px solid #dfe5ef;
+    border-left:4px solid #2855d9;
+    border-radius:12px;
+    padding:18px 22px;
+    display:flex;
+    align-items:center;
+}
+
+.total-left{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.total-icon{
+    font-size:29px;
+}
+
+.total-label{
+    font-size:12px;
+    color:#8a94a6;
+    margin-bottom:5px;
+}
+
+.total-value{
+    font-size:34px;
+    font-weight:700;
+    line-height:1;
+}
+
+.total-sub{
+    font-size:11px;
+    color:#8a94a6;
+    margin-top:7px;
+}
+
+/* CARDS */
+
 .card{
-background:#fff;
-border:1px solid #e8ebf1;
-border-radius:12px;
-padding:20px;
+    background:#fff;
+    border:1px solid #e8ebf1;
+    border-radius:12px;
+    padding:20px;
 }
 
 .card-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:15px;
-margin-bottom:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:18px;
 }
 
 .card-title{
-font-size:15px;
-font-weight:700;
+    font-size:15px;
+    font-weight:700;
 }
 
 .card-subtitle{
-color:#929bad;
-font-size:11px;
-margin-top:4px;
+    color:#929bad;
+    font-size:11px;
+    margin-top:4px;
 }
 
 /* FLUJO */
 
 .flow{
-margin-bottom:18px;
+    margin-bottom:18px;
 }
 
 .flow-grid{
-display:grid;
-grid-template-columns:repeat(6,1fr);
-gap:10px;
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;
 }
 
 .flow-step{
-border:1px solid #e7eaf0;
-border-radius:10px;
-padding:16px 12px;
-background:#fff;
+    border:1px solid #e7eaf0;
+    border-radius:10px;
+    padding:16px 12px;
+    background:#fff;
 }
 
 .flow-icon{
-font-size:21px;
-margin-bottom:9px;
+    font-size:21px;
+    margin-bottom:9px;
 }
 
 .flow-name{
-font-size:12px;
-font-weight:700;
+    font-size:12px;
+    font-weight:700;
 }
 
 .flow-value{
-font-size:22px;
-font-weight:700;
-margin-top:7px;
+    font-size:22px;
+    font-weight:700;
+    margin-top:7px;
 }
 
 .flow-percent{
-font-size:10px;
-color:#8a94a6;
-margin-top:3px;
+    font-size:10px;
+    color:#8a94a6;
+    margin-top:3px;
 }
 
-/* TOTAL DESPLEGABLE */
-
-.total-wrapper{
-margin-bottom:18px;
-}
-
-.total-card{
-background:#fff;
-border:1px solid #e8ebf1;
-border-left:4px solid #2855d9;
-border-radius:12px;
-padding:20px 22px;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:20px;
-transition:.2s;
-}
-
-.total-card:hover{
-background:#fafcff;
-border-color:#ced8eb;
-}
-
-.total-left{
-display:flex;
-align-items:center;
-gap:20px;
-}
-
-.total-icon{
-font-size:30px;
-}
-
-.total-label{
-font-size:12px;
-color:#8a94a6;
-margin-bottom:6px;
-}
-
-.total-value{
-font-size:34px;
-font-weight:700;
-}
-
-.total-sub{
-font-size:11px;
-color:#8a94a6;
-margin-top:4px;
-}
-
-.total-action{
-font-size:12px;
-font-weight:700;
-color:#2855d9;
-white-space:nowrap;
-}
-
-.detalle-kpis{
-display:none;
-grid-template-columns:repeat(3,1fr);
-gap:16px;
-margin-top:12px;
-}
-
-.detalle-kpis.visible{
-display:grid;
-}
-
-.kpi{
-background:#fff;
-border:1px solid #e8ebf1;
-border-radius:12px;
-padding:19px;
-}
-
-.kpi-label{
-font-size:12px;
-color:#8a94a6;
-margin-bottom:9px;
-}
-
-.kpi-value{
-font-size:28px;
-font-weight:700;
-}
-
-.kpi-sub{
-margin-top:7px;
-font-size:11px;
-color:#8a94a6;
-}
-
-.kpi-green{border-left:4px solid #27ae60}
-.kpi-orange{border-left:4px solid #f2994a}
-.kpi-purple{border-left:4px solid #8e63ce}
-
-/* CURVA + ESTADO */
+/* CURVA */
 
 .dashboard-grid{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:18px;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:18px;
 }
 
 .chart-container{
-height:330px;
+    height:330px;
 }
 
+/* ESTADO */
+
 .status-box{
-background:#f7f9fc;
-border-radius:10px;
-padding:18px;
-margin-bottom:15px;
+    background:#f7f9fc;
+    border-radius:10px;
+    padding:18px;
+    margin-bottom:15px;
 }
 
 .status-big{
-font-size:26px;
-font-weight:700;
+    font-size:26px;
+    font-weight:700;
 }
 
 .status-label{
-color:#8a94a6;
-font-size:11px;
-margin-top:4px;
+    color:#8a94a6;
+    font-size:11px;
+    margin-top:4px;
 }
 
 .progress{
-height:8px;
-background:#e8edf5;
-border-radius:20px;
-overflow:hidden;
-margin:15px 0 8px;
+    height:8px;
+    background:#e8edf5;
+    border-radius:20px;
+    overflow:hidden;
+    margin:15px 0 8px;
 }
 
 .progress-bar{
-height:100%;
-width:0;
-background:#2855d9;
-border-radius:20px;
+    height:100%;
+    width:0;
+    background:#2855d9;
+    border-radius:20px;
 }
 
 .progress-info{
-display:flex;
-justify-content:space-between;
-font-size:11px;
-color:#7c8799;
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:#7c8799;
 }
 
-/* TIPOS */
+/* AVANCE POR TIPO */
 
 .tipo-card{
-margin-top:18px;
+    margin-top:18px;
 }
 
 .tipo-actions{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
 }
 
 .tipo-btn{
-border:1px solid #dce3ea;
-background:#fff;
-color:#45556d;
-padding:8px 12px;
-border-radius:8px;
-font-size:12px;
-font-weight:700;
-cursor:pointer;
+    border:1px solid #dce3ea;
+    background:#fff;
+    color:#45556d;
+    padding:8px 12px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
 }
 
 .tipo-btn:hover{
-background:#f4f7fb;
+    background:#f4f7fb;
 }
 
 .tipo-btn.active{
-background:#edf3ff;
-border-color:#bfd0ff;
-color:#1745d1;
+    background:#edf3ff;
+    border-color:#bfd0ff;
+    color:#1745d1;
 }
 
 .detalle-tipos{
-display:none;
-margin-top:10px;
+    display:none;
+    margin-top:10px;
 }
 
 .detalle-tipos.visible{
-display:block;
+    display:block;
 }
 
 .tipo-chart-wrap{
-width:100%;
-min-height:400px;
-position:relative;
+    width:100%;
+    min-height:400px;
+    position:relative;
 }
 
 .tabla-scroll{
-overflow-x:auto;
+    overflow-x:auto;
 }
 
 /* TABLAS */
 
 table{
-width:100%;
-border-collapse:collapse;
+    width:100%;
+    border-collapse:collapse;
 }
 
 th{
-text-align:left;
-color:#929bad;
-font-size:10px;
-padding:11px 8px;
-border-bottom:1px solid #edf0f4;
+    text-align:left;
+    color:#929bad;
+    font-size:10px;
+    padding:11px 8px;
+    border-bottom:1px solid #edf0f4;
 }
 
 td{
-padding:12px 8px;
-font-size:12px;
-border-bottom:1px solid #f0f2f6;
+    padding:12px 8px;
+    font-size:12px;
+    border-bottom:1px solid #f0f2f6;
 }
 
 .tipo-table th:not(:first-child),
 .tipo-table td:not(:first-child){
-text-align:center;
+    text-align:center;
 }
 
 .tipo-nombre,
 .tipo-total{
-font-weight:700;
+    font-weight:700;
 }
 
 .bottom-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:18px;
-margin-top:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:18px;
 }
 
 .badge{
-padding:5px 8px;
-border-radius:20px;
-font-size:10px;
-font-weight:700;
+    padding:5px 8px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:700;
 }
 
 .badge-green{
-background:#e9f8ef;
-color:#239653;
+    background:#e9f8ef;
+    color:#239653;
 }
 
 .badge-blue{
-background:#edf3ff;
-color:#2855d9;
+    background:#edf3ff;
+    color:#2855d9;
 }
 
 .badge-orange{
-background:#fff3e8;
-color:#d97924;
+    background:#fff3e8;
+    color:#d97924;
 }
 
 .badge-gray{
-background:#eef1f5;
-color:#687386;
+    background:#eef1f5;
+    color:#687386;
 }
 
 .error{
-display:none;
-background:#fff0f0;
-border:1px solid #ffc7c7;
-color:#a32121;
-padding:12px;
-border-radius:8px;
-margin-bottom:18px;
-font-size:13px;
+    display:none;
+    background:#fff0f0;
+    border:1px solid #ffc7c7;
+    color:#a32121;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:18px;
+    font-size:13px;
 }
 
+/* RESPONSIVE */
+
 @media(max-width:1100px){
-.flow-grid{
-grid-template-columns:repeat(3,1fr);
-}
+
+    .flow-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
 }
 
 @media(max-width:1000px){
 
-.sidebar{
-width:70px;
-}
+    .sidebar{
+        width:70px;
+    }
 
-.logo span,
-.menu a span{
-display:none;
-}
+    .logo span,
+    .menu a span{
+        display:none;
+    }
 
-.main{
-margin-left:70px;
-width:calc(100% - 70px);
-}
+    .main{
+        margin-left:70px;
+        width:calc(100% - 70px);
+    }
 
-.dashboard-grid{
-grid-template-columns:1fr;
-}
-
-.detalle-kpis{
-grid-template-columns:1fr;
-}
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
 
 }
 
 @media(max-width:700px){
 
-.content{
-padding:18px;
-}
+    .content{
+        padding:18px;
+    }
 
-.flow-grid{
-grid-template-columns:1fr 1fr;
-}
+    .flow-grid{
+        grid-template-columns:1fr 1fr;
+    }
 
-.bottom-grid{
-grid-template-columns:1fr;
-}
+    .bottom-grid{
+        grid-template-columns:1fr;
+    }
 
-.card-header{
-align-items:flex-start;
-flex-direction:column;
-}
-
-.total-card{
-align-items:flex-start;
-}
+    .card-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
 
 }
+
 </style>
 </head>
 
 <body>
 
 <div class="app">
+
+<!-- SIDEBAR -->
 
 <aside class="sidebar">
 
@@ -571,6 +527,8 @@ align-items:flex-start;
 </aside>
 
 
+<!-- MAIN -->
+
 <main class="main">
 
 <header class="topbar">
@@ -590,9 +548,14 @@ Proyecto
 
 <div class="content">
 
+
+<!-- TITULO -->
+
 <div class="page-title">
 
-<h1>Resumen ejecutivo</h1>
+<h1>
+Resumen ejecutivo
+</h1>
 
 <p>
 Seguimiento general de premoldeados: fabricación, logística, calidad, montaje y pintura
@@ -600,12 +563,51 @@ Seguimiento general de premoldeados: fabricación, logística, calidad, montaje 
 
 </div>
 
+
 <div class="error" id="errorBox"></div>
 
 
-<!-- =================================================
-FLUJO ARRIBA DE TODO
-================================================= -->
+<!-- ==================================================
+TOTAL PREMOLDEADOS
+PRIMERO DE TODO
+================================================== -->
+
+<section class="total-wrapper">
+
+<div class="total-card">
+
+<div class="total-left">
+
+<div class="total-icon">
+🏗️
+</div>
+
+<div>
+
+<div class="total-label">
+PREMOLDEADOS TOTALES
+</div>
+
+<div class="total-value" id="total">
+0
+</div>
+
+<div class="total-sub">
+Base de Ingeniería
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+FLUJO
+================================================== -->
 
 <section class="card flow">
 
@@ -627,6 +629,7 @@ QA/QC se calcula contra los premoldeados en obra
 
 
 <div class="flow-grid">
+
 
 <div class="flow-step">
 
@@ -741,116 +744,18 @@ Pintado
 
 </div>
 
-</div>
-
-</section>
-
-
-<!-- =================================================
-TOTAL PREMOLDEADOS
-================================================= -->
-
-<section class="total-wrapper">
-
-<div
-class="total-card"
-onclick="toggleDetalleKpis()"
-role="button"
-tabindex="0">
-
-<div class="total-left">
-
-<div class="total-icon">
-🏗️
-</div>
-
-<div>
-
-<div class="total-label">
-PREMOLDEADOS TOTALES
-</div>
-
-<div class="total-value" id="total">
-0
-</div>
-
-<div class="total-sub">
-Base de Ingeniería
-</div>
-
-</div>
-
-</div>
-
-<div class="total-action" id="textoDetalleKpi">
-Ver detalle ▼
-</div>
-
-</div>
-
-
-<div class="detalle-kpis" id="detalleKpis">
-
-<div class="kpi kpi-green">
-
-<div class="kpi-label">
-LIBERADOS EN TALLER
-</div>
-
-<div class="kpi-value" id="liberadas">
-0
-</div>
-
-<div class="kpi-sub" id="liberadasPct">
-0% del total
-</div>
-
-</div>
-
-
-<div class="kpi kpi-orange">
-
-<div class="kpi-label">
-EN OBRA
-</div>
-
-<div class="kpi-value" id="obra">
-0
-</div>
-
-<div class="kpi-sub" id="obraPct">
-0% del total
-</div>
-
-</div>
-
-
-<div class="kpi kpi-purple">
-
-<div class="kpi-label">
-MONTADOS
-</div>
-
-<div class="kpi-value" id="kpiMontadas">
-0
-</div>
-
-<div class="kpi-sub" id="kpiMontadasPct">
-0% del total
-</div>
-
-</div>
 
 </div>
 
 </section>
 
 
-<!-- =================================================
-CURVA + ESTADO
-================================================= -->
+<!-- ==================================================
+CURVA S + ESTADO
+================================================== -->
 
 <div class="dashboard-grid">
+
 
 <section class="card">
 
@@ -869,6 +774,7 @@ Curva S — Planificado vs Real
 </div>
 
 </div>
+
 
 <div class="chart-container">
 <canvas id="sCurve"></canvas>
@@ -906,9 +812,11 @@ CARGANDO
 Estado general
 </div>
 
+
 <div class="progress">
 <div class="progress-bar" id="progressBar"></div>
 </div>
+
 
 <div class="progress-info">
 
@@ -955,9 +863,9 @@ Desvío contra planificación
 </div>
 
 
-<!-- =================================================
+<!-- ==================================================
 AVANCE POR TIPO
-================================================= -->
+================================================== -->
 
 <section class="card tipo-card">
 
@@ -1049,9 +957,9 @@ Cargando...
 </section>
 
 
-<!-- =================================================
-INDICADORES + LECTURA
-================================================= -->
+<!-- ==================================================
+INDICADORES
+================================================== -->
 
 <div class="bottom-grid">
 
@@ -1087,8 +995,8 @@ Resumen acumulado por etapa
 
 </thead>
 
-
 <tbody>
+
 
 <tr>
 
@@ -1198,6 +1106,8 @@ Resumen acumulado por etapa
 </section>
 
 
+<!-- LECTURA EJECUTIVA -->
+
 <section class="card">
 
 <div class="card-header">
@@ -1225,27 +1135,47 @@ Avance general
 
 
 <p>
+
 El proyecto presenta un avance ponderado acumulado del
-<strong id="executivePct">0%</strong>.
+
+<strong id="executivePct">
+0%
+</strong>.
+
 </p>
 
 
 <p>
 
 Premoldeados liberados en taller:
-<strong id="executiveLiberadas">0</strong>.
+
+<strong id="executiveLiberadas">
+0
+</strong>.
 
 En obra:
-<strong id="executiveObra">0</strong>.
+
+<strong id="executiveObra">
+0
+</strong>.
 
 QA/QC:
-<strong id="executiveQA">0</strong>.
+
+<strong id="executiveQA">
+0
+</strong>.
 
 Montados:
-<strong id="executiveMontadas">0</strong>.
+
+<strong id="executiveMontadas">
+0
+</strong>.
 
 Pintados:
-<strong id="executivePintadas">0</strong>.
+
+<strong id="executivePintadas">
+0
+</strong>.
 
 </p>
 
@@ -1287,7 +1217,7 @@ SUPABASE_KEY
 
 
 /* =====================================================
-PLANIFICACIÓN
+PLANIFICACION
 ===================================================== */
 
 const PLAN = [
@@ -1310,29 +1240,6 @@ let chart=null;
 let chartTipos=null;
 let timer=null;
 let datosTipos=[];
-
-
-/* =====================================================
-DETALLE SUPERIOR
-===================================================== */
-
-function toggleDetalleKpis(){
-
-const detalle=
-document.getElementById("detalleKpis");
-
-const texto=
-document.getElementById("textoDetalleKpi");
-
-const abierto=
-detalle.classList.toggle("visible");
-
-texto.textContent=
-abierto
-? "Ocultar detalle ▲"
-: "Ver detalle ▼";
-
-}
 
 
 /* =====================================================
@@ -1417,13 +1324,15 @@ piezas.length;
 
 
 /*
+ETAPAS ACUMULATIVAS
+
 0 = TALLER
-1 = LIBERADO EN TALLER
+1 = LIBERADO
 2 = EN OBRA
 3 = QA/QC
 
 MONTAJE Y PINTURA
-SON INDEPENDIENTES
+SON INDEPENDIENTES.
 */
 
 
@@ -1463,7 +1372,7 @@ p=>p.pintada===true
 ).length;
 
 
-/* PORCENTAJES */
+/* PORCENTAJE TOTAL */
 
 function pctTotal(cantidad){
 
@@ -1478,14 +1387,7 @@ return Math.round(
 }
 
 
-/*
-CALIDAD:
-
-SE CALCULA SOBRE LOS
-PREMOLDEADOS EN OBRA.
-
-90 QA/QC / 90 EN OBRA = 100%
-*/
+/* QA/QC SOBRE EN OBRA */
 
 const pctCalidad=
 
@@ -1532,39 +1434,6 @@ total
 );
 
 
-/* DETALLE */
-
-setText(
-"liberadas",
-liberadas
-);
-
-setText(
-"liberadasPct",
-pctTotal(liberadas)+"% del total"
-);
-
-setText(
-"obra",
-obra
-);
-
-setText(
-"obraPct",
-pctTotal(obra)+"% del total"
-);
-
-setText(
-"kpiMontadas",
-montadas
-);
-
-setText(
-"kpiMontadasPct",
-pctTotal(montadas)+"% del total"
-);
-
-
 /* FLUJO */
 
 setText(
@@ -1577,6 +1446,7 @@ setText(
 pctTotal(taller)+"%"
 );
 
+
 setText(
 "flowLiberadas",
 liberadas
@@ -1586,6 +1456,7 @@ setText(
 "flowLiberadasPct",
 pctTotal(liberadas)+"%"
 );
+
 
 setText(
 "flowObra",
@@ -1597,6 +1468,7 @@ setText(
 pctTotal(obra)+"%"
 );
 
+
 setText(
 "qaqc",
 qaqc
@@ -1607,6 +1479,7 @@ setText(
 pctCalidad+"%"
 );
 
+
 setText(
 "montadas",
 montadas
@@ -1616,6 +1489,7 @@ setText(
 "montadasPctFlow",
 pctTotal(montadas)+"%"
 );
+
 
 setText(
 "flowPintadas",
@@ -1640,6 +1514,7 @@ setText(
 pctTotal(taller)+"%"
 );
 
+
 setText(
 "tblLiberadas",
 liberadas
@@ -1649,6 +1524,7 @@ setText(
 "tblLiberadasPct",
 pctTotal(liberadas)+"%"
 );
+
 
 setText(
 "tblObra",
@@ -1660,6 +1536,7 @@ setText(
 pctTotal(obra)+"%"
 );
 
+
 setText(
 "tblQA",
 qaqc
@@ -1667,8 +1544,7 @@ qaqc
 
 
 /*
-QA/QC USA EN OBRA
-COMO DENOMINADOR
+CALIDAD = QA/QC / EN OBRA
 */
 
 setText(
@@ -1687,6 +1563,7 @@ setText(
 pctTotal(montadas)+"%"
 );
 
+
 setText(
 "tblPintadas",
 pintadas
@@ -1698,7 +1575,7 @@ pctTotal(pintadas)+"%"
 );
 
 
-/* AVANCE */
+/* AVANCE GENERAL */
 
 setText(
 "progressText",
@@ -1709,6 +1586,7 @@ setText(
 "executivePct",
 avanceGeneral+"%"
 );
+
 
 document
 .getElementById("progressBar")
@@ -1744,7 +1622,7 @@ pintadas
 );
 
 
-/* RESTO */
+/* ACTUALIZACIONES */
 
 actualizarDatosTipos();
 
@@ -1762,7 +1640,7 @@ avanceGeneral
 
 
 /* =====================================================
-AGRUPACIÓN POR TIPO
+AGRUPAR POR TIPO
 ===================================================== */
 
 function actualizarDatosTipos(){
@@ -1855,11 +1733,15 @@ document.getElementById("tablaTipos");
 if(datosTipos.length===0){
 
 tbody.innerHTML=`
+
 <tr>
+
 <td colspan="5">
 No hay datos cargados.
 </td>
+
 </tr>
+
 `;
 
 return;
@@ -1890,7 +1772,9 @@ ${x.obra}
 </td>
 
 <td>
-<strong>${x.montadas}</strong>
+<strong>
+${x.montadas}
+</strong>
 </td>
 
 </tr>
@@ -1901,7 +1785,7 @@ ${x.obra}
 
 
 /* =====================================================
-MOSTRAR GRÁFICO / TABLA
+MOSTRAR DETALLE POR TIPO
 ===================================================== */
 
 function mostrarDetalleTipos(modo){
@@ -1971,7 +1855,7 @@ document
 
 
 /* =====================================================
-GRÁFICO POR TIPO
+GRAFICO POR TIPO
 ===================================================== */
 
 function actualizarGraficoTipos(){
@@ -2077,16 +1961,21 @@ position:"top"
 scales:{
 
 x:{
+
 beginAtZero:true,
+
 ticks:{
 precision:0
 }
+
 },
 
 y:{
+
 grid:{
 display:false
 }
+
 }
 
 }
@@ -2192,7 +2081,7 @@ status.style.color=
 
 
 /* =====================================================
-ÚLTIMA ACTUALIZACIÓN
+FECHA
 ===================================================== */
 
 function actualizarFecha(){
@@ -2227,9 +2116,11 @@ const ultima=
 new Date(
 
 Math.max(
+
 ...fechas.map(
 f=>f.getTime()
 )
+
 )
 
 );
