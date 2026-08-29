@@ -7,117 +7,301 @@
   <title>Control de Premoldeados</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
 
+    :root {
+      --azul: #102f52;
+      --azul-claro: #e8f1fb;
+      --fondo: #f4f6f8;
+      --texto: #24364b;
+      --borde: #dce3ea;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #1f2937;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
     }
+
+    /* =========================
+       ENCABEZADO
+    ========================= */
 
     header {
-      background: #1e3a5f;
+      background: linear-gradient(135deg, #102f52, #183f68);
       color: white;
-      padding: 25px 40px;
+      padding: 22px 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    header h1 {
+    .titulo-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .titulo-header h1 {
       margin: 0;
       font-size: 28px;
+      letter-spacing: 1px;
     }
 
-    header p {
-      margin: 8px 0 0;
-      opacity: 0.8;
+    .icono-header {
+      font-size: 32px;
+    }
+
+    .guia {
+      font-size: 15px;
+      opacity: 0.9;
     }
 
     main {
-      max-width: 1200px;
+      max-width: 1500px;
       margin: auto;
-      padding: 30px 20px;
+      padding: 25px;
     }
+
+    /* =========================
+       TARJETAS RESUMEN
+    ========================= */
 
     .resumen {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
+      grid-template-columns: repeat(6, minmax(170px, 1fr));
+      gap: 18px;
+      margin-bottom: 22px;
     }
 
     .tarjeta {
       background: white;
-      padding: 20px;
+      border: 1px solid var(--borde);
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 18px;
+      min-height: 145px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
     }
 
     .tarjeta h3 {
       margin: 0;
       font-size: 14px;
-      color: #6b7280;
+      letter-spacing: 0.5px;
     }
 
     .tarjeta .numero {
-      font-size: 30px;
+      font-size: 38px;
       font-weight: bold;
-      margin-top: 8px;
+      margin-top: 22px;
     }
+
+    .tarjeta p {
+      margin: 4px 0 0;
+      color: #637083;
+      font-size: 14px;
+    }
+
+    .tarjeta .icono {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      font-size: 40px;
+      opacity: 0.75;
+    }
+
+    .total {
+      background: #eef5fc;
+    }
+
+    .taller-card {
+      background: #f3f5f7;
+    }
+
+    .obra-card {
+      background: #fff8e9;
+    }
+
+    .liberada-taller-card {
+      background: #edf8f1;
+    }
+
+    .calidad-card {
+      background: #f2effb;
+    }
+
+    .montada-card {
+      background: #edf8f6;
+    }
+
+    /* =========================
+       CAMINO DEL PREMOLDEADO
+    ========================= */
+
+    .camino {
+      background: white;
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+    }
+
+    .camino h2 {
+      margin: 0;
+      font-size: 20px;
+      color: #314760;
+    }
+
+    .camino-subtitulo {
+      margin-top: 7px;
+      color: #58697b;
+      font-size: 15px;
+    }
+
+    .pasos {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 30px;
+      gap: 10px;
+    }
+
+    .paso {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      min-width: 150px;
+    }
+
+    .numero-paso {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin: auto auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .paso-icono {
+      font-size: 55px;
+      margin-bottom: 12px;
+    }
+
+    .paso h3 {
+      margin: 5px 0 8px;
+      font-size: 15px;
+      color: #30445c;
+    }
+
+    .paso p {
+      margin: 0 auto;
+      max-width: 190px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #526174;
+    }
+
+    .flecha {
+      align-self: center;
+      margin-top: 35px;
+      font-size: 28px;
+      color: #65778a;
+    }
+
+    .paso-1 .numero-paso {
+      background: #3575ad;
+    }
+
+    .paso-2 .numero-paso {
+      background: #df8a00;
+    }
+
+    .paso-3 .numero-paso {
+      background: #2f8a68;
+    }
+
+    .paso-4 .numero-paso {
+      background: #6c55ae;
+    }
+
+    .paso-5 .numero-paso {
+      background: #2c8062;
+    }
+
+    /* =========================
+       HERRAMIENTAS
+    ========================= */
 
     .herramientas {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 12px;
     }
 
-    input, select {
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 15px;
+    .buscador {
+      position: relative;
+      width: 330px;
     }
 
-    #buscador {
-      flex: 1;
-      min-width: 220px;
+    .buscador input {
+      width: 100%;
+      padding: 13px 15px 13px 42px;
+      border: 1px solid #ccd6df;
+      border-radius: 9px;
+      font-size: 14px;
+      background: white;
+    }
+
+    .lupa {
+      position: absolute;
+      left: 14px;
+      top: 11px;
+      font-size: 18px;
     }
 
     button {
-      border: none;
-      border-radius: 8px;
-      padding: 12px 18px;
-      font-size: 15px;
+      font-family: inherit;
       cursor: pointer;
+      transition: 0.2s;
     }
 
     .btn-nuevo {
-      background: #1e3a5f;
+      background: var(--azul);
       color: white;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      letter-spacing: 0.5px;
     }
 
-    .btn-avanzar {
-      background: #16a34a;
-      color: white;
-      padding: 8px 12px;
+    .btn-nuevo:hover {
+      background: #1b4a78;
     }
 
-    .btn-eliminar {
-      background: #dc2626;
-      color: white;
-      padding: 8px 12px;
-      margin-left: 5px;
-    }
+    /* =========================
+       FORMULARIO
+    ========================= */
 
     .formulario {
       display: none;
       background: white;
-      padding: 25px;
+      padding: 22px;
       border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid var(--borde);
+      margin-bottom: 20px;
     }
 
     .formulario.activo {
@@ -130,593 +314,1456 @@
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 15px;
     }
 
-    .form-grid input,
-    .form-grid select {
-      width: 100%;
+    input,
+    select {
+      padding: 13px;
+      border: 1px solid #ccd6df;
+      border-radius: 8px;
+      font-size: 14px;
     }
 
     .btn-guardar {
-      background: #1e3a5f;
-      color: white;
       margin-top: 15px;
+      background: #1b6b4a;
+      color: white;
+      border: none;
+      padding: 13px 20px;
+      border-radius: 8px;
+      font-weight: bold;
     }
 
+    /* =========================
+       TABLA
+    ========================= */
+
     .tabla-contenedor {
-      overflow-x: auto;
       background: white;
+      border: 1px solid var(--borde);
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow-x: auto;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 700px;
+      min-width: 1000px;
     }
 
     th {
-      background: #eaf0f6;
+      background: #f5f7f9;
       text-align: left;
-      padding: 15px;
-      font-size: 13px;
+      padding: 14px 25px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      color: #35475c;
     }
 
     td {
-      padding: 15px;
-      border-top: 1px solid #e5e7eb;
+      padding: 12px 25px;
+      border-top: 1px solid #e5e9ed;
+      font-size: 14px;
     }
+
+    tr:hover {
+      background: #fafcfd;
+    }
+
+    /* =========================
+       ESTADOS
+    ========================= */
 
     .estado {
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border-radius: 6px;
+      font-size: 12px;
       font-weight: bold;
-      font-size: 13px;
+      min-width: 180px;
     }
 
-    .taller {
-      background: #dbeafe;
-      color: #1d4ed8;
+    .estado-taller {
+      background: #e5f0fa;
+      color: #28649a;
+      border: 1px solid #c9deef;
     }
 
-    .salio {
-      background: #ffedd5;
-      color: #c2410c;
+    .estado-salio {
+      background: #fff0df;
+      color: #c86c00;
+      border: 1px solid #f5d5b0;
     }
 
-    .llego {
-      background: #fef3c7;
-      color: #a16207;
+    .estado-llego {
+      background: #fff7df;
+      color: #a97800;
+      border: 1px solid #efdfa8;
     }
 
-    .calidad {
-      background: #f3e8ff;
-      color: #7e22ce;
+    .estado-calidad {
+      background: #f0edfb;
+      color: #6953a8;
+      border: 1px solid #d9d0f0;
     }
 
-    .montado {
-      background: #dcfce7;
-      color: #15803d;
+    .estado-montado {
+      background: #e5f5ef;
+      color: #28765c;
+      border: 1px solid #c6e5d8;
     }
 
-    .vacio {
-      text-align: center;
+    /* =========================
+       BOTONES TABLA
+    ========================= */
+
+    .btn-actualizar {
+      background: white;
+      color: #334c67;
+      border: 1px solid #cfd8e1;
+      padding: 8px 16px;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
+    .btn-actualizar:hover {
+      background: #edf3f8;
+    }
+
+    .btn-ver {
+      background: #f5f7f9;
+      color: #526274;
+      border: 1px solid #d6dde5;
+      padding: 8px 16px;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
+    .btn-eliminar {
+      margin-left: 6px;
+      background: #fff;
+      color: #b43c3c;
+      border: 1px solid #e4bcbc;
+      padding: 8px 12px;
+      border-radius: 7px;
+    }
+
+    .mensaje-vacio {
       padding: 40px;
-      color: #6b7280;
+      text-align: center;
+      color: #69788a;
     }
 
-    @media (max-width: 600px) {
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #69788a;
+      font-size: 14px;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1200px) {
+
+      .resumen {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .pasos {
+        flex-wrap: wrap;
+      }
+
+      .flecha {
+        display: none;
+      }
+
+      .paso {
+        min-width: 30%;
+      }
+
+    }
+
+    @media (max-width: 700px) {
+
       header {
-        padding: 20px;
+        padding: 18px;
+      }
+
+      .titulo-header h1 {
+        font-size: 20px;
+      }
+
+      .guia {
+        display: none;
       }
 
       main {
-        padding: 20px 12px;
+        padding: 15px;
       }
 
-      header h1 {
-        font-size: 23px;
+      .resumen {
+        grid-template-columns: repeat(2, 1fr);
       }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .herramientas {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .buscador {
+        width: 100%;
+      }
+
+      .paso {
+        min-width: 100%;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e5e9ed;
+      }
+
     }
+
   </style>
 </head>
 
+
 <body>
 
-<header>
-  <h1>🏗️ Control de Premoldeados</h1>
-  <p>Seguimiento y trazabilidad de piezas desde el taller hasta el montaje</p>
-</header>
+  <!-- =========================
+       HEADER
+  ========================== -->
 
-<main>
+  <header>
 
-  <!-- RESUMEN -->
-  <section class="resumen">
+    <div class="titulo-header">
+      <div class="icono-header">🏗️</div>
 
-    <div class="tarjeta">
-      <h3>TOTAL</h3>
-      <div class="numero" id="total">0</div>
+      <h1>CONTROL DE PREMOLDEADOS</h1>
     </div>
 
-    <div class="tarjeta">
-      <h3>EN TALLER</h3>
-      <div class="numero" id="totalTaller">0</div>
+    <div class="guia">
+      ⓘ Guía del proceso
     </div>
 
-    <div class="tarjeta">
-      <h3>EN OBRA</h3>
-      <div class="numero" id="totalObra">0</div>
-    </div>
-
-    <div class="tarjeta">
-      <h3>MONTADOS</h3>
-      <div class="numero" id="totalMontados">0</div>
-    </div>
-
-  </section>
+  </header>
 
 
-  <!-- BUSCADOR Y BOTON -->
-  <section class="herramientas">
+  <main>
 
-    <input
-      type="text"
-      id="buscador"
-      placeholder="🔎 Buscar por código o tipo..."
+
+    <!-- =========================
+         RESUMEN
+    ========================== -->
+
+    <section class="resumen">
+
+      <div class="tarjeta total">
+
+        <h3>TOTAL</h3>
+
+        <div
+          class="numero"
+          id="total"
+        >
+          0
+        </div>
+
+        <p>premoldeados</p>
+
+        <div class="icono">
+          🧱
+        </div>
+
+      </div>
+
+
+      <div class="tarjeta taller-card">
+
+        <h3>EN TALLER</h3>
+
+        <div
+          class="numero"
+          id="enTaller"
+        >
+          0
+        </div>
+
+        <p>premoldeados</p>
+
+        <div class="icono">
+          🏭
+        </div>
+
+      </div>
+
+
+      <div class="tarjeta obra-card">
+
+        <h3>EN OBRA</h3>
+
+        <div
+          class="numero"
+          id="enObra"
+        >
+          0
+        </div>
+
+        <p>premoldeados</p>
+
+        <div class="icono">
+          🚧
+        </div>
+
+      </div>
+
+
+      <div class="tarjeta liberada-taller-card">
+
+        <h3>LIBERADAS<br>EN TALLER</h3>
+
+        <div
+          class="numero"
+          id="liberadasTaller"
+        >
+          0
+        </div>
+
+        <p>premoldeados</p>
+
+        <div class="icono">
+          ✓
+        </div>
+
+      </div>
+
+
+      <div class="tarjeta calidad-card">
+
+        <h3>LIBERADAS POR<br>CALIDAD</h3>
+
+        <div
+          class="numero"
+          id="liberadasCalidad"
+        >
+          0
+        </div>
+
+        <p>premoldeados</p>
+
+        <div class="icono">
+          ✔
+        </div>
+
+      </div>
+
+
+      <div class="tarjeta montada-card">
+
+        <h3>MONTADAS</h3>
+
+        <div
+          class="numero"
+          id="montadas"
+        >
+          0
+        </div>
+
+        <p>premoldeados</p>
+
+        <div class="icono">
+          🏗️
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         CAMINO DEL PREMOLDEADO
+    ========================== -->
+
+    <section class="camino">
+
+      <h2>CAMINO DEL PREMOLDEADO</h2>
+
+      <p class="camino-subtitulo">
+        Así es el recorrido de cada pieza desde el taller hasta su montaje en obra.
+      </p>
+
+
+      <div class="pasos">
+
+
+        <!-- PASO 1 -->
+
+        <div class="paso paso-1">
+
+          <div class="numero-paso">
+            1
+          </div>
+
+          <div class="paso-icono">
+            🏭
+          </div>
+
+          <h3>
+            LIBERADO EN TALLER
+          </h3>
+
+          <p>
+            La pieza es fabricada y liberada por el responsable del taller.
+          </p>
+
+        </div>
+
+
+        <div class="flecha">
+          ⟶
+        </div>
+
+
+        <!-- PASO 2 -->
+
+        <div class="paso paso-2">
+
+          <div class="numero-paso">
+            2
+          </div>
+
+          <div class="paso-icono">
+            🚛
+          </div>
+
+          <h3>
+            SALIÓ DEL TALLER<br>
+            HACIA OBRA
+          </h3>
+
+          <p>
+            La pieza sale del taller con destino a la obra.
+          </p>
+
+        </div>
+
+
+        <div class="flecha">
+          ⟶
+        </div>
+
+
+        <!-- PASO 3 -->
+
+        <div class="paso paso-3">
+
+          <div class="numero-paso">
+            3
+          </div>
+
+          <div class="paso-icono">
+            📍
+          </div>
+
+          <h3>
+            LLEGÓ A OBRA
+          </h3>
+
+          <p>
+            La pieza llega a la obra y es recibida por el responsable.
+          </p>
+
+        </div>
+
+
+        <div class="flecha">
+          ⟶
+        </div>
+
+
+        <!-- PASO 4 -->
+
+        <div class="paso paso-4">
+
+          <div class="numero-paso">
+            4
+          </div>
+
+          <div class="paso-icono">
+            📋
+          </div>
+
+          <h3>
+            LIBERADA POR CALIDAD<br>
+            EN OBRA
+          </h3>
+
+          <p>
+            El área de calidad revisa y libera la pieza para su montaje.
+          </p>
+
+        </div>
+
+
+        <div class="flecha">
+          ⟶
+        </div>
+
+
+        <!-- PASO 5 -->
+
+        <div class="paso paso-5">
+
+          <div class="numero-paso">
+            5
+          </div>
+
+          <div class="paso-icono">
+            🏗️
+          </div>
+
+          <h3>
+            MONTADA
+          </h3>
+
+          <p>
+            La pieza es montada en su posición definitiva en la obra.
+          </p>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         BUSCADOR
+    ========================== -->
+
+    <section class="herramientas">
+
+      <div class="buscador">
+
+        <span class="lupa">
+          🔎
+        </span>
+
+        <input
+          type="text"
+          id="buscador"
+          placeholder="Buscar por código o tipo..."
+        >
+
+      </div>
+
+
+      <button
+        class="btn-nuevo"
+        onclick="mostrarFormulario()"
+      >
+        ＋ NUEVO PREMOLDEADO
+      </button>
+
+    </section>
+
+
+
+    <!-- =========================
+         FORMULARIO
+    ========================== -->
+
+    <section
+      class="formulario"
+      id="formulario"
     >
 
-    <button class="btn-nuevo" onclick="mostrarFormulario()">
-      + Nuevo premoldeado
-    </button>
-
-  </section>
+      <h2>
+        Nuevo premoldeado
+      </h2>
 
 
-  <!-- FORMULARIO -->
-  <section class="formulario" id="formulario">
+      <div class="form-grid">
 
-    <h2>Nuevo premoldeado</h2>
 
-    <div class="form-grid">
+        <input
+          type="text"
+          id="codigo"
+          placeholder="Código (ej: V-001)"
+        >
 
-      <input
-        type="text"
-        id="codigo"
-        placeholder="Código (ej: V-001)"
+
+        <select id="tipo">
+
+          <option value="">
+            Seleccionar tipo
+          </option>
+
+          <option value="Viga">
+            Viga
+          </option>
+
+          <option value="Columna">
+            Columna
+          </option>
+
+          <option value="Losa">
+            Losa
+          </option>
+
+          <option value="Panel">
+            Panel
+          </option>
+
+          <option value="Base">
+            Base
+          </option>
+
+          <option value="Otro">
+            Otro
+          </option>
+
+        </select>
+
+
+        <input
+          type="text"
+          id="responsable"
+          placeholder="Responsable"
+        >
+
+
+      </div>
+
+
+      <button
+        class="btn-guardar"
+        onclick="agregarPremoldeado()"
+      >
+        GUARDAR PREMOLDEADO
+      </button>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         TABLA
+    ========================== -->
+
+    <section class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>CÓDIGO</th>
+
+            <th>TIPO</th>
+
+            <th>ESTADO ACTUAL</th>
+
+            <th>FECHA / HORA ACTUALIZACIÓN</th>
+
+            <th>RESPONSABLE</th>
+
+            <th>ACCIÓN</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody
+          id="tablaPremoldeados"
+        >
+        </tbody>
+
+
+      </table>
+
+
+      <div
+        class="mensaje-vacio"
+        id="mensajeVacio"
       >
 
-      <select id="tipo">
-        <option value="">Seleccionar tipo</option>
-        <option>Viga</option>
-        <option>Columna</option>
-        <option>Losa</option>
-        <option>Panel</option>
-        <option>Base</option>
-        <option>Otro</option>
-      </select>
+        Todavía no hay premoldeados cargados.
 
-    </div>
-
-    <button class="btn-guardar" onclick="agregarPremoldeado()">
-      Guardar premoldeado
-    </button>
-
-  </section>
+      </div>
 
 
-  <!-- TABLA -->
-  <section class="tabla-contenedor">
-
-    <table>
-
-      <thead>
-        <tr>
-          <th>CÓDIGO</th>
-          <th>TIPO</th>
-          <th>ESTADO ACTUAL</th>
-          <th>ACCIÓN</th>
-        </tr>
-      </thead>
-
-      <tbody id="tablaPremoldeados">
-      </tbody>
-
-    </table>
-
-    <div id="mensajeVacio" class="vacio">
-      Todavía no hay premoldeados cargados.
-    </div>
-
-  </section>
-
-</main>
+    </section>
 
 
-<script>
-
-  /*
-    ETAPAS DEL PROCESO
-  */
-
-  const etapas = [
-    {
-      nombre: "🏭 TALLER",
-      clase: "taller"
-    },
-    {
-      nombre: "🚛 SALIÓ A OBRA",
-      clase: "salio"
-    },
-    {
-      nombre: "📍 LLEGÓ A OBRA",
-      clase: "llego"
-    },
-    {
-      nombre: "🔍 CALIDAD",
-      clase: "calidad"
-    },
-    {
-      nombre: "🏗️ MONTADO",
-      clase: "montado"
-    }
-  ];
+  </main>
 
 
-  /*
-    CARGAR DATOS GUARDADOS
-  */
+  <footer>
 
-  let premoldeados =
-    JSON.parse(localStorage.getItem("premoldeados")) || [];
+    Sistema de control y seguimiento de premoldeados
 
-
-  /*
-    MOSTRAR / OCULTAR FORMULARIO
-  */
-
-  function mostrarFormulario() {
-
-    document
-      .getElementById("formulario")
-      .classList.toggle("activo");
-
-  }
+  </footer>
 
 
-  /*
-    AGREGAR NUEVO PREMOLDEADO
-  */
 
-  function agregarPremoldeado() {
-
-    const codigo =
-      document.getElementById("codigo").value.trim();
-
-    const tipo =
-      document.getElementById("tipo").value;
+  <script>
 
 
-    if (!codigo || !tipo) {
+    /* =========================
+       ETAPAS
+    ========================== */
 
-      alert("Por favor completá el código y el tipo.");
+    const etapas = [
 
-      return;
+      {
+        nombre: "LIBERADO EN TALLER",
+        icono: "🏭",
+        clase: "estado-taller"
+      },
+
+      {
+        nombre: "SALIÓ DEL TALLER",
+        icono: "🚛",
+        clase: "estado-salio"
+      },
+
+      {
+        nombre: "LLEGÓ A OBRA",
+        icono: "📍",
+        clase: "estado-llego"
+      },
+
+      {
+        nombre: "LIBERADA POR CALIDAD",
+        icono: "📋",
+        clase: "estado-calidad"
+      },
+
+      {
+        nombre: "MONTADA",
+        icono: "🏗️",
+        clase: "estado-montado"
+      }
+
+    ];
+
+
+
+    /* =========================
+       CARGAR DATOS
+    ========================== */
+
+    let premoldeados =
+      JSON.parse(
+        localStorage.getItem("premoldeados")
+      ) || [];
+
+
+
+    /* =========================
+       FORMULARIO
+    ========================== */
+
+    function mostrarFormulario() {
+
+      document
+        .getElementById("formulario")
+        .classList.toggle("activo");
 
     }
 
 
-    /*
-      VERIFICAR QUE NO EXISTA
-    */
 
-    const existe =
-      premoldeados.some(
-        p =>
-          p.codigo.toLowerCase() ===
-          codigo.toLowerCase()
+    /* =========================
+       AGREGAR PREMOLDEADO
+    ========================== */
+
+    function agregarPremoldeado() {
+
+
+      const codigo =
+        document
+          .getElementById("codigo")
+          .value
+          .trim();
+
+
+      const tipo =
+        document
+          .getElementById("tipo")
+          .value;
+
+
+      const responsable =
+        document
+          .getElementById("responsable")
+          .value
+          .trim();
+
+
+
+      if (
+        !codigo ||
+        !tipo ||
+        !responsable
+      ) {
+
+        alert(
+          "Por favor completá todos los campos."
+        );
+
+        return;
+
+      }
+
+
+
+      const existe =
+        premoldeados.some(
+          p =>
+            p.codigo.toLowerCase() ===
+            codigo.toLowerCase()
+        );
+
+
+      if (existe) {
+
+        alert(
+          "Ya existe un premoldeado con ese código."
+        );
+
+        return;
+
+      }
+
+
+
+      const fecha =
+        new Date().toLocaleString(
+          "es-AR"
+        );
+
+
+
+      /*
+        historial:
+
+        etapa 0 = liberada en taller
+
+        Esto permite conservar la información
+        aunque luego avance.
+      */
+
+      premoldeados.push({
+
+        codigo: codigo,
+
+        tipo: tipo,
+
+        etapa: 0,
+
+        responsable: responsable,
+
+        fecha: fecha,
+
+        historial: [
+
+          {
+            etapa: 0,
+
+            responsable: responsable,
+
+            fecha: fecha
+
+          }
+
+        ]
+
+      });
+
+
+
+      guardarDatos();
+
+
+
+      document
+        .getElementById("codigo")
+        .value = "";
+
+
+      document
+        .getElementById("tipo")
+        .value = "";
+
+
+      document
+        .getElementById("responsable")
+        .value = "";
+
+
+      document
+        .getElementById("formulario")
+        .classList.remove("activo");
+
+
+      renderizar();
+
+    }
+
+
+
+    /* =========================
+       ACTUALIZAR ETAPA
+    ========================== */
+
+    function actualizarPremoldeado(
+      indice
+    ) {
+
+
+      const pieza =
+        premoldeados[indice];
+
+
+
+      if (
+        pieza.etapa >=
+        etapas.length - 1
+      ) {
+
+        alert(
+          "Este premoldeado ya está montado."
+        );
+
+        return;
+
+      }
+
+
+
+      const nuevoResponsable =
+        prompt(
+          "Ingresá el nombre del responsable de esta actualización:"
+        );
+
+
+      if (
+        !nuevoResponsable ||
+        nuevoResponsable.trim() === ""
+      ) {
+
+        return;
+
+      }
+
+
+
+      pieza.etapa++;
+
+
+      pieza.responsable =
+        nuevoResponsable.trim();
+
+
+      pieza.fecha =
+        new Date().toLocaleString(
+          "es-AR"
+        );
+
+
+
+      if (!pieza.historial) {
+
+        pieza.historial = [];
+
+      }
+
+
+
+      pieza.historial.push({
+
+        etapa: pieza.etapa,
+
+        responsable:
+          pieza.responsable,
+
+        fecha:
+          pieza.fecha
+
+      });
+
+
+
+      guardarDatos();
+
+
+      renderizar();
+
+    }
+
+
+
+    /* =========================
+       VER HISTORIAL
+    ========================== */
+
+    function verHistorial(
+      indice
+    ) {
+
+
+      const pieza =
+        premoldeados[indice];
+
+
+      let texto =
+        "HISTORIAL DE " +
+        pieza.codigo +
+        "\n\n";
+
+
+      if (
+        pieza.historial &&
+        pieza.historial.length > 0
+      ) {
+
+
+        pieza.historial.forEach(
+          registro => {
+
+            texto +=
+              etapas[
+                registro.etapa
+              ].nombre +
+
+              "\nResponsable: " +
+
+              registro.responsable +
+
+              "\nFecha: " +
+
+              registro.fecha +
+
+              "\n\n";
+
+          }
+        );
+
+
+      }
+
+
+      alert(texto);
+
+    }
+
+
+
+    /* =========================
+       ELIMINAR
+    ========================== */
+
+    function eliminarPremoldeado(
+      indice
+    ) {
+
+
+      const confirmar =
+        confirm(
+          "¿Seguro que querés eliminar este premoldeado?"
+        );
+
+
+      if (confirmar) {
+
+        premoldeados.splice(
+          indice,
+          1
+        );
+
+
+        guardarDatos();
+
+
+        renderizar();
+
+      }
+
+    }
+
+
+
+    /* =========================
+       GUARDAR
+    ========================== */
+
+    function guardarDatos() {
+
+      localStorage.setItem(
+        "premoldeados",
+        JSON.stringify(
+          premoldeados
+        )
+      );
+
+    }
+
+
+
+    /* =========================
+       RENDERIZAR TABLA
+    ========================== */
+
+    function renderizar() {
+
+
+      const tabla =
+        document.getElementById(
+          "tablaPremoldeados"
+        );
+
+
+      const mensajeVacio =
+        document.getElementById(
+          "mensajeVacio"
+        );
+
+
+      tabla.innerHTML = "";
+
+
+      const busqueda =
+        document
+          .getElementById("buscador")
+          .value
+          .toLowerCase();
+
+
+      const filtrados =
+        premoldeados.filter(
+          p =>
+
+            p.codigo
+              .toLowerCase()
+              .includes(busqueda)
+
+            ||
+
+            p.tipo
+              .toLowerCase()
+              .includes(busqueda)
+
+        );
+
+
+
+      if (
+        filtrados.length === 0
+      ) {
+
+        mensajeVacio.style.display =
+          "block";
+
+      }
+
+      else {
+
+        mensajeVacio.style.display =
+          "none";
+
+      }
+
+
+
+      filtrados.forEach(
+        pieza => {
+
+
+          const indice =
+            premoldeados.indexOf(
+              pieza
+            );
+
+
+          const estado =
+            etapas[
+              pieza.etapa
+            ];
+
+
+
+          const botonAccion =
+
+            pieza.etapa <
+            etapas.length - 1
+
+              ?
+
+              `
+              <button
+                class="btn-actualizar"
+                onclick="actualizarPremoldeado(${indice})"
+              >
+                ACTUALIZAR
+              </button>
+              `
+
+              :
+
+              `
+              <button
+                class="btn-ver"
+                onclick="verHistorial(${indice})"
+              >
+                VER
+              </button>
+              `;
+
+
+
+          tabla.innerHTML +=
+
+            `
+
+            <tr>
+
+              <td>
+                <strong>
+                  ${pieza.codigo}
+                </strong>
+              </td>
+
+
+              <td>
+                ${pieza.tipo.toUpperCase()}
+              </td>
+
+
+              <td>
+
+                <span
+                  class="estado ${estado.clase}"
+                >
+
+                  <span>
+                    ${estado.icono}
+                  </span>
+
+                  ${estado.nombre}
+
+                </span>
+
+              </td>
+
+
+              <td>
+                ${pieza.fecha}
+              </td>
+
+
+              <td>
+                ${pieza.responsable}
+              </td>
+
+
+              <td>
+
+                ${botonAccion}
+
+
+                <button
+                  class="btn-eliminar"
+                  onclick="eliminarPremoldeado(${indice})"
+                  title="Eliminar"
+                >
+                  🗑
+                </button>
+
+              </td>
+
+
+            </tr>
+
+            `;
+
+        }
       );
 
 
-    if (existe) {
 
-      alert("Ya existe un premoldeado con ese código.");
-
-      return;
+      actualizarResumen();
 
     }
 
 
-    /*
-      CREAR PREMOLDEADO
 
-      etapa: 0 = TALLER
-    */
+    /* =========================
+       RESUMEN
+    ========================== */
 
-    premoldeados.push({
-
-      codigo: codigo,
-
-      tipo: tipo,
-
-      etapa: 0,
-
-      fechaCreacion:
-        new Date().toLocaleString()
-
-    });
+    function actualizarResumen() {
 
 
-    guardarDatos();
+      /*
+        TOTAL
+      */
+
+      document
+        .getElementById("total")
+        .textContent =
+        premoldeados.length;
 
 
-    /*
-      LIMPIAR FORMULARIO
-    */
 
-    document.getElementById("codigo").value = "";
+      /*
+        EN TALLER
 
-    document.getElementById("tipo").value = "";
+        Estado actual:
+        LIBERADO EN TALLER
+      */
 
+      document
+        .getElementById("enTaller")
+        .textContent =
+
+        premoldeados.filter(
+          p => p.etapa === 0
+        ).length;
+
+
+
+      /*
+        EN OBRA
+
+        Desde que llega a obra
+        hasta antes de montarse.
+      */
+
+      document
+        .getElementById("enObra")
+        .textContent =
+
+        premoldeados.filter(
+
+          p =>
+            p.etapa === 2 ||
+            p.etapa === 3
+
+        ).length;
+
+
+
+      /*
+        LIBERADAS EN TALLER
+
+        Cuenta todas las piezas que
+        alguna vez fueron liberadas.
+
+        Como todas empiezan en etapa 0,
+        todas las cargadas cuentan.
+      */
+
+      document
+        .getElementById(
+          "liberadasTaller"
+        )
+        .textContent =
+
+        premoldeados.filter(
+
+          p =>
+
+            p.historial &&
+            p.historial.some(
+              h => h.etapa === 0
+            )
+
+        ).length;
+
+
+
+      /*
+        LIBERADAS POR CALIDAD
+
+        Cuenta las que llegaron
+        a etapa 3 o superior.
+      */
+
+      document
+        .getElementById(
+          "liberadasCalidad"
+        )
+        .textContent =
+
+        premoldeados.filter(
+
+          p =>
+            p.etapa >= 3
+
+        ).length;
+
+
+
+      /*
+        MONTADAS
+      */
+
+      document
+        .getElementById("montadas")
+        .textContent =
+
+        premoldeados.filter(
+
+          p => p.etapa === 4
+
+        ).length;
+
+    }
+
+
+
+    /* =========================
+       BUSCADOR
+    ========================== */
 
     document
-      .getElementById("formulario")
-      .classList.remove("activo");
+      .getElementById("buscador")
+      .addEventListener(
 
+        "input",
+
+        renderizar
+
+      );
+
+
+
+    /* =========================
+       INICIAR
+    ========================== */
 
     renderizar();
 
-  }
 
+  </script>
 
-  /*
-    AVANZAR A LA SIGUIENTE ETAPA
-  */
-
-  function avanzarEtapa(indice) {
-
-    if (
-      premoldeados[indice].etapa <
-      etapas.length - 1
-    ) {
-
-      premoldeados[indice].etapa++;
-
-      guardarDatos();
-
-      renderizar();
-
-    }
-
-  }
-
-
-  /*
-    ELIMINAR PREMOLDEADO
-  */
-
-  function eliminarPremoldeado(indice) {
-
-    const confirmar =
-      confirm(
-        "¿Seguro que querés eliminar este premoldeado?"
-      );
-
-
-    if (confirmar) {
-
-      premoldeados.splice(indice, 1);
-
-      guardarDatos();
-
-      renderizar();
-
-    }
-
-  }
-
-
-  /*
-    GUARDAR EN EL NAVEGADOR
-  */
-
-  function guardarDatos() {
-
-    localStorage.setItem(
-      "premoldeados",
-      JSON.stringify(premoldeados)
-    );
-
-  }
-
-
-  /*
-    MOSTRAR TABLA
-  */
-
-  function renderizar() {
-
-    const tabla =
-      document.getElementById("tablaPremoldeados");
-
-    const mensajeVacio =
-      document.getElementById("mensajeVacio");
-
-
-    tabla.innerHTML = "";
-
-
-    const busqueda =
-      document
-        .getElementById("buscador")
-        .value
-        .toLowerCase();
-
-
-    const filtrados =
-      premoldeados.filter(p =>
-        p.codigo.toLowerCase().includes(busqueda) ||
-        p.tipo.toLowerCase().includes(busqueda)
-      );
-
-
-    if (filtrados.length === 0) {
-
-      mensajeVacio.style.display = "block";
-
-    } else {
-
-      mensajeVacio.style.display = "none";
-
-    }
-
-
-    filtrados.forEach(p => {
-
-      /*
-        BUSCAR INDICE REAL
-      */
-
-      const indice =
-        premoldeados.indexOf(p);
-
-
-      const estado =
-        etapas[p.etapa];
-
-
-      const botonAvanzar =
-        p.etapa < etapas.length - 1
-
-          ? `
-            <button
-              class="btn-avanzar"
-              onclick="avanzarEtapa(${indice})"
-            >
-              Avanzar
-            </button>
-          `
-
-          : `
-            <strong>✓ Finalizado</strong>
-          `;
-
-
-      tabla.innerHTML += `
-
-        <tr>
-
-          <td>
-            <strong>${p.codigo}</strong>
-          </td>
-
-          <td>
-            ${p.tipo}
-          </td>
-
-          <td>
-
-            <span
-              class="estado ${estado.clase}"
-            >
-              ${estado.nombre}
-            </span>
-
-          </td>
-
-          <td>
-
-            ${botonAvanzar}
-
-            <button
-              class="btn-eliminar"
-              onclick="eliminarPremoldeado(${indice})"
-            >
-              Eliminar
-            </button>
-
-          </td>
-
-        </tr>
-
-      `;
-
-    });
-
-
-    actualizarResumen();
-
-  }
-
-
-  /*
-    ACTUALIZAR RESUMEN
-  */
-
-  function actualizarResumen() {
-
-    document.getElementById("total").textContent =
-      premoldeados.length;
-
-
-    document
-      .getElementById("totalTaller")
-      .textContent =
-      premoldeados.filter(
-        p => p.etapa === 0
-      ).length;
-
-
-    /*
-      EN OBRA:
-
-      SALIÓ
-      LLEGÓ
-      CALIDAD
-    */
-
-    document
-      .getElementById("totalObra")
-      .textContent =
-      premoldeados.filter(
-        p =>
-          p.etapa >= 1 &&
-          p.etapa <= 3
-      ).length;
-
-
-    document
-      .getElementById("totalMontados")
-      .textContent =
-      premoldeados.filter(
-        p => p.etapa === 4
-      ).length;
-
-  }
-
-
-  /*
-    BUSCADOR
-  */
-
-  document
-    .getElementById("buscador")
-    .addEventListener(
-      "input",
-      renderizar
-    );
-
-
-  /*
-    INICIAR PAGINA
-  */
-
-  renderizar();
-
-</script>
 
 </body>
 </html>
