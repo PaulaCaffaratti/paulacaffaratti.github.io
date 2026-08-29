@@ -1,0 +1,1010 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Avance - Control de Premoldeados</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --azul: #102f52;
+      --verde: #28734b;
+      --fondo: #f4f6f8;
+      --texto: #24364b;
+      --borde: #dce3ea;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+    }
+
+    header {
+      background: linear-gradient(135deg, #102f52, #183f68);
+      color: white;
+      padding: 20px 35px;
+    }
+
+    header h1 {
+      margin: 0 0 12px;
+      font-size: 26px;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 9px 14px;
+      border-radius: 7px;
+      background: rgba(255,255,255,.12);
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    nav a:hover,
+    nav a.activo {
+      background: white;
+      color: var(--azul);
+    }
+
+    main {
+      max-width: 1500px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .titulo-seccion h2 {
+      margin: 0 0 6px;
+    }
+
+    .titulo-seccion p {
+      margin: 0 0 22px;
+      color: #657487;
+    }
+
+    /* CAMINO */
+
+    .camino {
+      background: white;
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 22px;
+    }
+
+    .pasos {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .paso {
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+      padding: 12px 8px;
+      background: #f7f9fb;
+      border-radius: 10px;
+    }
+
+    .paso-icono {
+      font-size: 30px;
+    }
+
+    .paso h3 {
+      margin: 7px 0 0;
+      font-size: 11px;
+    }
+
+    .flecha {
+      align-self: center;
+      font-size: 20px;
+      color: #8b98a5;
+    }
+
+    /* FILTROS */
+
+    .controles {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    input, select {
+      padding: 13px;
+      border: 1px solid #ccd6df;
+      border-radius: 8px;
+      font-family: inherit;
+    }
+
+    #buscador {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    /* TABLA */
+
+    .tabla-contenedor {
+      background: white;
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    th {
+      background: #f4f6f8;
+      text-align: left;
+      padding: 14px;
+      font-size: 12px;
+    }
+
+    td {
+      padding: 13px 14px;
+      border-top: 1px solid #e6ebef;
+      font-size: 13px;
+    }
+
+    .estado {
+      padding: 7px 10px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: bold;
+      display: inline-block;
+      background: #edf1f5;
+    }
+
+    .btn-avanzar {
+      border: none;
+      background: var(--verde);
+      color: white;
+      padding: 9px 13px;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
+    .completo {
+      color: #28734b;
+      font-weight: bold;
+    }
+
+    .vacio {
+      padding: 35px;
+      text-align: center;
+      color: #778595;
+    }
+
+    /* MODAL */
+
+    .modal-fondo {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-fondo.activo {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      background: white;
+      border-radius: 14px;
+      padding: 25px;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .modal p {
+      color: #657487;
+      line-height: 1.5;
+    }
+
+    .modal input {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .acciones-modal {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-cancelar {
+      background: white;
+      border: 1px solid #ccd6df;
+      padding: 11px 15px;
+      border-radius: 8px;
+    }
+
+    .btn-confirmar {
+      background: var(--verde);
+      color: white;
+      border: none;
+      padding: 11px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .historial {
+      font-size: 11px;
+      color: #657487;
+      max-width: 230px;
+      line-height: 1.5;
+    }
+
+    @media(max-width: 900px) {
+
+      header {
+        padding: 18px;
+      }
+
+      main {
+        padding: 15px;
+      }
+
+      .pasos {
+        flex-wrap: wrap;
+      }
+
+      .paso {
+        min-width: 30%;
+      }
+
+      .flecha {
+        display: none;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <h1>🏗️ CONTROL DE PREMOLDEADOS</h1>
+
+  <nav>
+    <a href="index.html">📊 RESUMEN</a>
+    <a href="base.html">📋 BASE DE INGENIERÍA</a>
+    <a href="avance.html" class="activo">🚀 AVANCE</a>
+  </nav>
+
+</header>
+
+
+<main>
+
+  <section class="titulo-seccion">
+
+    <h2>🚀 Avance de Premoldeados</h2>
+
+    <p>
+      Buscá una pieza y confirmá el avance a la siguiente etapa.
+    </p>
+
+  </section>
+
+
+  <!-- CAMINO -->
+
+  <section class="camino">
+
+    <div class="pasos">
+
+      <div class="paso">
+        <div class="paso-icono">🏭</div>
+        <h3>EN TALLER</h3>
+      </div>
+
+      <div class="flecha">→</div>
+
+      <div class="paso">
+        <div class="paso-icono">✓</div>
+        <h3>LIBERADA EN TALLER</h3>
+      </div>
+
+      <div class="flecha">→</div>
+
+      <div class="paso">
+        <div class="paso-icono">🚧</div>
+        <h3>EN OBRA</h3>
+      </div>
+
+      <div class="flecha">→</div>
+
+      <div class="paso">
+        <div class="paso-icono">✔</div>
+        <h3>LIBERADA QA/QC</h3>
+      </div>
+
+      <div class="flecha">→</div>
+
+      <div class="paso">
+        <div class="paso-icono">🏗️</div>
+        <h3>MONTADA</h3>
+      </div>
+
+      <div class="flecha">→</div>
+
+      <div class="paso">
+        <div class="paso-icono">🎨</div>
+        <h3>PINTADA</h3>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- BUSCADOR Y FILTRO -->
+
+  <section class="controles">
+
+    <input
+      id="buscador"
+      placeholder="🔎 Buscar por código, tipo o modelo..."
+    >
+
+    <select id="filtroEtapa">
+
+      <option value="todos">
+        Todas las etapas
+      </option>
+
+      <option value="0">
+        EN TALLER
+      </option>
+
+      <option value="1">
+        LIBERADA EN TALLER
+      </option>
+
+      <option value="2">
+        EN OBRA
+      </option>
+
+      <option value="3">
+        LIBERADA QA/QC EN OBRA
+      </option>
+
+      <option value="4">
+        MONTADA
+      </option>
+
+      <option value="5">
+        PINTADA
+      </option>
+
+    </select>
+
+  </section>
+
+
+  <!-- TABLA -->
+
+  <section class="tabla-contenedor">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>CÓDIGO</th>
+          <th>TIPO</th>
+          <th>MODELO</th>
+          <th>ESTADO ACTUAL</th>
+          <th>ÚLTIMO RESPONSABLE</th>
+          <th>FECHA</th>
+          <th>ACCIÓN</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="tabla"></tbody>
+
+    </table>
+
+    <div
+      class="vacio"
+      id="mensajeVacio"
+    >
+      Todavía no hay premoldeados cargados.
+      Primero cargalos en la BASE DE INGENIERÍA.
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- MODAL -->
+
+<div
+  class="modal-fondo"
+  id="modalFondo"
+>
+
+  <div class="modal">
+
+    <h2>
+      Confirmar avance
+    </h2>
+
+    <p id="textoModal"></p>
+
+    <input
+      id="responsableInput"
+      placeholder="Escribí tu nombre"
+    >
+
+    <div class="acciones-modal">
+
+      <button
+        class="btn-cancelar"
+        onclick="cerrarModal()"
+      >
+        CANCELAR
+      </button>
+
+      <button
+        class="btn-confirmar"
+        onclick="confirmarAvance()"
+      >
+        CONFIRMAR
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  const etapas = [
+
+    "EN TALLER",
+
+    "LIBERADA EN TALLER",
+
+    "EN OBRA",
+
+    "LIBERADA QA/QC EN OBRA",
+
+    "MONTADA",
+
+    "PINTADA"
+
+  ];
+
+
+  let premoldeados =
+    JSON.parse(
+      localStorage.getItem(
+        "premoldeados"
+      )
+    ) || [];
+
+
+  let indiceSeleccionado =
+    null;
+
+
+  function guardar() {
+
+    localStorage.setItem(
+      "premoldeados",
+      JSON.stringify(
+        premoldeados
+      )
+    );
+
+  }
+
+
+  function formatearFecha(fecha) {
+
+    if (!fecha) {
+
+      return "-";
+
+    }
+
+
+    const d =
+      new Date(fecha);
+
+
+    return d.toLocaleString(
+      "es-AR"
+    );
+
+  }
+
+
+  function abrirModal(indice) {
+
+    indiceSeleccionado =
+      indice;
+
+
+    const pieza =
+      premoldeados[indice];
+
+
+    const siguienteEtapa =
+      etapas[
+        pieza.etapa + 1
+      ];
+
+
+    document
+      .getElementById("textoModal")
+      .innerHTML = `
+
+        <strong>
+          ${pieza.codigo}
+        </strong>
+
+        <br><br>
+
+        Vas a avanzar la pieza:
+
+        <br>
+
+        <strong>
+          ${etapas[pieza.etapa]}
+        </strong>
+
+        →
+
+        <strong>
+          ${siguienteEtapa}
+        </strong>
+
+        <br><br>
+
+        ¿Quién confirma este avance?
+
+      `;
+
+
+    document
+      .getElementById(
+        "responsableInput"
+      )
+      .value = "";
+
+
+    document
+      .getElementById(
+        "modalFondo"
+      )
+      .classList
+      .add("activo");
+
+
+    setTimeout(() => {
+
+      document
+        .getElementById(
+          "responsableInput"
+        )
+        .focus();
+
+    }, 100);
+
+  }
+
+
+  function cerrarModal() {
+
+    document
+      .getElementById(
+        "modalFondo"
+      )
+      .classList
+      .remove("activo");
+
+
+    indiceSeleccionado =
+      null;
+
+  }
+
+
+  function confirmarAvance() {
+
+    const responsable =
+      document
+      .getElementById(
+        "responsableInput"
+      )
+      .value
+      .trim();
+
+
+    if (!responsable) {
+
+      alert(
+        "Por favor escribí el nombre del responsable."
+      );
+
+      return;
+
+    }
+
+
+    const pieza =
+      premoldeados[
+        indiceSeleccionado
+      ];
+
+
+    /*
+      Creamos el historial si
+      la pieza todavía no lo tiene.
+    */
+
+    if (
+      !Array.isArray(
+        pieza.historial
+      )
+    ) {
+
+      pieza.historial = [];
+
+    }
+
+
+    const fecha =
+      new Date().toISOString();
+
+
+    /*
+      Guardamos en historial
+      el avance confirmado.
+    */
+
+    pieza.historial.push({
+
+      etapa:
+        pieza.etapa + 1,
+
+      responsable:
+        responsable,
+
+      fecha:
+        fecha
+
+    });
+
+
+    /*
+      Actualizamos el estado actual.
+    */
+
+    pieza.etapa =
+      pieza.etapa + 1;
+
+
+    pieza.responsable =
+      responsable;
+
+
+    pieza.fecha =
+      fecha;
+
+
+    guardar();
+
+
+    cerrarModal();
+
+
+    renderizar();
+
+  }
+
+
+  function renderizar() {
+
+    /*
+      Leemos nuevamente los datos
+      para actualizar si hubo cambios.
+    */
+
+    premoldeados =
+      JSON.parse(
+        localStorage.getItem(
+          "premoldeados"
+        )
+      ) || [];
+
+
+    const tabla =
+      document
+      .getElementById("tabla");
+
+
+    const busqueda =
+      document
+      .getElementById("buscador")
+      .value
+      .toLowerCase();
+
+
+    const filtro =
+      document
+      .getElementById("filtroEtapa")
+      .value;
+
+
+    tabla.innerHTML =
+      "";
+
+
+    const filtrados =
+      premoldeados.filter(p => {
+
+
+        const coincideBusqueda =
+
+          p.codigo
+          .toLowerCase()
+          .includes(busqueda)
+
+          ||
+
+          p.tipo
+          .toLowerCase()
+          .includes(busqueda)
+
+          ||
+
+          p.modelo
+          .toLowerCase()
+          .includes(busqueda);
+
+
+        const coincideEtapa =
+
+          filtro === "todos"
+
+          ||
+
+          p.etapa ===
+          Number(filtro);
+
+
+        return
+
+          coincideBusqueda
+
+          &&
+
+          coincideEtapa;
+
+      });
+
+
+    document
+      .getElementById(
+        "mensajeVacio"
+      )
+      .style
+      .display =
+
+      filtrados.length === 0
+        ? "block"
+        : "none";
+
+
+    filtrados.forEach(
+      pieza => {
+
+
+        const indice =
+          premoldeados.indexOf(
+            pieza
+          );
+
+
+        let accion;
+
+
+        if (
+          pieza.etapa >=
+          etapas.length - 1
+        ) {
+
+          accion = `
+
+            <span class="completo">
+
+              ✓ COMPLETADO
+
+            </span>
+
+          `;
+
+        } else {
+
+          accion = `
+
+            <button
+              class="btn-avanzar"
+              onclick="
+                abrirModal(
+                  ${indice}
+                )
+              "
+            >
+
+              AVANZAR →
+
+            </button>
+
+          `;
+
+        }
+
+
+        tabla.innerHTML += `
+
+          <tr>
+
+            <td>
+
+              <strong>
+                ${pieza.codigo}
+              </strong>
+
+            </td>
+
+
+            <td>
+
+              ${pieza.tipo}
+
+            </td>
+
+
+            <td>
+
+              ${pieza.modelo}
+
+            </td>
+
+
+            <td>
+
+              <span class="estado">
+
+                ${etapas[
+                  pieza.etapa
+                ]}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              ${
+                pieza.responsable
+                ||
+                "-"
+              }
+
+            </td>
+
+
+            <td>
+
+              ${
+                formatearFecha(
+                  pieza.fecha
+                )
+              }
+
+            </td>
+
+
+            <td>
+
+              ${accion}
+
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    );
+
+  }
+
+
+  document
+    .getElementById(
+      "buscador"
+    )
+    .addEventListener(
+      "input",
+      renderizar
+    );
+
+
+  document
+    .getElementById(
+      "filtroEtapa"
+    )
+    .addEventListener(
+      "change",
+      renderizar
+    );
+
+
+  document
+    .getElementById(
+      "modalFondo"
+    )
+    .addEventListener(
+      "click",
+      function(evento) {
+
+        if (
+          evento.target ===
+          this
+        ) {
+
+          cerrarModal();
+
+        }
+
+      }
+    );
+
+
+  renderizar();
+
+</script>
+
+</body>
+</html>
+```
