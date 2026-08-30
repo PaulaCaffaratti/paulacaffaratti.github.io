@@ -1,444 +1,331 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Avance - Premoldeados
-</title>
-
+<title>Localización de Premoldeados</title>
 
 <style>
-
 *{
-box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#f4f6f8;
-color:#24364b;
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f6f8;
+  color:#24364b;
 }
 
 header{
-background:#102f52;
-color:white;
-padding:20px 35px;
+  background:#102f52;
+  color:white;
+  padding:20px 35px;
 }
 
 header h1{
-margin:0 0 12px;
+  margin:0 0 12px;
 }
 
 nav{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 nav a{
-color:white;
-text-decoration:none;
-padding:9px 14px;
-border-radius:7px;
-background:#ffffff20;
-font-size:13px;
-font-weight:bold;
+  color:white;
+  text-decoration:none;
+  padding:9px 14px;
+  border-radius:7px;
+  background:#ffffff20;
+  font-size:13px;
+  font-weight:bold;
 }
 
 nav a:hover,
 nav a.activo{
-background:white;
-color:#102f52;
+  background:white;
+  color:#102f52;
 }
 
 main{
-max-width:1600px;
-margin:auto;
-padding:25px;
+  max-width:1600px;
+  margin:auto;
+  padding:25px;
 }
 
 .panel{
-background:white;
-border:1px solid #dce3ea;
-border-radius:14px;
-padding:20px;
-margin-bottom:20px;
+  background:white;
+  border:1px solid #dce3ea;
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:20px;
 }
 
 .login{
-max-width:450px;
-margin:50px auto;
+  max-width:450px;
+  margin:50px auto;
 }
 
 .login h2{
-margin-top:0;
+  margin-top:0;
 }
 
 .campo{
-display:flex;
-flex-direction:column;
-gap:6px;
-margin-bottom:14px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:14px;
 }
 
 .campo label{
-font-size:12px;
-font-weight:bold;
+  font-size:12px;
+  font-weight:bold;
 }
 
 input,
 select{
-padding:10px;
-border:1px solid #cfd8e1;
-border-radius:7px;
-font-size:14px;
+  padding:10px;
+  border:1px solid #cfd8e1;
+  border-radius:7px;
+  font-size:14px;
 }
 
 .boton{
-border:0;
-border-radius:7px;
-padding:10px 16px;
-cursor:pointer;
-font-weight:bold;
+  border:0;
+  border-radius:7px;
+  padding:10px 16px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
 .login-btn{
-background:#102f52;
-color:white;
-width:100%;
+  background:#102f52;
+  color:white;
+  width:100%;
 }
 
 .logout{
-background:#a83232;
-color:white;
-float:right;
+  background:#a83232;
+  color:white;
+  float:right;
 }
 
 .actualizar{
-background:#102f52;
-color:white;
+  background:#102f52;
+  color:white;
 }
 
 .estado{
-background:#fff8e9;
-border:1px solid #ead9a6;
-padding:12px 15px;
-border-radius:8px;
-margin-bottom:20px;
-font-size:13px;
+  background:#fff8e9;
+  border:1px solid #ead9a6;
+  padding:12px 15px;
+  border-radius:8px;
+  margin-bottom:20px;
+  font-size:13px;
 }
 
 .estado.ok{
-background:#edf8f1;
-border-color:#b9dcc5;
+  background:#edf8f1;
+  border-color:#b9dcc5;
 }
 
 .estado.error{
-background:#fff0f0;
-border-color:#e0b2b2;
+  background:#fff0f0;
+  border-color:#e0b2b2;
 }
 
 .usuario{
-background:#eef5fc;
-border:1px solid #d3e1ef;
-padding:12px;
-border-radius:8px;
-margin-bottom:15px;
-font-size:13px;
+  background:#eef5fc;
+  border:1px solid #d3e1ef;
+  padding:12px;
+  border-radius:8px;
+  margin-bottom:15px;
+  font-size:13px;
 }
 
 .filtros{
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-align-items:end;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:end;
 }
 
 .filtros .campo{
-margin-bottom:0;
-min-width:220px;
+  margin-bottom:0;
+  min-width:220px;
 }
 
 .tabla{
-overflow-x:auto;
+  overflow-x:auto;
 }
 
 table{
-width:100%;
-border-collapse:collapse;
-min-width:1250px;
+  width:100%;
+  border-collapse:collapse;
+  min-width:1250px;
 }
 
 th{
-background:#f4f6f8;
-padding:12px;
-text-align:left;
-font-size:12px;
-white-space:nowrap;
+  background:#f4f6f8;
+  padding:12px;
+  text-align:left;
+  font-size:12px;
+  white-space:nowrap;
 }
 
 td{
-padding:10px 12px;
-border-top:1px solid #e6ebef;
-font-size:13px;
-vertical-align:middle;
+  padding:10px 12px;
+  border-top:1px solid #e6ebef;
+  font-size:13px;
+  vertical-align:middle;
 }
 
 .oculto{
-display:none!important;
+  display:none!important;
 }
 
 .ayuda{
-font-size:12px;
-color:#657487;
-margin-top:12px;
+  font-size:12px;
+  color:#657487;
+  margin-top:12px;
 }
 
 .clear{
-clear:both;
+  clear:both;
 }
 
-
-/* ==============================
-RESUMEN
-============================== */
-
-.resumen{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-margin-bottom:20px;
-}
-
-.card{
-background:#eef5fc;
-border:1px solid #d3e1ef;
-border-radius:10px;
-padding:14px 17px;
-}
-
-.card span{
-display:block;
-font-size:11px;
-font-weight:bold;
-color:#68798c;
-margin-bottom:6px;
-text-transform:uppercase;
-}
-
-.card strong{
-font-size:24px;
-display:block;
-}
-
-.card small{
-font-size:10px;
-color:#718096;
-}
-
-.card.destacada{
-background:#102f52;
-color:white;
-border-color:#102f52;
-}
-
-.card.destacada span,
-.card.destacada small{
-color:#d9e5ef;
-}
-
-.contadores{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:10px;
-margin-bottom:20px;
-}
-
-.contador{
-background:#f8fafc;
-border:1px solid #dce3ea;
-border-radius:9px;
-padding:11px;
-font-size:11px;
-font-weight:bold;
-}
-
-.contador strong{
-display:block;
-font-size:21px;
-margin-top:5px;
-}
-
-
-/* ==============================
-ETAPAS
-============================== */
+/* ETAPAS */
 
 .etapas-checks{
-display:flex;
-gap:7px;
-flex-wrap:wrap;
-min-width:610px;
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  min-width:610px;
 }
 
 .check-etapa{
-display:flex;
-align-items:center;
-gap:6px;
-padding:9px 10px;
-border:1px solid #d9e1ea;
-background:#f8fafc;
-border-radius:8px;
-font-size:11px;
-font-weight:700;
-white-space:nowrap;
-transition:.15s;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:9px 10px;
+  border:1px solid #d9e1ea;
+  background:#f8fafc;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+  transition:.15s;
 }
 
 .check-etapa.completa{
-background:#edf7f1;
-border-color:#b9dfc7;
-color:#17683b;
+  background:#edf7f1;
+  border-color:#b9dfc7;
+  color:#17683b;
 }
 
 .check-etapa.actual{
-border-color:#3b82f6;
-box-shadow:0 0 0 1px #3b82f633;
+  border-color:#3b82f6;
+  box-shadow:0 0 0 1px #3b82f633;
 }
 
 .check-etapa input{
-width:18px;
-height:18px;
-cursor:pointer;
-accent-color:#15803d;
-margin:0;
+  width:18px;
+  height:18px;
+  cursor:pointer;
+  accent-color:#15803d;
+  margin:0;
 }
 
 .check-etapa input:disabled{
-cursor:not-allowed;
-opacity:.55;
+  cursor:not-allowed;
+  opacity:.55;
 }
 
-
-/* ==============================
-MONTAJE / PINTURA
-============================== */
+/* MONTAJE / PINTURA */
 
 .finales{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-min-width:210px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  min-width:210px;
 }
 
 .check-final{
-display:flex;
-align-items:center;
-gap:7px;
-padding:10px 11px;
-border:1px solid #d9e1ea;
-background:#f8fafc;
-border-radius:8px;
-font-size:11px;
-font-weight:bold;
-white-space:nowrap;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:10px 11px;
+  border:1px solid #d9e1ea;
+  background:#f8fafc;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:bold;
+  white-space:nowrap;
 }
 
 .check-final.activo{
-background:#edf7f1;
-border-color:#b9dfc7;
-color:#17683b;
+  background:#edf7f1;
+  border-color:#b9dfc7;
+  color:#17683b;
 }
 
 .check-final input{
-width:18px;
-height:18px;
-margin:0;
-cursor:pointer;
-accent-color:#15803d;
+  width:18px;
+  height:18px;
+  margin:0;
+  cursor:pointer;
+  accent-color:#15803d;
 }
 
 .check-final input:disabled{
-cursor:not-allowed;
-opacity:.55;
+  cursor:not-allowed;
+  opacity:.55;
 }
 
 .fecha-montaje{
-font-size:10px;
-color:#657487;
-margin-top:5px;
+  font-size:10px;
+  color:#657487;
+  margin-top:5px;
 }
 
 .m3-pieza{
-font-weight:bold;
-color:#255b88;
-white-space:nowrap;
+  font-weight:bold;
+  color:#255b88;
+  white-space:nowrap;
 }
 
 .vacio{
-text-align:center;
-padding:30px;
-color:#657487;
-}
-
-@media(max-width:1100px){
-
-.resumen{
-grid-template-columns:repeat(2,1fr);
-}
-
-.contadores{
-grid-template-columns:repeat(4,1fr);
-}
-
+  text-align:center;
+  padding:30px;
+  color:#657487;
 }
 
 @media(max-width:700px){
 
-main{
-padding:15px;
-}
+  main{
+    padding:15px;
+  }
 
-header{
-padding:18px;
-}
+  header{
+    padding:18px;
+  }
 
-.logout{
-float:none;
-margin-bottom:15px;
+  .logout{
+    float:none;
+    margin-bottom:15px;
+  }
 }
-
-.resumen{
-grid-template-columns:1fr;
-}
-
-.contadores{
-grid-template-columns:repeat(2,1fr);
-}
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <header>
 
-<h1>
-🏗️ CONTROL DE PREMOLDEADOS
-</h1>
+<h1>🏗️ CONTROL DE PREMOLDEADOS</h1>
 
 <nav>
 
@@ -450,431 +337,112 @@ grid-template-columns:repeat(2,1fr);
 📋 BASE DE INGENIERÍA
 </a>
 
-<a
-href="avance.html"
-class="activo">
-🚀 AVANCE
+<a href="avance.html" class="activo">
+📍 LOCALIZACIÓN DE PREMOLDEADOS
 </a>
 
 </nav>
 
 </header>
 
-
 <main>
 
+<!-- LOGIN -->
 
-<!-- ==============================
-LOGIN
-============================== -->
+<section id="loginPanel" class="panel login">
 
-<section
-id="loginPanel"
-class="panel login">
+<h2>🔐 Iniciar sesión</h2>
 
-<h2>
-🔐 Iniciar sesión
-</h2>
-
-<p>
-Ingresá con tu email y contraseña.
-</p>
+<p>Ingresá con tu email y contraseña.</p>
 
 <div class="campo">
-
-<label>
-EMAIL
-</label>
-
+<label>EMAIL</label>
 <input
-id="email"
-type="email"
-placeholder="tu@email.com">
-
+  id="email"
+  type="email"
+  placeholder="tu@email.com">
 </div>
-
 
 <div class="campo">
-
-<label>
-CONTRASEÑA
-</label>
-
+<label>CONTRASEÑA</label>
 <input
-id="password"
-type="password"
-placeholder="Contraseña">
-
+  id="password"
+  type="password"
+  placeholder="Contraseña">
 </div>
-
 
 <button
-class="boton login-btn"
-onclick="iniciarSesion()">
-
+  class="boton login-btn"
+  onclick="iniciarSesion()">
 🔐 INICIAR SESIÓN
-
 </button>
 
-
-<div
-id="loginError"
-class="ayuda">
-</div>
+<div id="loginError" class="ayuda"></div>
 
 </section>
 
 
+<!-- APP -->
 
-<!-- ==============================
-APP
-============================== -->
-
-<section
-id="appPanel"
-class="oculto">
-
+<section id="appPanel" class="oculto">
 
 <div class="panel">
 
-
 <button
-class="boton logout"
-onclick="cerrarSesion()">
-
+  class="boton logout"
+  onclick="cerrarSesion()">
 🚪 CERRAR SESIÓN
-
 </button>
 
+<h2>📍 Localización de Premoldeados</h2>
 
-<h2>
-🚀 Avance de Premoldeados
-</h2>
-
-
-<div class="clear">
-</div>
-
+<div class="clear"></div>
 
 <p>
-Actualización de etapas, montaje y pintura.
+Visualización y actualización de la ubicación y estado de cada premoldeado.
 </p>
 
+<div id="usuario" class="usuario"></div>
 
-<div
-id="usuario"
-class="usuario">
-</div>
-
-
-<div
-id="estado"
-class="estado">
-
+<div id="estado" class="estado">
 ⏳ Cargando...
+</div>
 
 </div>
 
 
-</div>
-
-
-
-<!-- ==============================
-RESUMEN M3
-============================== -->
+<!-- FILTROS -->
 
 <section class="panel">
-
-
-<h3>
-📊 Avance de montaje en m³
-</h3>
-
-
-<div class="resumen">
-
-
-<div class="card destacada">
-
-<span>
-Volumen total proyecto
-</span>
-
-<strong id="volumenTotal">
-0,00 m³
-</strong>
-
-<small>
-Base completa del proyecto
-</small>
-
-</div>
-
-
-<div class="card">
-
-<span>
-Cantidad total proyecto
-</span>
-
-<strong id="cantidadProyecto">
-0
-</strong>
-
-<small>
-unidades planificadas
-</small>
-
-</div>
-
-
-<div class="card">
-
-<span>
-Planificado a hoy
-</span>
-
-<strong id="planHoy">
-0,00 m³
-</strong>
-
-<small id="fechaPlan">
-—
-</small>
-
-</div>
-
-
-<div class="card">
-
-<span>
-Real montado
-</span>
-
-<strong id="realHoy">
-0,00 m³
-</strong>
-
-<small>
-Según piezas montadas
-</small>
-
-</div>
-
-
-<div class="card">
-
-<span>
-Desvío montaje
-</span>
-
-<strong id="desvioHoy">
-0,00 m³
-</strong>
-
-<small>
-Real - Plan
-</small>
-
-</div>
-
-
-<div class="card">
-
-<span>
-Avance real
-</span>
-
-<strong id="porcentajeReal">
-0%
-</strong>
-
-<small>
-sobre 308,496 m³
-</small>
-
-</div>
-
-
-<div class="card">
-
-<span>
-Piezas cargadas
-</span>
-
-<strong id="totalCargadas">
-0
-</strong>
-
-<small>
-Base de Ingeniería
-</small>
-
-</div>
-
-
-<div class="card">
-
-<span>
-Piezas montadas
-</span>
-
-<strong id="totalMontadasResumen">
-0
-</strong>
-
-<small>
-unidades reales
-</small>
-
-</div>
-
-
-</div>
-
-
-<div class="contadores">
-
-
-<div class="contador">
-
-En taller
-
-<strong id="taller">
-0
-</strong>
-
-</div>
-
-
-<div class="contador">
-
-Liberada taller
-
-<strong id="liberadaTaller">
-0
-</strong>
-
-</div>
-
-
-<div class="contador">
-
-En obra
-
-<strong id="obra">
-0
-</strong>
-
-</div>
-
-
-<div class="contador">
-
-QA/QC
-
-<strong id="qaqc">
-0
-</strong>
-
-</div>
-
-
-<div class="contador">
-
-Montadas
-
-<strong id="montada">
-0
-</strong>
-
-</div>
-
-
-<div class="contador">
-
-Pintadas
-
-<strong id="pintada">
-0
-</strong>
-
-</div>
-
-
-<div class="contador">
-
-Total cargadas
-
-<strong id="total">
-0
-</strong>
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-<!-- ==============================
-FILTROS
-============================== -->
-
-<section class="panel">
-
 
 <div class="filtros">
 
-
 <div class="campo">
 
-<label>
-🔎 BUSCAR
-</label>
+<label>🔎 BUSCAR</label>
 
 <input
-id="buscar"
-type="text"
-placeholder="Código, tipo o modelo..."
-oninput="mostrarTabla()">
+  id="buscar"
+  type="text"
+  placeholder="Código, tipo o modelo..."
+  oninput="mostrarTabla()">
 
 </div>
 
 
 <div class="campo">
 
-<label>
-FILTRAR ETAPA
-</label>
+<label>FILTRAR ETAPA</label>
 
 <select
-id="filtroEtapa"
-onchange="mostrarTabla()">
+  id="filtroEtapa"
+  onchange="mostrarTabla()">
 
-<option value="">
-TODAS
-</option>
-
-<option value="0">
-EN TALLER
-</option>
-
-<option value="1">
-LIBERADA EN TALLER
-</option>
-
-<option value="2">
-EN OBRA
-</option>
-
-<option value="3">
-LIBERADA QA/QC EN OBRA
-</option>
+<option value="">TODAS</option>
+<option value="0">EN TALLER</option>
+<option value="1">LIBERADA EN TALLER</option>
+<option value="2">EN OBRA</option>
+<option value="3">LIBERADA QA/QC EN OBRA</option>
 
 </select>
 
@@ -882,2114 +450,1205 @@ LIBERADA QA/QC EN OBRA
 
 
 <button
-class="boton actualizar"
-onclick="cargarDatos()">
-
+  class="boton actualizar"
+  onclick="cargarDatos()">
 🔄 ACTUALIZAR
-
 </button>
-
 
 </div>
 
 </section>
 
 
-
-<!-- ==============================
-TABLA
-============================== -->
+<!-- TABLA -->
 
 <section class="panel">
 
-
 <div class="tabla">
 
-
 <table>
-
 
 <thead>
 
 <tr>
-
-<th>
-ID
-</th>
-
-<th>
-CÓDIGO
-</th>
-
-<th>
-TIPO
-</th>
-
-<th>
-MODELO
-</th>
-
-<th>
-m³ / UNIDAD
-</th>
-
-<th>
-AVANCE DE ETAPAS
-</th>
-
-<th>
-MONTAJE / PINTURA
-</th>
-
+<th>ID</th>
+<th>CÓDIGO</th>
+<th>TIPO</th>
+<th>MODELO</th>
+<th>m³ / UNIDAD</th>
+<th>LOCALIZACIÓN / ETAPA</th>
+<th>MONTAJE / PINTURA</th>
 </tr>
 
 </thead>
 
-
-<tbody id="tabla">
-</tbody>
-
+<tbody id="tabla"></tbody>
 
 </table>
 
-
 </div>
 
-
 </section>
 
-
 </section>
-
 
 </main>
 
 
-
-<script
-src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-
-/* =====================================================
+/* ==============================
 SUPABASE
-===================================================== */
+============================== */
 
-const SUPABASE_URL=
+const SUPABASE_URL =
 "https://tnnioleawbhuqjuykrsf.supabase.co";
 
-
-const SUPABASE_KEY=
+const SUPABASE_KEY =
 "sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
 
-
-const db=
+const db =
 supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
 
+/* ==============================
+m³ POR TIPO
+============================== */
 
-/* =====================================================
-BASE COMPLETA DEL PROYECTO
-===================================================== */
+const M3_POR_TIPO = {
 
-const BASE_PROYECTO=[
+"B0A":3.91,
+"B0B":3.91,
+"B1":7.4,
+"B2":2.5,
+"B3":7.56,
 
-{tipo:"B0A",cantidad:2,m3:3.91,inicio:"2026-08-12",fin:"2026-08-16"},
-{tipo:"B0B",cantidad:2,m3:3.91,inicio:"2026-08-12",fin:"2026-08-16"},
-{tipo:"B1",cantidad:14,m3:7.4,inicio:"2026-08-12",fin:"2026-08-16"},
-{tipo:"B2",cantidad:4,m3:2.5,inicio:"2026-08-12",fin:"2026-08-16"},
-{tipo:"B3",cantidad:4,m3:7.56,inicio:"2026-08-12",fin:"2026-08-16"},
+"F1":0.28,
+"F2":0.31,
+"FPE":0.64,
+"TPE":0.26,
+"F1A":0.28,
 
-{tipo:"F1",cantidad:20,m3:0.28,inicio:"2026-08-31",fin:"2026-09-02"},
-{tipo:"F2",cantidad:4,m3:0.31,inicio:"2026-08-31",fin:"2026-09-02"},
-{tipo:"FPE",cantidad:1,m3:0.64,inicio:"2026-09-25",fin:"2026-09-28"},
-{tipo:"TPE",cantidad:1,m3:0.26,inicio:"2026-09-25",fin:"2026-09-28"},
-{tipo:"F1A",cantidad:4,m3:0.28,inicio:"2026-08-31",fin:"2026-09-02"},
+"C1":0.993,
+"C2":1.03,
+"C3":1.03,
+"C4":1.07,
 
-{tipo:"C1",cantidad:2,m3:0.993,inicio:"2026-10-01",fin:"2026-10-12"},
-{tipo:"C2",cantidad:5,m3:1.03,inicio:"2026-10-01",fin:"2026-10-12"},
-{tipo:"C3",cantidad:3,m3:1.03,inicio:"2026-10-01",fin:"2026-10-12"},
-{tipo:"C4",cantidad:4,m3:1.07,inicio:"2026-10-01",fin:"2026-10-12"},
+"S1":1.59,
+"S2A":2.92,
+"S2B":2.92,
+"S3":1.77,
+"S4A":1.1,
+"S4B":0.55,
+"S5":0.8,
+"S6":0.3,
 
-{tipo:"S1",cantidad:2,m3:1.59,inicio:"2026-09-01",fin:"2026-09-03"},
-{tipo:"S2A",cantidad:4,m3:2.92,inicio:"2026-09-01",fin:"2026-09-03"},
-{tipo:"S2B",cantidad:1,m3:2.92,inicio:"2026-09-01",fin:"2026-09-03"},
-{tipo:"S3",cantidad:2,m3:1.77,inicio:"2026-09-01",fin:"2026-09-03"},
-{tipo:"S4A",cantidad:3,m3:1.1,inicio:"2026-09-01",fin:"2026-09-03"},
-{tipo:"S4B",cantidad:4,m3:0.55,inicio:"2026-09-01",fin:"2026-09-03"},
-{tipo:"S5",cantidad:2,m3:0.8,inicio:"2026-09-01",fin:"2026-09-03"},
-{tipo:"S6",cantidad:2,m3:0.3,inicio:"2026-09-01",fin:"2026-09-03"},
+"PTS-A":3.41,
 
-{tipo:"PTS-A",cantidad:2,m3:3.41,inicio:"2026-08-27",fin:"2026-08-27"},
+"BTS":3.1,
+"BTS-C":0.87,
 
-{tipo:"BTS",cantidad:1,m3:3.1,inicio:"2026-08-27",fin:"2026-08-30"},
-{tipo:"BTS-C",cantidad:1,m3:0.87,inicio:"2026-08-27",fin:"2026-08-30"},
+"FDS":1.5,
 
-{tipo:"FDS",cantidad:10,m3:1.5,inicio:"2026-10-06",fin:"2026-10-16"},
+"ILUM":2.24,
 
-{tipo:"ILUM",cantidad:4,m3:2.24,inicio:"2026-09-29",fin:"2026-10-09"},
+"FS-01":0.197,
+"FS-02":0.128,
+"FS-03":0.08,
+"FS-06":0.3,
 
-{tipo:"FS-01",cantidad:20,m3:0.197,inicio:"2026-10-01",fin:"2026-10-13"},
-{tipo:"FS-02",cantidad:10,m3:0.128,inicio:"2026-10-01",fin:"2026-10-13"},
-{tipo:"FS-03",cantidad:20,m3:0.08,inicio:"2026-10-01",fin:"2026-10-13"},
-{tipo:"FS-06",cantidad:12,m3:0.3,inicio:"2026-10-01",fin:"2026-10-13"},
+"B-01":2.36,
+"B-02":1.37,
+"B-03":1.03,
+"B-04":1.57,
+"B-06":1.27,
+"B-07":1.02,
 
-{tipo:"B-01",cantidad:1,m3:2.36,inicio:"2026-10-01",fin:"2026-10-13"},
-{tipo:"B-02",cantidad:1,m3:1.37,inicio:"2026-10-01",fin:"2026-10-13"},
-{tipo:"B-03",cantidad:1,m3:1.03,inicio:"2026-10-01",fin:"2026-10-13"},
-{tipo:"B-04",cantidad:4,m3:1.57,inicio:"2026-10-01",fin:"2026-10-13"},
-{tipo:"B-06",cantidad:1,m3:1.27,inicio:"2026-10-01",fin:"2026-10-13"},
-{tipo:"B-07",cantidad:3,m3:1.02,inicio:"2026-10-01",fin:"2026-10-13"},
+"FS-04":0.44,
 
-{tipo:"FS-04",cantidad:1,m3:0.44,inicio:"2026-10-01",fin:"2026-10-13"},
+"MG-BA":1.75,
+"MG-VB":0.59,
+"MG-VA":0.46,
+"MG-C":0.2,
+"MG-BA2":0.58,
+"MG-C2":0.2,
 
-{tipo:"MG-BA",cantidad:1,m3:1.75,inicio:"2026-11-05",fin:"2026-11-10"},
-{tipo:"MG-VB",cantidad:1,m3:0.59,inicio:"2026-11-05",fin:"2026-11-10"},
-{tipo:"MG-VA",cantidad:1,m3:0.46,inicio:"2026-11-05",fin:"2026-11-10"},
-{tipo:"MG-C",cantidad:1,m3:0.2,inicio:"2026-11-05",fin:"2026-11-10"},
-{tipo:"MG-BA2",cantidad:1,m3:0.58,inicio:"2026-11-05",fin:"2026-11-10"},
-{tipo:"MG-C2",cantidad:1,m3:0.2,inicio:"2026-11-05",fin:"2026-11-10"},
+"ALC-A":1.16,
+"ALC-B":1.16,
+"ALC-C":1.16,
 
-{tipo:"ALC-A",cantidad:1,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
-{tipo:"ALC-B",cantidad:18,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
-{tipo:"ALC-C",cantidad:1,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
+"TA-1":0.08,
+"TA-2":0.1,
+"TA-3":0.045,
 
-{tipo:"TA-1",cantidad:1,m3:0.08,inicio:"2026-09-17",fin:"2026-09-29"},
-{tipo:"TA-2",cantidad:1,m3:0.1,inicio:"2026-09-17",fin:"2026-09-29"},
-{tipo:"TA-3",cantidad:2,m3:0.045,inicio:"2026-09-17",fin:"2026-09-29"},
+"LO-1":0.44,
+"LO-2":0.36,
 
-{tipo:"LO-1",cantidad:1,m3:0.44,inicio:"2026-09-17",fin:"2026-09-29"},
-{tipo:"LO-2",cantidad:1,m3:0.36,inicio:"2026-09-17",fin:"2026-09-29"},
+"VI-1":0.07,
+"VI-2":0.05,
 
-{tipo:"VI-1",cantidad:1,m3:0.07,inicio:"2026-09-17",fin:"2026-09-29"},
-{tipo:"VI-2",cantidad:1,m3:0.05,inicio:"2026-09-17",fin:"2026-09-29"},
+"MO-1":3.64,
+"MO-2":3.64,
 
-{tipo:"MO-1",cantidad:1,m3:3.64,inicio:"2026-09-18",fin:"2026-10-12"},
-{tipo:"MO-2",cantidad:1,m3:3.64,inicio:"2026-09-18",fin:"2026-10-12"},
-
-{tipo:"CD-516",cantidad:1,m3:0.2,inicio:"2026-09-07",fin:"2026-09-09"}
-
-];
-
-
-
-/* =====================================================
-MAPA POR TIPO
-===================================================== */
-
-const BASE_POR_TIPO={};
-
-
-BASE_PROYECTO.forEach(
-item=>{
-
-BASE_POR_TIPO[
-normalizarTipo(
-item.tipo
-)
-]=
-item;
-
-}
-);
-
-
-
-/* =====================================================
-ETAPAS
-===================================================== */
-
-const etapas=[
-
-"EN TALLER",
-
-"LIBERADA EN TALLER",
-
-"EN OBRA",
-
-"LIBERADA QA/QC EN OBRA"
-
-];
-
-
-const nombresCortos=[
-
-"🏭 En taller",
-
-"✅ Liberado",
-
-"🚧 En obra",
-
-"✔️ QA/QC"
-
-];
-
-
-const permisosEtapa={
-
-1:"puede_liberar_taller",
-
-2:"puede_llevar_obra",
-
-3:"puede_liberar_qaqc"
+"CD-516":0.2
 
 };
 
 
+/* ==============================
+ETAPAS
+============================== */
 
-let premoldeados=[];
-
-let usuarioActual=null;
-
-let permisos=null;
-
-
-
-/* =====================================================
-UTILIDADES BASE
-===================================================== */
-
-function normalizarTipo(
-tipo
-){
-
-return String(
-tipo || ""
-)
-.trim()
-.toUpperCase();
-
-}
-
-
-function volumenPieza(
-pieza
-){
-
-const item=
-BASE_POR_TIPO[
-normalizarTipo(
-pieza.tipo
-)
+const etapas = [
+  "EN TALLER",
+  "LIBERADA EN TALLER",
+  "EN OBRA",
+  "LIBERADA QA/QC EN OBRA"
 ];
 
+const nombresCortos = [
+  "🏭 En taller",
+  "✅ Liberado",
+  "🚧 En obra",
+  "✔️ QA/QC"
+];
 
-return item
-?
-Number(
-item.m3
-)
-:
-0;
+const permisosEtapa = {
+  1:"puede_liberar_taller",
+  2:"puede_llevar_obra",
+  3:"puede_liberar_qaqc"
+};
 
+
+let premoldeados = [];
+let usuarioActual = null;
+let permisos = null;
+
+
+/* ==============================
+UTILIDADES
+============================== */
+
+function normalizarTipo(tipo){
+
+  return String(tipo || "")
+    .trim()
+    .toUpperCase();
 }
 
 
-function volumenTotalProyecto(){
+function volumenPieza(pieza){
 
-return BASE_PROYECTO.reduce(
-(total,item)=>
+  const tipo =
+    normalizarTipo(pieza.tipo);
 
-total+
-item.cantidad*
-item.m3,
-
-0
-);
-
+  return Number(
+    M3_POR_TIPO[tipo] || 0
+  );
 }
 
 
-function cantidadTotalProyecto(){
+function formatoM3(valor){
 
-return BASE_PROYECTO.reduce(
-(total,item)=>
-
-total+
-item.cantidad,
-
-0
-);
-
+  return Number(valor || 0)
+    .toLocaleString(
+      "es-AR",
+      {
+        minimumFractionDigits:2,
+        maximumFractionDigits:3
+      }
+    ) + " m³";
 }
 
 
-function fechaProyecto(
-texto
-){
-
-return new Date(
-texto+
-"T12:00:00"
-);
-
-}
-
-
-function inicioDia(
-fecha
-){
-
-const d=
-new Date(
-fecha
-);
-
-d.setHours(
-0,
-0,
-0,
-0
-);
-
-return d;
-
-}
-
-
-function diasEntre(
-inicio,
-fin
-){
-
-return Math.round(
-(
-inicioDia(fin)-
-inicioDia(inicio)
-)/
-86400000
-);
-
-}
-
-
-function formatoM3(
-valor
-){
-
-return Number(
-valor || 0
-)
-.toLocaleString(
-"es-AR",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:3
-}
-)+
-" m³";
-
-}
-
-
-
-/* =====================================================
-PLANIFICADO A UNA FECHA
-===================================================== */
-
-function planAcumuladoEnFecha(
-fecha
-){
-
-const objetivo=
-inicioDia(
-fecha
-);
-
-
-let total=0;
-
-
-BASE_PROYECTO.forEach(
-item=>{
-
-
-const inicio=
-inicioDia(
-fechaProyecto(
-item.inicio
-)
-);
-
-
-const fin=
-inicioDia(
-fechaProyecto(
-item.fin
-)
-);
-
-
-const volumen=
-item.cantidad*
-item.m3;
-
-
-if(
-objetivo<
-inicio
-){
-
-return;
-
-}
-
-
-if(
-objetivo>=fin
-){
-
-total+=
-volumen;
-
-return;
-
-}
-
-
-const duracion=
-diasEntre(
-inicio,
-fin
-);
-
-
-if(
-duracion<=0
-){
-
-total+=
-volumen;
-
-return;
-
-}
-
-
-const transcurrido=
-diasEntre(
-inicio,
-objetivo
-);
-
-
-const fraccion=
-Math.max(
-0,
-Math.min(
-1,
-transcurrido/
-duracion
-)
-);
-
-
-total+=
-volumen*
-fraccion;
-
-
-});
-
-
-return total;
-
-}
-
-
-
-/* =====================================================
-REAL MONTADO
-===================================================== */
-
-function realMontado(){
-
-return premoldeados
-
-.filter(
-p=>
-p.montada===true
-)
-
-.reduce(
-(total,p)=>
-
-total+
-volumenPieza(
-p
-),
-
-0
-);
-
-}
-
-
-
-/* =====================================================
+/* ==============================
 LOGIN
-===================================================== */
+============================== */
 
 async function iniciarSesion(){
 
-const email=
-document
-.getElementById("email")
-.value
-.trim();
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
+  const password =
+    document
+      .getElementById("password")
+      .value;
 
-const password=
-document
-.getElementById("password")
-.value;
+  const mensaje =
+    document.getElementById(
+      "loginError"
+    );
 
+  if(!email || !password){
 
-const mensaje=
-document
-.getElementById("loginError");
+    mensaje.textContent =
+      "❌ Completá email y contraseña.";
 
+    return;
+  }
 
-if(
-!email ||
-!password
-){
+  mensaje.textContent =
+    "⏳ Iniciando sesión...";
 
-mensaje.textContent=
-"❌ Completá email y contraseña.";
+  const {error} =
+    await db.auth.signInWithPassword({
+      email:email,
+      password:password
+    });
 
-return;
+  if(error){
 
+    mensaje.textContent =
+      "❌ " + error.message;
+
+    return;
+  }
+
+  mensaje.textContent = "";
+
+  await iniciarAplicacion();
 }
 
 
-mensaje.textContent=
-"⏳ Iniciando sesión...";
-
-
-const {
-error
-}=
-await db.auth.signInWithPassword({
-
-email:email,
-
-password:password
-
-});
-
-
-if(error){
-
-mensaje.textContent=
-"❌ "+error.message;
-
-return;
-
-}
-
-
-mensaje.textContent="";
-
-
-await iniciarAplicacion();
-
-}
-
-
-
-/* =====================================================
+/* ==============================
 CERRAR SESIÓN
-===================================================== */
+============================== */
 
 async function cerrarSesion(){
 
-await db.auth.signOut();
+  await db.auth.signOut();
 
+  usuarioActual = null;
+  permisos = null;
 
-usuarioActual=null;
+  document
+    .getElementById("appPanel")
+    .classList.add("oculto");
 
-permisos=null;
-
-
-document
-.getElementById("appPanel")
-.classList.add("oculto");
-
-
-document
-.getElementById("loginPanel")
-.classList.remove("oculto");
-
+  document
+    .getElementById("loginPanel")
+    .classList.remove("oculto");
 }
 
 
-
-/* =====================================================
+/* ==============================
 INICIAR APP
-===================================================== */
+============================== */
 
 async function iniciarAplicacion(){
 
-const {
-data:{
-user
-}
-}=
-await db.auth.getUser();
+  const {
+    data:{user}
+  } =
+  await db.auth.getUser();
 
+  if(!user){
+    return;
+  }
 
-if(!user){
+  usuarioActual = user;
 
-return;
+  const {
+    data,
+    error
+  } =
+  await db
+    .from("permisos_usuarios")
+    .select("*")
+    .eq("email",user.email)
+    .maybeSingle();
 
-}
+  if(error){
 
+    document
+      .getElementById("loginError")
+      .textContent =
+      "❌ Error consultando permisos: " +
+      error.message;
 
-usuarioActual=
-user;
+    return;
+  }
 
+  permisos = data;
 
-const {
-data,
-error
-}=
-await db
+  document
+    .getElementById("loginPanel")
+    .classList.add("oculto");
 
-.from(
-"permisos_usuarios"
-)
+  document
+    .getElementById("appPanel")
+    .classList.remove("oculto");
 
-.select("*")
+  document
+    .getElementById("usuario")
+    .innerHTML =
 
-.eq(
-"email",
-user.email
-)
+    permisos
+    ?
+    "👤 <strong>" +
+    escapeHtml(
+      permisos.nombre ||
+      user.email
+    ) +
+    "</strong> — permisos cargados."
+    :
+    "👁️ <strong>" +
+    escapeHtml(user.email) +
+    "</strong> — solo visualización.";
 
-.maybeSingle();
-
-
-if(error){
-
-document
-.getElementById("loginError")
-.textContent=
-
-"❌ Error consultando permisos: "+
-error.message;
-
-return;
-
-}
-
-
-permisos=
-data;
-
-
-document
-.getElementById("loginPanel")
-.classList.add("oculto");
-
-
-document
-.getElementById("appPanel")
-.classList.remove("oculto");
-
-
-document
-.getElementById("usuario")
-.innerHTML=
-
-permisos
-?
-"👤 <strong>"+
-escapeHtml(
-permisos.nombre ||
-user.email
-)+
-"</strong> — permisos cargados."
-:
-"👁️ <strong>"+
-escapeHtml(
-user.email
-)+
-"</strong> — solo visualización.";
-
-
-await cargarDatos();
-
+  await cargarDatos();
 }
 
 
-
-/* =====================================================
+/* ==============================
 PERMISOS
-===================================================== */
+============================== */
 
 function esAdmin(){
 
-return Boolean(
-permisos &&
-permisos.es_admin
-);
-
+  return Boolean(
+    permisos &&
+    permisos.es_admin
+  );
 }
 
 
 function tienePermisoEdicion(){
 
-if(
-!usuarioActual ||
-!permisos
-){
+  if(
+    !usuarioActual ||
+    !permisos
+  ){
+    return false;
+  }
 
-return false;
+  if(esAdmin()){
+    return true;
+  }
 
+  return Boolean(
+    permisos.puede_liberar_taller ||
+    permisos.puede_llevar_obra ||
+    permisos.puede_liberar_qaqc ||
+    permisos.puede_montar ||
+    permisos.puede_pintar
+  );
 }
 
 
-if(
-esAdmin()
-){
+function puedeAvanzarA(etapa){
 
-return true;
+  if(
+    !usuarioActual ||
+    !permisos
+  ){
+    return false;
+  }
 
-}
+  if(esAdmin()){
+    return true;
+  }
 
+  if(etapa === 0){
+    return tienePermisoEdicion();
+  }
 
-return Boolean(
+  const permiso =
+    permisosEtapa[etapa];
 
-permisos.puede_liberar_taller ||
-
-permisos.puede_llevar_obra ||
-
-permisos.puede_liberar_qaqc ||
-
-permisos.puede_montar ||
-
-permisos.puede_pintar
-
-);
-
-}
-
-
-function puedeAvanzarA(
-etapa
-){
-
-if(
-!usuarioActual ||
-!permisos
-){
-
-return false;
-
-}
-
-
-if(
-esAdmin()
-){
-
-return true;
-
-}
-
-
-if(
-etapa===0
-){
-
-return tienePermisoEdicion();
-
-}
-
-
-const permiso=
-permisosEtapa[
-etapa
-];
-
-
-return Boolean(
-permiso &&
-permisos[
-permiso
-]
-);
-
+  return Boolean(
+    permiso &&
+    permisos[permiso]
+  );
 }
 
 
 function puedeRetroceder(){
 
-return tienePermisoEdicion();
-
+  return tienePermisoEdicion();
 }
 
 
 function puedeMontar(){
 
-return Boolean(
-
-usuarioActual &&
-
-permisos &&
-
-(
-esAdmin() ||
-permisos.puede_montar
-)
-
-);
-
+  return Boolean(
+    usuarioActual &&
+    permisos &&
+    (
+      esAdmin() ||
+      permisos.puede_montar
+    )
+  );
 }
 
 
 function puedePintar(){
 
-return Boolean(
-
-usuarioActual &&
-
-permisos &&
-
-(
-esAdmin() ||
-permisos.puede_pintar
-)
-
-);
-
+  return Boolean(
+    usuarioActual &&
+    permisos &&
+    (
+      esAdmin() ||
+      permisos.puede_pintar
+    )
+  );
 }
 
 
-
-/* =====================================================
-ESTADO
-===================================================== */
+/* ==============================
+MENSAJE ESTADO
+============================== */
 
 function estado(
-mensaje,
-tipo=""
+  mensaje,
+  tipo=""
 ){
 
-const e=
-document.getElementById(
-"estado"
-);
+  const e =
+    document.getElementById(
+      "estado"
+    );
 
+  e.innerHTML = mensaje;
 
-e.innerHTML=
-mensaje;
+  e.className = "estado";
 
-
-e.className=
-"estado";
-
-
-if(tipo){
-
-e.classList.add(
-tipo
-);
-
-}
-
+  if(tipo){
+    e.classList.add(tipo);
+  }
 }
 
 
-
-/* =====================================================
-CARGAR
-===================================================== */
+/* ==============================
+CARGAR DATOS
+============================== */
 
 async function cargarDatos(){
 
-estado(
-"⏳ Cargando datos..."
-);
+  estado(
+    "⏳ Cargando datos..."
+  );
 
+  const {
+    data,
+    error
+  } =
+  await db
+    .from("premoldeados")
+    .select("*")
+    .order(
+      "id",
+      {ascending:true}
+    );
 
-const {
-data,
-error
-}=
-await db
+  if(error){
 
-.from(
-"premoldeados"
-)
+    estado(
+      "❌ Error al cargar: " +
+      error.message,
+      "error"
+    );
 
-.select("*")
+    return;
+  }
 
-.order(
-"id",
-{
-ascending:true
-}
-);
+  premoldeados =
+    data || [];
 
+  mostrarTabla();
 
-if(error){
-
-estado(
-
-"❌ Error al cargar: "+
-error.message,
-
-"error"
-
-);
-
-return;
-
+  estado(
+    "☁️ <strong>Conectado.</strong> Datos sincronizados online.",
+    "ok"
+  );
 }
 
 
-premoldeados=
-data || [];
-
-
-actualizarResumen();
-
-
-mostrarTabla();
-
-
-estado(
-
-"☁️ <strong>Conectado.</strong> Datos sincronizados online.",
-
-"ok"
-
-);
-
-}
-
-
-
-/* =====================================================
-RESUMEN
-===================================================== */
-
-function actualizarResumen(){
-
-const total=
-premoldeados.length;
-
-
-const taller=
-premoldeados.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=0
-).length;
-
-
-const liberada=
-premoldeados.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=1
-).length;
-
-
-const obra=
-premoldeados.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=2
-).length;
-
-
-const qaqc=
-premoldeados.filter(
-p=>
-Number(
-p.etapa ?? 0
-)>=3
-).length;
-
-
-const montadas=
-premoldeados.filter(
-p=>
-p.montada===true
-).length;
-
-
-const pintadas=
-premoldeados.filter(
-p=>
-p.pintada===true
-).length;
-
-
-const totalM3=
-volumenTotalProyecto();
-
-
-const cantidadProyecto=
-cantidadTotalProyecto();
-
-
-const hoy=
-new Date();
-
-
-const plan=
-planAcumuladoEnFecha(
-hoy
-);
-
-
-const real=
-realMontado();
-
-
-const desvio=
-real-
-plan;
-
-
-const pct=
-
-totalM3===0
-?
-0
-:
-real/
-totalM3*
-100;
-
-
-document
-.getElementById("volumenTotal")
-.textContent=
-formatoM3(
-totalM3
-);
-
-
-document
-.getElementById("cantidadProyecto")
-.textContent=
-cantidadProyecto;
-
-
-document
-.getElementById("planHoy")
-.textContent=
-formatoM3(
-plan
-);
-
-
-document
-.getElementById("realHoy")
-.textContent=
-formatoM3(
-real
-);
-
-
-document
-.getElementById("desvioHoy")
-.textContent=
-
-(
-desvio>=0
-?
-"+"
-:
-""
-)+
-formatoM3(
-desvio
-);
-
-
-document
-.getElementById("porcentajeReal")
-.textContent=
-
-pct.toLocaleString(
-"es-AR",
-{
-minimumFractionDigits:1,
-maximumFractionDigits:1
-}
-)+
-"%";
-
-
-document
-.getElementById("fechaPlan")
-.textContent=
-
-"al "+
-hoy.toLocaleDateString(
-"es-AR"
-);
-
-
-document
-.getElementById("totalCargadas")
-.textContent=
-total;
-
-
-document
-.getElementById("totalMontadasResumen")
-.textContent=
-montadas;
-
-
-document
-.getElementById("total")
-.textContent=
-total;
-
-
-document
-.getElementById("taller")
-.textContent=
-taller;
-
-
-document
-.getElementById("liberadaTaller")
-.textContent=
-liberada;
-
-
-document
-.getElementById("obra")
-.textContent=
-obra;
-
-
-document
-.getElementById("qaqc")
-.textContent=
-qaqc;
-
-
-document
-.getElementById("montada")
-.textContent=
-montadas;
-
-
-document
-.getElementById("pintada")
-.textContent=
-pintadas;
-
-}
-
-
-
-/* =====================================================
-TABLA
-===================================================== */
+/* ==============================
+MOSTRAR TABLA
+============================== */
 
 function mostrarTabla(){
 
-const tabla=
-document.getElementById(
-"tabla"
-);
+  const tabla =
+    document.getElementById(
+      "tabla"
+    );
+
+  const buscar =
+    document
+      .getElementById("buscar")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const filtro =
+    document
+      .getElementById("filtroEtapa")
+      .value;
+
+  const lista =
+    premoldeados.filter(
+      p => {
+
+        const texto =
+          String(
+            p.codigo ?? ""
+          ).toLowerCase()
+          + " " +
+          String(
+            p.tipo ?? ""
+          ).toLowerCase()
+          + " " +
+          String(
+            p.modelo ?? ""
+          ).toLowerCase();
+
+        const coincideBusqueda =
+          !buscar ||
+          texto.includes(buscar);
+
+        const etapa =
+          String(
+            Number(
+              p.etapa ?? 0
+            )
+          );
+
+        const coincideEtapa =
+          !filtro ||
+          etapa === filtro;
+
+        return (
+          coincideBusqueda &&
+          coincideEtapa
+        );
+      }
+    );
 
 
-const buscar=
-document
-.getElementById("buscar")
-.value
-.trim()
-.toLowerCase();
+  if(lista.length === 0){
+
+    tabla.innerHTML = `
+      <tr>
+        <td
+          colspan="7"
+          class="vacio">
+          No hay premoldeados que coincidan.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
 
 
-const filtro=
-document
-.getElementById("filtroEtapa")
-.value;
+  tabla.innerHTML =
+    lista.map(
+      p => {
+
+        const etapaActual =
+          Math.max(
+            0,
+            Math.min(
+              3,
+              Number(
+                p.etapa ?? 0
+              )
+            )
+          );
 
 
-const lista=
-premoldeados.filter(
-p=>{
+        const checks =
+          etapas.map(
+            (nombre,index) => {
+
+              const completa =
+                index <= etapaActual;
+
+              const actual =
+                index === etapaActual;
+
+              let disabled = false;
+
+              if(
+                index === 0 &&
+                completa
+              ){
+
+                disabled = true;
+
+              }
+              else if(completa){
+
+                disabled =
+                  !puedeRetroceder();
+
+              }
+              else{
+
+                disabled =
+                  !puedeAvanzarA(index);
+
+              }
 
 
-const texto=
+              return `
+                <label
+                  class="
+                    check-etapa
+                    ${completa ? "completa" : ""}
+                    ${actual ? "actual" : ""}
+                  ">
 
-String(
-p.codigo ?? ""
-).toLowerCase()
-+" "+
-String(
-p.tipo ?? ""
-).toLowerCase()
-+" "+
-String(
-p.modelo ?? ""
-).toLowerCase();
+                  <input
+                    type="checkbox"
+                    ${completa ? "checked" : ""}
+                    ${disabled ? "disabled" : ""}
+                    onchange="
+                      cambiarEtapaCheck(
+                        ${p.id},
+                        ${index},
+                        this.checked
+                      )
+                    ">
 
+                  ${nombresCortos[index]}
 
-const coincideBusqueda=
-
-!buscar ||
-texto.includes(
-buscar
-);
-
-
-const etapa=
-String(
-Number(
-p.etapa ?? 0
-)
-);
+                </label>
+              `;
+            }
+          ).join("");
 
 
-const coincideEtapa=
+        const montada =
+          p.montada === true;
 
-!filtro ||
-etapa===filtro;
+        const pintada =
+          p.pintada === true;
 
-
-return (
-coincideBusqueda &&
-coincideEtapa
-);
-
-});
+        const m3 =
+          volumenPieza(p);
 
 
-if(
-lista.length===0
-){
+        let fechaTexto = "";
 
-tabla.innerHTML=`
+        if(
+          montada &&
+          p.fecha_montaje
+        ){
 
-<tr>
+          fechaTexto = `
+            <div class="fecha-montaje">
+              Montado:
+              ${formatearFecha(
+                p.fecha_montaje
+              )}
+            </div>
+          `;
+        }
 
-<td
-colspan="7"
-class="vacio">
 
-No hay premoldeados que coincidan.
+        return `
+          <tr>
 
-</td>
+            <td>
+              ${p.id ?? ""}
+            </td>
 
-</tr>
+            <td>
+              <strong>
+                ${escapeHtml(
+                  p.codigo ?? ""
+                )}
+              </strong>
+            </td>
 
-`;
+            <td>
+              ${escapeHtml(
+                p.tipo ?? ""
+              )}
+            </td>
 
-return;
+            <td>
+              ${escapeHtml(
+                p.modelo ?? ""
+              )}
+            </td>
 
+            <td class="m3-pieza">
+
+              ${
+                m3 > 0
+                ?
+                formatoM3(m3)
+                :
+                "—"
+              }
+
+            </td>
+
+
+            <td>
+
+              <div class="etapas-checks">
+                ${checks}
+              </div>
+
+            </td>
+
+
+            <td>
+
+              <div class="finales">
+
+                <label
+                  class="
+                    check-final
+                    ${montada ? "activo" : ""}
+                  ">
+
+                  <input
+                    type="checkbox"
+                    ${montada ? "checked" : ""}
+                    ${puedeMontar() ? "" : "disabled"}
+                    onchange="
+                      cambiarEstadoFinal(
+                        ${p.id},
+                        'montada',
+                        this.checked
+                      )
+                    ">
+
+                  🏗️ Montaje
+
+                </label>
+
+
+                <label
+                  class="
+                    check-final
+                    ${pintada ? "activo" : ""}
+                  ">
+
+                  <input
+                    type="checkbox"
+                    ${pintada ? "checked" : ""}
+                    ${puedePintar() ? "" : "disabled"}
+                    onchange="
+                      cambiarEstadoFinal(
+                        ${p.id},
+                        'pintada',
+                        this.checked
+                      )
+                    ">
+
+                  🎨 Pintura
+
+                </label>
+
+              </div>
+
+              ${fechaTexto}
+
+            </td>
+
+          </tr>
+        `;
+      }
+    ).join("");
 }
 
 
-tabla.innerHTML=
-
-lista.map(
-p=>{
-
-
-const etapaActual=
-Math.max(
-0,
-Math.min(
-3,
-Number(
-p.etapa ?? 0
-)
-)
-);
-
-
-const checks=
-etapas.map(
-(nombre,index)=>{
-
-
-const completa=
-index<=etapaActual;
-
-
-const actual=
-index===etapaActual;
-
-
-let disabled=false;
-
-
-if(
-index===0 &&
-completa
-){
-
-disabled=true;
-
-}
-
-else if(
-completa
-){
-
-disabled=
-!puedeRetroceder();
-
-}
-
-else{
-
-disabled=
-!puedeAvanzarA(
-index
-);
-
-}
-
-
-return `
-
-<label
-class="
-check-etapa
-${completa ? "completa" : ""}
-${actual ? "actual" : ""}
-">
-
-<input
-type="checkbox"
-
-${completa ? "checked" : ""}
-
-${disabled ? "disabled" : ""}
-
-onchange="
-cambiarEtapaCheck(
-${p.id},
-${index},
-this.checked
-)
-">
-
-${nombresCortos[index]}
-
-</label>
-
-`;
-
-}
-).join("");
-
-
-const montada=
-p.montada===true;
-
-
-const pintada=
-p.pintada===true;
-
-
-const m3=
-volumenPieza(
-p
-);
-
-
-let fechaTexto="";
-
-
-if(
-montada &&
-p.fecha_montaje
-){
-
-fechaTexto=`
-
-<div class="fecha-montaje">
-
-Montado:
-${formatearFecha(
-p.fecha_montaje
-)}
-
-</div>
-
-`;
-
-}
-
-
-return `
-
-<tr>
-
-<td>
-${p.id ?? ""}
-</td>
-
-<td>
-
-<strong>
-${escapeHtml(
-p.codigo ?? ""
-)}
-</strong>
-
-</td>
-
-<td>
-${escapeHtml(
-p.tipo ?? ""
-)}
-</td>
-
-<td>
-${escapeHtml(
-p.modelo ?? ""
-)}
-</td>
-
-<td class="m3-pieza">
-
-${m3>0
-?
-formatoM3(m3)
-:
-"—"
-}
-
-</td>
-
-
-<td>
-
-<div class="etapas-checks">
-
-${checks}
-
-</div>
-
-</td>
-
-
-<td>
-
-<div class="finales">
-
-
-<label
-class="
-check-final
-${montada ? "activo" : ""}
-">
-
-<input
-type="checkbox"
-
-${montada ? "checked" : ""}
-
-${puedeMontar() ? "" : "disabled"}
-
-onchange="
-cambiarEstadoFinal(
-${p.id},
-'montada',
-this.checked
-)
-">
-
-🏗️ Montaje
-
-</label>
-
-
-<label
-class="
-check-final
-${pintada ? "activo" : ""}
-">
-
-<input
-type="checkbox"
-
-${pintada ? "checked" : ""}
-
-${puedePintar() ? "" : "disabled"}
-
-onchange="
-cambiarEstadoFinal(
-${p.id},
-'pintada',
-this.checked
-)
-">
-
-🎨 Pintura
-
-</label>
-
-
-</div>
-
-
-${fechaTexto}
-
-
-</td>
-
-</tr>
-
-`;
-
-}
-).join("");
-
-}
-
-
-
-/* =====================================================
+/* ==============================
 CAMBIAR ETAPA
-===================================================== */
+============================== */
 
 async function cambiarEtapaCheck(
-id,
-etapaClic,
-marcado
+  id,
+  etapaClic,
+  marcado
 ){
 
-const pieza=
-premoldeados.find(
-p=>
-Number(
-p.id
-)===
-Number(
-id
-)
-);
+  const pieza =
+    premoldeados.find(
+      p =>
+        Number(p.id) ===
+        Number(id)
+    );
+
+  if(!pieza){
+    return;
+  }
 
 
-if(!pieza){
+  const anterior =
+    Math.max(
+      0,
+      Math.min(
+        3,
+        Number(
+          pieza.etapa ?? 0
+        )
+      )
+    );
 
-return;
 
+  let nuevaEtapa =
+    anterior;
+
+
+  if(marcado){
+
+    if(etapaClic <= anterior){
+
+      mostrarTabla();
+      return;
+    }
+
+
+    if(
+      !puedeAvanzarA(
+        etapaClic
+      )
+    ){
+
+      alert(
+        "🔒 No tenés permiso para liberar esta etapa."
+      );
+
+      mostrarTabla();
+      return;
+    }
+
+
+    nuevaEtapa =
+      etapaClic;
+
+  }
+  else{
+
+    if(etapaClic === 0){
+
+      alert(
+        "EN TALLER no puede desmarcarse."
+      );
+
+      mostrarTabla();
+      return;
+    }
+
+
+    if(!puedeRetroceder()){
+
+      alert(
+        "🔒 No tenés permiso para retroceder."
+      );
+
+      mostrarTabla();
+      return;
+    }
+
+
+    nuevaEtapa =
+      etapaClic - 1;
+  }
+
+
+  const confirmar =
+    confirm(
+      "¿Confirmás cambiar " +
+      (pieza.codigo ?? "") +
+      " de " +
+      etapas[anterior] +
+      " a " +
+      etapas[nuevaEtapa] +
+      "?"
+    );
+
+
+  if(!confirmar){
+
+    mostrarTabla();
+    return;
+  }
+
+
+  const ahora =
+    new Date().toISOString();
+
+
+  const {error} =
+    await db
+      .from("premoldeados")
+      .update({
+        etapa:nuevaEtapa,
+        fecha:ahora
+      })
+      .eq(
+        "id",
+        id
+      );
+
+
+  if(error){
+
+    estado(
+      "❌ No se pudo guardar: " +
+      error.message,
+      "error"
+    );
+
+    mostrarTabla();
+    return;
+  }
+
+
+  pieza.etapa =
+    nuevaEtapa;
+
+  pieza.fecha =
+    ahora;
+
+  mostrarTabla();
+
+  estado(
+    "✅ Cambio guardado correctamente.",
+    "ok"
+  );
 }
 
 
-const anterior=
-Math.max(
-0,
-Math.min(
-3,
-Number(
-pieza.etapa ?? 0
-)
-)
-);
-
-
-let nuevaEtapa=
-anterior;
-
-
-if(
-marcado
-){
-
-if(
-etapaClic<=anterior
-){
-
-mostrarTabla();
-
-return;
-
-}
-
-
-if(
-!puedeAvanzarA(
-etapaClic
-)
-){
-
-alert(
-"🔒 No tenés permiso para liberar esta etapa."
-);
-
-mostrarTabla();
-
-return;
-
-}
-
-
-nuevaEtapa=
-etapaClic;
-
-}
-
-else{
-
-if(
-etapaClic===0
-){
-
-alert(
-"EN TALLER no puede desmarcarse."
-);
-
-mostrarTabla();
-
-return;
-
-}
-
-
-if(
-!puedeRetroceder()
-){
-
-alert(
-"🔒 No tenés permiso para retroceder."
-);
-
-mostrarTabla();
-
-return;
-
-}
-
-
-nuevaEtapa=
-etapaClic-1;
-
-}
-
-
-const confirmar=
-confirm(
-
-"¿Confirmás cambiar "+
-(pieza.codigo ?? "")+
-" de "+
-
-etapas[
-anterior
-]+
-
-" a "+
-
-etapas[
-nuevaEtapa
-]+
-
-"?"
-
-);
-
-
-if(
-!confirmar
-){
-
-mostrarTabla();
-
-return;
-
-}
-
-
-const ahora=
-new Date()
-.toISOString();
-
-
-const {
-error
-}=
-await db
-
-.from(
-"premoldeados"
-)
-
-.update({
-
-etapa:
-nuevaEtapa,
-
-fecha:
-ahora
-
-})
-
-.eq(
-"id",
-id
-);
-
-
-if(error){
-
-estado(
-
-"❌ No se pudo guardar: "+
-error.message,
-
-"error"
-
-);
-
-mostrarTabla();
-
-return;
-
-}
-
-
-pieza.etapa=
-nuevaEtapa;
-
-
-pieza.fecha=
-ahora;
-
-
-actualizarResumen();
-
-
-mostrarTabla();
-
-
-estado(
-
-"✅ Cambio guardado correctamente.",
-
-"ok"
-
-);
-
-}
-
-
-
-/* =====================================================
+/* ==============================
 MONTAJE / PINTURA
-===================================================== */
+============================== */
 
 async function cambiarEstadoFinal(
-id,
-campo,
-valor
+  id,
+  campo,
+  valor
 ){
 
-const pieza=
-premoldeados.find(
-p=>
-Number(
-p.id
-)===
-Number(
-id
-)
-);
+  const pieza =
+    premoldeados.find(
+      p =>
+        Number(p.id) ===
+        Number(id)
+    );
+
+  if(!pieza){
+    return;
+  }
 
 
-if(!pieza){
+  if(
+    campo === "montada" &&
+    !puedeMontar()
+  ){
 
-return;
+    alert(
+      "No tenés permiso para modificar Montaje."
+    );
 
+    mostrarTabla();
+    return;
+  }
+
+
+  if(
+    campo === "pintada" &&
+    !puedePintar()
+  ){
+
+    alert(
+      "No tenés permiso para modificar Pintura."
+    );
+
+    mostrarTabla();
+    return;
+  }
+
+
+  const nombre =
+    campo === "montada"
+    ?
+    "Montaje"
+    :
+    "Pintura";
+
+
+  if(
+    !confirm(
+      `¿Confirmás cambiar ${nombre} de ${pieza.codigo}?`
+    )
+  ){
+
+    mostrarTabla();
+    return;
+  }
+
+
+  const ahora =
+    new Date().toISOString();
+
+
+  const cambios = {
+
+    [campo]:valor,
+
+    fecha:ahora
+
+  };
+
+
+  if(campo === "montada"){
+
+    cambios.fecha_montaje =
+      valor
+      ?
+      ahora
+      :
+      null;
+  }
+
+
+  const {error} =
+    await db
+      .from("premoldeados")
+      .update(cambios)
+      .eq(
+        "id",
+        id
+      );
+
+
+  if(error){
+
+    estado(
+      "❌ No se pudo actualizar: " +
+      error.message,
+      "error"
+    );
+
+    mostrarTabla();
+    return;
+  }
+
+
+  pieza[campo] =
+    valor;
+
+  pieza.fecha =
+    ahora;
+
+
+  if(campo === "montada"){
+
+    pieza.fecha_montaje =
+      valor
+      ?
+      ahora
+      :
+      null;
+  }
+
+
+  mostrarTabla();
+
+  estado(
+    "✅ " +
+    nombre +
+    " actualizado correctamente.",
+    "ok"
+  );
 }
 
 
-if(
-campo==="montada" &&
-!puedeMontar()
-){
-
-alert(
-"No tenés permiso para modificar Montaje."
-);
-
-mostrarTabla();
-
-return;
-
-}
-
-
-if(
-campo==="pintada" &&
-!puedePintar()
-){
-
-alert(
-"No tenés permiso para modificar Pintura."
-);
-
-mostrarTabla();
-
-return;
-
-}
-
-
-const nombre=
-campo==="montada"
-?
-"Montaje"
-:
-"Pintura";
-
-
-if(
-!confirm(
-`¿Confirmás cambiar ${nombre} de ${pieza.codigo}?`
-)
-){
-
-mostrarTabla();
-
-return;
-
-}
-
-
-const ahora=
-new Date()
-.toISOString();
-
-
-const cambios={
-
-[campo]:
-valor,
-
-fecha:
-ahora
-
-};
-
-
-if(
-campo==="montada"
-){
-
-cambios.fecha_montaje=
-
-valor
-?
-ahora
-:
-null;
-
-}
-
-
-const {
-error
-}=
-await db
-
-.from(
-"premoldeados"
-)
-
-.update(
-cambios
-)
-
-.eq(
-"id",
-id
-);
-
-
-if(error){
-
-estado(
-
-"❌ No se pudo actualizar: "+
-error.message,
-
-"error"
-
-);
-
-mostrarTabla();
-
-return;
-
-}
-
-
-pieza[
-campo
-]=
-valor;
-
-
-pieza.fecha=
-ahora;
-
-
-if(
-campo==="montada"
-){
-
-pieza.fecha_montaje=
-
-valor
-?
-ahora
-:
-null;
-
-}
-
-
-actualizarResumen();
-
-
-mostrarTabla();
-
-
-estado(
-
-"✅ "+nombre+
-" actualizado correctamente.",
-
-"ok"
-
-);
-
-}
-
-
-
-/* =====================================================
+/* ==============================
 FECHA
-===================================================== */
+============================== */
 
-function formatearFecha(
-fecha
-){
+function formatearFecha(fecha){
 
-const d=
-new Date(
-fecha
-);
+  const d =
+    new Date(fecha);
 
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+    return "";
+  }
 
-if(
-Number.isNaN(
-d.getTime()
-)
-){
-
-return "";
-
+  return d.toLocaleDateString(
+    "es-AR"
+  );
 }
 
 
-return d.toLocaleDateString(
-"es-AR"
-);
-
-}
-
-
-
-/* =====================================================
+/* ==============================
 ESCAPE HTML
-===================================================== */
+============================== */
 
-function escapeHtml(
-text
-){
+function escapeHtml(text){
 
-return String(
-text
-)
+  return String(text)
 
-.replace(
-/&/g,
-"&amp;"
-)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-.replace(
-/</g,
-"&lt;"
-)
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-.replace(
-/>/g,
-"&gt;"
-)
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-.replace(
-/"/g,
-"&quot;"
-)
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-.replace(
-/'/g,
-"&#039;"
-);
-
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 }
 
 
-
-/* =====================================================
+/* ==============================
 ARRANQUE
-===================================================== */
+============================== */
 
 (async function(){
 
-const {
-data:{
-session
-}
-}=
-await db.auth.getSession();
+  const {
+    data:{session}
+  } =
+  await db.auth.getSession();
 
-
-if(
-session
-){
-
-await iniciarAplicacion();
-
-}
+  if(session){
+    await iniciarAplicacion();
+  }
 
 })();
 
-
 </script>
 
-
 </body>
-
 </html>
