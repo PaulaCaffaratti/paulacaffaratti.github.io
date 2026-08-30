@@ -453,6 +453,87 @@ flex-wrap:wrap;
 color:#68798c;
 }
 
+
+/* PENDIENTES DE MONTAJE */
+
+.pendientes-resumen{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.pendiente-kpi{
+  background:#fafbfd;
+  border:1px solid #dce4ec;
+  border-radius:10px;
+  padding:15px;
+}
+
+.pendiente-kpi span{
+  display:block;
+  font-size:11px;
+  font-weight:800;
+  color:#718096;
+  text-transform:uppercase;
+}
+
+.pendiente-kpi strong{
+  display:block;
+  margin-top:6px;
+  font-size:22px;
+  color:#173650;
+}
+
+.tabla-pendientes-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+.tabla-pendientes{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+
+.tabla-pendientes th,
+.tabla-pendientes td{
+  padding:11px 12px;
+  border-bottom:1px solid #e5eaf0;
+  text-align:right;
+  white-space:nowrap;
+}
+
+.tabla-pendientes th:first-child,
+.tabla-pendientes td:first-child{
+  text-align:left;
+}
+
+.tabla-pendientes th{
+  background:#f7f9fb;
+  color:#5f7185;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+
+.tabla-pendientes tbody tr:hover{
+  background:#fafcfe;
+}
+
+.tabla-pendientes tfoot td{
+  font-weight:800;
+  background:#f2f6f9;
+  color:#173650;
+}
+
+.sin-pendientes{
+  padding:20px;
+  text-align:center;
+  color:#28734b;
+  font-weight:800;
+}
+
 @media(max-width:1200px){
 
 .metricas-m3{
@@ -498,6 +579,10 @@ grid-template-columns:1fr;
 
 .metricas-m3{
 grid-template-columns:repeat(2,1fr);
+}
+
+.pendientes-resumen{
+grid-template-columns:1fr;
 }
 
 }
@@ -879,6 +964,77 @@ El <strong>desvío %</strong> se calcula contra lo planificado a la fecha:
 
 </div>
 
+</div>
+
+</div>
+
+</section>
+
+
+
+
+<section class="panel">
+
+<div class="panel-titulo">
+
+<h2>
+🏗️ Bases pendientes de montar
+</h2>
+
+<button
+id="btnPendientes"
+class="btn-toggle"
+onclick="toggleSeccion('contenidoPendientes','btnPendientes')">
+Ocultar ▲
+</button>
+
+</div>
+
+<div id="contenidoPendientes">
+
+<div class="pendientes-resumen">
+
+<div class="pendiente-kpi">
+<span>Unidades pendientes</span>
+<strong id="unidadesPendientes">0</strong>
+</div>
+
+<div class="pendiente-kpi">
+<span>Tipos con pendientes</span>
+<strong id="tiposPendientes">0</strong>
+</div>
+
+<div class="pendiente-kpi">
+<span>m³ pendientes de montar</span>
+<strong id="m3PendientesTotal">0,00 m³</strong>
+</div>
+
+</div>
+
+<div class="tabla-pendientes-wrap">
+<table class="tabla-pendientes">
+<thead>
+<tr>
+<th>Tipo / Base</th>
+<th>Planificadas</th>
+<th>Montadas</th>
+<th>Pendientes</th>
+<th>m³ c/u</th>
+<th>m³ pendientes</th>
+</tr>
+</thead>
+<tbody id="tablaPendientesBody"></tbody>
+<tfoot>
+<tr>
+<td>TOTAL PENDIENTE</td>
+<td id="totalPlanPendientes">0</td>
+<td id="totalMontadasPendientes">0</td>
+<td id="totalUnidadesPendientes">0</td>
+<td>—</td>
+<td id="totalM3PendientesTabla">0,00 m³</td>
+</tr>
+</tfoot>
+</table>
 </div>
 
 </div>
@@ -1394,6 +1550,8 @@ actualizarResumen();
 
 dibujarCurva();
 
+dibujarPendientesMontaje();
+
 dibujarFamilias();
 
 }
@@ -1895,6 +2053,121 @@ text:"m³ acumulados"
 
 }
 );
+
+}
+
+
+
+
+/* =====================================================
+PENDIENTES DE MONTAJE
+===================================================== */
+
+function dibujarPendientesMontaje(){
+
+const montadasPorTipo={};
+
+piezas.forEach(p=>{
+
+if(p.montada!==true){
+return;
+}
+
+const tipo=normalizarTipo(p.tipo);
+
+montadasPorTipo[tipo]=(montadasPorTipo[tipo]||0)+1;
+
+});
+
+const pendientes=BASE_PROYECTO
+.map(item=>{
+
+const tipo=normalizarTipo(item.tipo);
+const montadas=Math.min(
+Number(item.cantidad||0),
+Number(montadasPorTipo[tipo]||0)
+);
+
+const faltan=Math.max(
+Number(item.cantidad||0)-montadas,
+0
+);
+
+const m3Pendientes=faltan*Number(item.m3||0);
+
+return{
+tipo:item.tipo,
+planificadas:Number(item.cantidad||0),
+montadas,
+faltan,
+m3Unidad:Number(item.m3||0),
+m3Pendientes
+};
+
+})
+.filter(x=>x.faltan>0)
+.sort((a,b)=>b.m3Pendientes-a.m3Pendientes);
+
+const totalPlan=BASE_PROYECTO.reduce(
+(suma,item)=>suma+Number(item.cantidad||0),
+0
+);
+
+const totalMontadasPlan=BASE_PROYECTO.reduce(
+(suma,item)=>{
+const tipo=normalizarTipo(item.tipo);
+return suma+Math.min(
+Number(item.cantidad||0),
+Number(montadasPorTipo[tipo]||0)
+);
+},
+0
+);
+
+const totalUnidades=pendientes.reduce(
+(suma,item)=>suma+item.faltan,
+0
+);
+
+const totalM3=pendientes.reduce(
+(suma,item)=>suma+item.m3Pendientes,
+0
+);
+
+document.getElementById("unidadesPendientes").textContent=totalUnidades;
+document.getElementById("tiposPendientes").textContent=pendientes.length;
+document.getElementById("m3PendientesTotal").textContent=formatoM3(totalM3);
+
+document.getElementById("totalPlanPendientes").textContent=totalPlan;
+document.getElementById("totalMontadasPendientes").textContent=totalMontadasPlan;
+document.getElementById("totalUnidadesPendientes").textContent=totalUnidades;
+document.getElementById("totalM3PendientesTabla").textContent=formatoM3(totalM3);
+
+const tbody=document.getElementById("tablaPendientesBody");
+
+if(pendientes.length===0){
+
+tbody.innerHTML=`
+<tr>
+<td colspan="6" class="sin-pendientes">
+✅ No quedan premoldeados pendientes de montar
+</td>
+</tr>
+`;
+
+return;
+}
+
+tbody.innerHTML=pendientes.map(item=>`
+<tr>
+<td><strong>${item.tipo}</strong></td>
+<td>${item.planificadas}</td>
+<td>${item.montadas}</td>
+<td><strong>${item.faltan}</strong></td>
+<td>${formatoM3(item.m3Unidad)}</td>
+<td><strong>${formatoM3(item.m3Pendientes)}</strong></td>
+</tr>
+`).join("");
 
 }
 
