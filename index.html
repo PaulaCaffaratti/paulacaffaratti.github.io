@@ -7,10 +7,7 @@
 <title>Control de Premoldeados - Resumen</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
   margin:0;
@@ -18,10 +15,6 @@ body{
   background:#f4f6f8;
   color:#24364b;
 }
-
-/* =====================================================
-SIDEBAR
-===================================================== */
 
 .sidebar{
   position:fixed;
@@ -59,10 +52,6 @@ SIDEBAR
   color:#102f52;
 }
 
-/* =====================================================
-MAIN
-===================================================== */
-
 .main{
   margin-left:235px;
   min-height:100vh;
@@ -84,13 +73,8 @@ MAIN
   color:#68798c;
 }
 
-.conexion.ok{
-  color:#1c7a48;
-}
-
-.conexion.error{
-  color:#b33a3a;
-}
+.conexion.ok{color:#1c7a48;}
+.conexion.error{color:#b33a3a;}
 
 .contenido{
   padding:28px;
@@ -142,13 +126,10 @@ h1{
   color:#45596f;
 }
 
-.hidden{
-  display:none!important;
-}
+.hidden{display:none!important;}
 
-/* =====================================================
-TOTAL PRINCIPAL
-===================================================== */
+
+/* TOTAL */
 
 .total-principal{
   display:flex;
@@ -174,9 +155,7 @@ TOTAL PRINCIPAL
   margin-top:5px;
 }
 
-.total-volumen{
-  text-align:right;
-}
+.total-volumen{text-align:right;}
 
 .total-volumen strong{
   display:block;
@@ -188,9 +167,8 @@ TOTAL PRINCIPAL
   opacity:.8;
 }
 
-/* =====================================================
-FLUJO
-===================================================== */
+
+/* FLUJO */
 
 .flujo{
   display:grid;
@@ -243,9 +221,8 @@ FLUJO
   color:#28734b;
 }
 
-/* =====================================================
-CURVA S
-===================================================== */
+
+/* CURVA */
 
 .metricas-m3{
   display:grid;
@@ -275,17 +252,9 @@ CURVA S
   margin-top:6px;
 }
 
-.metrica.desvio-positivo{
-  border-left:5px solid #198754;
-}
-
-.metrica.desvio-negativo{
-  border-left:5px solid #c23838;
-}
-
-.metrica.desvio-neutro{
-  border-left:5px solid #d59a20;
-}
+.metrica.desvio-positivo{border-left:5px solid #198754;}
+.metrica.desvio-negativo{border-left:5px solid #c23838;}
+.metrica.desvio-neutro{border-left:5px solid #d59a20;}
 
 .grid-curva{
   display:grid;
@@ -317,17 +286,9 @@ CURVA S
   margin:10px 0 17px;
 }
 
-.estado-verde{
-  color:#198754;
-}
-
-.estado-amarillo{
-  color:#c17c00;
-}
-
-.estado-rojo{
-  color:#c23838;
-}
+.estado-verde{color:#198754;}
+.estado-amarillo{color:#c17c00;}
+.estado-rojo{color:#c23838;}
 
 .estado-fila{
   display:flex;
@@ -338,13 +299,8 @@ CURVA S
   font-size:12px;
 }
 
-.desvio-porcentaje-positivo{
-  color:#198754;
-}
-
-.desvio-porcentaje-negativo{
-  color:#c23838;
-}
+.desvio-porcentaje-positivo{color:#198754;}
+.desvio-porcentaje-negativo{color:#c23838;}
 
 .nota{
   font-size:11px;
@@ -353,13 +309,12 @@ CURVA S
   margin-top:15px;
 }
 
-/* =====================================================
-PENDIENTES
-===================================================== */
+
+/* PENDIENTES */
 
 .pendientes-resumen{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(2,1fr);
   gap:12px;
   margin-bottom:16px;
 }
@@ -430,9 +385,8 @@ PENDIENTES
   font-weight:800;
 }
 
-/* =====================================================
-FAMILIAS
-===================================================== */
+
+/* FAMILIAS */
 
 .familias{
   display:grid;
@@ -525,9 +479,7 @@ FAMILIAS
   padding-top:10px;
 }
 
-.detalle-tipos.abierto{
-  display:block;
-}
+.detalle-tipos.abierto{display:block;}
 
 .tipo-detalle{
   padding:8px 0;
@@ -547,28 +499,14 @@ FAMILIAS
   color:#68798c;
 }
 
-/* =====================================================
-RESPONSIVE
-===================================================== */
 
 @media(max-width:1200px){
-
-  .metricas-m3{
-    grid-template-columns:repeat(3,1fr);
-  }
-
+  .metricas-m3{grid-template-columns:repeat(3,1fr);}
 }
 
 @media(max-width:1150px){
-
-  .flujo{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-  .familias{
-    grid-template-columns:repeat(2,1fr);
-  }
-
+  .flujo{grid-template-columns:repeat(3,1fr);}
+  .familias{grid-template-columns:repeat(2,1fr);}
 }
 
 @media(max-width:850px){
@@ -578,30 +516,17 @@ RESPONSIVE
     width:100%;
   }
 
-  .main{
-    margin-left:0;
-  }
+  .main{margin-left:0;}
 
-  .grid-curva{
-    grid-template-columns:1fr;
-  }
+  .grid-curva{grid-template-columns:1fr;}
 
-  .flujo{
-    grid-template-columns:repeat(2,1fr);
-  }
+  .flujo{grid-template-columns:repeat(2,1fr);}
 
-  .familias{
-    grid-template-columns:1fr;
-  }
+  .familias{grid-template-columns:1fr;}
 
-  .metricas-m3{
-    grid-template-columns:repeat(2,1fr);
-  }
+  .metricas-m3{grid-template-columns:repeat(2,1fr);}
 
-  .pendientes-resumen{
-    grid-template-columns:1fr;
-  }
-
+  .pendientes-resumen{grid-template-columns:1fr;}
 }
 
 </style>
@@ -609,15 +534,10 @@ RESPONSIVE
 
 <body>
 
-<!-- =====================================================
-SIDEBAR
-===================================================== -->
-
 <aside class="sidebar">
 
 <div class="logo">
-🏗️ CONTROL DE<br>
-PREMOLDEADOS
+🏗️ CONTROL DE<br>PREMOLDEADOS
 </div>
 
 <a href="index.html" class="activo">
@@ -639,9 +559,7 @@ PREMOLDEADOS
 
 <div class="topbar">
 
-<strong>
-Seguimiento de Premoldeados
-</strong>
+<strong>Seguimiento de Premoldeados</strong>
 
 <div id="conexion" class="conexion">
 ⏳ Conectando...
@@ -659,21 +577,15 @@ Seguimiento general de premoldeados: fabricación, logística, calidad, montaje 
 </p>
 
 
-<!-- =====================================================
-TOTAL
-===================================================== -->
+<!-- TOTAL -->
 
 <div class="total-principal">
 
 <div>
 
-<small>
-PREMOLDEADOS TOTALES
-</small>
+<small>PREMOLDEADOS TOTALES</small>
 
-<div class="total-numero" id="total">
-0
-</div>
+<div class="total-numero" id="total">0</div>
 
 <div style="font-size:12px;opacity:.8">
 Base de Ingeniería
@@ -685,11 +597,12 @@ Base de Ingeniería
 <div class="total-volumen">
 
 <strong id="volumenProyecto">
-307,876 m³
+307,88 m³
 </strong>
 
 <span>
-<span id="cantidadPlanificada">217</span> unidades planificadas
+<span id="cantidadPlanificada">217</span>
+unidades planificadas
 </span>
 
 </div>
@@ -697,9 +610,7 @@ Base de Ingeniería
 </div>
 
 
-<!-- =====================================================
-FLUJO
-===================================================== -->
+<!-- FLUJO -->
 
 <section class="panel">
 
@@ -707,170 +618,103 @@ FLUJO
 <h2>🔄 Flujo de premoldeados</h2>
 </div>
 
-
 <div class="flujo">
 
-
 <div class="etapa">
-
 <div class="etapa-icono">🏭</div>
-
-<div class="etapa-nombre">
-En taller
-</div>
-
+<div class="etapa-nombre">En taller</div>
 <div class="etapa-valor">
 <span id="taller">0</span>
 <small>unidades</small>
 </div>
-
 <div class="etapa-m3">
-<span id="m3Taller">0,000</span> m³
+<span id="m3Taller">0,00</span> m³
 </div>
-
-<div class="etapa-pct" id="pctTaller">
-0%
-</div>
-
+<div class="etapa-pct" id="pctTaller">0%</div>
 </div>
 
 
 <div class="etapa">
-
 <div class="etapa-icono">✅</div>
-
-<div class="etapa-nombre">
-Liberado
-</div>
-
+<div class="etapa-nombre">Liberado</div>
 <div class="etapa-valor">
 <span id="liberadas">0</span>
 <small>unidades</small>
 </div>
-
 <div class="etapa-m3">
-<span id="m3Liberadas">0,000</span> m³
+<span id="m3Liberadas">0,00</span> m³
 </div>
-
-<div class="etapa-pct" id="pctLiberadas">
-0%
-</div>
-
+<div class="etapa-pct" id="pctLiberadas">0%</div>
 </div>
 
 
 <div class="etapa">
-
 <div class="etapa-icono">🚧</div>
-
-<div class="etapa-nombre">
-En obra
-</div>
-
+<div class="etapa-nombre">En obra</div>
 <div class="etapa-valor">
 <span id="obra">0</span>
 <small>unidades</small>
 </div>
-
 <div class="etapa-m3">
-<span id="m3Obra">0,000</span> m³
+<span id="m3Obra">0,00</span> m³
 </div>
-
-<div class="etapa-pct" id="pctObra">
-0%
-</div>
-
+<div class="etapa-pct" id="pctObra">0%</div>
 </div>
 
 
 <div class="etapa">
-
 <div class="etapa-icono">✔️</div>
-
-<div class="etapa-nombre">
-QA/QC
-</div>
-
+<div class="etapa-nombre">QA/QC</div>
 <div class="etapa-valor">
 <span id="qaqc">0</span>
 <small>unidades</small>
 </div>
-
 <div class="etapa-m3">
-<span id="m3Qaqc">0,000</span> m³
+<span id="m3Qaqc">0,00</span> m³
 </div>
-
-<div class="etapa-pct" id="pctQaqc">
-0%
-</div>
-
+<div class="etapa-pct" id="pctQaqc">0%</div>
 </div>
 
 
 <div class="etapa">
-
 <div class="etapa-icono">🏗️</div>
-
-<div class="etapa-nombre">
-Montado
-</div>
-
+<div class="etapa-nombre">Montado</div>
 <div class="etapa-valor">
 <span id="montadas">0</span>
 <small>unidades</small>
 </div>
-
 <div class="etapa-m3">
-<span id="m3Montadas">0,000</span> m³
+<span id="m3Montadas">0,00</span> m³
 </div>
-
-<div class="etapa-pct" id="pctMontadas">
-0%
-</div>
-
+<div class="etapa-pct" id="pctMontadas">0%</div>
 </div>
 
 
 <div class="etapa">
-
 <div class="etapa-icono">🎨</div>
-
-<div class="etapa-nombre">
-Pintado
-</div>
-
+<div class="etapa-nombre">Pintado</div>
 <div class="etapa-valor">
 <span id="pintadas">0</span>
 <small>unidades</small>
 </div>
-
 <div class="etapa-m3">
-<span id="m3Pintadas">0,000</span> m³
+<span id="m3Pintadas">0,00</span> m³
 </div>
-
-<div class="etapa-pct" id="pctPintadas">
-0%
+<div class="etapa-pct" id="pctPintadas">0%</div>
 </div>
-
-</div>
-
 
 </div>
 
 </section>
 
 
-<!-- =====================================================
-CURVA S
-===================================================== -->
+<!-- CURVA S -->
 
 <section class="panel">
 
 <div class="panel-titulo">
 
-<h2>
-📈 Curva S de Montaje — Base vs Real
-</h2>
+<h2>📈 Curva S de Montaje — Base vs Real</h2>
 
 <button
 id="btnAvance"
@@ -884,74 +728,32 @@ Ocultar ▲
 
 <div id="contenidoAvance">
 
-
 <div class="metricas-m3">
 
-
 <div class="metrica">
-
-<span>
-Volumen total proyecto
-</span>
-
-<strong id="m3Total">
-0,00 m³
-</strong>
-
+<span>Volumen total proyecto</span>
+<strong id="m3Total">0,00 m³</strong>
 </div>
 
-
 <div class="metrica">
-
-<span>
-Planificado a hoy
-</span>
-
-<strong id="m3PlanHoy">
-0,00 m³
-</strong>
-
+<span>Planificado a hoy</span>
+<strong id="m3PlanHoy">0,00 m³</strong>
 </div>
 
-
 <div class="metrica">
-
-<span>
-Real montado
-</span>
-
-<strong id="m3RealHoy">
-0,00 m³
-</strong>
-
+<span>Real montado</span>
+<strong id="m3RealHoy">0,00 m³</strong>
 </div>
-
 
 <div class="metrica" id="cardDesvioM3">
-
-<span>
-Desvío m³
-</span>
-
-<strong id="m3Desvio">
-0,00 m³
-</strong>
-
+<span>Desvío m³</span>
+<strong id="m3Desvio">0,00 m³</strong>
 </div>
-
 
 <div class="metrica" id="cardDesvioPct">
-
-<span>
-Desvío %
-</span>
-
-<strong id="pctDesvio">
-0,0%
-</strong>
-
+<span>Desvío %</span>
+<strong id="pctDesvio">0,0%</strong>
 </div>
-
 
 </div>
 
@@ -965,92 +767,41 @@ Desvío %
 
 <div class="estado-proyecto">
 
-<h3>
-Estado del proyecto
-</h3>
+<h3>Estado del proyecto</h3>
 
 <div id="estadoProyecto" class="estado-grande">
 —
 </div>
 
-
 <div class="estado-fila">
-
-<span>
-Planificado
-</span>
-
-<strong id="estadoPlan">
-0,00 m³
-</strong>
-
+<span>Planificado</span>
+<strong id="estadoPlan">0,00 m³</strong>
 </div>
 
-
 <div class="estado-fila">
-
-<span>
-Real
-</span>
-
-<strong id="estadoReal">
-0,00 m³
-</strong>
-
+<span>Real</span>
+<strong id="estadoReal">0,00 m³</strong>
 </div>
 
-
 <div class="estado-fila">
-
-<span>
-Desvío m³
-</span>
-
-<strong id="estadoDesvio">
-0,00 m³
-</strong>
-
+<span>Desvío m³</span>
+<strong id="estadoDesvio">0,00 m³</strong>
 </div>
 
-
 <div class="estado-fila">
-
-<span>
-Desvío %
-</span>
-
-<strong id="estadoDesvioPct">
-0,0%
-</strong>
-
+<span>Desvío %</span>
+<strong id="estadoDesvioPct">0,0%</strong>
 </div>
 
-
 <div class="estado-fila">
-
-<span>
-Avance real proyecto
-</span>
-
-<strong id="estadoPct">
-0%
-</strong>
-
+<span>Avance real proyecto</span>
+<strong id="estadoPct">0%</strong>
 </div>
 
-
 <div class="estado-fila">
-
-<span>
-Fecha de control
-</span>
-
-<strong id="fechaControl">
-—
-</strong>
-
+<span>Fecha de control</span>
+<strong id="fechaControl">—</strong>
 </div>
-
 
 <div class="nota">
 
@@ -1062,7 +813,7 @@ La línea <strong>REAL</strong> suma los m³ de cada pieza marcada como montada 
 
 <br><br>
 
-El <strong>desvío %</strong> se calcula:
+El desvío % se calcula:
 
 <br>
 
@@ -1081,17 +832,13 @@ El <strong>desvío %</strong> se calcula:
 </section>
 
 
-<!-- =====================================================
-PENDIENTES
-===================================================== -->
+<!-- PENDIENTES -->
 
 <section class="panel">
 
 <div class="panel-titulo">
 
-<h2>
-🏗️ Bases pendientes de montar
-</h2>
+<h2>🏗️ Bases pendientes de montar</h2>
 
 <button
 id="btnPendientes"
@@ -1105,7 +852,6 @@ Ocultar ▲
 
 <div id="contenidoPendientes">
 
-
 <div class="pendientes-resumen">
 
 <div class="pendiente-kpi">
@@ -1113,9 +859,8 @@ Ocultar ▲
 <strong id="unidadesPendientes">0</strong>
 </div>
 
-
 <div class="pendiente-kpi">
-<span>m³ pendientes de montar</span>
+<span>M³ pendientes de montar</span>
 <strong id="m3PendientesTotal">0,00 m³</strong>
 </div>
 
@@ -1133,8 +878,8 @@ Ocultar ▲
 <th>Planificadas</th>
 <th>Montadas</th>
 <th>Pendientes</th>
-<th>m³ c/u</th>
-<th>m³ pendientes</th>
+<th>M³ c/u</th>
+<th>M³ pendientes</th>
 </tr>
 
 </thead>
@@ -1146,25 +891,15 @@ Ocultar ▲
 
 <tr>
 
-<td>
-TOTAL PENDIENTE
-</td>
+<td>TOTAL PENDIENTE</td>
 
-<td id="totalPlanPendientes">
-0
-</td>
+<td id="totalPlanPendientes">0</td>
 
-<td id="totalMontadasPendientes">
-0
-</td>
+<td id="totalMontadasPendientes">0</td>
 
-<td id="totalUnidadesPendientes">
-0
-</td>
+<td id="totalUnidadesPendientes">0</td>
 
-<td>
-—
-</td>
+<td>—</td>
 
 <td id="totalM3PendientesTabla">
 0,00 m³
@@ -1183,17 +918,13 @@ TOTAL PENDIENTE
 </section>
 
 
-<!-- =====================================================
-FAMILIAS
-===================================================== -->
+<!-- FAMILIAS -->
 
 <section class="panel">
 
 <div class="panel-titulo">
 
-<h2>
-📦 Avance por familia de premoldeados
-</h2>
+<h2>📦 Avance por familia de premoldeados</h2>
 
 <button
 id="btnFamilias"
@@ -1204,29 +935,22 @@ Ocultar ▲
 
 </div>
 
-<div
-id="contenidoFamilias"
-class="familias">
+<div id="contenidoFamilias" class="familias">
 </div>
 
 </section>
 
 
 </main>
-
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 
 <script>
 
-/* =====================================================
-SUPABASE
-===================================================== */
+/* SUPABASE */
 
 const SUPABASE_URL=
 "https://tnnioleawbhuqjuykrsf.supabase.co";
@@ -1241,9 +965,7 @@ supabase.createClient(
 );
 
 
-/* =====================================================
-BASE PLANIFICADA
-===================================================== */
+/* BASE PLANIFICADA */
 
 const BASE_PROYECTO=[
 
@@ -1323,18 +1045,15 @@ const BASE_PROYECTO=[
 ];
 
 
-/* =====================================================
-MAPA M3 DE RESPALDO
-===================================================== */
+function normalizarTipo(tipo){
+  return String(tipo||"").trim().toUpperCase();
+}
+
 
 const M3_POR_TIPO={};
 
 BASE_PROYECTO.forEach(item=>{
-
-  M3_POR_TIPO[
-    normalizarTipo(item.tipo)
-  ]=item.m3;
-
+  M3_POR_TIPO[normalizarTipo(item.tipo)]=item.m3;
 });
 
 
@@ -1342,61 +1061,26 @@ let piezas=[];
 let chart=null;
 
 
-/* =====================================================
-UTILIDADES
-===================================================== */
-
-function normalizarTipo(tipo){
-
-  return String(tipo||"")
-  .trim()
-  .toUpperCase();
-
-}
-
+/* FORMATO */
 
 function crearFecha(texto){
-
-  return new Date(
-    texto+"T12:00:00"
-  );
-
+  return new Date(texto+"T12:00:00");
 }
-
 
 function inicioDia(fecha){
-
-  const d=
-  new Date(fecha);
-
-  d.setHours(
-    0,
-    0,
-    0,
-    0
-  );
-
+  const d=new Date(fecha);
+  d.setHours(0,0,0,0);
   return d;
-
 }
 
-
 function diasEntre(inicio,fin){
-
-  return Math.round(
-    (
-      inicioDia(fin)-
-      inicioDia(inicio)
-    )/86400000
-  );
-
+  return Math.round((inicioDia(fin)-inicioDia(inicio))/86400000);
 }
 
 
 function formatoM3(valor){
 
-  return Number(valor||0)
-  .toLocaleString(
+  return Number(valor||0).toLocaleString(
     "es-AR",
     {
       minimumFractionDigits:2,
@@ -1409,12 +1093,11 @@ function formatoM3(valor){
 
 function formatoNumeroM3(valor){
 
-  return Number(valor||0)
-  .toLocaleString(
+  return Number(valor||0).toLocaleString(
     "es-AR",
     {
-      minimumFractionDigits:3,
-      maximumFractionDigits:3
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
     }
   );
 
@@ -1423,23 +1106,16 @@ function formatoNumeroM3(valor){
 
 function formatoPorcentaje(valor){
 
-  const signo=
-  valor>0
-  ?
-  "+"
-  :
-  "";
+  const signo=valor>0?"+":"";
 
   return signo+
-  Number(valor||0)
-  .toLocaleString(
+  Number(valor||0).toLocaleString(
     "es-AR",
     {
       minimumFractionDigits:1,
       maximumFractionDigits:1
     }
   )+"%";
-
 }
 
 
@@ -1452,7 +1128,6 @@ function volumenTotalProyecto(){
     Number(item.m3||0),
     0
   );
-
 }
 
 
@@ -1464,108 +1139,60 @@ function cantidadTotalProyecto(){
     Number(item.cantidad||0),
     0
   );
-
 }
 
 
-/* =====================================================
-M3 DE CADA PIEZA
-PRIMERO USA SUPABASE.
-SI NO HAY M3, USA EL MAPA DE RESPALDO.
-===================================================== */
-
 function volumenPieza(pieza){
 
-  const valorBase=
-  Number(pieza.m3);
+  const valor=Number(pieza.m3);
 
   if(
-    Number.isFinite(valorBase) &&
-    valorBase>0
+    Number.isFinite(valor) &&
+    valor>0
   ){
-
-    return valorBase;
-
+    return valor;
   }
 
   return Number(
     M3_POR_TIPO[
-      normalizarTipo(
-        pieza.tipo
-      )
+      normalizarTipo(pieza.tipo)
     ]||0
   );
-
 }
 
 
-/* =====================================================
-PLAN ACUMULADO
-===================================================== */
+/* PLAN */
 
 function planAcumuladoEnFecha(fecha){
 
-  const objetivo=
-  inicioDia(fecha);
+  const objetivo=inicioDia(fecha);
 
   let total=0;
 
-
   BASE_PROYECTO.forEach(item=>{
 
-    const inicio=
-    inicioDia(
-      crearFecha(item.inicio)
-    );
-
-    const fin=
-    inicioDia(
-      crearFecha(item.fin)
-    );
+    const inicio=inicioDia(crearFecha(item.inicio));
+    const fin=inicioDia(crearFecha(item.fin));
 
     const volumen=
     Number(item.cantidad||0)*
     Number(item.m3||0);
 
-
-    if(objetivo<inicio){
-
-      return;
-
-    }
-
+    if(objetivo<inicio)return;
 
     if(objetivo>=fin){
-
       total+=volumen;
-
       return;
-
     }
 
-
-    const duracion=
-    diasEntre(
-      inicio,
-      fin
-    );
-
+    const duracion=diasEntre(inicio,fin);
 
     if(duracion<=0){
-
       total+=volumen;
-
       return;
-
     }
 
-
-    const transcurrido=
-    diasEntre(
-      inicio,
-      objetivo
-    );
-
+    const transcurrido=diasEntre(inicio,objetivo);
 
     const fraccion=
     Math.max(
@@ -1576,162 +1203,94 @@ function planAcumuladoEnFecha(fecha){
       )
     );
 
-
-    total+=
-    volumen*
-    fraccion;
+    total+=volumen*fraccion;
 
   });
 
-
   return total;
-
 }
 
 
-/* =====================================================
-REAL ACUMULADO
-===================================================== */
+/* REAL */
 
 function realAcumuladoEnFecha(fecha){
 
-  const objetivo=
-  inicioDia(fecha);
+  const objetivo=inicioDia(fecha);
 
+  return piezas.reduce((total,pieza)=>{
 
-  return piezas.reduce(
-    (total,pieza)=>{
+    if(
+      pieza.montada!==true ||
+      !pieza.fecha_montaje
+    ){
+      return total;
+    }
 
-      if(
-        pieza.montada!==true ||
-        !pieza.fecha_montaje
-      ){
+    const fechaMontaje=
+    inicioDia(
+      new Date(pieza.fecha_montaje)
+    );
 
-        return total;
+    if(fechaMontaje>objetivo){
+      return total;
+    }
 
-      }
+    return total+volumenPieza(pieza);
 
-
-      const fechaMontaje=
-      inicioDia(
-        new Date(
-          pieza.fecha_montaje
-        )
-      );
-
-
-      if(
-        fechaMontaje>
-        objetivo
-      ){
-
-        return total;
-
-      }
-
-
-      return total+
-      volumenPieza(pieza);
-
-    },
-    0
-  );
-
+  },0);
 }
 
 
-/* =====================================================
-FECHAS DE LA CURVA
-===================================================== */
-
 function obtenerRangoFechas(){
 
-  const inicio=
-  inicioDia(
+  const inicio=inicioDia(
     new Date(
       Math.min(
         ...BASE_PROYECTO.map(
-          x=>
-          crearFecha(
-            x.inicio
-          ).getTime()
+          x=>crearFecha(x.inicio).getTime()
         )
       )
     )
   );
 
-
-  const fin=
-  inicioDia(
+  const fin=inicioDia(
     new Date(
       Math.max(
         ...BASE_PROYECTO.map(
-          x=>
-          crearFecha(
-            x.fin
-          ).getTime()
+          x=>crearFecha(x.fin).getTime()
         )
       )
     )
   );
 
-
   const fechas=[];
-
-  const cursor=
-  new Date(inicio);
-
+  const cursor=new Date(inicio);
 
   while(cursor<=fin){
 
-    fechas.push(
-      new Date(cursor)
-    );
+    fechas.push(new Date(cursor));
 
     cursor.setDate(
       cursor.getDate()+1
     );
-
   }
 
-
   return fechas;
-
 }
 
 
-/* =====================================================
-SUPABASE
-===================================================== */
+/* CARGAR SUPABASE */
 
 async function cargarDatos(){
 
   const conexion=
-  document.getElementById(
-    "conexion"
-  );
+  document.getElementById("conexion");
 
-
-  const {
-    data,
-    error
-  }=
+  const {data,error}=
   await db
-
-  .from(
-    "premoldeados"
-  )
-
-  .select(
-    "id,codigo,tipo,modelo,m3,etapa,montada,pintada,fecha_montaje,fecha,created_at"
-  )
-
-  .order(
-    "id",
-    {
-      ascending:true
-    }
-  );
+  .from("premoldeados")
+  .select("id,codigo,tipo,modelo,m3,etapa,montada,pintada,fecha_montaje,fecha,created_at")
+  .order("id",{ascending:true});
 
 
   if(error){
@@ -1745,13 +1304,10 @@ async function cargarDatos(){
     console.error(error);
 
     return;
-
   }
 
 
-  piezas=
-  data||[];
-
+  piezas=data||[];
 
   conexion.textContent=
   "● Base online conectada";
@@ -1759,357 +1315,136 @@ async function cargarDatos(){
   conexion.className=
   "conexion ok";
 
-
   actualizarResumen();
-
   dibujarCurva();
-
   dibujarPendientesMontaje();
-
   dibujarFamilias();
-
 }
 
 
-/* =====================================================
-FLUJO
-===================================================== */
+/* FLUJO */
 
 function actualizarResumen(){
 
-  const total=
-  piezas.length;
-
+  const total=piezas.length;
 
   const listaTaller=
-  piezas.filter(
-    p=>Number(p.etapa??0)>=0
-  );
-
+  piezas.filter(p=>Number(p.etapa??0)>=0);
 
   const listaLiberadas=
-  piezas.filter(
-    p=>Number(p.etapa??0)>=1
-  );
-
+  piezas.filter(p=>Number(p.etapa??0)>=1);
 
   const listaObra=
-  piezas.filter(
-    p=>Number(p.etapa??0)>=2
-  );
-
+  piezas.filter(p=>Number(p.etapa??0)>=2);
 
   const listaQaqc=
-  piezas.filter(
-    p=>Number(p.etapa??0)>=3
-  );
-
+  piezas.filter(p=>Number(p.etapa??0)>=3);
 
   const listaMontadas=
-  piezas.filter(
-    p=>p.montada===true
-  );
-
+  piezas.filter(p=>p.montada===true);
 
   const listaPintadas=
-  piezas.filter(
-    p=>p.pintada===true
-  );
+  piezas.filter(p=>p.pintada===true);
 
 
-  const taller=
-  listaTaller.length;
-
-  const liberadas=
-  listaLiberadas.length;
-
-  const obra=
-  listaObra.length;
-
-  const qaqc=
-  listaQaqc.length;
-
-  const montadas=
-  listaMontadas.length;
-
-  const pintadas=
-  listaPintadas.length;
+  const taller=listaTaller.length;
+  const liberadas=listaLiberadas.length;
+  const obra=listaObra.length;
+  const qaqc=listaQaqc.length;
+  const montadas=listaMontadas.length;
+  const pintadas=listaPintadas.length;
 
 
   const sumarM3=
-  lista=>
-  lista.reduce(
-    (suma,p)=>
-    suma+
-    volumenPieza(p),
+  lista=>lista.reduce(
+    (suma,p)=>suma+volumenPieza(p),
     0
   );
 
 
-  const m3Taller=
-  sumarM3(
-    listaTaller
-  );
-
-  const m3Liberadas=
-  sumarM3(
-    listaLiberadas
-  );
-
-  const m3Obra=
-  sumarM3(
-    listaObra
-  );
-
-  const m3Qaqc=
-  sumarM3(
-    listaQaqc
-  );
-
-  const m3Montadas=
-  sumarM3(
-    listaMontadas
-  );
-
-  const m3Pintadas=
-  sumarM3(
-    listaPintadas
-  );
+  const m3Taller=sumarM3(listaTaller);
+  const m3Liberadas=sumarM3(listaLiberadas);
+  const m3Obra=sumarM3(listaObra);
+  const m3Qaqc=sumarM3(listaQaqc);
+  const m3Montadas=sumarM3(listaMontadas);
+  const m3Pintadas=sumarM3(listaPintadas);
 
 
   const pctTotal=
   cantidad=>
   total===0
-  ?
-  0
-  :
-  Math.round(
-    cantidad/
-    total*
-    100
-  );
+  ?0
+  :Math.round(cantidad/total*100);
 
 
   const pctQA=
   obra===0
-  ?
-  0
-  :
-  Math.round(
-    qaqc/
-    obra*
-    100
-  );
+  ?0
+  :Math.round(qaqc/obra*100);
 
 
-  document
-  .getElementById(
-    "total"
-  )
-  .textContent=
-  total;
+  document.getElementById("total").textContent=total;
 
-
-  document
-  .getElementById(
-    "cantidadPlanificada"
-  )
-  .textContent=
+  document.getElementById("cantidadPlanificada").textContent=
   cantidadTotalProyecto();
 
-
-  document
-  .getElementById(
-    "taller"
-  )
-  .textContent=
-  taller;
-
-
-  document
-  .getElementById(
-    "liberadas"
-  )
-  .textContent=
-  liberadas;
+  document.getElementById("taller").textContent=taller;
+  document.getElementById("liberadas").textContent=liberadas;
+  document.getElementById("obra").textContent=obra;
+  document.getElementById("qaqc").textContent=qaqc;
+  document.getElementById("montadas").textContent=montadas;
+  document.getElementById("pintadas").textContent=pintadas;
 
 
-  document
-  .getElementById(
-    "obra"
-  )
-  .textContent=
-  obra;
+  document.getElementById("m3Taller").textContent=
+  formatoNumeroM3(m3Taller);
+
+  document.getElementById("m3Liberadas").textContent=
+  formatoNumeroM3(m3Liberadas);
+
+  document.getElementById("m3Obra").textContent=
+  formatoNumeroM3(m3Obra);
+
+  document.getElementById("m3Qaqc").textContent=
+  formatoNumeroM3(m3Qaqc);
+
+  document.getElementById("m3Montadas").textContent=
+  formatoNumeroM3(m3Montadas);
+
+  document.getElementById("m3Pintadas").textContent=
+  formatoNumeroM3(m3Pintadas);
 
 
-  document
-  .getElementById(
-    "qaqc"
-  )
-  .textContent=
-  qaqc;
+  document.getElementById("pctTaller").textContent=
+  pctTotal(taller)+"%";
 
+  document.getElementById("pctLiberadas").textContent=
+  pctTotal(liberadas)+"%";
 
-  document
-  .getElementById(
-    "montadas"
-  )
-  .textContent=
-  montadas;
+  document.getElementById("pctObra").textContent=
+  pctTotal(obra)+"%";
 
-
-  document
-  .getElementById(
-    "pintadas"
-  )
-  .textContent=
-  pintadas;
-
-
-  /* M3 DEL FLUJO */
-
-  document
-  .getElementById(
-    "m3Taller"
-  )
-  .textContent=
-  formatoNumeroM3(
-    m3Taller
-  );
-
-
-  document
-  .getElementById(
-    "m3Liberadas"
-  )
-  .textContent=
-  formatoNumeroM3(
-    m3Liberadas
-  );
-
-
-  document
-  .getElementById(
-    "m3Obra"
-  )
-  .textContent=
-  formatoNumeroM3(
-    m3Obra
-  );
-
-
-  document
-  .getElementById(
-    "m3Qaqc"
-  )
-  .textContent=
-  formatoNumeroM3(
-    m3Qaqc
-  );
-
-
-  document
-  .getElementById(
-    "m3Montadas"
-  )
-  .textContent=
-  formatoNumeroM3(
-    m3Montadas
-  );
-
-
-  document
-  .getElementById(
-    "m3Pintadas"
-  )
-  .textContent=
-  formatoNumeroM3(
-    m3Pintadas
-  );
-
-
-  /* PORCENTAJES */
-
-  document
-  .getElementById(
-    "pctTaller"
-  )
-  .textContent=
-  pctTotal(
-    taller
-  )+"%";
-
-
-  document
-  .getElementById(
-    "pctLiberadas"
-  )
-  .textContent=
-  pctTotal(
-    liberadas
-  )+"%";
-
-
-  document
-  .getElementById(
-    "pctObra"
-  )
-  .textContent=
-  pctTotal(
-    obra
-  )+"%";
-
-
-  document
-  .getElementById(
-    "pctQaqc"
-  )
-  .textContent=
+  document.getElementById("pctQaqc").textContent=
   pctQA+"%";
 
+  document.getElementById("pctMontadas").textContent=
+  pctTotal(montadas)+"%";
 
-  document
-  .getElementById(
-    "pctMontadas"
-  )
-  .textContent=
-  pctTotal(
-    montadas
-  )+"%";
-
-
-  document
-  .getElementById(
-    "pctPintadas"
-  )
-  .textContent=
-  pctTotal(
-    pintadas
-  )+"%";
-
+  document.getElementById("pctPintadas").textContent=
+  pctTotal(pintadas)+"%";
 }
 
 
-/* =====================================================
-CURVA S
-===================================================== */
+/* CURVA S */
 
 function dibujarCurva(){
 
-  const fechas=
-  obtenerRangoFechas();
-
-
-  const hoy=
-  inicioDia(
-    new Date()
-  );
-
+  const fechas=obtenerRangoFechas();
+  const hoy=inicioDia(new Date());
 
   const labels=
   fechas.map(
-    f=>
-    f.toLocaleDateString(
+    f=>f.toLocaleDateString(
       "es-AR",
       {
         day:"2-digit",
@@ -2121,197 +1456,73 @@ function dibujarCurva(){
 
   const planData=
   fechas.map(
-    f=>
-    Math.round(
-      planAcumuladoEnFecha(f)*
-      1000
+    f=>Math.round(
+      planAcumuladoEnFecha(f)*1000
     )/1000
   );
 
 
   const realData=
-  fechas.map(
-    f=>{
+  fechas.map(f=>{
 
-      if(f>hoy){
+    if(f>hoy)return null;
 
-        return null;
+    return Math.round(
+      realAcumuladoEnFecha(f)*1000
+    )/1000;
 
-      }
-
-      return Math.round(
-        realAcumuladoEnFecha(f)*
-        1000
-      )/1000;
-
-    }
-  );
+  });
 
 
-  const totalM3=
-  volumenTotalProyecto();
+  const totalM3=volumenTotalProyecto();
+  const planHoy=planAcumuladoEnFecha(hoy);
+  const realHoy=realAcumuladoEnFecha(hoy);
 
-
-  const planHoy=
-  planAcumuladoEnFecha(
-    hoy
-  );
-
-
-  const realHoy=
-  realAcumuladoEnFecha(
-    hoy
-  );
-
-
-  const desvio=
-  realHoy-
-  planHoy;
-
+  const desvio=realHoy-planHoy;
 
   const desvioPct=
   planHoy===0
-  ?
-  0
-  :
-  (
-    desvio/
-    planHoy
-  )*100;
-
+  ?0
+  :(desvio/planHoy)*100;
 
   const porcentajeReal=
   totalM3===0
-  ?
-  0
-  :
-  (
-    realHoy/
-    totalM3
-  )*100;
+  ?0
+  :(realHoy/totalM3)*100;
 
 
-  document
-  .getElementById(
-    "volumenProyecto"
-  )
-  .textContent=
-  formatoM3(
-    totalM3
-  );
+  document.getElementById("volumenProyecto").textContent=
+  formatoM3(totalM3);
 
+  document.getElementById("m3Total").textContent=
+  formatoM3(totalM3);
 
-  document
-  .getElementById(
-    "m3Total"
-  )
-  .textContent=
-  formatoM3(
-    totalM3
-  );
+  document.getElementById("m3PlanHoy").textContent=
+  formatoM3(planHoy);
 
+  document.getElementById("m3RealHoy").textContent=
+  formatoM3(realHoy);
 
-  document
-  .getElementById(
-    "m3PlanHoy"
-  )
-  .textContent=
-  formatoM3(
-    planHoy
-  );
+  document.getElementById("m3Desvio").textContent=
+  (desvio>0?"+":"")+formatoM3(desvio);
 
+  document.getElementById("pctDesvio").textContent=
+  formatoPorcentaje(desvioPct);
 
-  document
-  .getElementById(
-    "m3RealHoy"
-  )
-  .textContent=
-  formatoM3(
-    realHoy
-  );
+  document.getElementById("estadoPlan").textContent=
+  formatoM3(planHoy);
 
+  document.getElementById("estadoReal").textContent=
+  formatoM3(realHoy);
 
-  document
-  .getElementById(
-    "m3Desvio"
-  )
-  .textContent=
-  (
-    desvio>0
-    ?
-    "+"
-    :
-    ""
-  )+
-  formatoM3(
-    desvio
-  );
+  document.getElementById("estadoDesvio").textContent=
+  (desvio>0?"+":"")+formatoM3(desvio);
 
+  document.getElementById("estadoDesvioPct").textContent=
+  formatoPorcentaje(desvioPct);
 
-  document
-  .getElementById(
-    "pctDesvio"
-  )
-  .textContent=
-  formatoPorcentaje(
-    desvioPct
-  );
-
-
-  document
-  .getElementById(
-    "estadoPlan"
-  )
-  .textContent=
-  formatoM3(
-    planHoy
-  );
-
-
-  document
-  .getElementById(
-    "estadoReal"
-  )
-  .textContent=
-  formatoM3(
-    realHoy
-  );
-
-
-  document
-  .getElementById(
-    "estadoDesvio"
-  )
-  .textContent=
-  (
-    desvio>0
-    ?
-    "+"
-    :
-    ""
-  )+
-  formatoM3(
-    desvio
-  );
-
-
-  document
-  .getElementById(
-    "estadoDesvioPct"
-  )
-  .textContent=
-  formatoPorcentaje(
-    desvioPct
-  );
-
-
-  document
-  .getElementById(
-    "estadoPct"
-  )
-  .textContent=
-  porcentajeReal
-  .toLocaleString(
+  document.getElementById("estadoPct").textContent=
+  porcentajeReal.toLocaleString(
     "es-AR",
     {
       minimumFractionDigits:1,
@@ -2319,33 +1530,13 @@ function dibujarCurva(){
     }
   )+"%";
 
-
-  document
-  .getElementById(
-    "fechaControl"
-  )
-  .textContent=
-  hoy.toLocaleDateString(
-    "es-AR"
-  );
+  document.getElementById("fechaControl").textContent=
+  hoy.toLocaleDateString("es-AR");
 
 
-  /* COLORES */
-
-  const cardM3=
-  document.getElementById(
-    "cardDesvioM3"
-  );
-
-  const cardPct=
-  document.getElementById(
-    "cardDesvioPct"
-  );
-
-  const estadoPctDesvio=
-  document.getElementById(
-    "estadoDesvioPct"
-  );
+  const cardM3=document.getElementById("cardDesvioM3");
+  const cardPct=document.getElementById("cardDesvioPct");
+  const estadoPctDesvio=document.getElementById("estadoDesvioPct");
 
 
   cardM3.classList.remove(
@@ -2354,13 +1545,11 @@ function dibujarCurva(){
     "desvio-neutro"
   );
 
-
   cardPct.classList.remove(
     "desvio-positivo",
     "desvio-negativo",
     "desvio-neutro"
   );
-
 
   estadoPctDesvio.classList.remove(
     "desvio-porcentaje-positivo",
@@ -2370,105 +1559,58 @@ function dibujarCurva(){
 
   if(desvio>0){
 
-    cardM3.classList.add(
-      "desvio-positivo"
-    );
-
-    cardPct.classList.add(
-      "desvio-positivo"
-    );
+    cardM3.classList.add("desvio-positivo");
+    cardPct.classList.add("desvio-positivo");
 
     estadoPctDesvio.classList.add(
       "desvio-porcentaje-positivo"
     );
 
-  }
+  }else if(desvio<0){
 
-  else if(desvio<0){
-
-    cardM3.classList.add(
-      "desvio-negativo"
-    );
-
-    cardPct.classList.add(
-      "desvio-negativo"
-    );
+    cardM3.classList.add("desvio-negativo");
+    cardPct.classList.add("desvio-negativo");
 
     estadoPctDesvio.classList.add(
       "desvio-porcentaje-negativo"
     );
 
-  }
+  }else{
 
-  else{
-
-    cardM3.classList.add(
-      "desvio-neutro"
-    );
-
-    cardPct.classList.add(
-      "desvio-neutro"
-    );
-
+    cardM3.classList.add("desvio-neutro");
+    cardPct.classList.add("desvio-neutro");
   }
 
 
-  const estado=
-  document.getElementById(
-    "estadoProyecto"
-  );
+  const estado=document.getElementById("estadoProyecto");
 
-
-  estado.className=
-  "estado-grande";
+  estado.className="estado-grande";
 
 
   if(desvio>0){
 
-    estado.textContent=
-    "ADELANTADO";
+    estado.textContent="ADELANTADO";
+    estado.classList.add("estado-verde");
 
-    estado.classList.add(
-      "estado-verde"
-    );
+  }else if(desvio<0){
 
-  }
+    estado.textContent="ATRASADO";
+    estado.classList.add("estado-rojo");
 
-  else if(desvio<0){
+  }else{
 
-    estado.textContent=
-    "ATRASADO";
-
-    estado.classList.add(
-      "estado-rojo"
-    );
-
-  }
-
-  else{
-
-    estado.textContent=
-    "EN LÍNEA";
-
-    estado.classList.add(
-      "estado-amarillo"
-    );
-
+    estado.textContent="EN LÍNEA";
+    estado.classList.add("estado-amarillo");
   }
 
 
   if(chart){
-
     chart.destroy();
-
   }
 
 
-  chart=
-  new Chart(
-    document.getElementById(
-      "curvaS"
-    ),
+  chart=new Chart(
+    document.getElementById("curvaS"),
     {
 
       type:"line",
@@ -2480,56 +1622,34 @@ function dibujarCurva(){
         datasets:[
 
           {
-
             label:"BASE PLANIFICADA (m³)",
-
             data:planData,
-
             borderColor:"#255b88",
-
             backgroundColor:"rgba(37,91,136,.08)",
-
             borderWidth:3,
-
             pointRadius:0,
-
             pointHoverRadius:4,
-
             tension:.2
-
           },
 
           {
-
             label:"REAL MONTADO (m³)",
-
             data:realData,
-
             borderColor:"#28734b",
-
             backgroundColor:"rgba(40,115,75,.08)",
-
             borderWidth:3,
-
             pointRadius:0,
-
             pointHoverRadius:4,
-
             tension:.15,
-
             spanGaps:false
-
           }
 
         ]
-
       },
-
 
       options:{
 
         responsive:true,
-
         maintainAspectRatio:false,
 
         interaction:{
@@ -2550,70 +1670,45 @@ function dibujarCurva(){
 
               label:function(ctx){
 
-                if(
-                  ctx.raw===null
-                ){
-
-                  return "";
-
-                }
-
+                if(ctx.raw===null)return "";
 
                 return ctx.dataset.label+
                 ": "+
-                Number(ctx.raw)
-                .toLocaleString(
+                Number(ctx.raw).toLocaleString(
                   "es-AR",
                   {
                     minimumFractionDigits:2,
-                    maximumFractionDigits:3
+                    maximumFractionDigits:2
                   }
                 )+
                 " m³";
-
               }
-
             }
-
           }
-
         },
-
 
         scales:{
 
           x:{
-
-            grid:{
-              display:false
-            },
-
+            grid:{display:false},
             ticks:{
               autoSkip:true,
               maxTicksLimit:12,
               maxRotation:0
             }
-
           },
 
           y:{
-
             beginAtZero:true,
-
             title:{
               display:true,
               text:"m³ acumulados"
             }
-
           }
-
         }
-
       }
-
     }
   );
-
 }
 
 
@@ -2628,116 +1723,62 @@ function dibujarPendientesMontaje(){
 
   piezas.forEach(p=>{
 
-    if(
-      p.montada!==true
-    ){
-
+    if(p.montada!==true){
       return;
-
     }
 
-
-    const tipo=
-    normalizarTipo(
-      p.tipo
-    );
-
+    const tipo=normalizarTipo(p.tipo);
 
     montadasPorTipo[tipo]=
-    (
-      montadasPorTipo[tipo]||
-      0
-    )+1;
-
+    (montadasPorTipo[tipo]||0)+1;
   });
 
 
   const pendientes=
   BASE_PROYECTO
-
   .map(item=>{
 
     const tipo=
-    normalizarTipo(
-      item.tipo
-    );
-
+    normalizarTipo(item.tipo);
 
     const montadas=
     Math.min(
-      Number(
-        item.cantidad||0
-      ),
-      Number(
-        montadasPorTipo[tipo]||0
-      )
+      Number(item.cantidad||0),
+      Number(montadasPorTipo[tipo]||0)
     );
-
 
     const faltan=
     Math.max(
-      Number(
-        item.cantidad||0
-      )-
-      montadas,
+      Number(item.cantidad||0)-montadas,
       0
     );
 
-
     const m3Pendientes=
     faltan*
-    Number(
-      item.m3||0
-    );
+    Number(item.m3||0);
 
 
     return{
-
-      tipo:
-      item.tipo,
-
-      planificadas:
-      Number(
-        item.cantidad||0
-      ),
-
-      montadas:
-      montadas,
-
-      faltan:
-      faltan,
-
-      m3Unidad:
-      Number(
-        item.m3||0
-      ),
-
-      m3Pendientes:
-      m3Pendientes
-
+      tipo:item.tipo,
+      planificadas:Number(item.cantidad||0),
+      montadas:montadas,
+      faltan:faltan,
+      m3Unidad:Number(item.m3||0),
+      m3Pendientes:m3Pendientes
     };
 
   })
-
-  .filter(
-    x=>
-    x.faltan>0
-  )
-
+  .filter(item=>item.faltan>0)
   .sort(
     (a,b)=>
-    b.m3Pendientes-
-    a.m3Pendientes
+    b.m3Pendientes-a.m3Pendientes
   );
 
 
   const totalPlan=
   BASE_PROYECTO.reduce(
     (suma,item)=>
-    suma+
-    Number(
-      item.cantidad||0
-    ),
+    suma+Number(item.cantidad||0),
     0
   );
 
@@ -2747,19 +1788,12 @@ function dibujarPendientesMontaje(){
     (suma,item)=>{
 
       const tipo=
-      normalizarTipo(
-        item.tipo
-      );
-
+      normalizarTipo(item.tipo);
 
       return suma+
       Math.min(
-        Number(
-          item.cantidad||0
-        ),
-        Number(
-          montadasPorTipo[tipo]||0
-        )
+        Number(item.cantidad||0),
+        Number(montadasPorTipo[tipo]||0)
       );
 
     },
@@ -2770,8 +1804,7 @@ function dibujarPendientesMontaje(){
   const totalUnidades=
   pendientes.reduce(
     (suma,item)=>
-    suma+
-    item.faltan,
+    suma+item.faltan,
     0
   );
 
@@ -2779,188 +1812,105 @@ function dibujarPendientesMontaje(){
   const totalM3=
   pendientes.reduce(
     (suma,item)=>
-    suma+
-    item.m3Pendientes,
+    suma+item.m3Pendientes,
     0
   );
 
 
-  document
-  .getElementById(
-    "unidadesPendientes"
-  )
-  .textContent=
+  document.getElementById("unidadesPendientes").textContent=
   totalUnidades;
 
+  document.getElementById("m3PendientesTotal").textContent=
+  formatoM3(totalM3);
 
-  document
-  .getElementById(
-    "tiposPendientes"
-  )
-  .textContent=
-  pendientes.length;
-
-
-  document
-  .getElementById(
-    "m3PendientesTotal"
-  )
-  .textContent=
-  formatoM3(
-    totalM3
-  );
-
-
-  document
-  .getElementById(
-    "totalPlanPendientes"
-  )
-  .textContent=
+  document.getElementById("totalPlanPendientes").textContent=
   totalPlan;
 
-
-  document
-  .getElementById(
-    "totalMontadasPendientes"
-  )
-  .textContent=
+  document.getElementById("totalMontadasPendientes").textContent=
   totalMontadasPlan;
 
-
-  document
-  .getElementById(
-    "totalUnidadesPendientes"
-  )
-  .textContent=
+  document.getElementById("totalUnidadesPendientes").textContent=
   totalUnidades;
 
-
-  document
-  .getElementById(
-    "totalM3PendientesTabla"
-  )
-  .textContent=
-  formatoM3(
-    totalM3
-  );
+  document.getElementById("totalM3PendientesTabla").textContent=
+  formatoM3(totalM3);
 
 
   const tbody=
-  document.getElementById(
-    "tablaPendientesBody"
-  );
+  document.getElementById("tablaPendientesBody");
 
 
-  if(
-    pendientes.length===0
-  ){
+  if(pendientes.length===0){
 
     tbody.innerHTML=`
-
-    <tr>
-
-    <td
-    colspan="6"
-    class="sin-pendientes">
-
-    ✅ No quedan premoldeados pendientes de montar
-
-    </td>
-
-    </tr>
-
+      <tr>
+        <td colspan="6" class="sin-pendientes">
+        ✅ No quedan premoldeados pendientes de montar
+        </td>
+      </tr>
     `;
 
     return;
-
   }
 
 
   tbody.innerHTML=
-  pendientes.map(
-    item=>`
+  pendientes.map(item=>`
 
     <tr>
 
-    <td>
-    <strong>
-    ${item.tipo}
-    </strong>
-    </td>
+      <td>
+        <strong>${item.tipo}</strong>
+      </td>
 
-    <td>
-    ${item.planificadas}
-    </td>
+      <td>
+        ${item.planificadas}
+      </td>
 
-    <td>
-    ${item.montadas}
-    </td>
+      <td>
+        ${item.montadas}
+      </td>
 
-    <td>
-    <strong>
-    ${item.faltan}
-    </strong>
-    </td>
+      <td>
+        <strong>${item.faltan}</strong>
+      </td>
 
-    <td>
-    ${formatoM3(
-      item.m3Unidad
-    )}
-    </td>
+      <td>
+        ${formatoM3(item.m3Unidad)}
+      </td>
 
-    <td>
-    <strong>
-    ${formatoM3(
-      item.m3Pendientes
-    )}
-    </strong>
-    </td>
+      <td>
+        <strong>
+        ${formatoM3(item.m3Pendientes)}
+        </strong>
+      </td>
 
     </tr>
 
-    `
-  ).join("");
-
+  `).join("");
 }
 
 
-/* =====================================================
-FAMILIAS
-===================================================== */
+/* FAMILIAS */
 
 function obtenerFamilia(tipo){
 
   const limpio=
-  String(
-    tipo||
-    "SIN TIPO"
-  )
+  String(tipo||"SIN TIPO")
   .trim()
   .toUpperCase();
 
-
   const match=
-  limpio.match(
-    /[A-ZÁÉÍÓÚÑ]/
-  );
+  limpio.match(/[A-ZÁÉÍÓÚÑ]/);
 
-
-  return match
-  ?
-  match[0]
-  :
-  "#";
-
+  return match?match[0]:"#";
 }
 
 
 function dibujarFamilias(){
 
   const contenedor=
-  document.getElementById(
-    "contenidoFamilias"
-  );
-
+  document.getElementById("contenidoFamilias");
 
   const grupos={};
 
@@ -2968,83 +1918,44 @@ function dibujarFamilias(){
   piezas.forEach(p=>{
 
     const familia=
-    obtenerFamilia(
-      p.tipo
-    );
+    obtenerFamilia(p.tipo);
 
-
-    if(
-      !grupos[familia]
-    ){
-
+    if(!grupos[familia]){
       grupos[familia]=[];
-
     }
 
-
-    grupos[familia].push(
-      p
-    );
-
+    grupos[familia].push(p);
   });
 
 
   contenedor.innerHTML=
-  Object.keys(
-    grupos
-  )
-
+  Object.keys(grupos)
   .sort()
-
   .map(familia=>{
 
+    const lista=grupos[familia];
 
-    const lista=
-    grupos[familia];
-
-
-    const total=
-    lista.length;
-
+    const total=lista.length;
 
     const obra=
     lista.filter(
-      p=>
-      Number(
-        p.etapa??0
-      )>=2
+      p=>Number(p.etapa??0)>=2
     ).length;
-
 
     const montadas=
     lista.filter(
-      p=>
-      p.montada===true
+      p=>p.montada===true
     ).length;
-
 
     const pctObra=
     total===0
-    ?
-    0
-    :
-    Math.round(
-      obra/
-      total*
-      100
-    );
-
+    ?0
+    :Math.round(obra/total*100);
 
     const pctMontadas=
     total===0
-    ?
-    0
-    :
-    Math.round(
-      montadas/
-      total*
-      100
-    );
+    ?0
+    :Math.round(montadas/total*100);
 
 
     const tipos={};
@@ -3053,66 +1964,39 @@ function dibujarFamilias(){
     lista.forEach(p=>{
 
       const tipo=
-      normalizarTipo(
-        p.tipo
-      );
+      normalizarTipo(p.tipo);
 
-
-      if(
-        !tipos[tipo]
-      ){
-
+      if(!tipos[tipo]){
         tipos[tipo]=[];
-
       }
 
-
-      tipos[tipo].push(
-        p
-      );
-
+      tipos[tipo].push(p);
     });
 
 
     const detalle=
-    Object.keys(
-      tipos
-    )
-
+    Object.keys(tipos)
     .sort()
-
     .map(tipo=>{
 
+      const listaTipo=tipos[tipo];
 
-      const listaTipo=
-      tipos[tipo];
-
-
-      const t=
-      listaTipo.length;
-
+      const t=listaTipo.length;
 
       const o=
       listaTipo.filter(
-        p=>
-        Number(
-          p.etapa??0
-        )>=2
+        p=>Number(p.etapa??0)>=2
       ).length;
-
 
       const m=
       listaTipo.filter(
-        p=>
-        p.montada===true
+        p=>p.montada===true
       ).length;
-
 
       const volumenTipo=
       listaTipo.reduce(
         (suma,p)=>
-        suma+
-        volumenPieza(p),
+        suma+volumenPieza(p),
         0
       );
 
@@ -3121,29 +2005,29 @@ function dibujarFamilias(){
 
       <div class="tipo-detalle">
 
-      <div class="tipo-nombre">
-      ${tipo}
-      </div>
+        <div class="tipo-nombre">
+        ${tipo}
+        </div>
 
-      <div class="tipo-stats">
+        <div class="tipo-stats">
 
-      <span>
-      Total ${t} unidades
-      </span>
+          <span>
+          Total ${t} unidades
+          </span>
 
-      <span>
-      ${formatoM3(volumenTipo)}
-      </span>
+          <span>
+          ${formatoM3(volumenTipo)}
+          </span>
 
-      <span>
-      En obra ${o} unidades
-      </span>
+          <span>
+          En obra ${o} unidades
+          </span>
 
-      <span>
-      Montados ${m} unidades
-      </span>
+          <span>
+          Montados ${m} unidades
+          </span>
 
-      </div>
+        </div>
 
       </div>
 
@@ -3156,180 +2040,134 @@ function dibujarFamilias(){
 
     <div class="familia">
 
-    <div class="familia-cabecera">
+      <div class="familia-cabecera">
 
-    <div class="familia-icono">
-    ${familia}
-    </div>
+        <div class="familia-icono">
+        ${familia}
+        </div>
 
-    <div>
+        <div>
 
-    <h3>
-    FAMILIA ${familia}
-    </h3>
+          <h3>
+          FAMILIA ${familia}
+          </h3>
 
-    <div class="familia-total">
+          <div class="familia-total">
 
-    ${total}
+          ${total}
 
-    <small>
-    unidades
-    </small>
+          <small>
+          unidades
+          </small>
 
-    </div>
+          </div>
 
-    </div>
+        </div>
 
-    </div>
-
-
-    <div class="barra-label">
-
-    <span>
-    En obra
-    </span>
-
-    <span>
-    ${obra} unidades · ${pctObra}%
-    </span>
-
-    </div>
+      </div>
 
 
-    <div class="barra">
-    <div style="width:${pctObra}%"></div>
-    </div>
+      <div class="barra-label">
+
+        <span>En obra</span>
+
+        <span>
+        ${obra} unidades · ${pctObra}%
+        </span>
+
+      </div>
+
+      <div class="barra">
+        <div style="width:${pctObra}%"></div>
+      </div>
 
 
-    <div class="barra-label">
+      <div class="barra-label">
 
-    <span>
-    Montados
-    </span>
+        <span>Montados</span>
 
-    <span>
-    ${montadas} unidades · ${pctMontadas}%
-    </span>
+        <span>
+        ${montadas} unidades · ${pctMontadas}%
+        </span>
 
-    </div>
+      </div>
 
-
-    <div class="barra montaje">
-    <div style="width:${pctMontadas}%"></div>
-    </div>
+      <div class="barra montaje">
+        <div style="width:${pctMontadas}%"></div>
+      </div>
 
 
-    <button
-    class="detalle-btn"
-    onclick="toggleDetalle(this)">
-
-    Ver detalle ▼
-
-    </button>
+      <button
+      class="detalle-btn"
+      onclick="toggleDetalle(this)">
+      Ver detalle ▼
+      </button>
 
 
-    <div class="detalle-tipos">
-
-    ${detalle}
-
-    </div>
+      <div class="detalle-tipos">
+      ${detalle}
+      </div>
 
     </div>
 
     `;
 
   }).join("");
-
 }
 
 
-/* =====================================================
-TOGGLES
-===================================================== */
+/* TOGGLES */
 
 function toggleDetalle(boton){
 
   const detalle=
   boton.nextElementSibling;
 
-
   const abierto=
-  detalle.classList.toggle(
-    "abierto"
-  );
-
+  detalle.classList.toggle("abierto");
 
   boton.textContent=
   abierto
-  ?
-  "Ocultar detalle ▲"
-  :
-  "Ver detalle ▼";
-
+  ?"Ocultar detalle ▲"
+  :"Ver detalle ▼";
 }
 
 
-function toggleSeccion(
-  contenidoId,
-  botonId
-){
+function toggleSeccion(contenidoId,botonId){
 
   const contenido=
-  document.getElementById(
-    contenidoId
-  );
-
+  document.getElementById(contenidoId);
 
   const boton=
-  document.getElementById(
-    botonId
-  );
-
+  document.getElementById(botonId);
 
   const cerrado=
-  contenido.classList.toggle(
-    "hidden"
-  );
-
+  contenido.classList.toggle("hidden");
 
   boton.textContent=
   cerrado
-  ?
-  "Mostrar ▼"
-  :
-  "Ocultar ▲";
-
+  ?"Mostrar ▼"
+  :"Ocultar ▲";
 
   if(
-    contenidoId===
-    "contenidoAvance" &&
+    contenidoId==="contenidoAvance" &&
     !cerrado
   ){
 
-    setTimeout(
-      ()=>{
+    setTimeout(()=>{
 
-        if(chart){
+      if(chart){
+        chart.resize();
+      }
 
-          chart.resize();
-
-        }
-
-      },
-      50
-    );
-
+    },50);
   }
-
 }
 
 
-/* =====================================================
-INICIAR
-===================================================== */
+/* INICIAR */
 
 cargarDatos();
-
 
 setInterval(
   cargarDatos,
