@@ -197,7 +197,10 @@ td{
   clear:both;
 }
 
-/* ETAPAS */
+
+/* ==============================
+ETAPAS
+============================== */
 
 .etapas-checks{
   display:flex;
@@ -244,7 +247,10 @@ td{
   opacity:.55;
 }
 
-/* MONTAJE / PINTURA */
+
+/* ==============================
+MONTAJE / PINTURA
+============================== */
 
 .finales{
   display:flex;
@@ -319,6 +325,7 @@ td{
   }
 }
 </style>
+
 </head>
 
 <body>
@@ -345,9 +352,13 @@ td{
 
 </header>
 
+
 <main>
 
-<!-- LOGIN -->
+
+<!-- ==============================
+LOGIN
+============================== -->
 
 <section id="loginPanel" class="panel login">
 
@@ -357,6 +368,7 @@ td{
 
 <div class="campo">
 <label>EMAIL</label>
+
 <input
   id="email"
   type="email"
@@ -364,17 +376,22 @@ td{
 </div>
 
 <div class="campo">
+
 <label>CONTRASEÑA</label>
+
 <input
   id="password"
   type="password"
   placeholder="Contraseña">
+
 </div>
 
 <button
   class="boton login-btn"
   onclick="iniciarSesion()">
+
 🔐 INICIAR SESIÓN
+
 </button>
 
 <div id="loginError" class="ayuda"></div>
@@ -382,16 +399,21 @@ td{
 </section>
 
 
-<!-- APP -->
+<!-- ==============================
+APP
+============================== -->
 
 <section id="appPanel" class="oculto">
+
 
 <div class="panel">
 
 <button
   class="boton logout"
   onclick="cerrarSesion()">
+
 🚪 CERRAR SESIÓN
+
 </button>
 
 <h2>📍 Localización de Premoldeados</h2>
@@ -411,7 +433,9 @@ Visualización y actualización de la ubicación y estado de cada premoldeado.
 </div>
 
 
-<!-- FILTROS -->
+<!-- ==============================
+FILTROS
+============================== -->
 
 <section class="panel">
 
@@ -452,7 +476,9 @@ Visualización y actualización de la ubicación y estado de cada premoldeado.
 <button
   class="boton actualizar"
   onclick="cargarDatos()">
+
 🔄 ACTUALIZAR
+
 </button>
 
 </div>
@@ -460,7 +486,9 @@ Visualización y actualización de la ubicación y estado de cada premoldeado.
 </section>
 
 
-<!-- TABLA -->
+<!-- ==============================
+TABLA
+============================== -->
 
 <section class="panel">
 
@@ -498,6 +526,7 @@ Visualización y actualización de la ubicación y estado de cada premoldeado.
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
 
 /* ==============================
 SUPABASE
@@ -618,6 +647,17 @@ const nombresCortos = [
   "✔️ QA/QC"
 ];
 
+
+/*
+IMPORTANTE:
+
+Etapa 1 = LIBERADA EN TALLER
+Etapa 2 = EN OBRA
+Etapa 3 = QA/QC
+
+Cada etapa tiene SU PROPIO permiso.
+*/
+
 const permisosEtapa = {
   1:"puede_liberar_taller",
   2:"puede_llevar_obra",
@@ -639,6 +679,7 @@ function normalizarTipo(tipo){
   return String(tipo || "")
     .trim()
     .toUpperCase();
+
 }
 
 
@@ -650,6 +691,7 @@ function volumenPieza(pieza){
   return Number(
     M3_POR_TIPO[tipo] || 0
   );
+
 }
 
 
@@ -663,6 +705,7 @@ function formatoM3(valor){
         maximumFractionDigits:3
       }
     ) + " m³";
+
 }
 
 
@@ -716,6 +759,7 @@ async function iniciarSesion(){
   mensaje.textContent = "";
 
   await iniciarAplicacion();
+
 }
 
 
@@ -729,6 +773,7 @@ async function cerrarSesion(){
 
   usuarioActual = null;
   permisos = null;
+  premoldeados = [];
 
   document
     .getElementById("appPanel")
@@ -737,6 +782,7 @@ async function cerrarSesion(){
   document
     .getElementById("loginPanel")
     .classList.remove("oculto");
+
 }
 
 
@@ -806,6 +852,7 @@ async function iniciarAplicacion(){
     "</strong> — solo visualización.";
 
   await cargarDatos();
+
 }
 
 
@@ -819,10 +866,16 @@ function esAdmin(){
     permisos &&
     permisos.es_admin
   );
+
 }
 
 
-function tienePermisoEdicion(){
+/*
+Devuelve TRUE solamente si el usuario
+tiene permiso para ESA etapa concreta.
+*/
+
+function puedeModificarEtapa(etapa){
 
   if(
     !usuarioActual ||
@@ -835,31 +888,13 @@ function tienePermisoEdicion(){
     return true;
   }
 
-  return Boolean(
-    permisos.puede_liberar_taller ||
-    permisos.puede_llevar_obra ||
-    permisos.puede_liberar_qaqc ||
-    permisos.puede_montar ||
-    permisos.puede_pintar
-  );
-}
-
-
-function puedeAvanzarA(etapa){
-
-  if(
-    !usuarioActual ||
-    !permisos
-  ){
-    return false;
-  }
-
-  if(esAdmin()){
-    return true;
-  }
+  /*
+  EN TALLER es la etapa inicial
+  y no se modifica manualmente.
+  */
 
   if(etapa === 0){
-    return tienePermisoEdicion();
+    return false;
   }
 
   const permiso =
@@ -869,14 +904,13 @@ function puedeAvanzarA(etapa){
     permiso &&
     permisos[permiso]
   );
+
 }
 
 
-function puedeRetroceder(){
-
-  return tienePermisoEdicion();
-}
-
+/*
+MONTAJE
+*/
 
 function puedeMontar(){
 
@@ -888,8 +922,13 @@ function puedeMontar(){
       permisos.puede_montar
     )
   );
+
 }
 
+
+/*
+PINTURA
+*/
 
 function puedePintar(){
 
@@ -901,6 +940,7 @@ function puedePintar(){
       permisos.puede_pintar
     )
   );
+
 }
 
 
@@ -925,6 +965,7 @@ function estado(
   if(tipo){
     e.classList.add(tipo);
   }
+
 }
 
 
@@ -970,6 +1011,7 @@ async function cargarDatos(){
     "☁️ <strong>Conectado.</strong> Datos sincronizados online.",
     "ok"
   );
+
 }
 
 
@@ -1032,6 +1074,7 @@ function mostrarTabla(){
           coincideBusqueda &&
           coincideEtapa
         );
+
       }
     );
 
@@ -1078,26 +1121,82 @@ function mostrarTabla(){
               const actual =
                 index === etapaActual;
 
-              let disabled = false;
+              let disabled = true;
 
-              if(
-                index === 0 &&
-                completa
-              ){
+
+              /*
+              ==================================
+              REGLA NUEVA DE PERMISOS
+              ==================================
+
+              1) EN TALLER nunca se toca.
+
+              2) Las etapas anteriores a la actual
+                 quedan bloqueadas.
+
+              3) La etapa ACTUAL puede quitarla
+                 solamente quien tenga permiso
+                 para esa misma etapa.
+
+              4) Solamente se puede marcar
+                 la etapa INMEDIATAMENTE SIGUIENTE.
+
+              5) Para marcarla se necesita
+                 el permiso específico.
+              */
+
+
+              if(index === 0){
 
                 disabled = true;
 
               }
-              else if(completa){
 
-                disabled =
-                  !puedeRetroceder();
+              else if(index < etapaActual){
+
+                /*
+                Etapa histórica.
+                Nadie la puede desmarcar directamente.
+                */
+
+                disabled = true;
 
               }
-              else{
+
+              else if(index === etapaActual){
+
+                /*
+                Puede quitar la etapa actual
+                solamente quien tenga permiso
+                para esa etapa.
+                */
 
                 disabled =
-                  !puedeAvanzarA(index);
+                  !puedeModificarEtapa(index);
+
+              }
+
+              else if(
+                index === etapaActual + 1
+              ){
+
+                /*
+                Solo se puede avanzar
+                una etapa por vez.
+                */
+
+                disabled =
+                  !puedeModificarEtapa(index);
+
+              }
+
+              else{
+
+                /*
+                No se permite saltar etapas.
+                */
+
+                disabled = true;
 
               }
 
@@ -1126,6 +1225,7 @@ function mostrarTabla(){
 
                 </label>
               `;
+
             }
           ).join("");
 
@@ -1155,6 +1255,7 @@ function mostrarTabla(){
               )}
             </div>
           `;
+
         }
 
 
@@ -1264,8 +1365,10 @@ function mostrarTabla(){
 
           </tr>
         `;
+
       }
     ).join("");
+
 }
 
 
@@ -1307,27 +1410,52 @@ async function cambiarEtapaCheck(
     anterior;
 
 
+  /* ==============================
+  MARCAR ETAPA
+  ============================== */
+
   if(marcado){
 
-    if(etapaClic <= anterior){
+    /*
+    Solamente se permite avanzar
+    UNA etapa.
+    */
+
+    if(
+      etapaClic !==
+      anterior + 1
+    ){
+
+      alert(
+        "🔒 Las etapas deben completarse en orden."
+      );
 
       mostrarTabla();
       return;
+
     }
 
 
+    /*
+    Verificar permiso específico
+    de la etapa que quiere marcar.
+    */
+
     if(
-      !puedeAvanzarA(
+      !puedeModificarEtapa(
         etapaClic
       )
     ){
 
       alert(
-        "🔒 No tenés permiso para liberar esta etapa."
+        "🔒 No tenés permiso para modificar " +
+        etapas[etapaClic] +
+        "."
       );
 
       mostrarTabla();
       return;
+
     }
 
 
@@ -1335,7 +1463,17 @@ async function cambiarEtapaCheck(
       etapaClic;
 
   }
+
+
+  /* ==============================
+  DESMARCAR ETAPA
+  ============================== */
+
   else{
+
+    /*
+    EN TALLER nunca se desmarca.
+    */
 
     if(etapaClic === 0){
 
@@ -1345,24 +1483,64 @@ async function cambiarEtapaCheck(
 
       mostrarTabla();
       return;
+
     }
 
 
-    if(!puedeRetroceder()){
+    /*
+    Solo puede quitarse
+    LA ETAPA ACTUAL.
+
+    Esto evita que alguien con permiso
+    EN OBRA quite QA/QC indirectamente.
+    */
+
+    if(
+      etapaClic !== anterior
+    ){
 
       alert(
-        "🔒 No tenés permiso para retroceder."
+        "🔒 Solo se puede quitar la etapa actual."
       );
 
       mostrarTabla();
       return;
+
+    }
+
+
+    /*
+    Para quitarla debe tener
+    permiso específico para ESA etapa.
+    */
+
+    if(
+      !puedeModificarEtapa(
+        etapaClic
+      )
+    ){
+
+      alert(
+        "🔒 No tenés permiso para quitar " +
+        etapas[etapaClic] +
+        "."
+      );
+
+      mostrarTabla();
+      return;
+
     }
 
 
     nuevaEtapa =
       etapaClic - 1;
+
   }
 
+
+  /* ==============================
+  CONFIRMACIÓN
+  ============================== */
 
   const confirmar =
     confirm(
@@ -1380,24 +1558,48 @@ async function cambiarEtapaCheck(
 
     mostrarTabla();
     return;
+
   }
+
+
+  estado(
+    "⏳ Guardando cambio..."
+  );
 
 
   const ahora =
     new Date().toISOString();
 
 
-  const {error} =
-    await db
-      .from("premoldeados")
-      .update({
-        etapa:nuevaEtapa,
-        fecha:ahora
-      })
-      .eq(
-        "id",
-        id
-      );
+  /*
+  MUY IMPORTANTE:
+
+  Después del UPDATE pedimos a Supabase
+  que nos devuelva la fila actualizada.
+
+  Si RLS bloqueó el cambio y no actualizó
+  ninguna fila, NO mostramos el cambio
+  como guardado.
+  */
+
+  const {
+    data:actualizada,
+    error
+  } =
+  await db
+    .from("premoldeados")
+    .update({
+      etapa:nuevaEtapa,
+      fecha:ahora
+    })
+    .eq(
+      "id",
+      id
+    )
+    .select(
+      "id,etapa,fecha"
+    )
+    .maybeSingle();
 
 
   if(error){
@@ -1408,23 +1610,69 @@ async function cambiarEtapaCheck(
       "error"
     );
 
-    mostrarTabla();
+    await cargarDatos();
     return;
+
   }
 
 
-  pieza.etapa =
-    nuevaEtapa;
+  /*
+  Si Supabase no devolvió una fila,
+  interpretamos que el UPDATE
+  no fue autorizado.
+  */
 
-  pieza.fecha =
-    ahora;
+  if(!actualizada){
 
-  mostrarTabla();
+    estado(
+      "❌ El cambio no fue guardado. Revisá los permisos de Supabase.",
+      "error"
+    );
+
+    await cargarDatos();
+    return;
+
+  }
+
+
+  /*
+  Verificación extra:
+  comprobamos que Supabase realmente
+  haya guardado la etapa solicitada.
+  */
+
+  if(
+    Number(actualizada.etapa) !==
+    Number(nuevaEtapa)
+  ){
+
+    estado(
+      "❌ Supabase no confirmó el cambio solicitado.",
+      "error"
+    );
+
+    await cargarDatos();
+    return;
+
+  }
+
+
+  /*
+  NO modificamos solamente la pantalla.
+
+  Volvemos a cargar todo desde Supabase.
+  Así la pantalla siempre coincide
+  con la base real.
+  */
+
+  await cargarDatos();
+
 
   estado(
     "✅ Cambio guardado correctamente.",
     "ok"
   );
+
 }
 
 
@@ -1450,19 +1698,28 @@ async function cambiarEstadoFinal(
   }
 
 
+  /*
+  VALIDAR MONTAJE
+  */
+
   if(
     campo === "montada" &&
     !puedeMontar()
   ){
 
     alert(
-      "No tenés permiso para modificar Montaje."
+      "🔒 No tenés permiso para modificar Montaje."
     );
 
     mostrarTabla();
     return;
+
   }
 
+
+  /*
+  VALIDAR PINTURA
+  */
 
   if(
     campo === "pintada" &&
@@ -1470,11 +1727,12 @@ async function cambiarEstadoFinal(
   ){
 
     alert(
-      "No tenés permiso para modificar Pintura."
+      "🔒 No tenés permiso para modificar Pintura."
     );
 
     mostrarTabla();
     return;
+
   }
 
 
@@ -1494,7 +1752,13 @@ async function cambiarEstadoFinal(
 
     mostrarTabla();
     return;
+
   }
+
+
+  estado(
+    "⏳ Guardando cambio..."
+  );
 
 
   const ahora =
@@ -1510,6 +1774,10 @@ async function cambiarEstadoFinal(
   };
 
 
+  /*
+  FECHA DE MONTAJE
+  */
+
   if(campo === "montada"){
 
     cambios.fecha_montaje =
@@ -1518,17 +1786,30 @@ async function cambiarEstadoFinal(
       ahora
       :
       null;
+
   }
 
 
-  const {error} =
-    await db
-      .from("premoldeados")
-      .update(cambios)
-      .eq(
-        "id",
-        id
-      );
+  /*
+  Guardamos y pedimos que Supabase
+  devuelva la fila realmente modificada.
+  */
+
+  const {
+    data:actualizada,
+    error
+  } =
+  await db
+    .from("premoldeados")
+    .update(cambios)
+    .eq(
+      "id",
+      id
+    )
+    .select(
+      "id,montada,pintada,fecha,fecha_montaje"
+    )
+    .maybeSingle();
 
 
   if(error){
@@ -1539,30 +1820,61 @@ async function cambiarEstadoFinal(
       "error"
     );
 
-    mostrarTabla();
+    await cargarDatos();
     return;
+
   }
 
 
-  pieza[campo] =
-    valor;
+  /*
+  Si no volvió ninguna fila,
+  probablemente RLS no permitió
+  modificarla.
+  */
 
-  pieza.fecha =
-    ahora;
+  if(!actualizada){
 
+    estado(
+      "❌ El cambio no fue guardado. Revisá los permisos de Supabase.",
+      "error"
+    );
 
-  if(campo === "montada"){
+    await cargarDatos();
+    return;
 
-    pieza.fecha_montaje =
-      valor
-      ?
-      ahora
-      :
-      null;
   }
 
 
-  mostrarTabla();
+  /*
+  Verificación del valor realmente
+  guardado.
+  */
+
+  if(
+    Boolean(actualizada[campo]) !==
+    Boolean(valor)
+  ){
+
+    estado(
+      "❌ Supabase no confirmó el cambio solicitado.",
+      "error"
+    );
+
+    await cargarDatos();
+    return;
+
+  }
+
+
+  /*
+  Volvemos a consultar Supabase.
+
+  Esto evita que la pantalla muestre
+  algo diferente de la base real.
+  */
+
+  await cargarDatos();
+
 
   estado(
     "✅ " +
@@ -1570,6 +1882,7 @@ async function cambiarEstadoFinal(
     " actualizado correctamente.",
     "ok"
   );
+
 }
 
 
@@ -1593,6 +1906,7 @@ function formatearFecha(fecha){
   return d.toLocaleDateString(
     "es-AR"
   );
+
 }
 
 
@@ -1628,6 +1942,7 @@ function escapeHtml(text){
       /'/g,
       "&#039;"
     );
+
 }
 
 
