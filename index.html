@@ -630,13 +630,12 @@ unidades planificadas
 <div class="etapa-m3">
 <span id="m3Taller">0,00</span> m³
 </div>
-<div class="etapa-pct" id="pctTaller">0%</div>
 </div>
 
 
 <div class="etapa">
 <div class="etapa-icono">✅</div>
-<div class="etapa-nombre">Liberado</div>
+<div class="etapa-nombre">Liberado en taller</div>
 <div class="etapa-valor">
 <span id="liberadas">0</span>
 <small>unidades</small>
@@ -644,7 +643,6 @@ unidades planificadas
 <div class="etapa-m3">
 <span id="m3Liberadas">0,00</span> m³
 </div>
-<div class="etapa-pct" id="pctLiberadas">0%</div>
 </div>
 
 
@@ -658,7 +656,6 @@ unidades planificadas
 <div class="etapa-m3">
 <span id="m3Obra">0,00</span> m³
 </div>
-<div class="etapa-pct" id="pctObra">0%</div>
 </div>
 
 
@@ -672,7 +669,6 @@ unidades planificadas
 <div class="etapa-m3">
 <span id="m3Qaqc">0,00</span> m³
 </div>
-<div class="etapa-pct" id="pctQaqc">0%</div>
 </div>
 
 
@@ -686,7 +682,6 @@ unidades planificadas
 <div class="etapa-m3">
 <span id="m3Montadas">0,00</span> m³
 </div>
-<div class="etapa-pct" id="pctMontadas">0%</div>
 </div>
 
 
@@ -700,7 +695,6 @@ unidades planificadas
 <div class="etapa-m3">
 <span id="m3Pintadas">0,00</span> m³
 </div>
-<div class="etapa-pct" id="pctPintadas">0%</div>
 </div>
 
 </div>
@@ -1368,22 +1362,7 @@ function actualizarResumen(){
   const m3Qaqc=sumarM3(listaQaqc);
   const m3Montadas=sumarM3(listaMontadas);
   const m3Pintadas=sumarM3(listaPintadas);
-
-
-  const pctTotal=
-  cantidad=>
-  total===0
-  ?0
-  :Math.round(cantidad/total*100);
-
-
-  const pctQA=
-  obra===0
-  ?0
-  :Math.round(qaqc/obra*100);
-
-
-  document.getElementById("total").textContent=total;
+document.getElementById("total").textContent=total;
 
   document.getElementById("cantidadPlanificada").textContent=
   cantidadTotalProyecto();
@@ -1413,25 +1392,6 @@ function actualizarResumen(){
 
   document.getElementById("m3Pintadas").textContent=
   formatoNumeroM3(m3Pintadas);
-
-
-  document.getElementById("pctTaller").textContent=
-  pctTotal(taller)+"%";
-
-  document.getElementById("pctLiberadas").textContent=
-  pctTotal(liberadas)+"%";
-
-  document.getElementById("pctObra").textContent=
-  pctTotal(obra)+"%";
-
-  document.getElementById("pctQaqc").textContent=
-  pctQA+"%";
-
-  document.getElementById("pctMontadas").textContent=
-  pctTotal(montadas)+"%";
-
-  document.getElementById("pctPintadas").textContent=
-  pctTotal(pintadas)+"%";
 }
 
 
