@@ -221,6 +221,58 @@ td{
   white-space:nowrap;
 }
 
+.modificar{
+  background:#eef5fc;
+  color:#174f7d;
+  border:1px solid #b9d4ea;
+  margin-right:7px;
+}
+
+.modal-fondo{
+  position:fixed;
+  inset:0;
+  background:rgba(15,35,55,.48);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:9999;
+}
+
+.modal-fondo.oculto{
+  display:none;
+}
+
+.modal-edicion{
+  background:white;
+  width:min(620px,100%);
+  border-radius:14px;
+  padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.modal-edicion h3{
+  margin-top:0;
+}
+
+.modal-acciones{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:18px;
+}
+
+.guardar-edicion{
+  background:#18723f;
+  color:white;
+}
+
+.cancelar-edicion{
+  background:#e9eef5;
+  color:#24364b;
+  border:1px solid #d2dae4;
+}
+
 .eliminar{
   background:#fff0f0;
   color:#a83232;
@@ -598,6 +650,45 @@ onclick="exportarExcel()">
 
 </section>
 
+
+<!-- =====================================================
+EDITAR PREMOLDEADO - SOLO MARÍA
+===================================================== -->
+<div id="modalEditar" class="modal-fondo oculto">
+  <div class="modal-edicion">
+    <h3>✏️ Modificar premoldeado</h3>
+    <input id="editarId" type="hidden">
+
+    <div class="campo">
+      <label>CÓDIGO</label>
+      <input id="editarCodigo" type="text">
+    </div>
+    <br>
+
+    <div class="campo">
+      <label>TIPO</label>
+      <input id="editarTipo" type="text">
+    </div>
+    <br>
+
+    <div class="campo">
+      <label>MODELO</label>
+      <input id="editarModelo" type="text">
+    </div>
+    <br>
+
+    <div class="campo">
+      <label>M³ POR UNIDAD</label>
+      <input id="editarM3" type="text" inputmode="decimal">
+    </div>
+
+    <div class="modal-acciones">
+      <button class="boton cancelar-edicion" onclick="cerrarEdicion()">CANCELAR</button>
+      <button class="boton guardar-edicion" onclick="guardarEdicion()">💾 GUARDAR CAMBIOS</button>
+    </div>
+  </div>
+</div>
+
 </main>
 
 
@@ -638,6 +729,16 @@ VARIABLES
 let premoldeados = [];
 
 let listaVisible = [];
+
+let usuarioActual = null;
+const EMAIL_EDITOR = "maria.caffaratti@pecomenergia.com.ar";
+
+function esEditoraBase(){
+  return Boolean(
+    usuarioActual &&
+    String(usuarioActual.email || "").toLowerCase() === EMAIL_EDITOR
+  );
+}
 
 
 /*
@@ -1957,6 +2058,102 @@ function exportarExcel(){
 
 
 
+
+/* =====================================================
+MODIFICAR - SOLO MARÍA
+===================================================== */
+
+function abrirEdicion(id){
+
+  if(!esEditoraBase()){
+    alert("🔒 Solo María puede modificar los datos de ingeniería.");
+    return;
+  }
+
+  const p = premoldeados.find(
+    x => Number(x.id) === Number(id)
+  );
+
+  if(!p){
+    alert("No se encontró el premoldeado.");
+    return;
+  }
+
+  document.getElementById("editarId").value = p.id;
+  document.getElementById("editarCodigo").value = p.codigo ?? "";
+  document.getElementById("editarTipo").value = p.tipo ?? "";
+  document.getElementById("editarModelo").value = p.modelo ?? "";
+  document.getElementById("editarM3").value =
+    p.m3 === null || p.m3 === undefined ? "" : String(p.m3).replace(".", ",");
+
+  document.getElementById("modalEditar").classList.remove("oculto");
+}
+
+function cerrarEdicion(){
+  document.getElementById("modalEditar").classList.add("oculto");
+}
+
+async function guardarEdicion(){
+
+  if(!esEditoraBase()){
+    alert("🔒 Solo María puede modificar los datos de ingeniería.");
+    cerrarEdicion();
+    return;
+  }
+
+  const id = Number(document.getElementById("editarId").value);
+  const codigo = document.getElementById("editarCodigo").value.trim();
+  const tipo = document.getElementById("editarTipo").value.trim();
+  const modelo = document.getElementById("editarModelo").value.trim();
+  const m3Texto = document.getElementById("editarM3").value.trim();
+  const m3 = convertirM3(m3Texto);
+
+  if(!id || !codigo || !tipo || !modelo || !m3Texto){
+    alert("Completá CÓDIGO, TIPO, MODELO y M³.");
+    return;
+  }
+
+  if(m3 === null || m3 < 0){
+    alert("Ingresá un valor de M³ válido. Ejemplo: 7,40");
+    return;
+  }
+
+  if(!confirm("¿Confirmás guardar los cambios de este premoldeado?")){
+    return;
+  }
+
+  estado("⏳ Guardando modificación...");
+
+  const { data, error } = await db
+    .from("premoldeados")
+    .update({
+      codigo,
+      tipo,
+      modelo,
+      m3
+    })
+    .eq("id", id)
+    .select("id,codigo,tipo,modelo,m3")
+    .maybeSingle();
+
+  if(error){
+    console.error(error);
+    estado("❌ No se pudo modificar: " + error.message, "error");
+    return;
+  }
+
+  if(!data){
+    estado("❌ Supabase no confirmó la modificación.", "error");
+    await cargarDatos();
+    return;
+  }
+
+  cerrarEdicion();
+  await cargarDatos();
+  estado("✅ Premoldeado modificado correctamente.", "ok");
+}
+
+
 /* =====================================================
 ELIMINAR
 ===================================================== */
@@ -2074,7 +2271,17 @@ function escapeHtml(
 INICIAR
 ===================================================== */
 
-cargarDatos();
+(async function iniciarBase(){
+
+  const {
+    data:{user}
+  } = await db.auth.getUser();
+
+  usuarioActual = user || null;
+
+  await cargarDatos();
+
+})();
 
 </script>
 
