@@ -731,13 +731,9 @@ let premoldeados = [];
 let listaVisible = [];
 
 let usuarioActual = null;
-const EMAIL_EDITOR = "maria.caffaratti@pecomenergia.com.ar";
 
 function esEditoraBase(){
-  return Boolean(
-    usuarioActual &&
-    String(usuarioActual.email || "").toLowerCase() === EMAIL_EDITOR
-  );
+  return true;
 }
 
 
@@ -2066,7 +2062,7 @@ MODIFICAR - SOLO MARÍA
 function abrirEdicion(id){
 
   if(!esEditoraBase()){
-    alert("🔒 Solo María puede modificar los datos de ingeniería.");
+    alert("🔒 No tenés permiso para modificar los datos de ingeniería.");
     return;
   }
 
@@ -2096,7 +2092,7 @@ function cerrarEdicion(){
 async function guardarEdicion(){
 
   if(!esEditoraBase()){
-    alert("🔒 Solo María puede modificar los datos de ingeniería.");
+    alert("🔒 No tenés permiso para modificar los datos de ingeniería.");
     cerrarEdicion();
     return;
   }
