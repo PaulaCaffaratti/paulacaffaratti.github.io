@@ -229,6 +229,45 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
       </div>
     </section>
 
+    <section class="curva-panel">
+      <div class="curva-head">
+        <div>
+          <h2>🏗️ Curva S – Obra</h2>
+          <div class="curva-sub">
+            Planificado vs. montaje real de spooles en obra para los grupos vinculados al cronograma.
+          </div>
+        </div>
+        <div id="pipeCurvaObraEstado" class="curva-estado">NO INICIADO</div>
+      </div>
+
+      <div class="curva-kpis">
+        <div class="curva-kpi">
+          <small>Plan a hoy</small>
+          <strong id="pipeCurvaObraPlan">0,00"</strong>
+        </div>
+        <div class="curva-kpi">
+          <small>Real a hoy</small>
+          <strong id="pipeCurvaObraReal">0,00"</strong>
+        </div>
+        <div id="pipeCurvaObraDesvioCard" class="curva-kpi desvio">
+          <small>Desvío real - plan</small>
+          <strong id="pipeCurvaObraDesvio">0,00"</strong>
+        </div>
+        <div id="pipeCurvaObraDesvioPctCard" class="curva-kpi desvio">
+          <small>Desvío %</small>
+          <strong id="pipeCurvaObraDesvioPct">—</strong>
+        </div>
+      </div>
+
+      <div class="curva-wrap">
+        <canvas id="pipeCurvaObra"></canvas>
+      </div>
+
+      <div class="curva-nota">
+        El real se alimenta automáticamente cuando se marca Montaje en la localización de spooles.
+      </div>
+    </section>
+
     <div class="grid2">
 
       <section class="panel">
@@ -324,6 +363,7 @@ window.supabase.createClient(
 
 const PIPING_LIMITE_RECHAZO = null;
 let pipeCurvaChart = null;
+let pipeCurvaObraChart = null;
 
 function escapar(v){
   return String(v ?? "")
@@ -361,7 +401,8 @@ async function cargarPiping(){
       {data:resumen,error:errorResumen},
       {data:rechazos,error:errorRechazos},
       {data:flujoSpooles,error:errorFlujoSpooles},
-      {data:curvaLumber,error:errorCurvaLumber}
+      {data:curvaLumber,error:errorCurvaLumber},
+      {data:curvaObra,error:errorCurvaObra}
     ] = await Promise.all([
 
       db
@@ -380,6 +421,11 @@ async function cargarPiping(){
       db
         .from("v_piping_curva_lumber")
         .select("*")
+        .order("fecha", {ascending:true}),
+
+      db
+        .from("v_piping_curva_obra")
+        .select("*")
         .order("fecha", {ascending:true})
 
     ]);
@@ -388,6 +434,7 @@ async function cargarPiping(){
     if(errorRechazos) throw errorRechazos;
     if(errorFlujoSpooles) throw errorFlujoSpooles;
     if(errorCurvaLumber) throw errorCurvaLumber;
+    if(errorCurvaObra) throw errorCurvaObra;
 
 
     const flujoConfig = {
@@ -578,6 +625,172 @@ async function cargarPiping(){
       const estadoCurva=document.getElementById("pipeCurvaEstado");
       estadoCurva.textContent="Sin datos";
       estadoCurva.className="curva-estado";
+    }
+
+
+    const obraFilas = curvaObra || [];
+
+    if(obraFilas.length){
+
+      const hoyISO = new Date().toLocaleDateString("en-CA");
+      const filasHastaHoy = obraFilas.filter(x=>String(x.fecha) <= hoyISO);
+      const filaHoyObra = filasHastaHoy.length
+        ? filasHastaHoy[filasHastaHoy.length - 1]
+        : null;
+
+      let planHoyObra = 0;
+      let realHoyObra = 0;
+      let desvioHoyObra = 0;
+      let desvioPctObra = null;
+
+      if(filaHoyObra){
+        planHoyObra = Number(filaHoyObra.plan_acumulado || 0);
+        realHoyObra = Number(filaHoyObra.real_acumulado || 0);
+        desvioHoyObra = Number(filaHoyObra.desvio_pulgadas || 0);
+        desvioPctObra =
+          filaHoyObra.desvio_porcentaje === null
+          ? null
+          : Number(filaHoyObra.desvio_porcentaje);
+      }
+
+      setTexto("pipeCurvaObraPlan", pipeNum(planHoyObra)+'"');
+      setTexto("pipeCurvaObraReal", pipeNum(realHoyObra)+'"');
+      setTexto(
+        "pipeCurvaObraDesvio",
+        (desvioHoyObra>0 ? "+" : "") + pipeNum(desvioHoyObra)+'"'
+      );
+      setTexto(
+        "pipeCurvaObraDesvioPct",
+        desvioPctObra === null
+        ? "—"
+        : (desvioPctObra>0 ? "+" : "") + pipePct(desvioPctObra)
+      );
+
+      const estadoObra=document.getElementById("pipeCurvaObraEstado");
+      const cardObraDesvio=document.getElementById("pipeCurvaObraDesvioCard");
+      const cardObraPct=document.getElementById("pipeCurvaObraDesvioPctCard");
+
+      cardObraDesvio.classList.remove("positivo","negativo");
+      cardObraPct.classList.remove("positivo","negativo");
+
+      if(!filaHoyObra || planHoyObra===0){
+        estadoObra.textContent="NO INICIADO";
+        estadoObra.className="curva-estado";
+      }else if(desvioHoyObra>0){
+        estadoObra.textContent="ADELANTADO";
+        estadoObra.className="curva-estado adelantado";
+        cardObraDesvio.classList.add("positivo");
+        cardObraPct.classList.add("positivo");
+      }else if(desvioHoyObra<0){
+        estadoObra.textContent="ATRASADO";
+        estadoObra.className="curva-estado atrasado";
+        cardObraDesvio.classList.add("negativo");
+        cardObraPct.classList.add("negativo");
+      }else{
+        estadoObra.textContent="EN LÍNEA";
+        estadoObra.className="curva-estado linea";
+      }
+
+      const labelsObra = obraFilas.map(x=>{
+        const [y,m,d]=String(x.fecha).split("-");
+        return `${d}/${m}`;
+      });
+
+      const datosPlanObra = obraFilas.map(x=>Number(x.plan_acumulado || 0));
+
+      const datosRealObra = obraFilas.map(x=>
+        x.real_acumulado === null || x.real_acumulado === undefined
+        ? null
+        : Number(x.real_acumulado)
+      );
+
+      const ctxObra=document.getElementById("pipeCurvaObra");
+
+      if(pipeCurvaObraChart){
+        pipeCurvaObraChart.destroy();
+      }
+
+      pipeCurvaObraChart = new Chart(ctxObra,{
+        type:"line",
+        data:{
+          labels:labelsObra,
+          datasets:[
+            {
+              label:'Planificado acumulado (")',
+              data:datosPlanObra,
+              borderColor:"#2f6fb5",
+              backgroundColor:"rgba(47,111,181,.08)",
+              borderWidth:3,
+              pointRadius:2,
+              pointHoverRadius:5,
+              tension:.28,
+              fill:false
+            },
+            {
+              label:'Real montado acumulado (")',
+              data:datosRealObra,
+              borderColor:"#179447",
+              backgroundColor:"rgba(23,148,71,.08)",
+              borderWidth:3,
+              pointRadius:3,
+              pointHoverRadius:5,
+              tension:.28,
+              spanGaps:false,
+              fill:false
+            }
+          ]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          interaction:{mode:"index",intersect:false},
+          plugins:{
+            legend:{
+              position:"top",
+              labels:{usePointStyle:true,boxWidth:8,font:{size:11}}
+            },
+            tooltip:{
+              callbacks:{
+                label:function(context){
+                  if(context.raw===null) return null;
+                  return `${context.dataset.label}: ${pipeNum(context.raw)}"`;
+                }
+              }
+            }
+          },
+          scales:{
+            x:{
+              grid:{display:false},
+              ticks:{
+                maxRotation:0,
+                autoSkip:true,
+                maxTicksLimit:12,
+                font:{size:10}
+              }
+            },
+            y:{
+              beginAtZero:true,
+              title:{
+                display:true,
+                text:'Pulgadas acumuladas (")',
+                font:{size:11}
+              },
+              ticks:{callback:value=>pipeNum(value)+'"'},
+              grid:{color:"#edf1f5"}
+            }
+          }
+        }
+      });
+
+    }else{
+      setTexto("pipeCurvaObraPlan",'0,00"');
+      setTexto("pipeCurvaObraReal",'0,00"');
+      setTexto("pipeCurvaObraDesvio",'0,00"');
+      setTexto("pipeCurvaObraDesvioPct","—");
+
+      const estadoObra=document.getElementById("pipeCurvaObraEstado");
+      estadoObra.textContent="NO INICIADO";
+      estadoObra.className="curva-estado";
     }
 
 
