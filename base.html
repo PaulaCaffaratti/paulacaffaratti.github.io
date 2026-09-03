@@ -221,62 +221,49 @@ td{
   white-space:nowrap;
 }
 
-.modificar{
-  background:#eef5fc;
-  color:#174f7d;
-  border:1px solid #b9d4ea;
-  margin-right:7px;
-}
-
-.modal-fondo{
-  position:fixed;
-  inset:0;
-  background:rgba(15,35,55,.48);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:9999;
-}
-
-.modal-fondo.oculto{
-  display:none;
-}
-
-.modal-edicion{
-  background:white;
-  width:min(620px,100%);
-  border-radius:14px;
-  padding:24px;
-  box-shadow:0 20px 60px rgba(0,0,0,.25);
-}
-
-.modal-edicion h3{
-  margin-top:0;
-}
-
-.modal-acciones{
-  display:flex;
-  gap:10px;
-  justify-content:flex-end;
-  margin-top:18px;
-}
-
-.guardar-edicion{
-  background:#18723f;
-  color:white;
-}
-
-.cancelar-edicion{
-  background:#e9eef5;
-  color:#24364b;
-  border:1px solid #d2dae4;
-}
-
 .eliminar{
   background:#fff0f0;
   color:#a83232;
   border:1px solid #e3b8b8;
+}
+
+.editar{
+  background:#eef5fc;
+  color:#255b88;
+  border:1px solid #b9cfe3;
+}
+
+.guardar{
+  background:#e8f7ee;
+  color:#18723f;
+  border:1px solid #b9dcc5;
+}
+
+.cancelar{
+  background:#f1f3f6;
+  color:#556270;
+  border:1px solid #d2dae4;
+}
+
+.acciones-fila{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.input-edicion{
+  width:100%;
+  min-width:90px;
+  padding:8px;
+  border:1px solid #9fb5c8;
+  border-radius:6px;
+  font-size:13px;
+  background:#fff;
+}
+
+.input-edicion.modelo{
+  min-width:220px;
 }
 
 .vacio{
@@ -314,6 +301,101 @@ td{
   line-height:1.5;
 }
 
+
+
+.planificacion-grid{
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  gap:16px;
+  align-items:start;
+}
+
+.planificacion-caja{
+  border:1px solid #dce3ea;
+  border-radius:10px;
+  padding:16px;
+  background:#fafbfd;
+}
+
+.planificacion-caja h4{
+  margin:0 0 10px 0;
+}
+
+.login-plan{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px;
+  align-items:end;
+}
+
+.login-plan .campo{
+  min-width:0;
+}
+
+.login-plan input{
+  width:100%;
+}
+
+.usuario-plan{
+  margin-top:10px;
+  font-size:12px;
+  color:#657487;
+}
+
+.planificacion-estado{
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:8px;
+  background:#f1f4f7;
+  color:#45596f;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.planificacion-estado.ok{
+  background:#e8f7ee;
+  color:#18723f;
+}
+
+.planificacion-estado.error{
+  background:#fff0f0;
+  color:#a83232;
+}
+
+.planificacion-estado.cargando{
+  background:#eef5fc;
+  color:#255b88;
+}
+
+.resumen-plan{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.resumen-plan .mini{
+  border:1px solid #e0e6ec;
+  border-radius:8px;
+  background:white;
+  padding:10px;
+}
+
+.resumen-plan .mini span{
+  display:block;
+  font-size:10px;
+  color:#718096;
+  font-weight:bold;
+  text-transform:uppercase;
+}
+
+.resumen-plan .mini strong{
+  display:block;
+  margin-top:5px;
+  color:#173650;
+  font-size:18px;
+}
+
 @media(max-width:1050px){
 
   .formulario{
@@ -323,6 +405,10 @@ td{
 }
 
 @media(max-width:700px){
+
+  .planificacion-grid{grid-template-columns:1fr;}
+  .login-plan{grid-template-columns:1fr;}
+  .resumen-plan{grid-template-columns:1fr;}
 
   .formulario{
     grid-template-columns:1fr;
@@ -509,6 +595,85 @@ Todos los registros importados comenzarán automáticamente en
 
 
 
+
+
+<!-- =====================================================
+PLANIFICACION DE MONTAJE
+===================================================== -->
+
+<section class="panel">
+
+<h3>📅 Planificación de montaje</h3>
+
+<p class="ayuda">
+Subí el Excel de planificación. El sistema toma la hoja <strong>Hoja1</strong> (si existe) y reconoce las columnas
+<strong>ZONA</strong>, <strong>DENOMINACION</strong>, <strong>TIPO</strong>, <strong>cantidad (en unidd)</strong>,
+<strong>m3 (cantidad UM)</strong>, <strong>Finc</strong> y <strong>Ffin</strong>.
+La nueva carga reemplaza la planificación anterior.
+</p>
+
+<div class="planificacion-grid">
+
+  <div class="planificacion-caja">
+    <h4>📥 Cargar Excel de planificación</h4>
+
+    <input type="file" id="excelPlanificacion" accept=".xlsx,.xls,.csv">
+
+    <button class="boton importar" onclick="importarPlanificacion()">
+      📅 CARGAR PLANIFICACIÓN
+    </button>
+
+    <div id="estadoPlanificacion" class="planificacion-estado">
+      Iniciá sesión para cargar o reemplazar la planificación.
+    </div>
+
+    <div class="resumen-plan">
+      <div class="mini">
+        <span>Registros cargados</span>
+        <strong id="planRegistros">0</strong>
+      </div>
+      <div class="mini">
+        <span>Unidades planificadas</span>
+        <strong id="planUnidades">0</strong>
+      </div>
+      <div class="mini">
+        <span>Volumen planificado</span>
+        <strong id="planVolumen">0,00 m³</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="planificacion-caja">
+    <h4>🔐 Usuario autorizado</h4>
+
+    <div class="login-plan">
+      <div class="campo">
+        <label>EMAIL</label>
+        <input id="planEmail" type="email" placeholder="usuario@pecomenergia.com.ar">
+      </div>
+      <div class="campo">
+        <label>CONTRASEÑA</label>
+        <input id="planPassword" type="password" placeholder="Contraseña">
+      </div>
+      <button class="boton actualizar" onclick="loginPlanificacion()">
+        INGRESAR
+      </button>
+    </div>
+
+    <div id="usuarioPlanificacion" class="usuario-plan">
+      Sin sesión iniciada.
+    </div>
+
+    <button class="boton eliminar" id="btnSalirPlan" onclick="logoutPlanificacion()" style="display:none;margin-top:10px;">
+      CERRAR SESIÓN
+    </button>
+  </div>
+
+</div>
+
+</section>
+
+
 <!-- =====================================================
 BASE
 ===================================================== -->
@@ -618,7 +783,7 @@ onclick="exportarExcel()">
 
 <tr>
 
-<th>ID</th>
+<th>N°</th>
 
 <th>CÓDIGO</th>
 
@@ -649,45 +814,6 @@ onclick="exportarExcel()">
 </div>
 
 </section>
-
-
-<!-- =====================================================
-EDITAR PREMOLDEADO - SOLO MARÍA
-===================================================== -->
-<div id="modalEditar" class="modal-fondo oculto">
-  <div class="modal-edicion">
-    <h3>✏️ Modificar premoldeado</h3>
-    <input id="editarId" type="hidden">
-
-    <div class="campo">
-      <label>CÓDIGO</label>
-      <input id="editarCodigo" type="text">
-    </div>
-    <br>
-
-    <div class="campo">
-      <label>TIPO</label>
-      <input id="editarTipo" type="text">
-    </div>
-    <br>
-
-    <div class="campo">
-      <label>MODELO</label>
-      <input id="editarModelo" type="text">
-    </div>
-    <br>
-
-    <div class="campo">
-      <label>M³ POR UNIDAD</label>
-      <input id="editarM3" type="text" inputmode="decimal">
-    </div>
-
-    <div class="modal-acciones">
-      <button class="boton cancelar-edicion" onclick="cerrarEdicion()">CANCELAR</button>
-      <button class="boton guardar-edicion" onclick="guardarEdicion()">💾 GUARDAR CAMBIOS</button>
-    </div>
-  </div>
-</div>
 
 </main>
 
@@ -730,11 +856,7 @@ let premoldeados = [];
 
 let listaVisible = [];
 
-let usuarioActual = null;
-
-function esEditoraBase(){
-  return true;
-}
+let idEditando = null;
 
 
 /*
@@ -1194,6 +1316,115 @@ function mostrarTabla(){
       p.pintada === true;
 
 
+      /*
+      NÚMERO CONSECUTIVO VISIBLE.
+      El ID REAL de Supabase sigue existiendo,
+      pero no se muestra ni se modifica.
+      */
+      const numeroVisible =
+      premoldeados.findIndex(
+        item => item.id === p.id
+      ) + 1;
+
+
+      const editando =
+      Number(idEditando) === Number(p.id);
+
+
+      if(editando){
+
+        return `
+
+        <tr>
+
+        <td>
+          <strong>${numeroVisible}</strong>
+        </td>
+
+        <td>
+          <input
+          id="edit-codigo-${p.id}"
+          class="input-edicion"
+          type="text"
+          value="${escapeHtml(p.codigo ?? "")}">
+        </td>
+
+        <td>
+          <input
+          id="edit-tipo-${p.id}"
+          class="input-edicion"
+          type="text"
+          value="${escapeHtml(p.tipo ?? "")}">
+        </td>
+
+        <td>
+          <input
+          id="edit-modelo-${p.id}"
+          class="input-edicion modelo"
+          type="text"
+          value="${escapeHtml(p.modelo ?? "")}">
+        </td>
+
+        <td>
+          <input
+          id="edit-m3-${p.id}"
+          class="input-edicion"
+          type="text"
+          inputmode="decimal"
+          value="${escapeHtml(
+            p.m3 === null || p.m3 === undefined
+            ? ""
+            : String(p.m3).replace(".", ",")
+          )}">
+        </td>
+
+        <td>
+          ${escapeHtml(textoEtapa)}
+        </td>
+
+        <td>
+          <span class="
+          estado-extra
+          ${montaje ? "si" : "no"}
+          ">
+          ${montaje ? "✓ SÍ" : "—"}
+          </span>
+        </td>
+
+        <td>
+          <span class="
+          estado-extra
+          ${pintura ? "si" : "no"}
+          ">
+          ${pintura ? "✓ SÍ" : "—"}
+          </span>
+        </td>
+
+        <td>
+          <div class="acciones-fila">
+
+            <button
+            class="boton guardar"
+            onclick="guardarEdicion(${p.id})">
+            💾 Guardar
+            </button>
+
+            <button
+            class="boton cancelar"
+            onclick="cancelarEdicion()">
+            ✖ Cancelar
+            </button>
+
+          </div>
+        </td>
+
+        </tr>
+
+        `;
+
+      }
+
+
       return `
 
       <tr>
@@ -1201,7 +1432,7 @@ function mostrarTabla(){
 
       <td>
 
-      ${p.id ?? ""}
+      <strong>${numeroVisible}</strong>
 
       </td>
 
@@ -1285,23 +1516,29 @@ function mostrarTabla(){
 
       <td>
 
-      <button
-        class="boton modificar"
-        onclick="abrirEdicion(${p.id})">
-        ✏️ Modificar
-      </button>
+      <div class="acciones-fila">
 
-      <button
-      class="boton eliminar"
-      onclick="
-      eliminarPremoldeado(
-        ${p.id}
-      )
-      ">
+        <button
+        class="boton editar"
+        onclick="editarPremoldeado(${p.id})">
 
-      🗑️ Eliminar
+        ✏️ Editar
 
-      </button>
+        </button>
+
+        <button
+        class="boton eliminar"
+        onclick="
+        eliminarPremoldeado(
+          ${p.id}
+        )
+        ">
+
+        🗑️ Eliminar
+
+        </button>
+
+      </div>
 
       </td>
 
@@ -1312,6 +1549,170 @@ function mostrarTabla(){
 
     }
   ).join("");
+
+}
+
+
+/* =====================================================
+EDITAR PREMOLDEADO
+===================================================== */
+
+function editarPremoldeado(id){
+
+  idEditando =
+  Number(id);
+
+  mostrarTabla();
+
+}
+
+
+function cancelarEdicion(){
+
+  idEditando =
+  null;
+
+  mostrarTabla();
+
+}
+
+
+async function guardarEdicion(id){
+
+  const codigo =
+  document
+  .getElementById(
+    "edit-codigo-" + id
+  )
+  .value
+  .trim();
+
+
+  const tipo =
+  document
+  .getElementById(
+    "edit-tipo-" + id
+  )
+  .value
+  .trim();
+
+
+  const modelo =
+  document
+  .getElementById(
+    "edit-modelo-" + id
+  )
+  .value
+  .trim();
+
+
+  const m3Texto =
+  document
+  .getElementById(
+    "edit-m3-" + id
+  )
+  .value
+  .trim();
+
+
+  const m3 =
+  convertirM3(
+    m3Texto
+  );
+
+
+  if(
+    !codigo ||
+    !tipo ||
+    !modelo ||
+    !m3Texto
+  ){
+
+    alert(
+      "Completá CÓDIGO, TIPO, MODELO y M³."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    m3 === null ||
+    m3 < 0
+  ){
+
+    alert(
+      "Ingresá un valor de M³ válido. Ejemplo: 7,40"
+    );
+
+    return;
+
+  }
+
+
+  estado(
+    "⏳ Guardando cambios..."
+  );
+
+
+  const {
+    error
+  } =
+  await db
+
+  .from(
+    "premoldeados"
+  )
+
+  .update({
+
+    codigo:
+    codigo,
+
+    tipo:
+    tipo,
+
+    modelo:
+    modelo,
+
+    m3:
+    m3
+
+  })
+
+  .eq(
+    "id",
+    id
+  );
+
+
+  if(error){
+
+    console.error(error);
+
+    estado(
+      "❌ No se pudo modificar: " +
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  idEditando =
+  null;
+
+
+  estado(
+    "✅ Premoldeado modificado correctamente.",
+    "ok"
+  );
+
+
+  await cargarDatos();
 
 }
 
@@ -1902,10 +2303,16 @@ function exportarExcel(){
       }
 
 
+      const numeroVisible =
+      premoldeados.findIndex(
+        item => item.id === p.id
+      ) + 1;
+
+
       return {
 
-        ID:
-        p.id ?? "",
+        "N°":
+        numeroVisible,
 
         CODIGO:
         p.codigo ?? "",
@@ -2060,102 +2467,6 @@ function exportarExcel(){
 
 
 
-
-/* =====================================================
-MODIFICAR - SOLO MARÍA
-===================================================== */
-
-function abrirEdicion(id){
-
-  if(!esEditoraBase()){
-    alert("🔒 No tenés permiso para modificar los datos de ingeniería.");
-    return;
-  }
-
-  const p = premoldeados.find(
-    x => Number(x.id) === Number(id)
-  );
-
-  if(!p){
-    alert("No se encontró el premoldeado.");
-    return;
-  }
-
-  document.getElementById("editarId").value = p.id;
-  document.getElementById("editarCodigo").value = p.codigo ?? "";
-  document.getElementById("editarTipo").value = p.tipo ?? "";
-  document.getElementById("editarModelo").value = p.modelo ?? "";
-  document.getElementById("editarM3").value =
-    p.m3 === null || p.m3 === undefined ? "" : String(p.m3).replace(".", ",");
-
-  document.getElementById("modalEditar").classList.remove("oculto");
-}
-
-function cerrarEdicion(){
-  document.getElementById("modalEditar").classList.add("oculto");
-}
-
-async function guardarEdicion(){
-
-  if(!esEditoraBase()){
-    alert("🔒 No tenés permiso para modificar los datos de ingeniería.");
-    cerrarEdicion();
-    return;
-  }
-
-  const id = Number(document.getElementById("editarId").value);
-  const codigo = document.getElementById("editarCodigo").value.trim();
-  const tipo = document.getElementById("editarTipo").value.trim();
-  const modelo = document.getElementById("editarModelo").value.trim();
-  const m3Texto = document.getElementById("editarM3").value.trim();
-  const m3 = convertirM3(m3Texto);
-
-  if(!id || !codigo || !tipo || !modelo || !m3Texto){
-    alert("Completá CÓDIGO, TIPO, MODELO y M³.");
-    return;
-  }
-
-  if(m3 === null || m3 < 0){
-    alert("Ingresá un valor de M³ válido. Ejemplo: 7,40");
-    return;
-  }
-
-  if(!confirm("¿Confirmás guardar los cambios de este premoldeado?")){
-    return;
-  }
-
-  estado("⏳ Guardando modificación...");
-
-  const { data, error } = await db
-    .from("premoldeados")
-    .update({
-      codigo,
-      tipo,
-      modelo,
-      m3
-    })
-    .eq("id", id)
-    .select("id,codigo,tipo,modelo,m3")
-    .maybeSingle();
-
-  if(error){
-    console.error(error);
-    estado("❌ No se pudo modificar: " + error.message, "error");
-    return;
-  }
-
-  if(!data){
-    estado("❌ Supabase no confirmó la modificación.", "error");
-    await cargarDatos();
-    return;
-  }
-
-  cerrarEdicion();
-  await cargarDatos();
-  estado("✅ Premoldeado modificado correctamente.", "ok");
-}
-
-
 /* =====================================================
 ELIMINAR
 ===================================================== */
@@ -2269,21 +2580,280 @@ function escapeHtml(
 
 
 
+
+
+/* =====================================================
+PLANIFICACION DE MONTAJE
+===================================================== */
+
+function estadoPlanificacion(mensaje,tipo=""){
+  const e=document.getElementById("estadoPlanificacion");
+  if(!e) return;
+  e.innerHTML=mensaje;
+  e.className="planificacion-estado" + (tipo ? " "+tipo : "");
+}
+
+function normalizarClavePlan(valor){
+  return String(valor ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g," ")
+    .trim();
+}
+
+function numeroPlan(valor){
+  if(valor===null || valor===undefined || valor==="") return null;
+  if(typeof valor==="number") return Number.isFinite(valor) ? valor : null;
+  let t=String(valor).trim().replace(/\s/g,"");
+  if(!t) return null;
+  if(t.includes(",") && t.includes(".")){
+    if(t.lastIndexOf(",")>t.lastIndexOf(".")) t=t.replace(/\./g,"").replace(",",".");
+    else t=t.replace(/,/g,"");
+  }else if(t.includes(",")){
+    t=t.replace(",",".");
+  }
+  const n=Number(t);
+  return Number.isFinite(n) ? n : null;
+}
+
+function fechaPlanISO(valor){
+  if(valor===null || valor===undefined || valor==="") return null;
+
+  if(valor instanceof Date && !isNaN(valor)){
+    const y=valor.getFullYear();
+    const m=String(valor.getMonth()+1).padStart(2,"0");
+    const d=String(valor.getDate()).padStart(2,"0");
+    return `${y}-${m}-${d}`;
+  }
+
+  if(typeof valor==="number" && Number.isFinite(valor)){
+    const p=XLSX.SSF.parse_date_code(valor);
+    if(p){
+      return `${String(p.y).padStart(4,"0")}-${String(p.m).padStart(2,"0")}-${String(p.d).padStart(2,"0")}`;
+    }
+  }
+
+  const t=String(valor).trim();
+  let m=t.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if(m){
+    return `${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`;
+  }
+
+  m=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(m){
+    return `${m[1]}-${m[2].padStart(2,"0")}-${m[3].padStart(2,"0")}`;
+  }
+
+  const d=new Date(t);
+  if(!isNaN(d)){
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  }
+
+  return null;
+}
+
+function buscarColumnaPlan(encabezados,opciones){
+  const norm=encabezados.map(normalizarClavePlan);
+  for(const opcion of opciones){
+    const objetivo=normalizarClavePlan(opcion);
+    let i=norm.findIndex(x=>x===objetivo);
+    if(i>=0) return i;
+  }
+  return -1;
+}
+
+async function actualizarSesionPlanificacion(){
+  const {data}=await db.auth.getSession();
+  const sesion=data?.session || null;
+  const usuario=document.getElementById("usuarioPlanificacion");
+  const btn=document.getElementById("btnSalirPlan");
+
+  if(sesion?.user?.email){
+    usuario.innerHTML=`✅ Sesión iniciada: <strong>${escapeHtml(sesion.user.email)}</strong>`;
+    btn.style.display="inline-block";
+    estadoPlanificacion("✅ Podés cargar o reemplazar la planificación.","ok");
+  }else{
+    usuario.textContent="Sin sesión iniciada.";
+    btn.style.display="none";
+    estadoPlanificacion("Iniciá sesión para cargar o reemplazar la planificación.");
+  }
+}
+
+async function loginPlanificacion(){
+  const email=document.getElementById("planEmail").value.trim();
+  const password=document.getElementById("planPassword").value;
+
+  if(!email || !password){
+    estadoPlanificacion("❌ Completá email y contraseña.","error");
+    return;
+  }
+
+  estadoPlanificacion("⏳ Iniciando sesión...","cargando");
+  const {error}=await db.auth.signInWithPassword({email,password});
+  if(error){
+    estadoPlanificacion("❌ No se pudo iniciar sesión: "+escapeHtml(error.message),"error");
+    return;
+  }
+
+  document.getElementById("planPassword").value="";
+  await actualizarSesionPlanificacion();
+}
+
+async function logoutPlanificacion(){
+  await db.auth.signOut();
+  await actualizarSesionPlanificacion();
+}
+
+async function cargarResumenPlanificacion(){
+  const {data,error}=await db
+    .from("planificacion_premoldeados")
+    .select("cantidad,m3_unitario");
+
+  if(error){
+    console.warn("No se pudo leer planificación:",error.message);
+    return;
+  }
+
+  const filas=data || [];
+  const unidades=filas.reduce((a,r)=>a+(Number(r.cantidad)||0),0);
+  const volumen=filas.reduce((a,r)=>a+((Number(r.cantidad)||0)*(Number(r.m3_unitario)||0)),0);
+
+  document.getElementById("planRegistros").textContent=filas.length;
+  document.getElementById("planUnidades").textContent=unidades;
+  document.getElementById("planVolumen").textContent=volumen.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2})+" m³";
+}
+
+async function importarPlanificacion(){
+  const input=document.getElementById("excelPlanificacion");
+  const archivo=input.files?.[0];
+
+  if(!archivo){
+    estadoPlanificacion("❌ Seleccioná primero un archivo Excel.","error");
+    return;
+  }
+
+  const {data:sdata}=await db.auth.getSession();
+  const email=sdata?.session?.user?.email || null;
+  if(!email){
+    estadoPlanificacion("❌ Tenés que iniciar sesión antes de cargar la planificación.","error");
+    return;
+  }
+
+  estadoPlanificacion("⏳ Leyendo y validando el Excel...","cargando");
+
+  try{
+    const buffer=await archivo.arrayBuffer();
+    const libro=XLSX.read(buffer,{type:"array",cellDates:true});
+    const nombreHoja=libro.SheetNames.includes("Hoja1") ? "Hoja1" : libro.SheetNames[0];
+    const hoja=libro.Sheets[nombreHoja];
+    const matriz=XLSX.utils.sheet_to_json(hoja,{header:1,defval:null,raw:true});
+
+    let filaEnc=-1;
+    for(let i=0;i<Math.min(matriz.length,15);i++){
+      const claves=(matriz[i]||[]).map(normalizarClavePlan);
+      if(claves.some(x=>x==="tipo") && claves.some(x=>x.includes("cantidad"))){
+        filaEnc=i;
+        break;
+      }
+    }
+
+    if(filaEnc<0) throw new Error("No encontré la fila de encabezados con TIPO y cantidad.");
+
+    const enc=matriz[filaEnc] || [];
+    const izona=buscarColumnaPlan(enc,["ZONA"]);
+    const idenom=buscarColumnaPlan(enc,["DENOMINACION","DENOMINACIÓN"]);
+    const itipo=buscarColumnaPlan(enc,["TIPO"]);
+    const icant=buscarColumnaPlan(enc,["cantidad (en unidd)","cantidad","unidades"]);
+    const im3=buscarColumnaPlan(enc,["m3 (cantidad UM)","m3","m³","m3 unitario"]);
+    const ifinc=buscarColumnaPlan(enc,["Finc","fecha inicio","inicio"]);
+    const iffin=buscarColumnaPlan(enc,["Ffin","fecha fin","fin"]);
+
+    if(itipo<0 || icant<0 || im3<0 || ifinc<0 || iffin<0){
+      throw new Error("Faltan columnas obligatorias: TIPO, cantidad, m3, Finc o Ffin.");
+    }
+
+    const registros=[];
+    for(let i=filaEnc+1;i<matriz.length;i++){
+      const r=matriz[i] || [];
+      const tipo=String(r[itipo] ?? "").trim();
+      if(!tipo) continue;
+
+      const cantidad=numeroPlan(r[icant]);
+      const m3=numeroPlan(r[im3]);
+      const fi=fechaPlanISO(r[ifinc]);
+      const ff=fechaPlanISO(r[iffin]);
+
+      if(!Number.isFinite(cantidad) || cantidad<=0) continue;
+      if(!Number.isFinite(m3) || m3<0) continue;
+      if(!fi || !ff) continue;
+
+      registros.push({
+        zona: izona>=0 ? String(r[izona] ?? "").trim() || null : null,
+        denominacion: idenom>=0 ? String(r[idenom] ?? "").trim() || null : null,
+        tipo,
+        cantidad: Math.round(cantidad),
+        m3_unitario: m3,
+        fecha_inicio: fi,
+        fecha_fin: ff,
+        archivo_origen: archivo.name,
+        cargado_por: email
+      });
+    }
+
+    if(registros.length===0){
+      throw new Error("No encontré filas válidas de planificación para cargar.");
+    }
+
+    const unidades=registros.reduce((a,r)=>a+r.cantidad,0);
+    const volumen=registros.reduce((a,r)=>a+(r.cantidad*r.m3_unitario),0);
+
+    const confirmar=confirm(
+      `Se cargarán ${registros.length} tipos, ${unidades} unidades y ${volumen.toFixed(2)} m³.\n\nEsto reemplazará la planificación anterior. ¿Continuar?`
+    );
+    if(!confirmar){
+      estadoPlanificacion("Carga cancelada.");
+      return;
+    }
+
+    estadoPlanificacion("⏳ Reemplazando planificación anterior...","cargando");
+
+    const {error:errorDelete}=await db
+      .from("planificacion_premoldeados")
+      .delete()
+      .gte("id",0);
+
+    if(errorDelete) throw new Error("No se pudo borrar la planificación anterior: "+errorDelete.message);
+
+    let cargados=0;
+    const TAM=300;
+    for(let i=0;i<registros.length;i+=TAM){
+      const lote=registros.slice(i,i+TAM);
+      const {error}=await db.from("planificacion_premoldeados").insert(lote);
+      if(error) throw new Error("Error al guardar la nueva planificación: "+error.message);
+      cargados+=lote.length;
+    }
+
+    input.value="";
+    estadoPlanificacion(
+      `✅ Planificación actualizada: <strong>${cargados}</strong> registros · <strong>${unidades}</strong> unidades · <strong>${volumen.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2})} m³</strong>.`,
+      "ok"
+    );
+    await cargarResumenPlanificacion();
+  }catch(error){
+    console.error(error);
+    estadoPlanificacion("❌ "+escapeHtml(error.message || String(error)),"error");
+  }
+}
+
+
 /* =====================================================
 INICIAR
 ===================================================== */
 
-(async function iniciarBase(){
-
-  const {
-    data:{user}
-  } = await db.auth.getUser();
-
-  usuarioActual = user || null;
-
-  await cargarDatos();
-
-})();
+cargarDatos();
+actualizarSesionPlanificacion();
+cargarResumenPlanificacion();
 
 </script>
 
