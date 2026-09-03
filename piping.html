@@ -86,6 +86,23 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
   .rechazoTotal{grid-template-columns:1fr}
   .soldadorFila{grid-template-columns:1fr}
 }
+
+.flujo-spooles{background:white;border:1px solid #dce3ea;border-radius:14px;padding:18px 22px;margin-bottom:20px}
+.flujo-spooles h2{font-size:17px;margin:0 0 16px;color:#173650}
+.flujo-grid{display:grid;grid-template-columns:repeat(8,minmax(150px,1fr));gap:10px;overflow-x:auto;padding-bottom:2px}
+.flujo-card{background:#f7f9fb;border:1px solid #dce3ea;border-radius:11px;padding:14px;min-height:142px}
+.flujo-card .ico{font-size:20px;margin-bottom:7px}
+.flujo-card small{display:block;font-size:9px;font-weight:800;color:#718096;text-transform:uppercase;line-height:1.2;min-height:22px}
+.flujo-card strong{display:block;font-size:24px;color:#173650;margin:5px 0 1px}
+.flujo-card .unidad{font-size:10px;color:#718096}
+.flujo-card .meta{margin-top:8px;font-size:11px;color:#52677c;line-height:1.55}
+.flujo-card .meta b{color:#173650}
+.flujo-card.total{background:#163d66;color:white;border-color:#163d66}
+.flujo-card.total small,.flujo-card.total .unidad,.flujo-card.total .meta{color:#d7e4f0}
+.flujo-card.total strong,.flujo-card.total .meta b{color:white}
+@media(max-width:1100px){.flujo-grid{grid-template-columns:repeat(4,minmax(160px,1fr))}}
+@media(max-width:650px){.flujo-grid{grid-template-columns:repeat(2,minmax(150px,1fr))}}
+
 </style>
 </head>
 
@@ -116,6 +133,14 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 
     <h1>Resumen ejecutivo de Piping</h1>
     <p class="subtitulo">Datos actualizados automáticamente desde la última trazabilidad cargada.</p>
+
+
+    <section class="flujo-spooles">
+      <h2>🔄 Flujo de Spooles</h2>
+      <div id="pipeFlujoSpooles" class="flujo-grid">
+        <div class="flujo-card"><small>Cargando flujo...</small><strong>—</strong></div>
+      </div>
+    </section>
 
     <div class="kpis">
       <div class="kpi">
@@ -273,7 +298,8 @@ async function cargarPiping(){
 
     const [
       {data:resumen,error:errorResumen},
-      {data:rechazos,error:errorRechazos}
+      {data:rechazos,error:errorRechazos},
+      {data:flujoSpooles,error:errorFlujoSpooles}
     ] = await Promise.all([
 
       db
@@ -282,12 +308,52 @@ async function cargarPiping(){
 
       db
         .from("v_piping_rechazos")
+        .select("*"),
+
+      db
+        .from("v_piping_flujo_spooles")
         .select("*")
+        .order("orden", {ascending:true})
 
     ]);
 
     if(errorResumen) throw errorResumen;
     if(errorRechazos) throw errorRechazos;
+    if(errorFlujoSpooles) throw errorFlujoSpooles;
+
+
+    const flujoConfig = {
+      TOTAL:{nombre:"Spooles totales",ico:"🧩"},
+      DESPACHO_LUMBER:{nombre:"Despacho Lumber",ico:"🚚"},
+      RECEPCION_OBRA:{nombre:"Recepción en obra",ico:"📥"},
+      PH:{nombre:"PH",ico:"🧪"},
+      MONTAJE:{nombre:"Montaje",ico:"🏗️"},
+      TORQUE:{nombre:"Torque",ico:"🔩"},
+      LIBERACION_CALIDAD:{nombre:"Liberación Calidad",ico:"✅"},
+      LIBERACION_PRECOM:{nombre:"Liberación PRECOM",ico:"🏁"}
+    };
+
+    const flujoCont=document.getElementById("pipeFlujoSpooles");
+    const flujoFilas=flujoSpooles || [];
+
+    flujoCont.innerHTML = flujoFilas.length
+      ? flujoFilas.map(x=>{
+          const cfg=flujoConfig[x.etapa] || {nombre:x.etapa,ico:"•"};
+          return `
+            <div class="flujo-card ${x.etapa==="TOTAL" ? "total" : ""}">
+              <div class="ico">${cfg.ico}</div>
+              <small>${escapar(cfg.nombre)}</small>
+              <strong>${Number(x.spooles || 0)}</strong>
+              <div class="unidad">spooles</div>
+              <div class="meta">
+                <div><b>${Number(x.lineas || 0)}</b> líneas</div>
+                <div><b>${pipeNum(x.pulgadas)}"</b></div>
+                <div><b>${pipePct(x.porcentaje)}</b> del total</div>
+              </div>
+            </div>
+          `;
+        }).join("")
+      : '<div class="flujo-card"><small>Sin datos de spooles</small><strong>0</strong></div>';
 
     const filas=resumen || [];
 
