@@ -6,6 +6,7 @@
 <title>Piping - Resumen</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
 <style>
 *{box-sizing:border-box}
@@ -103,6 +104,26 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 @media(max-width:1100px){.flujo-grid{grid-template-columns:repeat(4,minmax(160px,1fr))}}
 @media(max-width:650px){.flujo-grid{grid-template-columns:repeat(2,minmax(150px,1fr))}}
 
+
+.curva-panel{background:white;border:1px solid #dce3ea;border-radius:14px;padding:22px;margin-bottom:20px}
+.curva-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:16px}
+.curva-head h2{font-size:18px;margin:0 0 5px;color:#173650}
+.curva-sub{font-size:12px;color:#718096;line-height:1.45}
+.curva-estado{padding:8px 12px;border-radius:20px;font-size:11px;font-weight:800;white-space:nowrap;background:#edf1f5;color:#52677c}
+.curva-estado.adelantado{background:#eaf8ef;color:#176d3c}
+.curva-estado.atrasado{background:#fdecec;color:#a62f2f}
+.curva-estado.linea{background:#eef3ff;color:#3559a7}
+.curva-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.curva-kpi{background:#f7f9fb;border:1px solid #e0e6ec;border-radius:11px;padding:13px 14px}
+.curva-kpi small{display:block;font-size:9px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:6px}
+.curva-kpi strong{display:block;font-size:21px;color:#173650}
+.curva-kpi.desvio.positivo{border-top:3px solid #179447}
+.curva-kpi.desvio.negativo{border-top:3px solid #d83c3c}
+.curva-wrap{position:relative;height:360px}
+.curva-nota{margin-top:12px;font-size:11px;color:#718096;line-height:1.5}
+@media(max-width:900px){.curva-kpis{grid-template-columns:repeat(2,1fr)}.curva-wrap{height:320px}}
+@media(max-width:520px){.curva-kpis{grid-template-columns:1fr}.curva-head{flex-direction:column}.curva-wrap{height:300px}}
+
 </style>
 </head>
 
@@ -168,6 +189,45 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
         <strong id="pipeAvance">—</strong>
       </div>
     </div>
+
+    <section class="curva-panel">
+      <div class="curva-head">
+        <div>
+          <h2>📈 Curva S – Prefabricación Lumber</h2>
+          <div class="curva-sub">
+            Planificado vs. ejecución real de costuras para los 6 grupos vinculados al cronograma.
+          </div>
+        </div>
+        <div id="pipeCurvaEstado" class="curva-estado">Calculando...</div>
+      </div>
+
+      <div class="curva-kpis">
+        <div class="curva-kpi">
+          <small>Plan a hoy</small>
+          <strong id="pipeCurvaPlan">—</strong>
+        </div>
+        <div class="curva-kpi">
+          <small>Real a hoy</small>
+          <strong id="pipeCurvaReal">—</strong>
+        </div>
+        <div id="pipeCurvaDesvioCard" class="curva-kpi desvio">
+          <small>Desvío real - plan</small>
+          <strong id="pipeCurvaDesvio">—</strong>
+        </div>
+        <div id="pipeCurvaDesvioPctCard" class="curva-kpi desvio">
+          <small>Desvío %</small>
+          <strong id="pipeCurvaDesvioPct">—</strong>
+        </div>
+      </div>
+
+      <div class="curva-wrap">
+        <canvas id="pipeCurvaLumber"></canvas>
+      </div>
+
+      <div class="curva-nota">
+        El plan continúa hasta el fin programado. La curva real se detiene en la última fecha con avance registrado.
+      </div>
+    </section>
 
     <div class="grid2">
 
@@ -263,6 +323,7 @@ window.supabase.createClient(
 );
 
 const PIPING_LIMITE_RECHAZO = null;
+let pipeCurvaChart = null;
 
 function escapar(v){
   return String(v ?? "")
@@ -299,7 +360,8 @@ async function cargarPiping(){
     const [
       {data:resumen,error:errorResumen},
       {data:rechazos,error:errorRechazos},
-      {data:flujoSpooles,error:errorFlujoSpooles}
+      {data:flujoSpooles,error:errorFlujoSpooles},
+      {data:curvaLumber,error:errorCurvaLumber}
     ] = await Promise.all([
 
       db
@@ -313,13 +375,19 @@ async function cargarPiping(){
       db
         .from("v_piping_flujo_spooles")
         .select("*")
-        .order("orden", {ascending:true})
+        .order("orden", {ascending:true}),
+
+      db
+        .from("v_piping_curva_lumber")
+        .select("*")
+        .order("fecha", {ascending:true})
 
     ]);
 
     if(errorResumen) throw errorResumen;
     if(errorRechazos) throw errorRechazos;
     if(errorFlujoSpooles) throw errorFlujoSpooles;
+    if(errorCurvaLumber) throw errorCurvaLumber;
 
 
     const flujoConfig = {
@@ -354,6 +422,164 @@ async function cargarPiping(){
           `;
         }).join("")
       : '<div class="flujo-card"><small>Sin datos de spooles</small><strong>0</strong></div>';
+
+    const curvaFilas = curvaLumber || [];
+
+    if(curvaFilas.length){
+
+      const filaActual = [...curvaFilas]
+        .reverse()
+        .find(x=>x.real_acumulado !== null && x.real_acumulado !== undefined);
+
+      if(filaActual){
+
+        const planHoy = Number(filaActual.plan_acumulado || 0);
+        const realHoy = Number(filaActual.real_acumulado || 0);
+        const desvioHoy = Number(filaActual.desvio_pulgadas || 0);
+        const desvioPctHoy =
+          filaActual.desvio_porcentaje === null
+          ? null
+          : Number(filaActual.desvio_porcentaje);
+
+        setTexto("pipeCurvaPlan", pipeNum(planHoy)+'"');
+        setTexto("pipeCurvaReal", pipeNum(realHoy)+'"');
+        setTexto(
+          "pipeCurvaDesvio",
+          (desvioHoy>0 ? "+" : "") + pipeNum(desvioHoy)+'"'
+        );
+        setTexto(
+          "pipeCurvaDesvioPct",
+          desvioPctHoy === null
+          ? "—"
+          : (desvioPctHoy>0 ? "+" : "") + pipePct(desvioPctHoy)
+        );
+
+        const estadoCurva=document.getElementById("pipeCurvaEstado");
+        const cardDesvio=document.getElementById("pipeCurvaDesvioCard");
+        const cardDesvioPct=document.getElementById("pipeCurvaDesvioPctCard");
+
+        cardDesvio.classList.remove("positivo","negativo");
+        cardDesvioPct.classList.remove("positivo","negativo");
+
+        if(desvioHoy>0){
+          estadoCurva.textContent="ADELANTADO";
+          estadoCurva.className="curva-estado adelantado";
+          cardDesvio.classList.add("positivo");
+          cardDesvioPct.classList.add("positivo");
+        }else if(desvioHoy<0){
+          estadoCurva.textContent="ATRASADO";
+          estadoCurva.className="curva-estado atrasado";
+          cardDesvio.classList.add("negativo");
+          cardDesvioPct.classList.add("negativo");
+        }else{
+          estadoCurva.textContent="EN LÍNEA";
+          estadoCurva.className="curva-estado linea";
+        }
+      }
+
+      const labels = curvaFilas.map(x=>{
+        const [y,m,d]=String(x.fecha).split("-");
+        return `${d}/${m}`;
+      });
+
+      const datosPlan = curvaFilas.map(x=>Number(x.plan_acumulado || 0));
+
+      const datosReal = curvaFilas.map(x=>
+        x.real_acumulado === null || x.real_acumulado === undefined
+        ? null
+        : Number(x.real_acumulado)
+      );
+
+      const ctx=document.getElementById("pipeCurvaLumber");
+
+      if(pipeCurvaChart){
+        pipeCurvaChart.destroy();
+      }
+
+      pipeCurvaChart = new Chart(ctx,{
+        type:"line",
+        data:{
+          labels,
+          datasets:[
+            {
+              label:'Planificado acumulado (")',
+              data:datosPlan,
+              borderColor:"#2f6fb5",
+              backgroundColor:"rgba(47,111,181,.08)",
+              borderWidth:3,
+              pointRadius:2,
+              pointHoverRadius:5,
+              tension:.28,
+              fill:false
+            },
+            {
+              label:'Real ejecutado acumulado (")',
+              data:datosReal,
+              borderColor:"#179447",
+              backgroundColor:"rgba(23,148,71,.08)",
+              borderWidth:3,
+              pointRadius:3,
+              pointHoverRadius:5,
+              tension:.28,
+              spanGaps:false,
+              fill:false
+            }
+          ]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          interaction:{mode:"index",intersect:false},
+          plugins:{
+            legend:{
+              position:"top",
+              labels:{usePointStyle:true,boxWidth:8,font:{size:11}}
+            },
+            tooltip:{
+              callbacks:{
+                label:function(context){
+                  if(context.raw===null) return null;
+                  return `${context.dataset.label}: ${pipeNum(context.raw)}"`;
+                }
+              }
+            }
+          },
+          scales:{
+            x:{
+              grid:{display:false},
+              ticks:{
+                maxRotation:0,
+                autoSkip:true,
+                maxTicksLimit:12,
+                font:{size:10}
+              }
+            },
+            y:{
+              beginAtZero:true,
+              title:{
+                display:true,
+                text:'Pulgadas acumuladas (")',
+                font:{size:11}
+              },
+              ticks:{callback:value=>pipeNum(value)+'"'},
+              grid:{color:"#edf1f5"}
+            }
+          }
+        }
+      });
+
+    }else{
+
+      setTexto("pipeCurvaPlan","—");
+      setTexto("pipeCurvaReal","—");
+      setTexto("pipeCurvaDesvio","—");
+      setTexto("pipeCurvaDesvioPct","—");
+
+      const estadoCurva=document.getElementById("pipeCurvaEstado");
+      estadoCurva.textContent="Sin datos";
+      estadoCurva.className="curva-estado";
+    }
+
 
     const filas=resumen || [];
 
