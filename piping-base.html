@@ -114,6 +114,26 @@ td{padding:9px 10px;border-bottom:1px solid #e8edf1;vertical-align:top;white-spa
       </div>
     </section>
 
+    <section class="panel" id="panelPlanificacion">
+      <h2>📅 Planificación de Piping</h2>
+      <div class="fila">
+        <input id="archivoPlan" type="file" accept=".xlsx,.xls">
+        <button id="btnAnalizarPlan" class="btnAzul" onclick="analizarPlanificacion()">Analizar planificación</button>
+        <button id="btnCargarPlan" class="btnVerde" onclick="subirPlanificacion()" disabled>Cargar planificación</button>
+      </div>
+      <div class="nota">
+        El Excel puede tener una hoja llamada <b>Planificación</b> o <b>Planificacion</b>; si no, se toma la primera hoja.
+        Columnas esperadas: <b>línea</b>, <b>spool</b>, <b>sistema</b>, <b>subsistema</b>, <b>pulgadas planificadas</b>, <b>fecha inicio</b> y <b>fecha fin</b>.
+        Al confirmar, la nueva planificación reemplaza la anterior.
+      </div>
+      <div id="resumenPlan" class="kpis" style="display:none;">
+        <div class="kpi"><span>Registros</span><strong id="kPlanRegistros">0</strong></div>
+        <div class="kpi verde"><span>Ø planificadas</span><strong id="kPlanPulgadas">0"</strong></div>
+        <div class="kpi violeta"><span>Desde</span><strong id="kPlanDesde" style="font-size:18px;">—</strong></div>
+        <div class="kpi naranja"><span>Hasta</span><strong id="kPlanHasta" style="font-size:18px;">—</strong></div>
+      </div>
+    </section>
+
     <section id="resumen" class="panel" style="display:none;">
       <h2>2. Vista previa</h2>
       <div class="kpis">
@@ -205,6 +225,8 @@ let juntas=[];
 let resumenTipos=[];
 let resumenCuadernillos=[];
 let totalGeneral=null;
+let planificacion=[];
+let nombreArchivoPlan="";
 
 function setEstado(texto,tipo=""){
   const e=document.getElementById("estado");
@@ -284,6 +306,11 @@ async function cerrarSesion(){
 function actualizarBotonCarga(){
   document.getElementById("btnCargar").disabled=
     !(juntas.length && totalGeneral && sesionOk && usuarioAutorizado);
+
+  const btnPlan=document.getElementById("btnCargarPlan");
+  if(btnPlan){
+    btnPlan.disabled=!(planificacion.length && sesionOk && usuarioAutorizado);
+  }
 }
 
 function txt(v){
@@ -339,6 +366,143 @@ function pct(v){
 
 function pulgadas(v){
   return Number(v||0).toLocaleString("es-AR",{minimumFractionDigits:0,maximumFractionDigits:2})+'"';
+}
+
+
+function normalizarCabecera(v){
+  return String(v ?? "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9]+/g,"_")
+    .replace(/^_+|_+$/g,"");
+}
+
+function obtenerCampo(obj,aliases){
+  for(const a of aliases){
+    const k=normalizarCabecera(a);
+    if(Object.prototype.hasOwnProperty.call(obj,k) && obj[k]!=="" && obj[k]!==null && obj[k]!==undefined){
+      return obj[k];
+    }
+  }
+  return null;
+}
+
+async function analizarPlanificacion(){
+  const input=document.getElementById("archivoPlan");
+  if(!input.files.length){
+    setEstado("Seleccioná primero el Excel de planificación de Piping.","error");
+    return;
+  }
+
+  try{
+    setEstado("⏳ Analizando planificación de Piping...");
+    nombreArchivoPlan=input.files[0].name;
+
+    const buffer=await input.files[0].arrayBuffer();
+    const wb=XLSX.read(buffer,{type:"array",cellDates:false});
+    const nombreHoja=wb.SheetNames.find(n=>normalizarCabecera(n)==="planificacion") || wb.SheetNames[0];
+    const ws=wb.Sheets[nombreHoja];
+    if(!ws) throw new Error("No se encontró una hoja para leer la planificación.");
+
+    const filas=XLSX.utils.sheet_to_json(ws,{defval:null,raw:true});
+    if(!filas.length) throw new Error("La hoja de planificación está vacía.");
+
+    const normalizadas=filas.map(f=>{
+      const o={};
+      Object.entries(f).forEach(([k,v])=>o[normalizarCabecera(k)]=v);
+      return o;
+    });
+
+    planificacion=normalizadas.map((f,idx)=>{
+      const linea=txt(obtenerCampo(f,["linea","línea","line"]));
+      const spool=txt(obtenerCampo(f,["spool","spool_numero","n_spool","numero_spool"]));
+      const sistema=txt(obtenerCampo(f,["sistema","system"]));
+      const subsistema=txt(obtenerCampo(f,["subsistema","sub_sistema","subsystem"]));
+      const pulgadas=num(obtenerCampo(f,["pulgadas_planificadas","pulgadas","diametro_pulgadas","pulgadas_a_ejecutar","inch","inches"]));
+      const inicio=fechaISO(obtenerCampo(f,["fecha_inicio","inicio","finc","fecha_ini","start"]));
+      const fin=fechaISO(obtenerCampo(f,["fecha_fin","fin","ffin","fecha_final","finish"]));
+
+      if(!linea && !spool && !sistema && !subsistema && pulgadas===null && !inicio && !fin) return null;
+      if(pulgadas===null) throw new Error(`Fila ${idx+2}: falta el valor de pulgadas planificadas.`);
+      if(!inicio || !fin) throw new Error(`Fila ${idx+2}: faltan fecha de inicio o fecha de fin.`);
+
+      return {
+        linea: linea || null,
+        spool: spool || null,
+        sistema: sistema || null,
+        subsistema: subsistema || null,
+        pulgadas_planificadas:pulgadas,
+        fecha_inicio:inicio,
+        fecha_fin:fin,
+        archivo_origen:nombreArchivoPlan
+      };
+    }).filter(Boolean);
+
+    if(!planificacion.length) throw new Error("No se encontraron filas válidas de planificación.");
+
+    const total=planificacion.reduce((a,x)=>a+Number(x.pulgadas_planificadas||0),0);
+    const fechasInicio=planificacion.map(x=>x.fecha_inicio).filter(Boolean).sort();
+    const fechasFin=planificacion.map(x=>x.fecha_fin).filter(Boolean).sort();
+
+    document.getElementById("kPlanRegistros").textContent=planificacion.length;
+    document.getElementById("kPlanPulgadas").textContent=pulgadas(total);
+    document.getElementById("kPlanDesde").textContent=fechasInicio[0] || "—";
+    document.getElementById("kPlanHasta").textContent=fechasFin.at(-1) || "—";
+    document.getElementById("resumenPlan").style.display="grid";
+
+    setEstado(`✅ Planificación analizada: ${planificacion.length} registros · ${pulgadas(total)} planificadas.`,"ok");
+    actualizarBotonCarga();
+  }catch(err){
+    console.error(err);
+    planificacion=[];
+    document.getElementById("resumenPlan").style.display="none";
+    setEstado("❌ No se pudo leer la planificación: "+err.message,"error");
+    actualizarBotonCarga();
+  }
+}
+
+async function subirPlanificacion(){
+  if(!planificacion.length){
+    setEstado("Analizá primero el Excel de planificación.","error");
+    return;
+  }
+
+  const {data:{session}}=await db.auth.getSession();
+  if(!session){
+    setEstado("❌ La sesión venció. Volvé a iniciar sesión.","error");
+    return;
+  }
+
+  const email=emailNormalizado(session.user.email);
+  if(!esAutorizado(email)){
+    setEstado("⛔ Este usuario no está autorizado para cargar planificación.","error");
+    return;
+  }
+
+  const btn=document.getElementById("btnCargarPlan");
+  btn.disabled=true;
+
+  try{
+    setEstado("⏳ Reemplazando planificación de Piping...");
+
+    const {error:errorBorrar}=await db.from("planificacion_piping").delete().neq("id",0);
+    if(errorBorrar) throw errorBorrar;
+
+    const filas=planificacion.map(x=>({...x,cargado_por:email}));
+    for(let i=0;i<filas.length;i+=200){
+      const {error}=await db.from("planificacion_piping").insert(filas.slice(i,i+200));
+      if(error) throw error;
+    }
+
+    setEstado(`✅ Planificación de Piping cargada por ${email}: ${filas.length} registros.`,"ok");
+  }catch(err){
+    console.error(err);
+    setEstado("❌ No se pudo cargar la planificación: "+err.message,"error");
+  }finally{
+    actualizarBotonCarga();
+  }
 }
 
 async function analizarExcel(){
