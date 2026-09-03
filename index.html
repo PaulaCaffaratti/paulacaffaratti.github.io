@@ -906,13 +906,13 @@ El desvío % se calcula:
 id="btnPendientes"
 class="btn-toggle"
 onclick="toggleSeccion('contenidoPendientes','btnPendientes')">
-Ocultar ▲
+Mostrar ▼
 </button>
 
 </div>
 
 
-<div id="contenidoPendientes">
+<div id="contenidoPendientes" class="hidden">
 
 <div class="pendientes-resumen">
 
@@ -978,30 +978,6 @@ Ocultar ▲
 </div>
 
 </section>
-
-
-<!-- FAMILIAS -->
-
-<section class="panel">
-
-<div class="panel-titulo">
-
-<h2>📦 Avance por familia de premoldeados</h2>
-
-<button
-id="btnFamilias"
-class="btn-toggle"
-onclick="toggleSeccion('contenidoFamilias','btnFamilias')">
-Ocultar ▲
-</button>
-
-</div>
-
-<div id="contenidoFamilias" class="familias">
-</div>
-
-</section>
-
 
 </main>
 </div>
@@ -1380,7 +1356,6 @@ async function cargarDatos(){
   actualizarResumen();
   dibujarCurva();
   dibujarPendientesMontaje();
-  dibujarFamilias();
 }
 
 
