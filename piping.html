@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piping - Resumen</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#24364b}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:270px;background:#102f52;color:white;padding:28px 18px;z-index:10;overflow:auto}
+.logo{font-size:19px;font-weight:800;line-height:1.35;margin-bottom:28px}
+.modulo-titulo{margin:18px 8px 8px;font-size:10px;font-weight:800;letter-spacing:.8px;color:#89a6c3;text-transform:uppercase}
+.sidebar a{display:block;text-decoration:none;color:#dbe7f3;padding:13px 14px;margin-bottom:8px;border-radius:9px;font-size:13px;font-weight:bold}
+.sidebar a:hover,.sidebar a.activo{background:white;color:#102f52}
+.main{margin-left:270px;min-height:100vh}
+.topbar{background:white;border-bottom:1px solid #dfe5eb;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.conexion{font-size:12px;font-weight:bold;color:#68798c}
+.conexion.ok{color:#1c7a48}
+.conexion.error{color:#b33a3a}
+.contenido{padding:28px;max-width:1500px;margin:auto}
+h1{margin:0 0 6px;font-size:27px;color:#173650}
+.subtitulo{margin:0 0 24px;color:#718096;font-size:14px}
+
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:white;border:1px solid #dce3ea;border-radius:12px;padding:18px;min-height:118px}
+.kpi small{display:block;font-size:10px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:9px}
+.kpi strong{display:block;font-size:28px;color:#173650}
+.kpi.verde{border-top:4px solid #179447}
+.kpi.naranja{border-top:4px solid #f28c28}
+.kpi.violeta{border-top:4px solid #6657b8}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}
+.panel{background:white;border:1px solid #dce3ea;border-radius:14px;padding:22px;margin-bottom:20px}
+.panel h2{font-size:17px;margin:0 0 18px;color:#173650}
+.tabla-wrap{overflow:auto;border:1px solid #dce3ea;border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#102f52;color:white;padding:11px;text-align:left;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
+
+.rechazoTotal{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center}
+.rechazoDonut{
+  width:140px;height:140px;border-radius:50%;
+  background:conic-gradient(#e8edf1 0deg 360deg);
+  display:grid;place-items:center;position:relative
+}
+.rechazoDonut::after{
+  content:"";position:absolute;width:96px;height:96px;border-radius:50%;background:white
+}
+.rechazoDonutCentro{position:relative;z-index:2;text-align:center}
+.rechazoDonutCentro strong{display:block;font-size:25px;color:#173650}
+.rechazoDonutCentro span{font-size:10px;color:#718096;text-transform:uppercase;font-weight:bold}
+.rechazoInfo{font-size:12px;color:#4d6277}
+.rechazoLinea{height:14px;background:#e8edf1;border-radius:20px;position:relative;margin:16px 0 5px;overflow:visible}
+.rechazoValor{height:100%;width:0%;border-radius:20px;background:#179447}
+.rechazoLimite{display:none;position:absolute;top:-4px;bottom:-4px;width:2px;background:#d83c3c}
+.rechazoEscala{display:flex;justify-content:space-between;font-size:9px;color:#8a98a8}
+.nota{margin-top:12px;color:#68798c;font-size:11px;line-height:1.5}
+
+.soldadoresLista{display:flex;flex-direction:column;gap:12px}
+.soldadorFila{display:grid;grid-template-columns:150px 65px 1fr 115px;gap:10px;align-items:center}
+.soldadorNombre{font-size:12px;font-weight:bold;color:#334e68;overflow:hidden;text-overflow:ellipsis}
+.soldadorPct{font-size:12px;font-weight:bold;text-align:right}
+.soldadorBarra{height:12px;background:#e8edf1;border-radius:20px;position:relative}
+.soldadorBarraFill{height:100%;border-radius:20px}
+.soldadorBarraLimite{position:absolute;top:-3px;bottom:-3px;width:2px;background:#d83c3c}
+.pipingBadge{display:inline-block;text-align:center;padding:5px 7px;border-radius:15px;background:#edf1f5;color:#66788a;font-size:9px;font-weight:bold}
+.pipingBadge.ok{background:#eaf8ef;color:#176d3c}
+.pipingBadge.alerta{background:#fdecec;color:#a62f2f}
+.soldadorSinDatos{color:#718096;font-size:12px;padding:10px 0}
+
+@media(max-width:1100px){
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .grid2{grid-template-columns:1fr}
+}
+@media(max-width:850px){
+  .sidebar{position:relative;width:100%}
+  .main{margin-left:0}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .contenido{padding:14px}
+  .kpis{grid-template-columns:1fr}
+  .rechazoTotal{grid-template-columns:1fr}
+  .soldadorFila{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+  <div class="logo">🏗️ CONTROL DE<br>PRODUCCIÓN</div>
+
+  <div class="modulo-titulo">PREMOLDEADOS</div>
+  <a href="index.html">📊 RESUMEN</a>
+  <a href="base.html">📋 BASE DE INGENIERÍA</a>
+  <a href="avance.html">📍 LOCALIZACIÓN DE PREMOLDEADOS</a>
+
+  <div class="modulo-titulo">PIPING</div>
+  <a href="piping.html" class="activo">📊 RESUMEN</a>
+  <a href="piping-base.html">📋 BASE DE INGENIERÍA / TRAZABILIDAD</a>
+  <a href="spooles.html">📍 LOCALIZACIÓN DE SPOOLES</a>
+</aside>
+
+<div class="main">
+
+  <div class="topbar">
+    <strong>Seguimiento de Piping</strong>
+    <div id="pipeConexion" class="conexion">⏳ Actualizando datos...</div>
+  </div>
+
+  <main class="contenido">
+
+    <h1>Resumen ejecutivo de Piping</h1>
+    <p class="subtitulo">Datos actualizados automáticamente desde la última trazabilidad cargada.</p>
+
+    <div class="kpis">
+      <div class="kpi">
+        <small>Juntas</small>
+        <strong id="pipeJuntas">—</strong>
+      </div>
+
+      <div class="kpi">
+        <small>Ø a ejecutar</small>
+        <strong id="pipeTotal">—</strong>
+      </div>
+
+      <div class="kpi verde">
+        <small>Ø ejecutadas</small>
+        <strong id="pipeEjecutadas">—</strong>
+      </div>
+
+      <div class="kpi naranja">
+        <small>Ø pendientes</small>
+        <strong id="pipePendientes">—</strong>
+      </div>
+
+      <div class="kpi violeta">
+        <small>Avance general</small>
+        <strong id="pipeAvance">—</strong>
+      </div>
+    </div>
+
+    <div class="grid2">
+
+      <section class="panel">
+        <h2>% de rechazos · total</h2>
+
+        <div class="rechazoTotal">
+
+          <div id="pipeDonut" class="rechazoDonut">
+            <div class="rechazoDonutCentro">
+              <strong id="pipeRechazoTotal">—</strong>
+              <span>rechazo</span>
+            </div>
+          </div>
+
+          <div class="rechazoInfo">
+            <div><strong>Límite de rechazo:</strong> <span id="pipeLimiteTexto">No definido</span></div>
+
+            <div class="rechazoLinea">
+              <div id="pipeRechazoValor" class="rechazoValor"></div>
+              <div id="pipeRechazoLimite" class="rechazoLimite"></div>
+            </div>
+
+            <div class="rechazoEscala">
+              <span>0%</span>
+              <span>100%</span>
+            </div>
+
+            <div id="pipeRechazoDetalle" class="nota">
+              Sin datos de inspección.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>% de rechazos por soldador</h2>
+
+        <div id="pipeSoldadores" class="soldadoresLista">
+          <div class="soldadorSinDatos">Sin datos de inspección por soldador.</div>
+        </div>
+
+        <div class="nota">
+          La línea roja de límite aparecerá cuando definamos el porcentaje máximo permitido.
+        </div>
+      </section>
+
+    </div>
+
+    <section class="panel">
+      <h2>Avance por tipo de junta</h2>
+
+      <div class="tabla-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Descripción</th>
+              <th>Juntas</th>
+              <th>Ø a ejecutar</th>
+              <th>Ø ejecutadas</th>
+              <th>Ø pendientes</th>
+              <th>% avance</th>
+            </tr>
+          </thead>
+
+          <tbody id="pipeTablaTipos">
+            <tr>
+              <td colspan="7" style="text-align:center;color:#718096;padding:28px">
+                Cargando datos...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const SUPABASE_URL =
+"https://mzgbtejfgsrskiuymtwh.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_Wen9hxBnae8wRrEEaP5lOQ_aNl9OCGd";
+
+const db =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const PIPING_LIMITE_RECHAZO = null;
+
+function escapar(v){
+  return String(v ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function setTexto(id,valor){
+  const e=document.getElementById(id);
+  if(e) e.textContent=valor;
+}
+
+function pipeNum(v){
+  return Number(v || 0).toLocaleString(
+    "es-AR",
+    {minimumFractionDigits:0,maximumFractionDigits:2}
+  );
+}
+
+function pipePct(v){
+  if(v===null || v===undefined || v==="") return "—";
+  return Number(v).toFixed(2).replace(".",",")+"%";
+}
+
+async function cargarPiping(){
+
+  const estado=document.getElementById("pipeConexion");
+
+  try{
+
+    const [
+      {data:resumen,error:errorResumen},
+      {data:rechazos,error:errorRechazos}
+    ] = await Promise.all([
+
+      db
+        .from("v_piping_dashboard")
+        .select("*"),
+
+      db
+        .from("v_piping_rechazos")
+        .select("*")
+
+    ]);
+
+    if(errorResumen) throw errorResumen;
+    if(errorRechazos) throw errorRechazos;
+
+    const filas=resumen || [];
+
+    const total=
+      filas.find(x=>x.categoria==="TOTAL_GENERAL");
+
+    const tipos=
+      filas.filter(x=>x.categoria==="TIPO_JUNTA");
+
+    if(total){
+
+      setTexto(
+        "pipeJuntas",
+        Number(total.juntas || 0)
+      );
+
+      setTexto(
+        "pipeTotal",
+        pipeNum(total.pulgadas_a_ejecutar)+'"'
+      );
+
+      setTexto(
+        "pipeEjecutadas",
+        pipeNum(total.pulgadas_ejecutadas)+'"'
+      );
+
+      setTexto(
+        "pipePendientes",
+        pipeNum(total.pulgadas_pendientes)+'"'
+      );
+
+      setTexto(
+        "pipeAvance",
+        pipePct(total.avance_porcentaje)
+      );
+
+    }else{
+
+      setTexto("pipeJuntas","—");
+      setTexto("pipeTotal","—");
+      setTexto("pipeEjecutadas","—");
+      setTexto("pipePendientes","—");
+      setTexto("pipeAvance","—");
+
+    }
+
+    document.getElementById("pipeTablaTipos").innerHTML=
+      tipos.length
+      ? tipos.map(x=>`
+          <tr>
+            <td><strong>${escapar(x.codigo || "")}</strong></td>
+            <td>${escapar(x.descripcion || "")}</td>
+            <td>${Number(x.juntas || 0)}</td>
+            <td>${pipeNum(x.pulgadas_a_ejecutar)}"</td>
+            <td>${pipeNum(x.pulgadas_ejecutadas)}"</td>
+            <td>${pipeNum(x.pulgadas_pendientes)}"</td>
+            <td><strong>${pipePct(x.avance_porcentaje)}</strong></td>
+          </tr>
+        `).join("")
+      : `
+        <tr>
+          <td colspan="7" style="text-align:center;color:#718096;padding:28px">
+            No hay datos cargados.
+          </td>
+        </tr>
+      `;
+
+    const listaRechazos=rechazos || [];
+
+    const totalRechazo=
+      listaRechazos.find(x=>x.tipo==="TOTAL");
+
+    const soldadores=
+      listaRechazos
+        .filter(x=>x.tipo==="SOLDADOR")
+        .sort(
+          (a,b)=>
+          Number(b.rechazo_porcentaje ?? -1) -
+          Number(a.rechazo_porcentaje ?? -1)
+        );
+
+    const limite=PIPING_LIMITE_RECHAZO;
+
+    document.getElementById("pipeLimiteTexto").textContent=
+      Number.isFinite(limite)
+      ? pipePct(limite)
+      : "No definido";
+
+    const limiteGeneral=
+      document.getElementById("pipeRechazoLimite");
+
+    if(Number.isFinite(limite)){
+
+      limiteGeneral.style.display="block";
+      limiteGeneral.style.left=
+        Math.min(100,Math.max(0,limite))+"%";
+
+    }else{
+
+      limiteGeneral.style.display="none";
+
+    }
+
+    if(
+      totalRechazo &&
+      totalRechazo.rechazo_porcentaje !== null
+    ){
+
+      const p=
+        Number(totalRechazo.rechazo_porcentaje || 0);
+
+      const inspeccionadas=
+        Number(totalRechazo.juntas_inspeccionadas || 0);
+
+      const rechazadas=
+        Number(totalRechazo.juntas_rechazadas || 0);
+
+      setTexto(
+        "pipeRechazoTotal",
+        pipePct(p)
+      );
+
+      const fill=
+        document.getElementById("pipeRechazoValor");
+
+      fill.style.width=
+        Math.min(100,Math.max(0,p))+"%";
+
+      const fuera=
+        Number.isFinite(limite) &&
+        p>limite;
+
+      fill.style.background=
+        fuera ? "#d83c3c" : "#179447";
+
+      const donut=
+        document.getElementById("pipeDonut");
+
+      const grados=
+        Math.min(
+          360,
+          Math.max(0,p*3.6)
+        );
+
+      donut.style.background=
+        `conic-gradient(
+          ${fuera ? "#d83c3c" : "#179447"}
+          0deg ${grados}deg,
+          #e8edf1 ${grados}deg 360deg
+        )`;
+
+      document.getElementById(
+        "pipeRechazoDetalle"
+      ).textContent=
+        `${rechazadas} rechazadas de ${inspeccionadas} juntas inspeccionadas`;
+
+    }else{
+
+      setTexto(
+        "pipeRechazoTotal",
+        "—"
+      );
+
+      document.getElementById(
+        "pipeRechazoValor"
+      ).style.width="0%";
+
+      document.getElementById(
+        "pipeDonut"
+      ).style.background=
+        "conic-gradient(#e8edf1 0deg 360deg)";
+
+      document.getElementById(
+        "pipeRechazoDetalle"
+      ).textContent=
+        "Sin datos de inspección / END con resultado registrado.";
+
+    }
+
+    const cont=
+      document.getElementById("pipeSoldadores");
+
+    if(
+      !soldadores.length ||
+      !soldadores.some(
+        x=>x.rechazo_porcentaje !== null
+      )
+    ){
+
+      cont.innerHTML=
+        '<div class="soldadorSinDatos">Sin datos de inspección por soldador.</div>';
+
+    }else{
+
+      cont.innerHTML=
+        soldadores.map(x=>{
+
+          const sinDato=
+            x.rechazo_porcentaje===null;
+
+          const p=
+            sinDato
+            ? 0
+            : Number(x.rechazo_porcentaje || 0);
+
+          const fuera=
+            !sinDato &&
+            Number.isFinite(limite) &&
+            p>limite;
+
+          return `
+            <div class="soldadorFila">
+
+              <div class="soldadorNombre">
+                ${escapar(x.soldador || "-")}
+              </div>
+
+              <div
+                class="soldadorPct"
+                style="color:${
+                  sinDato
+                  ? "#687787"
+                  : (
+                      fuera
+                      ? "#d83c3c"
+                      : "#179447"
+                    )
+                }"
+              >
+                ${
+                  sinDato
+                  ? "—"
+                  : pipePct(p)
+                }
+              </div>
+
+              <div class="soldadorBarra">
+
+                <div
+                  class="soldadorBarraFill"
+                  style="
+                    width:${Math.min(100,Math.max(0,p))}%;
+                    background:${fuera ? "#d83c3c" : "#179447"};
+                  "
+                ></div>
+
+                ${
+                  Number.isFinite(limite)
+                  ? `
+                    <div
+                      class="soldadorBarraLimite"
+                      style="
+                        display:block;
+                        left:${Math.min(100,Math.max(0,limite))}%;
+                      "
+                    ></div>
+                  `
+                  : ""
+                }
+
+              </div>
+
+              ${
+                sinDato
+                ? '<span class="pipingBadge">Sin datos</span>'
+                : (
+                    Number.isFinite(limite)
+                    ? (
+                        fuera
+                        ? '<span class="pipingBadge alerta">Fuera de límite</span>'
+                        : '<span class="pipingBadge ok">Dentro de límite</span>'
+                      )
+                    : '<span class="pipingBadge">Límite pendiente</span>'
+                  )
+              }
+
+            </div>
+          `;
+
+        }).join("");
+
+    }
+
+    estado.textContent=
+      "● Datos de Piping actualizados automáticamente";
+
+    estado.className=
+      "conexion ok";
+
+  }catch(err){
+
+    console.error(err);
+
+    estado.textContent=
+      "❌ No se pudieron actualizar los datos de Piping";
+
+    estado.className=
+      "conexion error";
+
+  }
+
+}
+
+cargarPiping();
+
+setInterval(
+  cargarPiping,
+  60000
+);
+</script>
+
+</body>
+</html>
