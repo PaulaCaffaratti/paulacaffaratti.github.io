@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piping - Base de Ingeniería / Trazabilidad</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#24364b}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:270px;background:#102f52;color:white;padding:28px 18px;z-index:10;overflow:auto}
+.logo{font-size:19px;font-weight:800;line-height:1.35;margin-bottom:28px}
+.modulo-titulo{margin:18px 8px 8px;font-size:10px;font-weight:800;letter-spacing:.8px;color:#89a6c3;text-transform:uppercase}
+.sidebar a{display:block;text-decoration:none;color:#dbe7f3;padding:13px 14px;margin-bottom:8px;border-radius:9px;font-size:13px;font-weight:bold}
+.sidebar a:hover,.sidebar a.activo{background:white;color:#102f52}
+.main{margin-left:270px;min-height:100vh}
+.topbar{background:white;border-bottom:1px solid #dfe5eb;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.conexion{font-size:12px;font-weight:bold;color:#68798c}
+.conexion.ok{color:#1c7a48}
+.conexion.error{color:#b33a3a}
+.contenido{padding:28px;max-width:1500px;margin:auto}
+h1{margin:0 0 6px;font-size:27px;color:#173650}
+.subtitulo{margin:0 0 24px;color:#718096;font-size:14px}
+.panel{background:white;border:1px solid #dce3ea;border-radius:14px;padding:22px;margin-bottom:20px}
+.panel h2{font-size:17px;margin:0 0 18px;color:#173650}
+.estado{padding:12px 14px;border-radius:9px;background:#eef6fb;color:#31566e;font-size:12px;margin-bottom:18px}
+.estado.ok{background:#eaf8ef;color:#176d3c}
+.estado.error{background:#fdecec;color:#a62f2f}
+.estado.aviso{background:#fff5df;color:#8a5a00}
+.fila{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+input[type=file],input[type=email],input[type=password]{
+  border:1px solid #ccd7df;border-radius:9px;padding:11px;background:white;min-width:260px
+}
+button{border:0;border-radius:9px;padding:12px 18px;cursor:pointer;font-weight:bold}
+.btnAzul{background:#102f52;color:white}
+.btnVerde{background:#198754;color:white}
+.btnGris{background:#e9eef3;color:#45596f}
+button:disabled{opacity:.45;cursor:not-allowed}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}
+.kpi{border:1px solid #dce3ea;border-radius:12px;padding:16px;background:#fafbfd}
+.kpi span{display:block;text-transform:uppercase;color:#718096;font-size:10px;font-weight:bold}
+.kpi strong{display:block;color:#173650;font-size:27px;margin-top:7px}
+.kpi.verde{border-top:4px solid #198754}
+.kpi.naranja{border-top:4px solid #f28c28}
+.kpi.violeta{border-top:4px solid #6657b8}
+.tablaWrap{overflow:auto;border:1px solid #dce3ea;border-radius:10px;max-height:520px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{position:sticky;top:0;background:#102f52;color:white;padding:10px;text-align:left;white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid #e8edf1;vertical-align:top;white-space:nowrap}
+.badge{display:inline-block;padding:4px 8px;border-radius:15px;font-size:10px;font-weight:bold}
+.SW{background:#eaf8ef;color:#176d3c} .FW{background:#fff3e5;color:#9a5d00} .FFW{background:#eeeafd;color:#5545a8}
+.nota{margin-top:12px;color:#68798c;font-size:11px;line-height:1.5}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.login-box{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.usuario{font-size:12px;color:#68798c;margin-top:10px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:850px){.sidebar{position:relative;width:100%}.main{margin-left:0}}
+@media(max-width:700px){.contenido{padding:14px}.kpis{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+  <div class="logo">🏗️ CONTROL DE<br>PRODUCCIÓN</div>
+
+  <div class="modulo-titulo">PREMOLDEADOS</div>
+  <a href="index.html">📊 RESUMEN</a>
+  <a href="base.html">📋 BASE DE INGENIERÍA</a>
+  <a href="avance.html">📍 LOCALIZACIÓN DE PREMOLDEADOS</a>
+
+  <div class="modulo-titulo">PIPING</div>
+  <a href="piping.html">📊 RESUMEN</a>
+  <a href="piping-base.html" class="activo">📋 BASE DE INGENIERÍA / TRAZABILIDAD</a>
+  <a href="spooles.html">📍 LOCALIZACIÓN DE SPOOLES</a>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <strong>Piping · Base de Ingeniería / Trazabilidad</strong>
+    <div id="conexion" class="conexion">⏳ Verificando acceso...</div>
+  </div>
+
+  <main class="contenido">
+    <h1>Base de Ingeniería / Trazabilidad</h1>
+    <p class="subtitulo">Carga de la trazabilidad de soldadura desde Excel. Solo usuarios autorizados pueden confirmar una carga.</p>
+
+    <section class="panel" id="panelLogin">
+      <h2>🔐 Acceso para carga</h2>
+      <div class="login-box">
+        <input id="email" type="email" placeholder="Correo corporativo">
+        <input id="password" type="password" placeholder="Contraseña">
+        <button class="btnAzul" onclick="iniciarSesion()">Ingresar</button>
+        <button class="btnGris" onclick="cerrarSesion()">Salir</button>
+      </div>
+      <div id="usuarioActual" class="usuario">Sin sesión iniciada.</div>
+    </section>
+
+    <div id="estado" class="estado">⏳ Verificando sesión...</div>
+
+    <section class="panel">
+      <h2>1. Seleccionar Excel de trazabilidad</h2>
+      <div class="fila">
+        <input id="archivo" type="file" accept=".xlsx,.xls">
+        <button id="btnAnalizar" class="btnAzul" onclick="analizarExcel()">Analizar Excel</button>
+        <button id="btnCargar" class="btnVerde" onclick="subirDatos()" disabled>Cargar a Supabase</button>
+      </div>
+      <div class="nota">
+        Se leen las hojas <b>Trazabilidad NQOG317</b> y <b>Resumen</b>.
+        Primero se muestra una vista previa; la carga a la base solo se habilita a usuarios autorizados.
+      </div>
+    </section>
+
+    <section id="resumen" class="panel" style="display:none;">
+      <h2>2. Vista previa</h2>
+      <div class="kpis">
+        <div class="kpi"><span>Juntas</span><strong id="kJuntas">0</strong></div>
+        <div class="kpi"><span>Ø a ejecutar</span><strong id="kTotal">0"</strong></div>
+        <div class="kpi verde"><span>Ø ejecutadas</span><strong id="kEjecutado">0"</strong></div>
+        <div class="kpi naranja"><span>Ø pendientes</span><strong id="kPendiente">0"</strong></div>
+        <div class="kpi violeta"><span>Avance general</span><strong id="kAvance">0%</strong></div>
+      </div>
+    </section>
+
+    <section id="tipos" class="panel" style="display:none;">
+      <h2>Avance por tipo de junta</h2>
+      <div class="tablaWrap" style="max-height:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th><th>Descripción</th><th>Juntas</th>
+              <th>Ø a ejecutar</th><th>Ø ejecutadas</th><th>Ø pendientes</th><th>% avance</th>
+            </tr>
+          </thead>
+          <tbody id="tablaTipos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="grid2">
+      <section id="cuadernillos" class="panel" style="display:none;">
+        <h2>Avance SW por cuadernillo</h2>
+        <div class="tablaWrap" style="max-height:none;">
+          <table>
+            <thead><tr><th>Cuadernillo</th><th>A construir</th><th>Construido</th><th>% avance</th></tr></thead>
+            <tbody id="tablaCuadernillos"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="detalle" class="panel" style="display:none;">
+        <h2>Control de lectura</h2>
+        <div class="kpis" style="grid-template-columns:repeat(2,1fr);">
+          <div class="kpi"><span>Filas de trazabilidad</span><strong id="kFilas">0</strong></div>
+          <div class="kpi verde"><span>Con fecha soldadura</span><strong id="kSoldadas">0</strong></div>
+        </div>
+        <div class="nota">Este control permite revisar la lectura del Excel antes de confirmar.</div>
+      </section>
+    </div>
+
+    <section id="tablaDetalle" class="panel" style="display:none;">
+      <h2>Inputs detectados en la trazabilidad</h2>
+      <div class="tablaWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Sistema</th><th>Subsistema</th><th>Cuadernillo</th><th>Línea</th><th>Hoja</th><th>Rev.</th>
+              <th>Ø</th><th>SCH</th><th>Espesor</th><th>Class</th><th>Junta</th><th>Spool</th><th>Tipo</th>
+              <th>Diseño</th><th>Ø 2</th><th>SCH 2</th><th>Espesor 2</th><th>Ubicación/Estado</th>
+              <th>N° Serie</th><th>EPS</th><th>Aporte</th><th>Soldador raíz</th><th>Soldador relleno</th>
+              <th>Fecha soldadura</th><th>Código construcción</th><th>Material 1</th><th>Grado 1</th><th>Colada 1</th>
+              <th>Material 2</th><th>Grado 2</th><th>Colada 2</th><th>IV</th><th>% END</th><th>Lote</th><th>Libera</th>
+              <th>Ubicación ensayo</th><th>Fecha ensayo 1</th><th>Informe 1</th><th>Fecha ensayo 2</th><th>Resultado 1</th>
+              <th>Informe 2</th><th>Fecha ensayo 3</th><th>Resultado 2</th><th>Observaciones</th><th>Sistema color</th>
+              <th>Fecha PH</th><th>Fecha pintura</th><th>OT</th>
+            </tr>
+          </thead>
+          <tbody id="tablaJuntas"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const SUPABASE_URL = "https://mzgbtejfgsrskiuymtwh.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Wen9hxBnae8wRrEEaP5lOQ_aNl9OCGd";
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const USUARIOS_AUTORIZADOS = [
+  "maria.caffaratti@pecomenergia.com.ar",
+  "kevin.rojas@pecomenergia.com.ar",
+  "sebastian.sowa@pecomenergia.com.ar",
+  "agustin.schechtel@pecomenergia.com.ar",
+  "pablo.perez@pecomenergia.com.ar"
+].map(x=>x.toLowerCase());
+
+let sesionOk=false;
+let usuarioAutorizado=false;
+let nombreArchivo="";
+let juntas=[];
+let resumenTipos=[];
+let resumenCuadernillos=[];
+let totalGeneral=null;
+
+function setEstado(texto,tipo=""){
+  const e=document.getElementById("estado");
+  e.textContent=texto;
+  e.className="estado"+(tipo?" "+tipo:"");
+}
+
+function emailNormalizado(v){
+  return String(v||"").trim().toLowerCase();
+}
+
+function esAutorizado(email){
+  return USUARIOS_AUTORIZADOS.includes(emailNormalizado(email));
+}
+
+async function verificarSesion(){
+  const {data:{session}}=await db.auth.getSession();
+  const conexion=document.getElementById("conexion");
+  const usuario=document.getElementById("usuarioActual");
+
+  if(!session){
+    sesionOk=false;
+    usuarioAutorizado=false;
+    usuario.textContent="Sin sesión iniciada.";
+    conexion.textContent="⚠️ Sin sesión";
+    conexion.className="conexion error";
+    setEstado("Podés analizar el Excel, pero para cargarlo debés iniciar sesión con un usuario autorizado.","aviso");
+    actualizarBotonCarga();
+    return;
+  }
+
+  sesionOk=true;
+  const email=emailNormalizado(session.user.email);
+  usuarioAutorizado=esAutorizado(email);
+  usuario.textContent="Sesión: "+email;
+
+  if(usuarioAutorizado){
+    conexion.textContent="● Usuario autorizado";
+    conexion.className="conexion ok";
+    setEstado("● Sesión activa · autorizado para cargar trazabilidad.","ok");
+  }else{
+    conexion.textContent="⛔ Solo lectura";
+    conexion.className="conexion error";
+    setEstado("⛔ Tu usuario puede revisar el Excel, pero no está autorizado para cargarlo.","error");
+  }
+
+  actualizarBotonCarga();
+}
+
+async function iniciarSesion(){
+  const email=emailNormalizado(document.getElementById("email").value);
+  const password=document.getElementById("password").value;
+
+  if(!email || !password){
+    setEstado("Ingresá correo y contraseña.","error");
+    return;
+  }
+
+  setEstado("⏳ Iniciando sesión...");
+
+  const {error}=await db.auth.signInWithPassword({email,password});
+
+  if(error){
+    setEstado("❌ No se pudo iniciar sesión: "+error.message,"error");
+    return;
+  }
+
+  document.getElementById("password").value="";
+  await verificarSesion();
+}
+
+async function cerrarSesion(){
+  await db.auth.signOut();
+  await verificarSesion();
+}
+
+function actualizarBotonCarga(){
+  document.getElementById("btnCargar").disabled=
+    !(juntas.length && totalGeneral && sesionOk && usuarioAutorizado);
+}
+
+function txt(v){
+  return String(v ?? "").trim();
+}
+
+function num(v){
+  if(v===null || v===undefined || v==="") return null;
+  if(typeof v==="number") return Number.isFinite(v)?v:null;
+  const n=Number(String(v).replace(",","."));
+  return Number.isFinite(n)?n:null;
+}
+
+function fechaISO(v){
+  if(v===null || v===undefined || v==="") return null;
+
+  if(v instanceof Date && !isNaN(v.getTime())){
+    return v.toISOString().slice(0,10);
+  }
+
+  if(typeof v==="number"){
+    const p=XLSX.SSF.parse_date_code(v);
+    if(p){
+      return `${p.y}-${String(p.m).padStart(2,"0")}-${String(p.d).padStart(2,"0")}`;
+    }
+  }
+
+  const s=String(v).trim();
+  const dmy=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+
+  if(dmy){
+    let y=Number(dmy[3]);
+    if(y<100) y+=2000;
+    return `${y}-${String(dmy[2]).padStart(2,"0")}-${String(dmy[1]).padStart(2,"0")}`;
+  }
+
+  const ymd=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(ymd){
+    return `${ymd[1]}-${String(ymd[2]).padStart(2,"0")}-${String(ymd[3]).padStart(2,"0")}`;
+  }
+
+  return null;
+}
+
+function valor(ws,r,c){
+  const ref=XLSX.utils.encode_cell({r:r-1,c:c-1});
+  return ws[ref] ? ws[ref].v : null;
+}
+
+function pct(v){
+  return (Number(v||0)*100).toFixed(2).replace(".",",")+"%";
+}
+
+function pulgadas(v){
+  return Number(v||0).toLocaleString("es-AR",{minimumFractionDigits:0,maximumFractionDigits:2})+'"';
+}
+
+async function analizarExcel(){
+  const input=document.getElementById("archivo");
+
+  if(!input.files.length){
+    setEstado("Seleccioná primero el Excel de trazabilidad.","error");
+    return;
+  }
+
+  try{
+    setEstado("⏳ Analizando Excel...");
+    nombreArchivo=input.files[0].name;
+
+    const buffer=await input.files[0].arrayBuffer();
+    const wb=XLSX.read(buffer,{type:"array",cellDates:false});
+
+    const ws=wb.Sheets["Trazabilidad NQOG317"];
+    const wr=wb.Sheets["Resumen"];
+
+    if(!ws) throw new Error('No se encontró la hoja "Trazabilidad NQOG317".');
+    if(!wr) throw new Error('No se encontró la hoja "Resumen".');
+
+    juntas=[];
+
+    const range=XLSX.utils.decode_range(ws["!ref"] || "A1:AV1");
+
+    for(let r=11;r<=range.e.r+1;r++){
+      const linea=txt(valor(ws,r,4));
+      const juntaNumero=txt(valor(ws,r,11));
+      const tipo=txt(valor(ws,r,13)).toUpperCase();
+
+      if(!linea && !juntaNumero && !tipo) continue;
+
+      juntas.push({
+        sistema:txt(valor(ws,r,1)) || null,
+        subsistema:txt(valor(ws,r,2)) || null,
+        cuadernillo:txt(valor(ws,r,3)) || null,
+        linea:linea || null,
+        hoja:txt(valor(ws,r,5)) || null,
+        revision:txt(valor(ws,r,6)) || null,
+        diametro:num(valor(ws,r,7)),
+        sch:txt(valor(ws,r,8)) || null,
+        espesor:num(valor(ws,r,9)),
+        piping_class:txt(valor(ws,r,10)) || null,
+        junta_numero:juntaNumero || null,
+        spool:txt(valor(ws,r,12)) || null,
+        tipo_junta:tipo || null,
+        diseno_junta:txt(valor(ws,r,14)) || null,
+        diametro_2:num(valor(ws,r,15)),
+        sch_2:txt(valor(ws,r,16)) || null,
+        espesor_2:num(valor(ws,r,17)),
+        ubicacion_estado:txt(valor(ws,r,18)) || null,
+        numero_serie:txt(valor(ws,r,19)) || null,
+        eps:txt(valor(ws,r,20)) || null,
+        aporte:txt(valor(ws,r,21)) || null,
+        soldador_raiz:txt(valor(ws,r,22)) || null,
+        soldador_relleno:txt(valor(ws,r,23)) || null,
+        fecha_soldadura:fechaISO(valor(ws,r,24)),
+        codigo_construccion:txt(valor(ws,r,25)) || null,
+        material_1:txt(valor(ws,r,26)) || null,
+        grado_material_1:txt(valor(ws,r,27)) || null,
+        colada_1:txt(valor(ws,r,28)) || null,
+        material_2:txt(valor(ws,r,29)) || null,
+        grado_material_2:txt(valor(ws,r,30)) || null,
+        colada_2:txt(valor(ws,r,31)) || null,
+        iv:txt(valor(ws,r,32)) || null,
+        porcentaje_end:num(valor(ws,r,33)),
+        lote:txt(valor(ws,r,34)) || null,
+        libera:txt(valor(ws,r,35)) || null,
+        ubicacion_ensayo:txt(valor(ws,r,36)) || null,
+        fecha_ensayo_1:fechaISO(valor(ws,r,37)),
+        informe_1:txt(valor(ws,r,38)) || null,
+        fecha_ensayo_2:fechaISO(valor(ws,r,39)),
+        resultado_1:txt(valor(ws,r,40)) || null,
+        informe_2:txt(valor(ws,r,41)) || null,
+        fecha_ensayo_3:fechaISO(valor(ws,r,42)),
+        resultado_2:txt(valor(ws,r,43)) || null,
+        observaciones:txt(valor(ws,r,44)) || null,
+        sistema_color:txt(valor(ws,r,45)) || null,
+        fecha_ph:fechaISO(valor(ws,r,46)),
+        fecha_pintura:fechaISO(valor(ws,r,47)),
+        ot:txt(valor(ws,r,48)) || null
+      });
+    }
+
+    resumenCuadernillos=[];
+    for(let r=11;r<=13;r++){
+      const descripcion=txt(valor(wr,r,2));
+      if(!descripcion) continue;
+      const ejecutar=Number(num(valor(wr,r,3)) || 0);
+      const ejecutadas=Number(num(valor(wr,r,4)) || 0);
+      const avance=Number(num(valor(wr,r,5)) || 0);
+      const pendientePct=Number(num(valor(wr,r,6)) || 0);
+
+      resumenCuadernillos.push({
+        categoria:"CUADERNILLO",
+        codigo:descripcion.replace(/\D+/g,"") || descripcion,
+        descripcion,
+        juntas:null,
+        pulgadas_a_ejecutar:ejecutar,
+        pulgadas_ejecutadas:ejecutadas,
+        pulgadas_pendientes:Math.max(0,ejecutar-ejecutadas),
+        avance_porcentaje:avance,
+        pendiente_porcentaje:pendientePct
+      });
+    }
+
+    resumenTipos=[];
+    for(let r=19;r<=21;r++){
+      const codigo=txt(valor(wr,r,2)).toUpperCase();
+      if(!codigo) continue;
+
+      resumenTipos.push({
+        categoria:"TIPO_JUNTA",
+        codigo,
+        descripcion:txt(valor(wr,r,3)) || null,
+        juntas:Number(num(valor(wr,r,4)) || 0),
+        pulgadas_a_ejecutar:Number(num(valor(wr,r,5)) || 0),
+        pulgadas_ejecutadas:Number(num(valor(wr,r,6)) || 0),
+        pulgadas_pendientes:Number(num(valor(wr,r,7)) || 0),
+        avance_porcentaje:Number(num(valor(wr,r,8)) || 0),
+        pendiente_porcentaje:Number(num(valor(wr,r,9)) || 0)
+      });
+    }
+
+    totalGeneral={
+      categoria:"TOTAL_GENERAL",
+      codigo:"TOTAL",
+      descripcion:"Total general de Piping",
+      juntas:Number(num(valor(wr,22,4)) || 0),
+      pulgadas_a_ejecutar:Number(num(valor(wr,22,5)) || 0),
+      pulgadas_ejecutadas:Number(num(valor(wr,22,6)) || 0),
+      pulgadas_pendientes:Number(num(valor(wr,22,7)) || 0),
+      avance_porcentaje:Number(num(valor(wr,22,8)) || 0),
+      pendiente_porcentaje:Number(num(valor(wr,22,9)) || 0)
+    };
+
+    if(!juntas.length) throw new Error("No se detectaron juntas en la trazabilidad.");
+    if(!totalGeneral.pulgadas_a_ejecutar) throw new Error("No se pudo leer el total general de la hoja Resumen.");
+
+    pintarPreview();
+    actualizarBotonCarga();
+
+    setEstado(
+      `✓ Excel analizado: ${juntas.length} juntas y ${pulgadas(totalGeneral.pulgadas_a_ejecutar)} de alcance total.`+
+      (usuarioAutorizado ? " Listo para cargar." : " Vista previa disponible; carga restringida."),
+      usuarioAutorizado ? "ok" : "aviso"
+    );
+
+  }catch(err){
+    console.error(err);
+    juntas=[];
+    resumenTipos=[];
+    resumenCuadernillos=[];
+    totalGeneral=null;
+    actualizarBotonCarga();
+    setEstado("❌ "+err.message,"error");
+  }
+}
+
+function pintarPreview(){
+  document.getElementById("kJuntas").textContent=totalGeneral.juntas;
+  document.getElementById("kTotal").textContent=pulgadas(totalGeneral.pulgadas_a_ejecutar);
+  document.getElementById("kEjecutado").textContent=pulgadas(totalGeneral.pulgadas_ejecutadas);
+  document.getElementById("kPendiente").textContent=pulgadas(totalGeneral.pulgadas_pendientes);
+  document.getElementById("kAvance").textContent=pct(totalGeneral.avance_porcentaje);
+
+  document.getElementById("kFilas").textContent=juntas.length;
+  document.getElementById("kSoldadas").textContent=juntas.filter(x=>!!x.fecha_soldadura).length;
+
+  document.getElementById("tablaTipos").innerHTML=resumenTipos.map(x=>`
+    <tr>
+      <td><span class="badge ${x.codigo}">${esc(x.codigo)}</span></td>
+      <td>${esc(x.descripcion || "")}</td>
+      <td>${x.juntas}</td>
+      <td>${pulgadas(x.pulgadas_a_ejecutar)}</td>
+      <td>${pulgadas(x.pulgadas_ejecutadas)}</td>
+      <td>${pulgadas(x.pulgadas_pendientes)}</td>
+      <td><strong>${pct(x.avance_porcentaje)}</strong></td>
+    </tr>
+  `).join("");
+
+  document.getElementById("tablaCuadernillos").innerHTML=resumenCuadernillos.map(x=>`
+    <tr>
+      <td>${esc(x.descripcion)}</td>
+      <td>${pulgadas(x.pulgadas_a_ejecutar)}</td>
+      <td>${pulgadas(x.pulgadas_ejecutadas)}</td>
+      <td><strong>${pct(x.avance_porcentaje)}</strong></td>
+    </tr>
+  `).join("");
+
+  const columnas = [
+    "sistema","subsistema","cuadernillo","linea","hoja","revision","diametro","sch","espesor","piping_class",
+    "junta_numero","spool","tipo_junta","diseno_junta","diametro_2","sch_2","espesor_2","ubicacion_estado",
+    "numero_serie","eps","aporte","soldador_raiz","soldador_relleno","fecha_soldadura","codigo_construccion",
+    "material_1","grado_material_1","colada_1","material_2","grado_material_2","colada_2","iv","porcentaje_end",
+    "lote","libera","ubicacion_ensayo","fecha_ensayo_1","informe_1","fecha_ensayo_2","resultado_1","informe_2",
+    "fecha_ensayo_3","resultado_2","observaciones","sistema_color","fecha_ph","fecha_pintura","ot"
+  ];
+
+  document.getElementById("tablaJuntas").innerHTML=juntas.slice(0,200).map(x=>`
+    <tr>${columnas.map(c=>`<td>${esc(x[c] ?? "")}</td>`).join("")}</tr>
+  `).join("");
+
+  ["resumen","tipos","cuadernillos","detalle","tablaDetalle"].forEach(id=>{
+    document.getElementById(id).style.display="block";
+  });
+}
+
+async function subirDatos(){
+  if(!juntas.length || !totalGeneral){
+    setEstado("Primero analizá el Excel.","error");
+    return;
+  }
+
+  const {data:{session}}=await db.auth.getSession();
+
+  if(!session){
+    setEstado("❌ La sesión venció. Volvé a iniciar sesión.","error");
+    return;
+  }
+
+  const email=emailNormalizado(session.user.email);
+
+  if(!esAutorizado(email)){
+    setEstado("⛔ Este usuario no está autorizado para cargar trazabilidad.","error");
+    return;
+  }
+
+  const btn=document.getElementById("btnCargar");
+  btn.disabled=true;
+  let cargaId=null;
+
+  try{
+    setEstado("⏳ Creando carga de Piping...");
+
+    const {data:carga,error:errorCarga}=await db
+      .from("piping_cargas")
+      .insert({
+        archivo_nombre:nombreArchivo,
+        usuario:email,
+        juntas_detectadas:juntas.length,
+        observacion:"Carga desde trazabilidad de soldadura"
+      })
+      .select("id")
+      .single();
+
+    if(errorCarga) throw errorCarga;
+    cargaId=carga.id;
+
+    const detalle=juntas.map(x=>({...x,carga_id:cargaId}));
+
+    for(let i=0;i<detalle.length;i+=100){
+      const {error}=await db
+        .from("piping_juntas")
+        .insert(detalle.slice(i,i+100));
+      if(error) throw error;
+    }
+
+    const resumen=[
+      ...resumenCuadernillos,
+      ...resumenTipos,
+      totalGeneral
+    ].map(x=>({...x,carga_id:cargaId}));
+
+    const {error:errorResumen}=await db
+      .from("piping_resumen")
+      .insert(resumen);
+
+    if(errorResumen) throw errorResumen;
+
+    setEstado(
+      `✓ Carga completada por ${email}: ${juntas.length} juntas · ${pulgadas(totalGeneral.pulgadas_ejecutadas)} ejecutadas · ${pct(totalGeneral.avance_porcentaje)} de avance.`,
+      "ok"
+    );
+
+  }catch(err){
+    console.error(err);
+
+    if(cargaId){
+      await db.from("piping_cargas").delete().eq("id",cargaId);
+    }
+
+    setEstado("❌ No se pudo completar la carga: "+err.message,"error");
+
+  }finally{
+    actualizarBotonCarga();
+  }
+}
+
+function esc(v){
+  return String(v ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+db.auth.onAuthStateChange(()=>verificarSesion());
+verificarSesion();
+</script>
+
+</body>
+</html>
