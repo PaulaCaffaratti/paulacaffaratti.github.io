@@ -354,6 +354,41 @@ h1{
   color:#173650;
 }
 
+.pendientes-herramientas{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  margin:0 0 14px;
+}
+
+.pendientes-buscador,
+.pendientes-orden{
+  border:1px solid #d8e0e8;
+  background:white;
+  border-radius:8px;
+  padding:10px 12px;
+  font-size:12px;
+  color:#24364b;
+  outline:none;
+}
+
+.pendientes-buscador{
+  flex:1 1 320px;
+  min-width:220px;
+}
+
+.pendientes-orden{
+  flex:0 1 260px;
+}
+
+.pendientes-buscador:focus,
+.pendientes-orden:focus{
+  border-color:#255b88;
+  box-shadow:0 0 0 2px rgba(37,91,136,.08);
+}
+
 .tabla-pendientes-wrap{
   width:100%;
   overflow-x:auto;
@@ -1025,6 +1060,27 @@ Mostrar ▼
 
 </div>
 
+<div class="pendientes-herramientas">
+  <input
+    id="buscarPendiente"
+    class="pendientes-buscador"
+    type="search"
+    placeholder="🔎 Buscar por tipo/base o fecha..."
+    oninput="renderizarPendientes()"
+  >
+
+  <select
+    id="ordenPendientes"
+    class="pendientes-orden"
+    onchange="renderizarPendientes()"
+  >
+    <option value="m3-desc">M³ pendientes: mayor → menor</option>
+    <option value="m3-asc">M³ pendientes: menor → mayor</option>
+    <option value="fecha-asc">Fecha: más próxima → más lejana</option>
+    <option value="fecha-desc">Fecha: más lejana → más próxima</option>
+  </select>
+</div>
+
 
 <div class="tabla-pendientes-wrap">
 
@@ -1034,6 +1090,7 @@ Mostrar ▼
 
 <tr>
 <th>Tipo / Base</th>
+<th>Fecha planificada</th>
 <th>Planificadas</th>
 <th>Montadas</th>
 <th>Pendientes</th>
@@ -1051,6 +1108,8 @@ Mostrar ▼
 <tr>
 
 <td>TOTAL PENDIENTE</td>
+
+<td>—</td>
 
 <td id="totalPlanPendientes">0</td>
 
@@ -1917,10 +1976,11 @@ function dibujarCurva(){
 PENDIENTES DE MONTAJE
 ===================================================== */
 
+let pendientesMontajeCache=[];
+
 function dibujarPendientesMontaje(){
 
   const montadasPorTipo={};
-
 
   piezas.forEach(p=>{
 
@@ -1935,7 +1995,7 @@ function dibujarPendientesMontaje(){
   });
 
 
-  const pendientes=
+  pendientesMontajeCache=
   BASE_PROYECTO
   .map(item=>{
 
@@ -1961,6 +2021,8 @@ function dibujarPendientesMontaje(){
 
     return{
       tipo:item.tipo,
+      inicio:item.inicio||"",
+      fin:item.fin||"",
       planificadas:Number(item.cantidad||0),
       montadas:montadas,
       faltan:faltan,
@@ -1969,11 +2031,7 @@ function dibujarPendientesMontaje(){
     };
 
   })
-  .filter(item=>item.faltan>0)
-  .sort(
-    (a,b)=>
-    b.m3Pendientes-a.m3Pendientes
-  );
+  .filter(item=>item.faltan>0);
 
 
   const totalPlan=
@@ -2003,7 +2061,7 @@ function dibujarPendientesMontaje(){
 
 
   const totalUnidades=
-  pendientes.reduce(
+  pendientesMontajeCache.reduce(
     (suma,item)=>
     suma+item.faltan,
     0
@@ -2011,7 +2069,7 @@ function dibujarPendientesMontaje(){
 
 
   const totalM3=
-  pendientes.reduce(
+  pendientesMontajeCache.reduce(
     (suma,item)=>
     suma+item.m3Pendientes,
     0
@@ -2036,17 +2094,76 @@ function dibujarPendientesMontaje(){
   document.getElementById("totalM3PendientesTabla").textContent=
   formatoM3(totalM3);
 
+  renderizarPendientes();
+}
+
+
+function renderizarPendientes(){
 
   const tbody=
   document.getElementById("tablaPendientesBody");
+
+  if(!tbody)return;
+
+  const buscador=
+  document.getElementById("buscarPendiente");
+
+  const selector=
+  document.getElementById("ordenPendientes");
+
+  const texto=
+  String(buscador?.value||"")
+  .trim()
+  .toUpperCase();
+
+  const orden=
+  selector?.value||"m3-desc";
+
+
+  let pendientes=
+  pendientesMontajeCache.filter(item=>{
+
+    if(!texto)return true;
+
+    const fecha=
+    fechaPlanTexto(item.inicio,item.fin)
+    .toUpperCase();
+
+    return(
+      normalizarTipo(item.tipo).includes(texto) ||
+      fecha.includes(texto)
+    );
+  });
+
+
+  pendientes.sort((a,b)=>{
+
+    if(orden==="m3-asc"){
+      return a.m3Pendientes-b.m3Pendientes;
+    }
+
+    if(orden==="fecha-asc"){
+      return crearFecha(a.inicio)-crearFecha(b.inicio);
+    }
+
+    if(orden==="fecha-desc"){
+      return crearFecha(b.inicio)-crearFecha(a.inicio);
+    }
+
+    return b.m3Pendientes-a.m3Pendientes;
+  });
 
 
   if(pendientes.length===0){
 
     tbody.innerHTML=`
       <tr>
-        <td colspan="6" class="sin-pendientes">
-        ✅ No quedan premoldeados pendientes de montar
+        <td colspan="7" class="sin-pendientes">
+        ${
+          pendientesMontajeCache.length===0
+          ?"✅ No quedan premoldeados pendientes de montar"
+          :"🔎 No hay resultados para la búsqueda"
+        }
         </td>
       </tr>
     `;
@@ -2062,6 +2179,10 @@ function dibujarPendientesMontaje(){
 
       <td>
         <strong>${item.tipo}</strong>
+      </td>
+
+      <td>
+        ${fechaPlanTexto(item.inicio,item.fin)}
       </td>
 
       <td>
@@ -2090,7 +2211,6 @@ function dibujarPendientesMontaje(){
 
   `).join("");
 }
-
 
 
 /* =====================================================
