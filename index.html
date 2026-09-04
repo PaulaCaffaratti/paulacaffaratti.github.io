@@ -1068,17 +1068,6 @@ Mostrar ▼
     placeholder="🔎 Buscar por tipo/base o fecha..."
     oninput="renderizarPendientes()"
   >
-
-  <select
-    id="ordenPendientes"
-    class="pendientes-orden"
-    onchange="renderizarPendientes()"
-  >
-    <option value="m3-desc">M³ pendientes: mayor → menor</option>
-    <option value="m3-asc">M³ pendientes: menor → mayor</option>
-    <option value="fecha-asc">Fecha: más próxima → más lejana</option>
-    <option value="fecha-desc">Fecha: más lejana → más próxima</option>
-  </select>
 </div>
 
 
@@ -1089,13 +1078,13 @@ Mostrar ▼
 <thead>
 
 <tr>
-<th>Tipo / Base</th>
-<th>Fecha planificada</th>
-<th>Planificadas</th>
-<th>Montadas</th>
-<th>Pendientes</th>
-<th>M³ c/u</th>
-<th>M³ pendientes</th>
+<th onclick="ordenarPendientesPor('tipo')" style="cursor:pointer">Tipo / Base <span id="ord-tipo">↕</span></th>
+<th onclick="ordenarPendientesPor('fecha')" style="cursor:pointer">Fecha planificada <span id="ord-fecha">↕</span></th>
+<th onclick="ordenarPendientesPor('planificadas')" style="cursor:pointer">Planificadas <span id="ord-planificadas">↕</span></th>
+<th onclick="ordenarPendientesPor('montadas')" style="cursor:pointer">Montadas <span id="ord-montadas">↕</span></th>
+<th onclick="ordenarPendientesPor('faltan')" style="cursor:pointer">Pendientes <span id="ord-faltan">↕</span></th>
+<th onclick="ordenarPendientesPor('m3Unidad')" style="cursor:pointer">M³ c/u <span id="ord-m3Unidad">↕</span></th>
+<th onclick="ordenarPendientesPor('m3Pendientes')" style="cursor:pointer">M³ pendientes <span id="ord-m3Pendientes">↕</span></th>
 </tr>
 
 </thead>
@@ -1977,6 +1966,18 @@ PENDIENTES DE MONTAJE
 ===================================================== */
 
 let pendientesMontajeCache=[];
+let columnaOrdenPendientes="m3Pendientes";
+let direccionOrdenPendientes="desc";
+
+function ordenarPendientesPor(columna){
+  if(columnaOrdenPendientes===columna){
+    direccionOrdenPendientes=direccionOrdenPendientes==="asc"?"desc":"asc";
+  }else{
+    columnaOrdenPendientes=columna;
+    direccionOrdenPendientes="asc";
+  }
+  renderizarPendientes();
+}
 
 function dibujarPendientesMontaje(){
 
@@ -2108,16 +2109,10 @@ function renderizarPendientes(){
   const buscador=
   document.getElementById("buscarPendiente");
 
-  const selector=
-  document.getElementById("ordenPendientes");
-
   const texto=
   String(buscador?.value||"")
   .trim()
   .toUpperCase();
-
-  const orden=
-  selector?.value||"m3-desc";
 
 
   let pendientes=
@@ -2137,20 +2132,26 @@ function renderizarPendientes(){
 
 
   pendientes.sort((a,b)=>{
+    let comparacion=0;
 
-    if(orden==="m3-asc"){
-      return a.m3Pendientes-b.m3Pendientes;
+    if(columnaOrdenPendientes==="tipo"){
+      comparacion=String(a.tipo||"").localeCompare(String(b.tipo||""),"es",{numeric:true});
+    }else if(columnaOrdenPendientes==="fecha"){
+      comparacion=crearFecha(a.inicio)-crearFecha(b.inicio);
+    }else{
+      comparacion=Number(a[columnaOrdenPendientes]||0)-Number(b[columnaOrdenPendientes]||0);
     }
 
-    if(orden==="fecha-asc"){
-      return crearFecha(a.inicio)-crearFecha(b.inicio);
-    }
+    return direccionOrdenPendientes==="asc"?comparacion:-comparacion;
+  });
 
-    if(orden==="fecha-desc"){
-      return crearFecha(b.inicio)-crearFecha(a.inicio);
-    }
-
-    return b.m3Pendientes-a.m3Pendientes;
+  ["tipo","fecha","planificadas","montadas","faltan","m3Unidad","m3Pendientes"].forEach(col=>{
+    const indicador=document.getElementById("ord-"+col);
+    if(!indicador)return;
+    indicador.textContent=
+      col===columnaOrdenPendientes
+      ?(direccionOrdenPendientes==="asc"?"▲":"▼")
+      :"↕";
   });
 
 
