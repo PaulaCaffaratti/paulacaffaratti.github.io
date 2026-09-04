@@ -399,199 +399,1805 @@ h1{
 }
 
 
+/* FAMILIAS */
 
-/* =====================================================
-DETALLE DEL DESVÍO
-Compara, por tipo, el volumen planificado acumulado a hoy
-contra el volumen realmente montado a hoy.
-===================================================== */
+.familias{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
 
-function planPorTipoEnFecha(fecha){
+.familia{
+  border:1px solid #dce3ea;
+  border-left:5px solid #255b88;
+  border-radius:12px;
+  padding:18px;
+  background:white;
+}
 
-  const objetivo=inicioDia(fecha);
-  const resultado={};
+.familia-cabecera{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
 
-  BASE_PROYECTO.forEach(item=>{
+.familia-icono{
+  width:38px;
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#edf4fa;
+  font-weight:800;
+  color:#255b88;
+}
 
-    const tipo=normalizarTipo(item.tipo);
-    const inicio=inicioDia(crearFecha(item.inicio));
-    const fin=inicioDia(crearFecha(item.fin));
-    const volumenTotal=
-      Number(item.cantidad||0)*
-      Number(item.m3||0);
+.familia h3{
+  margin:0;
+  font-size:14px;
+}
 
-    let volumenPlan=0;
+.familia-total{
+  font-size:24px;
+  font-weight:800;
+}
 
-    if(objetivo>=fin){
+.familia-total small{
+  font-size:11px;
+  color:#718096;
+}
 
-      volumenPlan=volumenTotal;
+.barra-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  font-weight:bold;
+  margin-top:12px;
+}
 
-    }else if(objetivo>=inicio){
+.barra{
+  height:7px;
+  background:#e9edf2;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:5px;
+}
 
-      const duracion=diasEntre(inicio,fin);
+.barra>div{
+  height:100%;
+  background:#2a72a5;
+}
 
-      if(duracion<=0){
+.barra.montaje>div{
+  background:#28734b;
+}
 
-        volumenPlan=volumenTotal;
+.detalle-btn{
+  margin-top:15px;
+  border:0;
+  background:none;
+  padding:0;
+  font-weight:bold;
+  font-size:11px;
+  cursor:pointer;
+  color:#255b88;
+}
 
-      }else{
+.detalle-tipos{
+  display:none;
+  margin-top:13px;
+  border-top:1px solid #e5eaf0;
+  padding-top:10px;
+}
 
-        const transcurrido=diasEntre(inicio,objetivo);
+.detalle-tipos.abierto{display:block;}
 
-        const fraccion=
-          Math.max(
-            0,
-            Math.min(
-              1,
-              transcurrido/duracion
-            )
-          );
+.tipo-detalle{
+  padding:8px 0;
+  border-bottom:1px solid #edf0f3;
+  font-size:11px;
+}
 
-        volumenPlan=volumenTotal*fraccion;
-      }
-    }
+.tipo-nombre{
+  font-weight:800;
+  margin-bottom:5px;
+}
 
-    resultado[tipo]=
-      (resultado[tipo]||0)+volumenPlan;
-  });
-
-  return resultado;
+.tipo-stats{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  color:#68798c;
 }
 
 
-function realPorTipoEnFecha(fecha){
+
+/* DETALLE DE DESVÍO */
+.metrica-click{
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.metrica-click:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 18px rgba(20,47,82,.10);
+}
+.click-ayuda{
+  display:block;
+  margin-top:7px;
+  font-size:10px;
+  color:#718096;
+  text-transform:none;
+  font-weight:700;
+}
+.modal-desvio{
+  position:fixed;
+  inset:0;
+  background:rgba(16,47,82,.46);
+  z-index:999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.modal-desvio.hidden{display:none!important;}
+.modal-desvio-caja{
+  width:min(1000px,96vw);
+  max-height:88vh;
+  overflow:auto;
+  background:white;
+  border-radius:14px;
+  border:1px solid #dce3ea;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+}
+.modal-desvio-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  padding:20px 22px 14px;
+  border-bottom:1px solid #e5eaf0;
+  position:sticky;
+  top:0;
+  background:white;
+  z-index:2;
+}
+.modal-desvio-head h3{
+  margin:0;
+  color:#173650;
+  font-size:18px;
+}
+.modal-desvio-head p{
+  margin:5px 0 0;
+  color:#718096;
+  font-size:12px;
+}
+.modal-cerrar{
+  border:0;
+  background:#eef3f7;
+  color:#173650;
+  border-radius:8px;
+  width:34px;
+  height:34px;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:800;
+}
+.desvio-resumen{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  padding:18px 22px 8px;
+}
+.desvio-mini{
+  border:1px solid #dce4ec;
+  border-radius:10px;
+  padding:14px;
+  background:#fafbfd;
+}
+.desvio-mini span{
+  display:block;
+  font-size:10px;
+  color:#718096;
+  font-weight:800;
+  text-transform:uppercase;
+}
+.desvio-mini strong{
+  display:block;
+  margin-top:5px;
+  font-size:20px;
+  color:#173650;
+}
+.desvio-explicacion{
+  margin:10px 22px 0;
+  padding:12px 14px;
+  border-radius:9px;
+  background:#f7f9fb;
+  color:#52677d;
+  font-size:12px;
+  line-height:1.45;
+}
+.tabla-desvio-wrap{
+  padding:16px 22px 22px;
+  overflow-x:auto;
+}
+.tabla-desvio{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+.tabla-desvio th,
+.tabla-desvio td{
+  padding:11px 10px;
+  border-bottom:1px solid #e5eaf0;
+  text-align:right;
+  white-space:nowrap;
+}
+.tabla-desvio th:first-child,
+.tabla-desvio td:first-child{text-align:left;}
+.tabla-desvio th{
+  background:#f7f9fb;
+  color:#5f7185;
+  font-size:10px;
+  text-transform:uppercase;
+}
+.desvio-falta{color:#c23838;font-weight:800;}
+.desvio-sobra{color:#198754;font-weight:800;}
+.desvio-linea{color:#c17c00;font-weight:800;}
+
+@media(max-width:1200px){
+  .metricas-m3{grid-template-columns:repeat(3,1fr);}
+}
+
+@media(max-width:1150px){
+  .flujo{grid-template-columns:repeat(3,1fr);}
+  .familias{grid-template-columns:repeat(2,1fr);}
+}
+
+@media(max-width:850px){
+
+  .sidebar{
+    position:relative;
+    width:100%;
+  }
+
+  .main{margin-left:0;}
+
+  .grid-curva{grid-template-columns:1fr;}
+
+  .flujo{grid-template-columns:repeat(2,1fr);}
+
+  .familias{grid-template-columns:1fr;}
+
+  .metricas-m3{grid-template-columns:repeat(2,1fr);}
+
+  .pendientes-resumen{grid-template-columns:1fr;}
+  .desvio-resumen{grid-template-columns:1fr;}
+}
+
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="logo">
+🏗️ CONTROL DE<br>PRODUCCIÓN
+</div>
+
+<div class="modulo-titulo">PREMOLDEADOS</div>
+
+<a href="index.html" class="activo">
+📊 RESUMEN
+</a>
+
+<a href="base.html">
+📋 BASE DE INGENIERÍA
+</a>
+
+<a href="avance.html">
+📍 LOCALIZACIÓN DE PREMOLDEADOS
+</a>
+
+<div class="modulo-titulo">PIPING</div>
+
+<a href="piping.html">
+📊 RESUMEN
+</a>
+
+<a href="piping-base.html">
+📋 BASE DE INGENIERÍA / TRAZABILIDAD
+</a>
+
+<a href="spooles.html">
+📍 LOCALIZACIÓN DE SPOOLES
+</a>
+
+</aside>
+
+
+<div class="main">
+
+<div class="topbar">
+
+<strong>Seguimiento de Premoldeados</strong>
+
+<div id="conexion" class="conexion">
+⏳ Conectando...
+</div>
+
+</div>
+
+
+<main class="contenido">
+
+<h1>Resumen ejecutivo</h1>
+
+<p class="subtitulo">
+Seguimiento general de premoldeados: fabricación, logística, calidad, montaje y pintura.
+</p>
+
+
+<!-- TOTAL -->
+
+<div class="total-principal">
+
+<div>
+
+<small>PREMOLDEADOS TOTALES</small>
+
+<div class="total-numero" id="total">0</div>
+
+<div style="font-size:12px;opacity:.8">
+Base de Ingeniería
+</div>
+
+</div>
+
+
+<div class="total-volumen">
+
+<strong id="volumenProyecto">
+0,00 m³
+</strong>
+
+<span>
+<span id="cantidadPlanificada">0</span>
+unidades planificadas
+</span>
+
+</div>
+
+</div>
+
+
+<!-- FLUJO -->
+
+<section class="panel">
+
+<div class="panel-titulo">
+<h2>🔄 Flujo de premoldeados</h2>
+</div>
+
+<div class="flujo">
+
+<div class="etapa">
+<div class="etapa-icono">🏭</div>
+<div class="etapa-nombre">En taller</div>
+<div class="etapa-valor">
+<span id="taller">0</span>
+<small>unidades</small>
+</div>
+<div class="etapa-m3">
+<span id="m3Taller">0,00</span> m³
+</div>
+</div>
+
+
+<div class="etapa">
+<div class="etapa-icono">✅</div>
+<div class="etapa-nombre">Liberado en taller</div>
+<div class="etapa-valor">
+<span id="liberadas">0</span>
+<small>unidades</small>
+</div>
+<div class="etapa-m3">
+<span id="m3Liberadas">0,00</span> m³
+</div>
+</div>
+
+
+<div class="etapa">
+<div class="etapa-icono">🚧</div>
+<div class="etapa-nombre">En obra</div>
+<div class="etapa-valor">
+<span id="obra">0</span>
+<small>unidades</small>
+</div>
+<div class="etapa-m3">
+<span id="m3Obra">0,00</span> m³
+</div>
+</div>
+
+
+<div class="etapa">
+<div class="etapa-icono">✔️</div>
+<div class="etapa-nombre">QA/QC</div>
+<div class="etapa-valor">
+<span id="qaqc">0</span>
+<small>unidades</small>
+</div>
+<div class="etapa-m3">
+<span id="m3Qaqc">0,00</span> m³
+</div>
+</div>
+
+
+<div class="etapa">
+<div class="etapa-icono">🏗️</div>
+<div class="etapa-nombre">Montado</div>
+<div class="etapa-valor">
+<span id="montadas">0</span>
+<small>unidades</small>
+</div>
+<div class="etapa-m3">
+<span id="m3Montadas">0,00</span> m³
+</div>
+</div>
+
+
+<div class="etapa">
+<div class="etapa-icono">🎨</div>
+<div class="etapa-nombre">Pintado</div>
+<div class="etapa-valor">
+<span id="pintadas">0</span>
+<small>unidades</small>
+</div>
+<div class="etapa-m3">
+<span id="m3Pintadas">0,00</span> m³
+</div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CURVA S -->
+
+<section class="panel">
+
+<div class="panel-titulo">
+
+<h2>📈 Curva S de Montaje — Base vs Real</h2>
+
+<button
+id="btnAvance"
+class="btn-toggle"
+onclick="toggleSeccion('contenidoAvance','btnAvance')">
+Ocultar ▲
+</button>
+
+</div>
+
+
+<div id="contenidoAvance">
+
+<div class="metricas-m3">
+
+<div class="metrica">
+<span>Volumen total proyecto</span>
+<strong id="m3Total">0,00 m³</strong>
+</div>
+
+<div class="metrica">
+<span>Planificado a hoy</span>
+<strong id="m3PlanHoy">0,00 m³</strong>
+</div>
+
+<div class="metrica">
+<span>Real montado</span>
+<strong id="m3RealHoy">0,00 m³</strong>
+</div>
+
+<div class="metrica metrica-click" id="cardDesvioM3" onclick="abrirDetalleDesvio()" title="Ver detalle del desvío">
+<span>Desvío m³ (Real - Plan)</span>
+<strong id="m3Desvio">0,00 m³</strong>
+<small class="click-ayuda">Tocar para ver qué está pendiente o adelantado</small>
+</div>
+
+<div class="metrica metrica-click" id="cardDesvioPct" onclick="abrirDetalleDesvio()" title="Ver detalle del desvío">
+<span>Desvío % (Real - Plan)</span>
+<strong id="pctDesvio">0,0%</strong>
+<small class="click-ayuda">Tocar para ver qué está pendiente o adelantado</small>
+</div>
+
+</div>
+
+
+<div class="grid-curva">
+
+<div class="chart-wrap">
+<canvas id="curvaS"></canvas>
+</div>
+
+
+<div class="estado-proyecto">
+
+<h3>Estado del proyecto</h3>
+
+<div id="estadoProyecto" class="estado-grande">
+—
+</div>
+
+<div class="estado-fila">
+<span>Planificado</span>
+<strong id="estadoPlan">0,00 m³</strong>
+</div>
+
+<div class="estado-fila">
+<span>Real</span>
+<strong id="estadoReal">0,00 m³</strong>
+</div>
+
+<div class="estado-fila">
+<span>Desvío m³ (Real - Plan)</span>
+<strong id="estadoDesvio">0,00 m³</strong>
+</div>
+
+<div class="estado-fila">
+<span>Desvío % (Real - Plan)</span>
+<strong id="estadoDesvioPct">0,0%</strong>
+</div>
+
+<div class="estado-fila">
+<span>Avance real proyecto</span>
+<strong id="estadoPct">0%</strong>
+</div>
+
+<div class="estado-fila">
+<span>Fecha de control</span>
+<strong id="fechaControl">—</strong>
+</div>
+
+<div class="nota">
+
+La línea <strong>BASE</strong> representa los m³ de montaje planificados acumulados entre Finc y Ffin.
+
+<br><br>
+
+La línea <strong>REAL</strong> suma los m³ de cada pieza marcada como montada según su <strong>fecha_montaje</strong>.
+
+<br><br>
+
+El desvío % se calcula:
+
+<br>
+
+<strong>
+(Real − Planificado) / Planificado × 100
+</strong>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PENDIENTES -->
+
+<section class="panel">
+
+<div class="panel-titulo">
+
+<h2>🏗️ Bases pendientes de montar</h2>
+
+<button
+id="btnPendientes"
+class="btn-toggle"
+onclick="toggleSeccion('contenidoPendientes','btnPendientes')">
+Mostrar ▼
+</button>
+
+</div>
+
+
+<div id="contenidoPendientes" class="hidden">
+
+<div class="pendientes-resumen">
+
+<div class="pendiente-kpi">
+<span>Unidades pendientes</span>
+<strong id="unidadesPendientes">0</strong>
+</div>
+
+<div class="pendiente-kpi">
+<span>M³ pendientes de montar</span>
+<strong id="m3PendientesTotal">0,00 m³</strong>
+</div>
+
+</div>
+
+
+<div class="tabla-pendientes-wrap">
+
+<table class="tabla-pendientes">
+
+<thead>
+
+<tr>
+<th>Tipo / Base</th>
+<th>Planificadas</th>
+<th>Montadas</th>
+<th>Pendientes</th>
+<th>M³ c/u</th>
+<th>M³ pendientes</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaPendientesBody">
+</tbody>
+
+<tfoot>
+
+<tr>
+
+<td>TOTAL PENDIENTE</td>
+
+<td id="totalPlanPendientes">0</td>
+
+<td id="totalMontadasPendientes">0</td>
+
+<td id="totalUnidadesPendientes">0</td>
+
+<td>—</td>
+
+<td id="totalM3PendientesTabla">
+0,00 m³
+</td>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+</main>
+</div>
+
+
+
+<div id="modalDesvio" class="modal-desvio hidden" onclick="cerrarDetalleDesvio(event)">
+  <div class="modal-desvio-caja" onclick="event.stopPropagation()">
+    <div class="modal-desvio-head">
+      <div>
+        <h3 id="modalDesvioTitulo">Detalle del desvío de montaje</h3>
+        <p>Comparación por tipo entre lo planificado a hoy y lo realmente montado.</p>
+      </div>
+      <button class="modal-cerrar" onclick="cerrarDetalleDesvio()">×</button>
+    </div>
+
+    <div class="desvio-resumen">
+      <div class="desvio-mini">
+        <span>Planificado a hoy</span>
+        <strong id="detallePlanTotal">0,00 m³</strong>
+      </div>
+      <div class="desvio-mini">
+        <span>Real montado</span>
+        <strong id="detalleRealTotal">0,00 m³</strong>
+      </div>
+      <div class="desvio-mini">
+        <span>Desvío total</span>
+        <strong id="detalleDesvioTotal">0,00 m³</strong>
+      </div>
+    </div>
+
+    <div id="detalleDesvioExplicacion" class="desvio-explicacion"></div>
+
+    <div class="tabla-desvio-wrap">
+      <table class="tabla-desvio">
+        <thead>
+          <tr>
+            <th>Tipo / Base</th>
+            <th>Plan a hoy</th>
+            <th>Real montado</th>
+            <th>Diferencia</th>
+            <th>Lectura</th>
+          </tr>
+        </thead>
+        <tbody id="tablaDesvioBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+/* SUPABASE */
+
+const SUPABASE_URL=
+"https://tnnioleawbhuqjuykrsf.supabase.co";
+
+const SUPABASE_KEY=
+"sb_publishable__gz2j09IN5vbQcPwdGnjKw_4NBMi1_O";
+
+const db=
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* BASE PLANIFICADA */
+
+/* =====================================================
+PLANIFICACIÓN DE MONTAJE
+La fuente principal ahora es Supabase: planificacion_premoldeados.
+Si no se puede leer, se usa la base anterior solo como respaldo.
+===================================================== */
+
+const BASE_PROYECTO_FALLBACK=[
+
+{tipo:"B0A",cantidad:2,m3:3.91,inicio:"2026-08-12",fin:"2026-08-16"},
+{tipo:"B0B",cantidad:2,m3:3.91,inicio:"2026-08-12",fin:"2026-08-16"},
+{tipo:"B1",cantidad:14,m3:7.4,inicio:"2026-08-12",fin:"2026-08-16"},
+{tipo:"B2",cantidad:4,m3:2.5,inicio:"2026-08-12",fin:"2026-08-16"},
+{tipo:"B3",cantidad:4,m3:7.56,inicio:"2026-08-12",fin:"2026-08-16"},
+
+{tipo:"F1",cantidad:20,m3:0.28,inicio:"2026-08-31",fin:"2026-09-02"},
+{tipo:"F2",cantidad:4,m3:0.31,inicio:"2026-08-31",fin:"2026-09-02"},
+{tipo:"FPE",cantidad:1,m3:0.64,inicio:"2026-09-25",fin:"2026-09-28"},
+{tipo:"TPE",cantidad:1,m3:0.26,inicio:"2026-09-25",fin:"2026-09-28"},
+{tipo:"F1A",cantidad:4,m3:0.28,inicio:"2026-08-31",fin:"2026-09-02"},
+
+{tipo:"C1",cantidad:2,m3:0.993,inicio:"2026-10-01",fin:"2026-10-12"},
+{tipo:"C2",cantidad:5,m3:1.03,inicio:"2026-10-01",fin:"2026-10-12"},
+{tipo:"C3",cantidad:3,m3:1.03,inicio:"2026-10-01",fin:"2026-10-12"},
+{tipo:"C4",cantidad:4,m3:1.07,inicio:"2026-10-01",fin:"2026-10-12"},
+
+{tipo:"S1",cantidad:2,m3:1.59,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S2A",cantidad:4,m3:2.92,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S2B",cantidad:1,m3:2.92,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S3",cantidad:2,m3:1.77,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S4A",cantidad:3,m3:1.1,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S4B",cantidad:4,m3:0.55,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S5",cantidad:2,m3:0.8,inicio:"2026-09-01",fin:"2026-09-03"},
+{tipo:"S6",cantidad:2,m3:0.3,inicio:"2026-09-01",fin:"2026-09-03"},
+
+{tipo:"PTS-A",cantidad:2,m3:3.41,inicio:"2026-08-27",fin:"2026-08-30"},
+{tipo:"BTS",cantidad:1,m3:3.1,inicio:"2026-08-27",fin:"2026-08-30"},
+{tipo:"BTS-C",cantidad:1,m3:0.87,inicio:"2026-08-27",fin:"2026-08-30"},
+
+{tipo:"FDS",cantidad:10,m3:1.5,inicio:"2026-10-06",fin:"2026-10-16"},
+{tipo:"ILUM",cantidad:4,m3:2.24,inicio:"2026-09-29",fin:"2026-10-09"},
+
+{tipo:"FS-01",cantidad:20,m3:0.197,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"FS-02",cantidad:10,m3:0.128,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"FS-03",cantidad:20,m3:0.08,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"FS-06",cantidad:12,m3:0.3,inicio:"2026-10-01",fin:"2026-10-13"},
+
+{tipo:"B-01",cantidad:1,m3:2.36,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-02",cantidad:1,m3:1.37,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-03",cantidad:1,m3:1.03,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-04",cantidad:4,m3:1.57,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-06",cantidad:1,m3:1.27,inicio:"2026-10-01",fin:"2026-10-13"},
+{tipo:"B-07",cantidad:3,m3:1.02,inicio:"2026-10-01",fin:"2026-10-13"},
+
+{tipo:"FS-04",cantidad:1,m3:0.44,inicio:"2026-10-01",fin:"2026-10-13"},
+
+{tipo:"MG-BA",cantidad:1,m3:1.75,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-VB",cantidad:1,m3:0.59,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-VA",cantidad:1,m3:0.46,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-C",cantidad:1,m3:0.2,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-BA2",cantidad:1,m3:0.58,inicio:"2026-11-05",fin:"2026-11-10"},
+{tipo:"MG-C2",cantidad:1,m3:0.2,inicio:"2026-11-05",fin:"2026-11-10"},
+
+{tipo:"ALC-A",cantidad:1,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"ALC-B",cantidad:18,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"ALC-C",cantidad:1,m3:1.16,inicio:"2026-09-17",fin:"2026-09-29"},
+
+{tipo:"TA-1",cantidad:1,m3:0.08,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"TA-2",cantidad:1,m3:0.1,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"TA-3",cantidad:2,m3:0.045,inicio:"2026-09-17",fin:"2026-09-29"},
+
+{tipo:"LO-1",cantidad:1,m3:0.44,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"LO-2",cantidad:1,m3:0.36,inicio:"2026-09-17",fin:"2026-09-29"},
+
+{tipo:"VI-1",cantidad:1,m3:0.07,inicio:"2026-09-17",fin:"2026-09-29"},
+{tipo:"VI-2",cantidad:1,m3:0.05,inicio:"2026-09-17",fin:"2026-09-29"},
+
+{tipo:"MO-1",cantidad:1,m3:3.64,inicio:"2026-09-18",fin:"2026-10-12"},
+{tipo:"MO-2",cantidad:1,m3:3.64,inicio:"2026-09-18",fin:"2026-10-12"},
+
+{tipo:"CD-516",cantidad:1,m3:0.2,inicio:"2026-09-07",fin:"2026-09-09"}
+
+];
+
+let BASE_PROYECTO=[];
+
+
+function normalizarTipo(tipo){
+  return String(tipo||"").trim().toUpperCase();
+}
+
+
+const M3_POR_TIPO={};
+
+function actualizarMapaM3(){
+  Object.keys(M3_POR_TIPO).forEach(k=>delete M3_POR_TIPO[k]);
+  BASE_PROYECTO.forEach(item=>{
+    M3_POR_TIPO[normalizarTipo(item.tipo)]=Number(item.m3||0);
+  });
+}
+
+function usarPlanificacionFallback(){
+  BASE_PROYECTO=BASE_PROYECTO_FALLBACK.map(item=>({...item}));
+  actualizarMapaM3();
+}
+
+async function cargarPlanificacion(){
+  const {data,error}=await db
+    .from("planificacion_premoldeados")
+    .select("tipo,cantidad,m3_unitario,fecha_inicio,fecha_fin")
+    .order("id",{ascending:true});
+
+  if(error){
+    console.warn("No se pudo leer planificacion_premoldeados; se usa respaldo:",error.message);
+    usarPlanificacionFallback();
+    return;
+  }
+
+  const filas=(data||[]).filter(r=>
+    r.tipo &&
+    Number(r.cantidad)>0 &&
+    Number.isFinite(Number(r.m3_unitario)) &&
+    r.fecha_inicio &&
+    r.fecha_fin
+  );
+
+  if(filas.length===0){
+    console.warn("La planificación está vacía; se usa respaldo.");
+    usarPlanificacionFallback();
+    return;
+  }
+
+  BASE_PROYECTO=filas.map(r=>({
+    tipo:String(r.tipo).trim(),
+    cantidad:Number(r.cantidad)||0,
+    m3:Number(r.m3_unitario)||0,
+    inicio:String(r.fecha_inicio).slice(0,10),
+    fin:String(r.fecha_fin).slice(0,10)
+  }));
+
+  actualizarMapaM3();
+}
+
+
+let piezas=[];
+let chart=null;
+
+
+/* FORMATO */
+
+function crearFecha(texto){
+  return new Date(texto+"T12:00:00");
+}
+
+function inicioDia(fecha){
+  const d=new Date(fecha);
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function diasEntre(inicio,fin){
+  return Math.round((inicioDia(fin)-inicioDia(inicio))/86400000);
+}
+
+
+function formatoM3(valor){
+
+  return Number(valor||0).toLocaleString(
+    "es-AR",
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  )+" m³";
+
+}
+
+
+function formatoNumeroM3(valor){
+
+  return Number(valor||0).toLocaleString(
+    "es-AR",
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+
+function formatoPorcentaje(valor){
+
+  const signo=valor>0?"+":"";
+
+  return signo+
+  Number(valor||0).toLocaleString(
+    "es-AR",
+    {
+      minimumFractionDigits:1,
+      maximumFractionDigits:1
+    }
+  )+"%";
+}
+
+
+function volumenTotalProyecto(){
+
+  return BASE_PROYECTO.reduce(
+    (total,item)=>
+    total+
+    Number(item.cantidad||0)*
+    Number(item.m3||0),
+    0
+  );
+}
+
+
+function cantidadTotalProyecto(){
+
+  return BASE_PROYECTO.reduce(
+    (total,item)=>
+    total+
+    Number(item.cantidad||0),
+    0
+  );
+}
+
+
+function volumenPieza(pieza){
+
+  const valor=Number(pieza.m3);
+
+  if(
+    Number.isFinite(valor) &&
+    valor>0
+  ){
+    return valor;
+  }
+
+  return Number(
+    M3_POR_TIPO[
+      normalizarTipo(pieza.tipo)
+    ]||0
+  );
+}
+
+
+/* PLAN */
+
+function planAcumuladoEnFecha(fecha){
 
   const objetivo=inicioDia(fecha);
-  const resultado={};
 
-  piezas.forEach(p=>{
+  let total=0;
 
-    if(
-      p.montada!==true ||
-      !p.fecha_montaje
-    ){
+  BASE_PROYECTO.forEach(item=>{
+
+    const inicio=inicioDia(crearFecha(item.inicio));
+    const fin=inicioDia(crearFecha(item.fin));
+
+    const volumen=
+    Number(item.cantidad||0)*
+    Number(item.m3||0);
+
+    if(objetivo<inicio)return;
+
+    if(objetivo>=fin){
+      total+=volumen;
       return;
     }
 
+    const duracion=diasEntre(inicio,fin);
+
+    if(duracion<=0){
+      total+=volumen;
+      return;
+    }
+
+    const transcurrido=diasEntre(inicio,objetivo);
+
+    const fraccion=
+    Math.max(
+      0,
+      Math.min(
+        1,
+        transcurrido/duracion
+      )
+    );
+
+    total+=volumen*fraccion;
+
+  });
+
+  return total;
+}
+
+
+/* REAL */
+
+function realAcumuladoEnFecha(fecha){
+
+  const objetivo=inicioDia(fecha);
+
+  return piezas.reduce((total,pieza)=>{
+
+    if(
+      pieza.montada!==true ||
+      !pieza.fecha_montaje
+    ){
+      return total;
+    }
+
     const fechaMontaje=
-      inicioDia(new Date(p.fecha_montaje));
+    inicioDia(
+      new Date(pieza.fecha_montaje)
+    );
 
     if(fechaMontaje>objetivo){
+      return total;
+    }
+
+    return total+volumenPieza(pieza);
+
+  },0);
+}
+
+
+function obtenerRangoFechas(){
+
+  const inicio=inicioDia(
+    new Date(
+      Math.min(
+        ...BASE_PROYECTO.map(
+          x=>crearFecha(x.inicio).getTime()
+        )
+      )
+    )
+  );
+
+  const fin=inicioDia(
+    new Date(
+      Math.max(
+        ...BASE_PROYECTO.map(
+          x=>crearFecha(x.fin).getTime()
+        )
+      )
+    )
+  );
+
+  const fechas=[];
+  const cursor=new Date(inicio);
+
+  while(cursor<=fin){
+
+    fechas.push(new Date(cursor));
+
+    cursor.setDate(
+      cursor.getDate()+1
+    );
+  }
+
+  return fechas;
+}
+
+
+/* CARGAR SUPABASE */
+
+async function cargarDatos(){
+
+  const conexion=
+  document.getElementById("conexion");
+
+  /* Primero leemos la planificación vigente.
+     Así unidades, m³, Curva S y pendientes usan la misma fuente
+     que el bloque “Planificación de montaje” de base.html. */
+  await cargarPlanificacion();
+
+  const {data,error}=
+  await db
+  .from("premoldeados")
+  .select("id,codigo,tipo,modelo,m3,etapa,montada,pintada,fecha_montaje,fecha,created_at")
+  .order("id",{ascending:true});
+
+
+  if(error){
+
+    conexion.textContent=
+    "❌ Error de conexión";
+
+    conexion.className=
+    "conexion error";
+
+    console.error(error);
+
+    return;
+  }
+
+
+  piezas=data||[];
+
+  conexion.textContent=
+  "● Base online conectada";
+
+  conexion.className=
+  "conexion ok";
+
+  actualizarResumen();
+  dibujarCurva();
+  dibujarPendientesMontaje();
+}
+
+
+/* FLUJO */
+
+function actualizarResumen(){
+
+  const total=piezas.length;
+
+  const listaTaller=
+  piezas.filter(p=>Number(p.etapa??0)>=0);
+
+  const listaLiberadas=
+  piezas.filter(p=>Number(p.etapa??0)>=1);
+
+  const listaObra=
+  piezas.filter(p=>Number(p.etapa??0)>=2);
+
+  const listaQaqc=
+  piezas.filter(p=>Number(p.etapa??0)>=3);
+
+  const listaMontadas=
+  piezas.filter(p=>p.montada===true);
+
+  const listaPintadas=
+  piezas.filter(p=>p.pintada===true);
+
+
+  const taller=listaTaller.length;
+  const liberadas=listaLiberadas.length;
+  const obra=listaObra.length;
+  const qaqc=listaQaqc.length;
+  const montadas=listaMontadas.length;
+  const pintadas=listaPintadas.length;
+
+
+  const sumarM3=
+  lista=>lista.reduce(
+    (suma,p)=>suma+volumenPieza(p),
+    0
+  );
+
+
+  const m3Taller=sumarM3(listaTaller);
+  const m3Liberadas=sumarM3(listaLiberadas);
+  const m3Obra=sumarM3(listaObra);
+  const m3Qaqc=sumarM3(listaQaqc);
+  const m3Montadas=sumarM3(listaMontadas);
+  const m3Pintadas=sumarM3(listaPintadas);
+document.getElementById("total").textContent=total;
+
+  document.getElementById("cantidadPlanificada").textContent=
+  cantidadTotalProyecto();
+
+  document.getElementById("taller").textContent=taller;
+  document.getElementById("liberadas").textContent=liberadas;
+  document.getElementById("obra").textContent=obra;
+  document.getElementById("qaqc").textContent=qaqc;
+  document.getElementById("montadas").textContent=montadas;
+  document.getElementById("pintadas").textContent=pintadas;
+
+
+  document.getElementById("m3Taller").textContent=
+  formatoNumeroM3(m3Taller);
+
+  document.getElementById("m3Liberadas").textContent=
+  formatoNumeroM3(m3Liberadas);
+
+  document.getElementById("m3Obra").textContent=
+  formatoNumeroM3(m3Obra);
+
+  document.getElementById("m3Qaqc").textContent=
+  formatoNumeroM3(m3Qaqc);
+
+  document.getElementById("m3Montadas").textContent=
+  formatoNumeroM3(m3Montadas);
+
+  document.getElementById("m3Pintadas").textContent=
+  formatoNumeroM3(m3Pintadas);
+}
+
+
+/* CURVA S */
+
+function dibujarCurva(){
+
+  const fechas=obtenerRangoFechas();
+  const hoy=inicioDia(new Date());
+
+  const labels=
+  fechas.map(
+    f=>f.toLocaleDateString(
+      "es-AR",
+      {
+        day:"2-digit",
+        month:"2-digit"
+      }
+    )
+  );
+
+
+  const planData=
+  fechas.map(
+    f=>Math.round(
+      planAcumuladoEnFecha(f)*1000
+    )/1000
+  );
+
+
+  const realData=
+  fechas.map(f=>{
+
+    if(f>hoy)return null;
+
+    return Math.round(
+      realAcumuladoEnFecha(f)*1000
+    )/1000;
+
+  });
+
+
+  const totalM3=volumenTotalProyecto();
+  const planHoy=planAcumuladoEnFecha(hoy);
+  const realHoy=realAcumuladoEnFecha(hoy);
+
+  const desvio=realHoy-planHoy;
+
+  const desvioPct=
+  planHoy===0
+  ?0
+  :(desvio/planHoy)*100;
+
+  const porcentajeReal=
+  totalM3===0
+  ?0
+  :(realHoy/totalM3)*100;
+
+
+  document.getElementById("volumenProyecto").textContent=
+  formatoM3(totalM3);
+
+  document.getElementById("m3Total").textContent=
+  formatoM3(totalM3);
+
+  document.getElementById("m3PlanHoy").textContent=
+  formatoM3(planHoy);
+
+  document.getElementById("m3RealHoy").textContent=
+  formatoM3(realHoy);
+
+  document.getElementById("m3Desvio").textContent=
+  (desvio>0?"+":"")+formatoM3(desvio);
+
+  document.getElementById("pctDesvio").textContent=
+  formatoPorcentaje(desvioPct);
+
+  document.getElementById("estadoPlan").textContent=
+  formatoM3(planHoy);
+
+  document.getElementById("estadoReal").textContent=
+  formatoM3(realHoy);
+
+  document.getElementById("estadoDesvio").textContent=
+  (desvio>0?"+":"")+formatoM3(desvio);
+
+  document.getElementById("estadoDesvioPct").textContent=
+  formatoPorcentaje(desvioPct);
+
+  document.getElementById("estadoPct").textContent=
+  porcentajeReal.toLocaleString(
+    "es-AR",
+    {
+      minimumFractionDigits:1,
+      maximumFractionDigits:1
+    }
+  )+"%";
+
+  document.getElementById("fechaControl").textContent=
+  hoy.toLocaleDateString("es-AR");
+
+
+  const cardM3=document.getElementById("cardDesvioM3");
+  const cardPct=document.getElementById("cardDesvioPct");
+  const estadoPctDesvio=document.getElementById("estadoDesvioPct");
+
+
+  cardM3.classList.remove(
+    "desvio-positivo",
+    "desvio-negativo",
+    "desvio-neutro"
+  );
+
+  cardPct.classList.remove(
+    "desvio-positivo",
+    "desvio-negativo",
+    "desvio-neutro"
+  );
+
+  estadoPctDesvio.classList.remove(
+    "desvio-porcentaje-positivo",
+    "desvio-porcentaje-negativo"
+  );
+
+
+  if(desvio>0){
+
+    cardM3.classList.add("desvio-positivo");
+    cardPct.classList.add("desvio-positivo");
+
+    estadoPctDesvio.classList.add(
+      "desvio-porcentaje-positivo"
+    );
+
+  }else if(desvio<0){
+
+    cardM3.classList.add("desvio-negativo");
+    cardPct.classList.add("desvio-negativo");
+
+    estadoPctDesvio.classList.add(
+      "desvio-porcentaje-negativo"
+    );
+
+  }else{
+
+    cardM3.classList.add("desvio-neutro");
+    cardPct.classList.add("desvio-neutro");
+  }
+
+
+  const estado=document.getElementById("estadoProyecto");
+
+  estado.className="estado-grande";
+
+
+  if(desvio>0){
+
+    estado.textContent="ADELANTADO";
+    estado.classList.add("estado-verde");
+
+  }else if(desvio<0){
+
+    estado.textContent="ATRASADO";
+    estado.classList.add("estado-rojo");
+
+  }else{
+
+    estado.textContent="EN LÍNEA";
+    estado.classList.add("estado-amarillo");
+  }
+
+
+  if(chart){
+    chart.destroy();
+  }
+
+
+  chart=new Chart(
+    document.getElementById("curvaS"),
+    {
+
+      type:"line",
+
+      data:{
+
+        labels:labels,
+
+        datasets:[
+
+          {
+            label:"BASE PLANIFICADA (m³)",
+            data:planData,
+            borderColor:"#255b88",
+            backgroundColor:"rgba(37,91,136,.08)",
+            borderWidth:3,
+            pointRadius:0,
+            pointHoverRadius:4,
+            tension:.2
+          },
+
+          {
+            label:"REAL MONTADO (m³)",
+            data:realData,
+            borderColor:"#28734b",
+            backgroundColor:"rgba(40,115,75,.08)",
+            borderWidth:3,
+            pointRadius:0,
+            pointHoverRadius:4,
+            tension:.15,
+            spanGaps:false
+          }
+
+        ]
+      },
+
+      options:{
+
+        responsive:true,
+        maintainAspectRatio:false,
+
+        interaction:{
+          mode:"index",
+          intersect:false
+        },
+
+        plugins:{
+
+          legend:{
+            position:"top",
+            align:"start"
+          },
+
+          tooltip:{
+
+            callbacks:{
+
+              label:function(ctx){
+
+                if(ctx.raw===null)return "";
+
+                return ctx.dataset.label+
+                ": "+
+                Number(ctx.raw).toLocaleString(
+                  "es-AR",
+                  {
+                    minimumFractionDigits:2,
+                    maximumFractionDigits:2
+                  }
+                )+
+                " m³";
+              }
+            }
+          }
+        },
+
+        scales:{
+
+          x:{
+            grid:{display:false},
+            ticks:{
+              autoSkip:true,
+              maxTicksLimit:12,
+              maxRotation:0
+            }
+          },
+
+          y:{
+            beginAtZero:true,
+            title:{
+              display:true,
+              text:"m³ acumulados"
+            }
+          }
+        }
+      }
+    }
+  );
+}
+
+
+/* =====================================================
+PENDIENTES DE MONTAJE
+===================================================== */
+
+function dibujarPendientesMontaje(){
+
+  const montadasPorTipo={};
+
+
+  piezas.forEach(p=>{
+
+    if(p.montada!==true){
       return;
     }
 
     const tipo=normalizarTipo(p.tipo);
 
-    resultado[tipo]=
-      (resultado[tipo]||0)+volumenPieza(p);
+    montadasPorTipo[tipo]=
+    (montadasPorTipo[tipo]||0)+1;
+  });
+
+
+  const pendientes=
+  BASE_PROYECTO
+  .map(item=>{
+
+    const tipo=
+    normalizarTipo(item.tipo);
+
+    const montadas=
+    Math.min(
+      Number(item.cantidad||0),
+      Number(montadasPorTipo[tipo]||0)
+    );
+
+    const faltan=
+    Math.max(
+      Number(item.cantidad||0)-montadas,
+      0
+    );
+
+    const m3Pendientes=
+    faltan*
+    Number(item.m3||0);
+
+
+    return{
+      tipo:item.tipo,
+      planificadas:Number(item.cantidad||0),
+      montadas:montadas,
+      faltan:faltan,
+      m3Unidad:Number(item.m3||0),
+      m3Pendientes:m3Pendientes
+    };
+
+  })
+  .filter(item=>item.faltan>0)
+  .sort(
+    (a,b)=>
+    b.m3Pendientes-a.m3Pendientes
+  );
+
+
+  const totalPlan=
+  BASE_PROYECTO.reduce(
+    (suma,item)=>
+    suma+Number(item.cantidad||0),
+    0
+  );
+
+
+  const totalMontadasPlan=
+  BASE_PROYECTO.reduce(
+    (suma,item)=>{
+
+      const tipo=
+      normalizarTipo(item.tipo);
+
+      return suma+
+      Math.min(
+        Number(item.cantidad||0),
+        Number(montadasPorTipo[tipo]||0)
+      );
+
+    },
+    0
+  );
+
+
+  const totalUnidades=
+  pendientes.reduce(
+    (suma,item)=>
+    suma+item.faltan,
+    0
+  );
+
+
+  const totalM3=
+  pendientes.reduce(
+    (suma,item)=>
+    suma+item.m3Pendientes,
+    0
+  );
+
+
+  document.getElementById("unidadesPendientes").textContent=
+  totalUnidades;
+
+  document.getElementById("m3PendientesTotal").textContent=
+  formatoM3(totalM3);
+
+  document.getElementById("totalPlanPendientes").textContent=
+  totalPlan;
+
+  document.getElementById("totalMontadasPendientes").textContent=
+  totalMontadasPlan;
+
+  document.getElementById("totalUnidadesPendientes").textContent=
+  totalUnidades;
+
+  document.getElementById("totalM3PendientesTabla").textContent=
+  formatoM3(totalM3);
+
+
+  const tbody=
+  document.getElementById("tablaPendientesBody");
+
+
+  if(pendientes.length===0){
+
+    tbody.innerHTML=`
+      <tr>
+        <td colspan="6" class="sin-pendientes">
+        ✅ No quedan premoldeados pendientes de montar
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML=
+  pendientes.map(item=>`
+
+    <tr>
+
+      <td>
+        <strong>${item.tipo}</strong>
+      </td>
+
+      <td>
+        ${item.planificadas}
+      </td>
+
+      <td>
+        ${item.montadas}
+      </td>
+
+      <td>
+        <strong>${item.faltan}</strong>
+      </td>
+
+      <td>
+        ${formatoM3(item.m3Unidad)}
+      </td>
+
+      <td>
+        <strong>
+        ${formatoM3(item.m3Pendientes)}
+        </strong>
+      </td>
+
+    </tr>
+
+  `).join("");
+}
+
+
+
+/* =====================================================
+DETALLE DEL DESVÍO
+===================================================== */
+
+function planPorTipoEnFecha(fecha){
+  const objetivo=inicioDia(fecha);
+  const resultado={};
+
+  BASE_PROYECTO.forEach(item=>{
+    const tipo=normalizarTipo(item.tipo);
+    const inicio=inicioDia(crearFecha(item.inicio));
+    const fin=inicioDia(crearFecha(item.fin));
+    const volumenTotal=Number(item.cantidad||0)*Number(item.m3||0);
+
+    let volumenPlan=0;
+
+    if(objetivo>=fin){
+      volumenPlan=volumenTotal;
+    }else if(objetivo>=inicio){
+      const duracion=diasEntre(inicio,fin);
+
+      if(duracion<=0){
+        volumenPlan=volumenTotal;
+      }else{
+        const transcurrido=diasEntre(inicio,objetivo);
+        const fraccion=Math.max(0,Math.min(1,transcurrido/duracion));
+        volumenPlan=volumenTotal*fraccion;
+      }
+    }
+
+    resultado[tipo]=(resultado[tipo]||0)+volumenPlan;
   });
 
   return resultado;
 }
 
+function realPorTipoEnFecha(fecha){
+  const objetivo=inicioDia(fecha);
+  const resultado={};
+
+  piezas.forEach(p=>{
+    if(p.montada!==true || !p.fecha_montaje)return;
+
+    const fechaMontaje=inicioDia(new Date(p.fecha_montaje));
+    if(fechaMontaje>objetivo)return;
+
+    const tipo=normalizarTipo(p.tipo);
+    resultado[tipo]=(resultado[tipo]||0)+volumenPieza(p);
+  });
+
+  return resultado;
+}
 
 function abrirDetalleDesvio(){
-
   const hoy=inicioDia(new Date());
-
   const planTipos=planPorTipoEnFecha(hoy);
   const realTipos=realPorTipoEnFecha(hoy);
 
-  const tipos=
-    Array.from(
-      new Set([
-        ...Object.keys(planTipos),
-        ...Object.keys(realTipos)
-      ])
-    );
+  const tipos=Array.from(new Set([
+    ...Object.keys(planTipos),
+    ...Object.keys(realTipos)
+  ]));
 
-  const filas=
-    tipos
+  const filas=tipos
     .map(tipo=>{
-
       const plan=Number(planTipos[tipo]||0);
       const real=Number(realTipos[tipo]||0);
-      const diferencia=real-plan;
-
-      return{
-        tipo,
-        plan,
-        real,
-        diferencia
-      };
+      return {tipo,plan,real,diferencia:real-plan};
     })
     .filter(item=>Math.abs(item.diferencia)>0.005)
-    .sort(
-      (a,b)=>
-      Math.abs(b.diferencia)-
-      Math.abs(a.diferencia)
-    );
+    .sort((a,b)=>Math.abs(b.diferencia)-Math.abs(a.diferencia));
 
+  const totalPlan=Object.values(planTipos).reduce((s,v)=>s+Number(v||0),0);
+  const totalReal=Object.values(realTipos).reduce((s,v)=>s+Number(v||0),0);
+  const totalDesvio=totalReal-totalPlan;
 
-  const totalPlan=
-    Object.values(planTipos)
-    .reduce((s,v)=>s+Number(v||0),0);
+  document.getElementById("detallePlanTotal").textContent=formatoM3(totalPlan);
+  document.getElementById("detalleRealTotal").textContent=formatoM3(totalReal);
+  document.getElementById("detalleDesvioTotal").textContent=(totalDesvio>0?"+":"")+formatoM3(totalDesvio);
 
-  const totalReal=
-    Object.values(realTipos)
-    .reduce((s,v)=>s+Number(v||0),0);
-
-  const totalDesvio=
-    totalReal-totalPlan;
-
-
-  document.getElementById("detallePlanTotal").textContent=
-    formatoM3(totalPlan);
-
-  document.getElementById("detalleRealTotal").textContent=
-    formatoM3(totalReal);
-
-  document.getElementById("detalleDesvioTotal").textContent=
-    (totalDesvio>0?"+":"")+
-    formatoM3(totalDesvio);
-
-
-  const titulo=
-    document.getElementById("modalDesvioTitulo");
-
-  const explicacion=
-    document.getElementById("detalleDesvioExplicacion");
-
+  const titulo=document.getElementById("modalDesvioTitulo");
+  const explicacion=document.getElementById("detalleDesvioExplicacion");
 
   if(totalDesvio>0){
-
     titulo.textContent="Detalle del desvío positivo";
-
     explicacion.innerHTML=
       "El proyecto está <strong>adelantado</strong>. "+
-      "Las filas verdes muestran qué tipos tienen más m³ montados que los planificados a hoy. "+
+      "Las filas verdes muestran qué tipos están adelantados respecto de los m³ planificados a hoy. "+
       "Las rojas muestran tipos que todavía están por debajo del plan.";
-
   }else if(totalDesvio<0){
-
     titulo.textContent="Detalle del desvío negativo";
-
     explicacion.innerHTML=
       "El proyecto está <strong>atrasado</strong>. "+
-      "Las filas rojas muestran qué tipos explican los m³ que faltan respecto del plan a hoy. "+
+      "Las filas rojas muestran qué tipos tienen m³ pendientes respecto del plan a hoy. "+
       "Las verdes muestran tipos adelantados que compensan parte del atraso.";
-
   }else{
-
     titulo.textContent="Detalle del desvío";
-
     explicacion.innerHTML=
-      "El proyecto está <strong>en línea</strong>: el total real coincide con el plan a hoy. "+
-      "Puede haber diferencias entre tipos que se compensan entre sí.";
+      "El proyecto está <strong>en línea</strong>. Puede haber diferencias por tipo que se compensan entre sí.";
   }
 
-
-  const tbody=
-    document.getElementById("tablaDesvioBody");
-
+  const tbody=document.getElementById("tablaDesvioBody");
 
   if(filas.length===0){
-
     tbody.innerHTML=`
       <tr>
         <td colspan="5" class="sin-pendientes">
@@ -599,63 +2205,42 @@ function abrirDetalleDesvio(){
         </td>
       </tr>
     `;
-
   }else{
+    tbody.innerHTML=filas.map(item=>{
+      let clase="desvio-linea";
+      let lectura="EN LÍNEA";
 
-    tbody.innerHTML=
-      filas.map(item=>{
+      if(item.diferencia>0.005){
+        clase="desvio-sobra";
+        lectura="ADELANTADO";
+      }else if(item.diferencia<-0.005){
+        clase="desvio-falta";
+        lectura="PENDIENTE";
+      }
 
-        let clase="desvio-linea";
-        let lectura="EN LÍNEA";
-
-        if(item.diferencia>0.005){
-          clase="desvio-sobra";
-          lectura="ADELANTADO / SOBRA";
-        }else if(item.diferencia<-0.005){
-          clase="desvio-falta";
-          lectura="FALTA";
-        }
-
-        return `
-          <tr>
-            <td><strong>${item.tipo}</strong></td>
-            <td>${formatoM3(item.plan)}</td>
-            <td>${formatoM3(item.real)}</td>
-            <td class="${clase}">
-              ${item.diferencia>0?"+":""}${formatoM3(item.diferencia)}
-            </td>
-            <td class="${clase}">${lectura}</td>
-          </tr>
-        `;
-      }).join("");
+      return `
+        <tr>
+          <td><strong>${item.tipo}</strong></td>
+          <td>${formatoM3(item.plan)}</td>
+          <td>${formatoM3(item.real)}</td>
+          <td class="${clase}">${item.diferencia>0?"+":""}${formatoM3(item.diferencia)}</td>
+          <td class="${clase}">${lectura}</td>
+        </tr>
+      `;
+    }).join("");
   }
 
-
-  document
-    .getElementById("modalDesvio")
-    .classList.remove("hidden");
+  document.getElementById("modalDesvio").classList.remove("hidden");
 }
-
 
 function cerrarDetalleDesvio(event){
-
-  if(event && event.target!==event.currentTarget){
-    return;
-  }
-
-  document
-    .getElementById("modalDesvio")
-    .classList.add("hidden");
+  if(event && event.target!==event.currentTarget)return;
+  document.getElementById("modalDesvio").classList.add("hidden");
 }
 
-
 document.addEventListener("keydown",event=>{
-
   if(event.key==="Escape"){
-
-    document
-      .getElementById("modalDesvio")
-      ?.classList.add("hidden");
+    document.getElementById("modalDesvio")?.classList.add("hidden");
   }
 });
 
