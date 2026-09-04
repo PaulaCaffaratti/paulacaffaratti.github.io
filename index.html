@@ -1112,10 +1112,9 @@ Mostrar ▼
         <thead>
           <tr>
             <th>Tipo / Base</th>
-            <th>Plan a hoy</th>
-            <th>Real montado</th>
+            <th>Fecha planificada</th>
             <th>Diferencia</th>
-            <th>Lectura</th>
+            <th>Estado</th>
           </tr>
         </thead>
         <tbody id="tablaDesvioBody"></tbody>
@@ -2147,6 +2146,22 @@ function realPorTipoEnFecha(fecha){
   return resultado;
 }
 
+function fechaPlanTexto(inicio,fin){
+
+  const formatear=valor=>{
+    if(!valor)return "—";
+    const partes=String(valor).slice(0,10).split("-");
+    if(partes.length!==3)return valor;
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+  };
+
+  if(!inicio && !fin)return "—";
+  if(inicio===fin || !fin)return formatear(inicio);
+
+  return `${formatear(inicio)} al ${formatear(fin)}`;
+}
+
+
 function abrirDetalleDesvio(){
   const hoy=inicioDia(new Date());
   const planTipos=planPorTipoEnFecha(hoy);
@@ -2161,7 +2176,29 @@ function abrirDetalleDesvio(){
     .map(tipo=>{
       const plan=Number(planTipos[tipo]||0);
       const real=Number(realTipos[tipo]||0);
-      return {tipo,plan,real,diferencia:real-plan};
+      const planesTipo=BASE_PROYECTO.filter(
+        item=>normalizarTipo(item.tipo)===tipo
+      );
+
+      const fechasInicio=planesTipo.map(item=>String(item.inicio||"")).filter(Boolean);
+      const fechasFin=planesTipo.map(item=>String(item.fin||"")).filter(Boolean);
+
+      const inicioPlan=fechasInicio.length
+        ? fechasInicio.sort()[0]
+        : "";
+
+      const finPlan=fechasFin.length
+        ? fechasFin.sort().slice(-1)[0]
+        : "";
+
+      return {
+        tipo,
+        plan,
+        real,
+        diferencia:real-plan,
+        inicioPlan,
+        finPlan
+      };
     })
     .filter(item=>Math.abs(item.diferencia)>0.005)
     .sort((a,b)=>Math.abs(b.diferencia)-Math.abs(a.diferencia));
@@ -2200,7 +2237,7 @@ function abrirDetalleDesvio(){
   if(filas.length===0){
     tbody.innerHTML=`
       <tr>
-        <td colspan="5" class="sin-pendientes">
+        <td colspan="4" class="sin-pendientes">
           ✅ No hay diferencias relevantes por tipo
         </td>
       </tr>
@@ -2221,8 +2258,7 @@ function abrirDetalleDesvio(){
       return `
         <tr>
           <td><strong>${item.tipo}</strong></td>
-          <td>${formatoM3(item.plan)}</td>
-          <td>${formatoM3(item.real)}</td>
+          <td>${fechaPlanTexto(item.inicioPlan,item.finPlan)}</td>
           <td class="${clase}">${item.diferencia>0?"+":""}${formatoM3(item.diferencia)}</td>
           <td class="${clase}">${lectura}</td>
         </tr>
