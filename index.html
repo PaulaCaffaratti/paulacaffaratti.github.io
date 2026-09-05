@@ -239,7 +239,7 @@ h1{
 
 .metricas-m3{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(4,1fr);
   gap:12px;
   margin-bottom:20px;
 }
@@ -938,14 +938,12 @@ Ocultar ▲
 </div>
 
 <div class="metrica metrica-click" id="cardDesvioM3" onclick="abrirDetalleDesvio()" title="Ver detalle del desvío">
-<span>Desvío m³ (Real - Plan)</span>
-<strong id="m3Desvio">0,00 m³</strong>
-<small class="click-ayuda">Tocar para ver qué está pendiente o adelantado</small>
-</div>
-
-<div class="metrica metrica-click" id="cardDesvioPct" onclick="abrirDetalleDesvio()" title="Ver detalle del desvío">
-<span>Desvío % (Real - Plan)</span>
-<strong id="pctDesvio">0,0%</strong>
+<span>Desvío (Real - Plan)</span>
+<strong>
+  <span id="m3Desvio">0,00 m³</span>
+  <span style="color:#8a98a8;font-weight:700;margin:0 7px">|</span>
+  <span id="pctDesvio">0,0%</span>
+</strong>
 <small class="click-ayuda">Tocar para ver qué está pendiente o adelantado</small>
 </div>
 
@@ -1784,17 +1782,10 @@ function dibujarCurva(){
 
 
   const cardM3=document.getElementById("cardDesvioM3");
-  const cardPct=document.getElementById("cardDesvioPct");
   const estadoPctDesvio=document.getElementById("estadoDesvioPct");
 
 
   cardM3.classList.remove(
-    "desvio-positivo",
-    "desvio-negativo",
-    "desvio-neutro"
-  );
-
-  cardPct.classList.remove(
     "desvio-positivo",
     "desvio-negativo",
     "desvio-neutro"
@@ -1809,7 +1800,6 @@ function dibujarCurva(){
   if(desvio>0){
 
     cardM3.classList.add("desvio-positivo");
-    cardPct.classList.add("desvio-positivo");
 
     estadoPctDesvio.classList.add(
       "desvio-porcentaje-positivo"
@@ -1818,7 +1808,6 @@ function dibujarCurva(){
   }else if(desvio<0){
 
     cardM3.classList.add("desvio-negativo");
-    cardPct.classList.add("desvio-negativo");
 
     estadoPctDesvio.classList.add(
       "desvio-porcentaje-negativo"
@@ -1827,7 +1816,6 @@ function dibujarCurva(){
   }else{
 
     cardM3.classList.add("desvio-neutro");
-    cardPct.classList.add("desvio-neutro");
   }
 
 
