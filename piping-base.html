@@ -610,12 +610,21 @@ async function extraerTextoImagen(file){
 
 function parsearCronogramaLumber(texto,nombreArchivo,tipoArchivo){
   const t=String(texto||"").toUpperCase();
+  const nombre=String(nombreArchivo||"").toUpperCase();
 
   // Formato del cronograma Lumber IS-003 / IS-002 / IS-001.
-  // Para la Curva S se toma exclusivamente la actividad SOLDADURA (barra azul),
-  // no los hitos de END, pintura ni despacho.
-  const tieneCronograma = t.includes("IS-003") && t.includes("IS-002") && t.includes("IS-001");
-  if(!tieneCronograma) return [];
+  // El OCR puede deformar los códigos IS-003 / IS-002 / IS-001, por eso
+  // también reconocemos el cronograma por su nombre de archivo y por las
+  // pulgadas principales visibles en la imagen.
+  // Para la Curva S se toma EXCLUSIVAMENTE SOLDADURA (barra azul).
+  const porCodigos = t.includes("IS-003") && t.includes("IS-002") && t.includes("IS-001");
+  const porNombre = nombre.includes("CRONOGRAMA");
+  const porPulgadas =
+    (t.includes("106,5") || t.includes("106.5")) &&
+    t.includes("193") &&
+    (t.includes("731,75") || t.includes("731.75"));
+
+  if(!(porCodigos || porNombre || porPulgadas)) return [];
 
   return [
     {
