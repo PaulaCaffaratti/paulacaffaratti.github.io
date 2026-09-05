@@ -113,23 +113,26 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 .curva-estado.adelantado{background:#eaf8ef;color:#176d3c}
 .curva-estado.atrasado{background:#fdecec;color:#a62f2f}
 .curva-estado.linea{background:#eef3ff;color:#3559a7}
-.iso-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
-.iso-card{background:#fff;border:1px solid #dce3ea;border-radius:12px;padding:15px}
-.iso-card h3{margin:0 0 10px;color:#173650;font-size:16px}
-.iso-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.iso-meta div{background:#f7f9fb;border-radius:9px;padding:9px}
-.iso-meta small{display:block;font-size:8px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:4px}
-.iso-meta strong{font-size:15px;color:#173650}
-.iso-barra{height:7px;background:#e9eef3;border-radius:999px;margin-top:11px;overflow:hidden}
-.iso-barra > div{height:100%;background:#179447;border-radius:999px;width:0}
-@media(max-width:900px){.iso-grid{grid-template-columns:1fr}}
+.iso-tabla-wrap{margin-bottom:18px;border:1px solid #e0e6ec;border-radius:11px;overflow:hidden;background:#fff}
+.iso-tabla{width:100%;border-collapse:collapse;font-size:13px}
+.iso-tabla thead th{background:#f7f9fb;color:#718096;font-size:9px;text-transform:uppercase;letter-spacing:.04em;text-align:left;padding:10px 14px;border-bottom:1px solid #e0e6ec}
+.iso-tabla tbody td{padding:11px 14px;border-bottom:1px solid #edf1f5;color:#52677c;vertical-align:middle}
+.iso-tabla tbody tr:last-child td{border-bottom:none}
+.iso-tabla tbody tr:hover{background:#fafbfd}
+.iso-tabla .iso-nombre{font-weight:800;color:#173650;font-size:14px}
+.iso-tabla .iso-num{font-weight:700;color:#173650;white-space:nowrap}
+.iso-tabla .iso-avance{font-weight:800;color:#173650;white-space:nowrap}
+@media(max-width:700px){.iso-tabla{font-size:12px}.iso-tabla thead th,.iso-tabla tbody td{padding:9px 8px}}
 
-.curva-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.curva-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
 .curva-kpi{background:#f7f9fb;border:1px solid #e0e6ec;border-radius:11px;padding:13px 14px}
 .curva-kpi small{display:block;font-size:9px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:6px}
 .curva-kpi strong{display:block;font-size:21px;color:#173650}
 .curva-kpi.desvio.positivo{border-top:3px solid #179447}
 .curva-kpi.desvio.negativo{border-top:3px solid #d83c3c}
+.curva-desvio-valores{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.curva-desvio-valores strong{display:inline-block}
+.curva-desvio-sep{font-size:18px;color:#9aa8b5;font-weight:700}
 .curva-wrap{position:relative;height:360px}
 .curva-nota{margin-top:12px;font-size:11px;color:#718096;line-height:1.5}
 @media(max-width:900px){.curva-kpis{grid-template-columns:repeat(2,1fr)}.curva-wrap{height:320px}}
@@ -212,10 +215,20 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
         <div id="pipeCurvaEstado" class="curva-estado">Calculando...</div>
       </div>
 
-      <div id="pipeIsometricos" class="iso-grid">
-        <div class="iso-card"><h3>IS-001</h3><div class="iso-meta"><div><small>Plan</small><strong>—</strong></div><div><small>Real</small><strong>—</strong></div><div><small>Avance</small><strong>—</strong></div></div></div>
-        <div class="iso-card"><h3>IS-002</h3><div class="iso-meta"><div><small>Plan</small><strong>—</strong></div><div><small>Real</small><strong>—</strong></div><div><small>Avance</small><strong>—</strong></div></div></div>
-        <div class="iso-card"><h3>IS-003</h3><div class="iso-meta"><div><small>Plan</small><strong>—</strong></div><div><small>Real</small><strong>—</strong></div><div><small>Avance</small><strong>—</strong></div></div></div>
+      <div class="iso-tabla-wrap">
+        <table class="iso-tabla">
+          <thead>
+            <tr>
+              <th>Isométrico</th>
+              <th>Plan</th>
+              <th>Real soldado</th>
+              <th>Avance</th>
+            </tr>
+          </thead>
+          <tbody id="pipeIsometricos">
+            <tr><td colspan="4">Cargando cuadernillos...</td></tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="curva-kpis">
@@ -228,12 +241,12 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
           <strong id="pipeCurvaReal">—</strong>
         </div>
         <div id="pipeCurvaDesvioCard" class="curva-kpi desvio">
-          <small>Desvío real - plan</small>
-          <strong id="pipeCurvaDesvio">—</strong>
-        </div>
-        <div id="pipeCurvaDesvioPctCard" class="curva-kpi desvio">
-          <small>Desvío %</small>
-          <strong id="pipeCurvaDesvioPct">—</strong>
+          <small>Desvío</small>
+          <div class="curva-desvio-valores">
+            <strong id="pipeCurvaDesvio">—</strong>
+            <span class="curva-desvio-sep">|</span>
+            <strong id="pipeCurvaDesvioPct">—</strong>
+          </div>
         </div>
       </div>
 
@@ -500,21 +513,16 @@ async function cargarPiping(){
     isoCont.innerHTML = isoFilas.length
       ? isoFilas.map(x=>{
           const pct=Math.max(0,Number(x.porcentaje_avance||0));
-          const ancho=Math.min(100,pct);
           return `
-            <div class="iso-card">
-              <h3>${escapar(x.isometrico || ("IS-"+x.cuadernillo))}</h3>
-              <div class="iso-meta">
-                <div><small>Plan</small><strong>${pipeNum(x.pulgadas_planificadas)}"</strong></div>
-                <div><small>Real soldado</small><strong>${pipeNum(x.pulgadas_soldadas)}"</strong></div>
-                <div><small>Avance</small><strong>${pipePct(pct)}</strong></div>
-              </div>
-              <div class="iso-barra"><div style="width:${ancho}%"></div></div>
-              <div class="curva-nota" style="margin-top:8px">${Number(x.juntas_soldadas||0)} juntas soldadas · Plan ${escapar(x.fecha_inicio||"—")} → ${escapar(x.fecha_fin||"—")}</div>
-            </div>
+            <tr>
+              <td class="iso-nombre">${escapar(x.isometrico || ("IS-"+x.cuadernillo))}</td>
+              <td class="iso-num">${pipeNum(x.pulgadas_planificadas)}"</td>
+              <td class="iso-num">${pipeNum(x.pulgadas_soldadas)}"</td>
+              <td class="iso-avance">${pipePct(pct)}</td>
+            </tr>
           `;
         }).join("")
-      : '<div class="iso-card"><h3>Sin datos por cuadernillo</h3><div class="curva-nota">No se pudo leer v_piping_lumber_cuadernillos.</div></div>';
+      : '<tr><td colspan="4">Sin datos por cuadernillo.</td></tr>';
 
     const curvaFilas = curvaLumber || [];
 
@@ -549,21 +557,17 @@ async function cargarPiping(){
 
         const estadoCurva=document.getElementById("pipeCurvaEstado");
         const cardDesvio=document.getElementById("pipeCurvaDesvioCard");
-        const cardDesvioPct=document.getElementById("pipeCurvaDesvioPctCard");
 
         cardDesvio.classList.remove("positivo","negativo");
-        cardDesvioPct.classList.remove("positivo","negativo");
 
         if(desvioHoy>0){
           estadoCurva.textContent="ADELANTADO";
           estadoCurva.className="curva-estado adelantado";
           cardDesvio.classList.add("positivo");
-          cardDesvioPct.classList.add("positivo");
         }else if(desvioHoy<0){
           estadoCurva.textContent="ATRASADO";
           estadoCurva.className="curva-estado atrasado";
           cardDesvio.classList.add("negativo");
-          cardDesvioPct.classList.add("negativo");
         }else{
           estadoCurva.textContent="EN LÍNEA";
           estadoCurva.className="curva-estado linea";
