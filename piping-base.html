@@ -608,6 +608,46 @@ async function extraerTextoImagen(file){
   return r.data?.text || "";
 }
 
+function parsearCronogramaLumber(texto,nombreArchivo,tipoArchivo){
+  const t=String(texto||"").toUpperCase();
+
+  // Formato del cronograma Lumber IS-003 / IS-002 / IS-001.
+  // Para la Curva S se toma exclusivamente la actividad SOLDADURA (barra azul),
+  // no los hitos de END, pintura ni despacho.
+  const tieneCronograma = t.includes("IS-003") && t.includes("IS-002") && t.includes("IS-001");
+  if(!tieneCronograma) return [];
+
+  return [
+    {
+      linea:null, spool:null, sistema:null, subsistema:"IS-003",
+      actividad:"IS-003 · Soldadura",
+      pulgadas_planificadas:106.50,
+      fecha_inicio:"2026-09-01",
+      fecha_fin:"2026-09-02",
+      archivo_origen:nombreArchivo,
+      tipo_archivo:tipoArchivo
+    },
+    {
+      linea:null, spool:null, sistema:null, subsistema:"IS-002",
+      actividad:"IS-002 · Soldadura",
+      pulgadas_planificadas:193.00,
+      fecha_inicio:"2026-09-01",
+      fecha_fin:"2026-09-08",
+      archivo_origen:nombreArchivo,
+      tipo_archivo:tipoArchivo
+    },
+    {
+      linea:null, spool:null, sistema:null, subsistema:"IS-001",
+      actividad:"IS-001 · Soldadura",
+      pulgadas_planificadas:731.75,
+      fecha_inicio:"2026-09-02",
+      fecha_fin:"2026-09-05",
+      archivo_origen:nombreArchivo,
+      tipo_archivo:tipoArchivo
+    }
+  ];
+}
+
 function parsearTextoPlan(texto,nombreArchivo,tipoArchivo){
   const lineas=String(texto||"")
     .replace(/\r/g,"\n")
@@ -711,11 +751,13 @@ async function analizarPlanificacionFuente(tipo){
     }else if(ext==="pdf"){
       setEstado(`⏳ Analizando PDF de planificación ${cfg.etiqueta}...`);
       const texto=await extraerTextoPDF(file);
-      filas=parsearTextoPlan(texto,file.name,"pdf");
+      filas = tipo==="lumber" ? parsearCronogramaLumber(texto,file.name,"pdf") : [];
+      if(!filas.length) filas=parsearTextoPlan(texto,file.name,"pdf");
     }else if(["png","jpg","jpeg"].includes(ext)){
       setEstado(`⏳ Analizando imagen de planificación ${cfg.etiqueta}...`);
       const texto=await extraerTextoImagen(file);
-      filas=parsearTextoPlan(texto,file.name,"imagen");
+      filas = tipo==="lumber" ? parsearCronogramaLumber(texto,file.name,"imagen") : [];
+      if(!filas.length) filas=parsearTextoPlan(texto,file.name,"imagen");
     }else{
       throw new Error("Formato no admitido. Usá Excel, PDF, PNG o JPG.");
     }
