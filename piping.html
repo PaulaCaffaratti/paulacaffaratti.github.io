@@ -407,22 +407,6 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
         <div id="pipeCurvaEstado" class="curva-estado">Calculando...</div>
       </div>
 
-      <div class="iso-tabla-wrap">
-        <table class="iso-tabla">
-          <thead>
-            <tr>
-              <th>Isométrico</th>
-              <th>Plan</th>
-              <th>Real soldado</th>
-              <th>Avance</th>
-            </tr>
-          </thead>
-          <tbody id="pipeIsometricos">
-            <tr><td colspan="4">Cargando cuadernillos...</td></tr>
-          </tbody>
-        </table>
-      </div>
-
       <div class="curva-kpis">
         <div class="curva-kpi">
           <small>
@@ -616,6 +600,7 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
         <thead>
           <tr>
             <th>Cuadernillo</th>
+            <th>Total pulgadas</th>
             <th>Plan a fecha</th>
             <th>Real soldado</th>
             <th>Diferencia</th>
@@ -674,7 +659,7 @@ function abrirDetalleDesvioLumber(){
   const filas = pipeCuadernillosLumberActuales || [];
 
   if(!fecha || !filas.length){
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#718096">Sin datos disponibles.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#718096">Sin datos disponibles.</td></tr>';
     modal.classList.remove("hidden");
     return;
   }
@@ -700,6 +685,7 @@ function abrirDetalleDesvioLumber(){
     return `
       <tr>
         <td><strong>${escapar(x.isometrico || ("IS-"+x.cuadernillo))}</strong></td>
+        <td><strong>${pipeNum(x.pulgadas_planificadas || 0)}"</strong></td>
         <td>${pipeNum(planFecha)}"</td>
         <td>${pipeNum(real)}"</td>
         <td class="${clase}">${diferencia>0?"+":""}${pipeNum(diferencia)}"</td>
@@ -851,23 +837,8 @@ async function cargarPiping(){
         }).join("")
       : '<div class="flujo-card"><small>Sin datos de spooles</small><strong>0</strong></div>';
 
-    const isoCont=document.getElementById("pipeIsometricos");
     const isoFilas=cuadernillosLumber || [];
     pipeCuadernillosLumberActuales = isoFilas;
-
-    isoCont.innerHTML = isoFilas.length
-      ? isoFilas.map(x=>{
-          const pct=Math.max(0,Number(x.porcentaje_avance||0));
-          return `
-            <tr>
-              <td class="iso-nombre">${escapar(x.isometrico || ("IS-"+x.cuadernillo))}</td>
-              <td class="iso-num">${pipeNum(x.pulgadas_planificadas)}"</td>
-              <td class="iso-num">${pipeNum(x.pulgadas_soldadas)}"</td>
-              <td class="iso-avance">${pipePct(pct)}</td>
-            </tr>
-          `;
-        }).join("")
-      : '<tr><td colspan="4">Sin datos por cuadernillo.</td></tr>';
 
     const curvaFilas = curvaLumber || [];
 
