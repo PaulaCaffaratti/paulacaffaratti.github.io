@@ -7,6 +7,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 <style>
 *{box-sizing:border-box}
@@ -114,23 +116,60 @@ td{padding:9px 10px;border-bottom:1px solid #e8edf1;vertical-align:top;white-spa
       </div>
     </section>
 
-    <section class="panel" id="panelPlanificacion">
-      <h2>📅 Planificación de Piping</h2>
+    <section class="panel" id="panelPlanificacionLumber">
+      <h2>🏭 2. Planificación Prefabricación – Lumber</h2>
       <div class="fila">
-        <input id="archivoPlan" type="file" accept=".xlsx,.xls">
-        <button id="btnAnalizarPlan" class="btnAzul" onclick="analizarPlanificacion()">Analizar planificación</button>
-        <button id="btnCargarPlan" class="btnVerde" onclick="subirPlanificacion()" disabled>Cargar planificación</button>
+        <input id="archivoPlanLumber" type="file" accept=".xlsx,.xls,.pdf,.png,.jpg,.jpeg">
+        <button id="btnAnalizarPlanLumber" class="btnAzul" onclick="analizarPlanificacionFuente('lumber')">Analizar planificación Lumber</button>
+        <button id="btnCargarPlanLumber" class="btnVerde" onclick="subirPlanificacionFuente('lumber')" disabled>Cargar planificación Lumber</button>
       </div>
       <div class="nota">
-        El Excel puede tener una hoja llamada <b>Planificación</b> o <b>Planificacion</b>; si no, se toma la primera hoja.
-        Columnas esperadas: <b>línea</b>, <b>spool</b>, <b>sistema</b>, <b>subsistema</b>, <b>pulgadas planificadas</b>, <b>fecha inicio</b> y <b>fecha fin</b>.
-        Al confirmar, la nueva planificación reemplaza la anterior.
+        Formatos admitidos: <b>Excel, PDF, PNG y JPG</b>. En Excel se buscan las columnas:
+        <b>línea</b>, <b>spool</b>, <b>sistema</b>, <b>subsistema</b>, <b>actividad</b>,
+        <b>pulgadas planificadas</b>, <b>fecha inicio</b> y <b>fecha fin</b>.
+        En PDF/imagen se intenta extraer el texto y convertir automáticamente las filas detectadas.
+        Esta carga reemplaza <b>solo la planificación de Lumber</b>.
       </div>
-      <div id="resumenPlan" class="kpis" style="display:none;">
-        <div class="kpi"><span>Registros</span><strong id="kPlanRegistros">0</strong></div>
-        <div class="kpi verde"><span>Ø planificadas</span><strong id="kPlanPulgadas">0"</strong></div>
-        <div class="kpi violeta"><span>Desde</span><strong id="kPlanDesde" style="font-size:18px;">—</strong></div>
-        <div class="kpi naranja"><span>Hasta</span><strong id="kPlanHasta" style="font-size:18px;">—</strong></div>
+
+      <div id="resumenPlanLumber" class="kpis" style="display:none;">
+        <div class="kpi"><span>Registros</span><strong id="kPlanLumberRegistros">0</strong></div>
+        <div class="kpi verde"><span>Ø planificadas</span><strong id="kPlanLumberPulgadas">0"</strong></div>
+        <div class="kpi violeta"><span>Desde</span><strong id="kPlanLumberDesde" style="font-size:18px;">—</strong></div>
+        <div class="kpi naranja"><span>Hasta</span><strong id="kPlanLumberHasta" style="font-size:18px;">—</strong></div>
+      </div>
+
+      <div id="previewPlanLumber" class="tablaWrap" style="display:none;margin-top:14px;max-height:320px;">
+        <table>
+          <thead><tr><th>Actividad</th><th>Línea</th><th>Spool</th><th>Ø plan.</th><th>Inicio</th><th>Fin</th></tr></thead>
+          <tbody id="tablaPlanLumber"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="panelPlanificacionObra">
+      <h2>🏗️ 3. Planificación Campo / Obra</h2>
+      <div class="fila">
+        <input id="archivoPlanObra" type="file" accept=".xlsx,.xls,.pdf,.png,.jpg,.jpeg">
+        <button id="btnAnalizarPlanObra" class="btnAzul" onclick="analizarPlanificacionFuente('obra')">Analizar planificación Obra</button>
+        <button id="btnCargarPlanObra" class="btnVerde" onclick="subirPlanificacionFuente('obra')" disabled>Cargar planificación Obra</button>
+      </div>
+      <div class="nota">
+        Formatos admitidos: <b>Excel, PDF, PNG y JPG</b>. La información queda separada de Lumber.
+        Esta carga reemplaza <b>solo la planificación de Campo / Obra</b> y será la fuente planificada de la Curva S de Obra.
+      </div>
+
+      <div id="resumenPlanObra" class="kpis" style="display:none;">
+        <div class="kpi"><span>Registros</span><strong id="kPlanObraRegistros">0</strong></div>
+        <div class="kpi verde"><span>Ø planificadas</span><strong id="kPlanObraPulgadas">0"</strong></div>
+        <div class="kpi violeta"><span>Desde</span><strong id="kPlanObraDesde" style="font-size:18px;">—</strong></div>
+        <div class="kpi naranja"><span>Hasta</span><strong id="kPlanObraHasta" style="font-size:18px;">—</strong></div>
+      </div>
+
+      <div id="previewPlanObra" class="tablaWrap" style="display:none;margin-top:14px;max-height:320px;">
+        <table>
+          <thead><tr><th>Actividad</th><th>Línea</th><th>Spool</th><th>Ø plan.</th><th>Inicio</th><th>Fin</th></tr></thead>
+          <tbody id="tablaPlanObra"></tbody>
+        </table>
       </div>
     </section>
 
@@ -225,8 +264,10 @@ let juntas=[];
 let resumenTipos=[];
 let resumenCuadernillos=[];
 let totalGeneral=null;
-let planificacion=[];
-let nombreArchivoPlan="";
+let planificacionLumber=[];
+let planificacionObra=[];
+let nombreArchivoPlanLumber="";
+let nombreArchivoPlanObra="";
 
 function setEstado(texto,tipo=""){
   const e=document.getElementById("estado");
@@ -307,9 +348,14 @@ function actualizarBotonCarga(){
   document.getElementById("btnCargar").disabled=
     !(juntas.length && totalGeneral && sesionOk && usuarioAutorizado);
 
-  const btnPlan=document.getElementById("btnCargarPlan");
-  if(btnPlan){
-    btnPlan.disabled=!(planificacion.length && sesionOk && usuarioAutorizado);
+  const btnLumber=document.getElementById("btnCargarPlanLumber");
+  if(btnLumber){
+    btnLumber.disabled=!(planificacionLumber.length && sesionOk && usuarioAutorizado);
+  }
+
+  const btnObra=document.getElementById("btnCargarPlanObra");
+  if(btnObra){
+    btnObra.disabled=!(planificacionObra.length && sesionOk && usuarioAutorizado);
   }
 }
 
@@ -389,83 +435,324 @@ function obtenerCampo(obj,aliases){
   return null;
 }
 
-async function analizarPlanificacion(){
-  const input=document.getElementById("archivoPlan");
+function configPlan(tipo){
+  if(tipo==="lumber"){
+    return {
+      etiqueta:"Lumber",
+      inputId:"archivoPlanLumber",
+      btnCargarId:"btnCargarPlanLumber",
+      resumenId:"resumenPlanLumber",
+      previewId:"previewPlanLumber",
+      tablaId:"tablaPlanLumber",
+      kReg:"kPlanLumberRegistros",
+      kPul:"kPlanLumberPulgadas",
+      kDesde:"kPlanLumberDesde",
+      kHasta:"kPlanLumberHasta",
+      tablaSupabase:"planificacion_piping_lumber"
+    };
+  }
+  return {
+    etiqueta:"Obra",
+    inputId:"archivoPlanObra",
+    btnCargarId:"btnCargarPlanObra",
+    resumenId:"resumenPlanObra",
+    previewId:"previewPlanObra",
+    tablaId:"tablaPlanObra",
+    kReg:"kPlanObraRegistros",
+    kPul:"kPlanObraPulgadas",
+    kDesde:"kPlanObraDesde",
+    kHasta:"kPlanObraHasta",
+    tablaSupabase:"planificacion_piping_obra"
+  };
+}
+
+function getPlan(tipo){
+  return tipo==="lumber" ? planificacionLumber : planificacionObra;
+}
+
+function setPlan(tipo,filas,nombreArchivo=""){
+  if(tipo==="lumber"){
+    planificacionLumber=filas;
+    nombreArchivoPlanLumber=nombreArchivo;
+  }else{
+    planificacionObra=filas;
+    nombreArchivoPlanObra=nombreArchivo;
+  }
+}
+
+function extensionArchivo(nombre){
+  return String(nombre||"").split(".").pop().toLowerCase();
+}
+
+function tipoArchivoPlan(nombre){
+  const ext=extensionArchivo(nombre);
+  if(["xlsx","xls"].includes(ext)) return "excel";
+  if(ext==="pdf") return "pdf";
+  if(["png","jpg","jpeg"].includes(ext)) return "imagen";
+  return ext || "desconocido";
+}
+
+function fechaISOFlexible(v){
+  const directa=fechaISO(v);
+  if(directa) return directa;
+
+  const s=String(v??"").trim();
+  const dm=s.match(/^(\d{1,2})[\/\-](\d{1,2})$/);
+  if(dm){
+    const anio=new Date().getFullYear();
+    return `${anio}-${String(dm[2]).padStart(2,"0")}-${String(dm[1]).padStart(2,"0")}`;
+  }
+  return null;
+}
+
+function normalizarFilaPlan(f,nombreArchivo,tipoArchivo,idx){
+  const linea=txt(obtenerCampo(f,["linea","línea","line"]));
+  const spool=txt(obtenerCampo(f,["spool","spool_numero","n_spool","numero_spool"]));
+  const sistema=txt(obtenerCampo(f,["sistema","system"]));
+  const subsistema=txt(obtenerCampo(f,["subsistema","sub_sistema","subsystem"]));
+  const actividad=txt(obtenerCampo(f,["actividad","tarea","descripcion","descripción","task","proceso"]));
+  const pulg=num(obtenerCampo(f,[
+    "pulgadas_planificadas","pulgadas","diametro_pulgadas","pulgadas_a_ejecutar",
+    "inch","inches","plan_diario","cantidad"
+  ]));
+  const inicio=fechaISOFlexible(obtenerCampo(f,["fecha_inicio","inicio","finc","fecha_ini","start","fecha"]));
+  const fin=fechaISOFlexible(obtenerCampo(f,["fecha_fin","fin","ffin","fecha_final","finish"])) || inicio;
+
+  if(!linea && !spool && !sistema && !subsistema && !actividad && pulg===null && !inicio && !fin) return null;
+  if(pulg===null) throw new Error(`Fila ${idx+2}: falta el valor de pulgadas planificadas.`);
+  if(!inicio || !fin) throw new Error(`Fila ${idx+2}: faltan fecha de inicio o fecha de fin.`);
+
+  return {
+    linea:linea || null,
+    spool:spool || null,
+    sistema:sistema || null,
+    subsistema:subsistema || null,
+    actividad:actividad || null,
+    pulgadas_planificadas:pulg,
+    fecha_inicio:inicio,
+    fecha_fin:fin,
+    archivo_origen:nombreArchivo,
+    tipo_archivo:tipoArchivo
+  };
+}
+
+async function leerExcelPlan(file){
+  const buffer=await file.arrayBuffer();
+  const wb=XLSX.read(buffer,{type:"array",cellDates:false});
+  const nombreHoja=wb.SheetNames.find(n=>normalizarCabecera(n)==="planificacion") || wb.SheetNames[0];
+  const ws=wb.Sheets[nombreHoja];
+  if(!ws) throw new Error("No se encontró una hoja para leer la planificación.");
+
+  const filas=XLSX.utils.sheet_to_json(ws,{defval:null,raw:true});
+  if(!filas.length) throw new Error("La hoja de planificación está vacía.");
+
+  return filas.map(f=>{
+    const o={};
+    Object.entries(f).forEach(([k,v])=>o[normalizarCabecera(k)]=v);
+    return o;
+  });
+}
+
+async function extraerTextoPDF(file){
+  if(!window.pdfjsLib) throw new Error("No se pudo cargar el lector de PDF.");
+  pdfjsLib.GlobalWorkerOptions.workerSrc=
+    "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+
+  const data=new Uint8Array(await file.arrayBuffer());
+  const pdf=await pdfjsLib.getDocument({data}).promise;
+  let texto="";
+
+  for(let n=1;n<=pdf.numPages;n++){
+    setEstado(`⏳ Leyendo PDF · página ${n} de ${pdf.numPages}...`);
+    const page=await pdf.getPage(n);
+    const content=await page.getTextContent();
+    const t=content.items.map(x=>x.str).join(" ");
+    texto+="\n"+t;
+  }
+
+  if(texto.replace(/\s/g,"").length>40) return texto;
+
+  // Si el PDF es escaneado, se renderizan las páginas y se usa OCR.
+  texto="";
+  for(let n=1;n<=pdf.numPages;n++){
+    setEstado(`⏳ OCR del PDF · página ${n} de ${pdf.numPages}...`);
+    const page=await pdf.getPage(n);
+    const viewport=page.getViewport({scale:1.8});
+    const canvas=document.createElement("canvas");
+    const ctx=canvas.getContext("2d");
+    canvas.width=Math.ceil(viewport.width);
+    canvas.height=Math.ceil(viewport.height);
+    await page.render({canvasContext:ctx,viewport}).promise;
+
+    const r=await Tesseract.recognize(canvas,"spa+eng",{
+      logger:m=>{
+        if(m.status==="recognizing text"){
+          setEstado(`⏳ OCR PDF página ${n}/${pdf.numPages} · ${Math.round((m.progress||0)*100)}%`);
+        }
+      }
+    });
+    texto+="\n"+(r.data?.text||"");
+  }
+  return texto;
+}
+
+async function extraerTextoImagen(file){
+  if(!window.Tesseract) throw new Error("No se pudo cargar el lector OCR de imágenes.");
+  const r=await Tesseract.recognize(file,"spa+eng",{
+    logger:m=>{
+      if(m.status==="recognizing text"){
+        setEstado(`⏳ Analizando imagen · ${Math.round((m.progress||0)*100)}%`);
+      }
+    }
+  });
+  return r.data?.text || "";
+}
+
+function parsearTextoPlan(texto,nombreArchivo,tipoArchivo){
+  const lineas=String(texto||"")
+    .replace(/\r/g,"\n")
+    .split(/\n+/)
+    .map(x=>x.replace(/\s+/g," ").trim())
+    .filter(Boolean);
+
+  const filas=[];
+  const fechaRe=/\b(\d{1,2}[\/\-]\d{1,2}(?:[\/\-]\d{2,4})?)\b/g;
+  const pulgRe=/(\d+(?:[.,]\d+)?)\s*(?:"|''|pulg(?:adas?)?|inch(?:es)?|in\b)/ig;
+
+  for(const lineaTxt of lineas){
+    const fechas=[...lineaTxt.matchAll(fechaRe)].map(m=>m[1]);
+    const cantidades=[...lineaTxt.matchAll(pulgRe)]
+      .map(m=>num(m[1]))
+      .filter(v=>v!==null && v>0);
+
+    if(!fechas.length || !cantidades.length) continue;
+
+    const inicio=fechaISOFlexible(fechas[0]);
+    const fin=fechaISOFlexible(fechas[1] || fechas[0]);
+    if(!inicio || !fin) continue;
+
+    filas.push({
+      linea:null,
+      spool:null,
+      sistema:null,
+      subsistema:null,
+      actividad:lineaTxt.slice(0,300),
+      pulgadas_planificadas:cantidades[0],
+      fecha_inicio:inicio,
+      fecha_fin:fin,
+      archivo_origen:nombreArchivo,
+      tipo_archivo:tipoArchivo
+    });
+  }
+
+  // Elimina duplicados exactos típicos del OCR.
+  const vistos=new Set();
+  return filas.filter(x=>{
+    const k=[x.actividad,x.pulgadas_planificadas,x.fecha_inicio,x.fecha_fin].join("|");
+    if(vistos.has(k)) return false;
+    vistos.add(k);
+    return true;
+  });
+}
+
+function pintarPreviewPlan(tipo){
+  const cfg=configPlan(tipo);
+  const plan=getPlan(tipo);
+
+  const total=plan.reduce((a,x)=>a+Number(x.pulgadas_planificadas||0),0);
+  const fechasInicio=plan.map(x=>x.fecha_inicio).filter(Boolean).sort();
+  const fechasFin=plan.map(x=>x.fecha_fin).filter(Boolean).sort();
+
+  document.getElementById(cfg.kReg).textContent=plan.length;
+  document.getElementById(cfg.kPul).textContent=pulgadas(total);
+  document.getElementById(cfg.kDesde).textContent=fechasInicio[0] || "—";
+  document.getElementById(cfg.kHasta).textContent=fechasFin.at(-1) || "—";
+  document.getElementById(cfg.resumenId).style.display="grid";
+
+  document.getElementById(cfg.tablaId).innerHTML=plan.slice(0,200).map(x=>`
+    <tr>
+      <td>${esc(x.actividad||"")}</td>
+      <td>${esc(x.linea||"")}</td>
+      <td>${esc(x.spool||"")}</td>
+      <td>${pulgadas(x.pulgadas_planificadas)}</td>
+      <td>${esc(x.fecha_inicio||"")}</td>
+      <td>${esc(x.fecha_fin||"")}</td>
+    </tr>
+  `).join("");
+
+  document.getElementById(cfg.previewId).style.display="block";
+}
+
+async function analizarPlanificacionFuente(tipo){
+  const cfg=configPlan(tipo);
+  const input=document.getElementById(cfg.inputId);
+
   if(!input.files.length){
-    setEstado("Seleccioná primero el Excel de planificación de Piping.","error");
+    setEstado(`Seleccioná primero el archivo de planificación de ${cfg.etiqueta}.`,"error");
     return;
   }
 
+  const file=input.files[0];
+  const ext=extensionArchivo(file.name);
+  const tArchivo=tipoArchivoPlan(file.name);
+
   try{
-    setEstado("⏳ Analizando planificación de Piping...");
-    nombreArchivoPlan=input.files[0].name;
-
-    const buffer=await input.files[0].arrayBuffer();
-    const wb=XLSX.read(buffer,{type:"array",cellDates:false});
-    const nombreHoja=wb.SheetNames.find(n=>normalizarCabecera(n)==="planificacion") || wb.SheetNames[0];
-    const ws=wb.Sheets[nombreHoja];
-    if(!ws) throw new Error("No se encontró una hoja para leer la planificación.");
-
-    const filas=XLSX.utils.sheet_to_json(ws,{defval:null,raw:true});
-    if(!filas.length) throw new Error("La hoja de planificación está vacía.");
-
-    const normalizadas=filas.map(f=>{
-      const o={};
-      Object.entries(f).forEach(([k,v])=>o[normalizarCabecera(k)]=v);
-      return o;
-    });
-
-    planificacion=normalizadas.map((f,idx)=>{
-      const linea=txt(obtenerCampo(f,["linea","línea","line"]));
-      const spool=txt(obtenerCampo(f,["spool","spool_numero","n_spool","numero_spool"]));
-      const sistema=txt(obtenerCampo(f,["sistema","system"]));
-      const subsistema=txt(obtenerCampo(f,["subsistema","sub_sistema","subsystem"]));
-      const pulgadas=num(obtenerCampo(f,["pulgadas_planificadas","pulgadas","diametro_pulgadas","pulgadas_a_ejecutar","inch","inches"]));
-      const inicio=fechaISO(obtenerCampo(f,["fecha_inicio","inicio","finc","fecha_ini","start"]));
-      const fin=fechaISO(obtenerCampo(f,["fecha_fin","fin","ffin","fecha_final","finish"]));
-
-      if(!linea && !spool && !sistema && !subsistema && pulgadas===null && !inicio && !fin) return null;
-      if(pulgadas===null) throw new Error(`Fila ${idx+2}: falta el valor de pulgadas planificadas.`);
-      if(!inicio || !fin) throw new Error(`Fila ${idx+2}: faltan fecha de inicio o fecha de fin.`);
-
-      return {
-        linea: linea || null,
-        spool: spool || null,
-        sistema: sistema || null,
-        subsistema: subsistema || null,
-        pulgadas_planificadas:pulgadas,
-        fecha_inicio:inicio,
-        fecha_fin:fin,
-        archivo_origen:nombreArchivoPlan
-      };
-    }).filter(Boolean);
-
-    if(!planificacion.length) throw new Error("No se encontraron filas válidas de planificación.");
-
-    const total=planificacion.reduce((a,x)=>a+Number(x.pulgadas_planificadas||0),0);
-    const fechasInicio=planificacion.map(x=>x.fecha_inicio).filter(Boolean).sort();
-    const fechasFin=planificacion.map(x=>x.fecha_fin).filter(Boolean).sort();
-
-    document.getElementById("kPlanRegistros").textContent=planificacion.length;
-    document.getElementById("kPlanPulgadas").textContent=pulgadas(total);
-    document.getElementById("kPlanDesde").textContent=fechasInicio[0] || "—";
-    document.getElementById("kPlanHasta").textContent=fechasFin.at(-1) || "—";
-    document.getElementById("resumenPlan").style.display="grid";
-
-    setEstado(`✅ Planificación analizada: ${planificacion.length} registros · ${pulgadas(total)} planificadas.`,"ok");
+    setPlan(tipo,[],file.name);
+    document.getElementById(cfg.resumenId).style.display="none";
+    document.getElementById(cfg.previewId).style.display="none";
     actualizarBotonCarga();
+
+    let filas=[];
+
+    if(["xlsx","xls"].includes(ext)){
+      setEstado(`⏳ Analizando Excel de planificación ${cfg.etiqueta}...`);
+      const normalizadas=await leerExcelPlan(file);
+      filas=normalizadas.map((f,idx)=>normalizarFilaPlan(f,file.name,"excel",idx)).filter(Boolean);
+    }else if(ext==="pdf"){
+      setEstado(`⏳ Analizando PDF de planificación ${cfg.etiqueta}...`);
+      const texto=await extraerTextoPDF(file);
+      filas=parsearTextoPlan(texto,file.name,"pdf");
+    }else if(["png","jpg","jpeg"].includes(ext)){
+      setEstado(`⏳ Analizando imagen de planificación ${cfg.etiqueta}...`);
+      const texto=await extraerTextoImagen(file);
+      filas=parsearTextoPlan(texto,file.name,"imagen");
+    }else{
+      throw new Error("Formato no admitido. Usá Excel, PDF, PNG o JPG.");
+    }
+
+    if(!filas.length){
+      throw new Error(
+        tArchivo==="excel"
+          ? "No se encontraron filas válidas de planificación."
+          : "Se pudo leer el archivo, pero no se detectaron automáticamente filas con fecha y pulgadas. Para cronogramas gráficos complejos puede ser necesario ajustar el lector al formato del documento."
+      );
+    }
+
+    setPlan(tipo,filas,file.name);
+    pintarPreviewPlan(tipo);
+    actualizarBotonCarga();
+
+    const total=filas.reduce((a,x)=>a+Number(x.pulgadas_planificadas||0),0);
+    setEstado(
+      `✅ Planificación ${cfg.etiqueta} analizada: ${filas.length} registros · ${pulgadas(total)} planificadas. Revisá la vista previa antes de cargar.`,
+      "ok"
+    );
   }catch(err){
     console.error(err);
-    planificacion=[];
-    document.getElementById("resumenPlan").style.display="none";
-    setEstado("❌ No se pudo leer la planificación: "+err.message,"error");
+    setPlan(tipo,[],file.name);
+    document.getElementById(cfg.resumenId).style.display="none";
+    document.getElementById(cfg.previewId).style.display="none";
+    setEstado(`❌ No se pudo leer la planificación ${cfg.etiqueta}: ${err.message}`,"error");
     actualizarBotonCarga();
   }
 }
 
-async function subirPlanificacion(){
-  if(!planificacion.length){
-    setEstado("Analizá primero el Excel de planificación.","error");
+async function subirPlanificacionFuente(tipo){
+  const cfg=configPlan(tipo);
+  const plan=getPlan(tipo);
+
+  if(!plan.length){
+    setEstado(`Analizá primero la planificación de ${cfg.etiqueta}.`,"error");
     return;
   }
 
@@ -481,25 +768,29 @@ async function subirPlanificacion(){
     return;
   }
 
-  const btn=document.getElementById("btnCargarPlan");
+  const btn=document.getElementById(cfg.btnCargarId);
   btn.disabled=true;
 
   try{
-    setEstado("⏳ Reemplazando planificación de Piping...");
+    setEstado(`⏳ Reemplazando planificación de ${cfg.etiqueta}...`);
 
-    const {error:errorBorrar}=await db.from("planificacion_piping").delete().neq("id",0);
+    const {error:errorBorrar}=await db.from(cfg.tablaSupabase).delete().neq("id",0);
     if(errorBorrar) throw errorBorrar;
 
-    const filas=planificacion.map(x=>({...x,cargado_por:email}));
+    const filas=plan.map(x=>({...x,cargado_por:email}));
+
     for(let i=0;i<filas.length;i+=200){
-      const {error}=await db.from("planificacion_piping").insert(filas.slice(i,i+200));
+      const {error}=await db.from(cfg.tablaSupabase).insert(filas.slice(i,i+200));
       if(error) throw error;
     }
 
-    setEstado(`✅ Planificación de Piping cargada por ${email}: ${filas.length} registros.`,"ok");
+    setEstado(
+      `✅ Planificación ${cfg.etiqueta} cargada por ${email}: ${filas.length} registros. La otra planificación no fue modificada.`,
+      "ok"
+    );
   }catch(err){
     console.error(err);
-    setEstado("❌ No se pudo cargar la planificación: "+err.message,"error");
+    setEstado(`❌ No se pudo cargar la planificación ${cfg.etiqueta}: ${err.message}`,"error");
   }finally{
     actualizarBotonCarga();
   }
