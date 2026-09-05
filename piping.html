@@ -113,6 +113,17 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 .curva-estado.adelantado{background:#eaf8ef;color:#176d3c}
 .curva-estado.atrasado{background:#fdecec;color:#a62f2f}
 .curva-estado.linea{background:#eef3ff;color:#3559a7}
+.iso-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.iso-card{background:#fff;border:1px solid #dce3ea;border-radius:12px;padding:15px}
+.iso-card h3{margin:0 0 10px;color:#173650;font-size:16px}
+.iso-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.iso-meta div{background:#f7f9fb;border-radius:9px;padding:9px}
+.iso-meta small{display:block;font-size:8px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:4px}
+.iso-meta strong{font-size:15px;color:#173650}
+.iso-barra{height:7px;background:#e9eef3;border-radius:999px;margin-top:11px;overflow:hidden}
+.iso-barra > div{height:100%;background:#179447;border-radius:999px;width:0}
+@media(max-width:900px){.iso-grid{grid-template-columns:1fr}}
+
 .curva-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
 .curva-kpi{background:#f7f9fb;border:1px solid #e0e6ec;border-radius:11px;padding:13px 14px}
 .curva-kpi small{display:block;font-size:9px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:6px}
@@ -195,10 +206,16 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
         <div>
           <h2>📈 Curva S – Prefabricación Lumber</h2>
           <div class="curva-sub">
-            Planificado vs. ejecución real de costuras para los 6 grupos vinculados al cronograma.
+            Planificado vs. ejecución real de soldadura para los 3 cuadernillos isométricos IS-001, IS-002 e IS-003.
           </div>
         </div>
         <div id="pipeCurvaEstado" class="curva-estado">Calculando...</div>
+      </div>
+
+      <div id="pipeIsometricos" class="iso-grid">
+        <div class="iso-card"><h3>IS-001</h3><div class="iso-meta"><div><small>Plan</small><strong>—</strong></div><div><small>Real</small><strong>—</strong></div><div><small>Avance</small><strong>—</strong></div></div></div>
+        <div class="iso-card"><h3>IS-002</h3><div class="iso-meta"><div><small>Plan</small><strong>—</strong></div><div><small>Real</small><strong>—</strong></div><div><small>Avance</small><strong>—</strong></div></div></div>
+        <div class="iso-card"><h3>IS-003</h3><div class="iso-meta"><div><small>Plan</small><strong>—</strong></div><div><small>Real</small><strong>—</strong></div><div><small>Avance</small><strong>—</strong></div></div></div>
       </div>
 
       <div class="curva-kpis">
@@ -402,6 +419,7 @@ async function cargarPiping(){
       {data:rechazos,error:errorRechazos},
       {data:flujoSpooles,error:errorFlujoSpooles},
       {data:curvaLumber,error:errorCurvaLumber},
+      {data:cuadernillosLumber,error:errorCuadernillosLumber},
       {data:curvaObra,error:errorCurvaObra}
     ] = await Promise.all([
 
@@ -424,6 +442,11 @@ async function cargarPiping(){
         .order("fecha", {ascending:true}),
 
       db
+        .from("v_piping_lumber_cuadernillos")
+        .select("*")
+        .order("cuadernillo", {ascending:true}),
+
+      db
         .from("v_piping_curva_obra")
         .select("*")
         .order("fecha", {ascending:true})
@@ -434,6 +457,7 @@ async function cargarPiping(){
     if(errorRechazos) throw errorRechazos;
     if(errorFlujoSpooles) throw errorFlujoSpooles;
     if(errorCurvaLumber) throw errorCurvaLumber;
+    if(errorCuadernillosLumber) throw errorCuadernillosLumber;
     if(errorCurvaObra) throw errorCurvaObra;
 
 
@@ -469,6 +493,28 @@ async function cargarPiping(){
           `;
         }).join("")
       : '<div class="flujo-card"><small>Sin datos de spooles</small><strong>0</strong></div>';
+
+    const isoCont=document.getElementById("pipeIsometricos");
+    const isoFilas=cuadernillosLumber || [];
+
+    isoCont.innerHTML = isoFilas.length
+      ? isoFilas.map(x=>{
+          const pct=Math.max(0,Number(x.porcentaje_avance||0));
+          const ancho=Math.min(100,pct);
+          return `
+            <div class="iso-card">
+              <h3>${escapar(x.isometrico || ("IS-"+x.cuadernillo))}</h3>
+              <div class="iso-meta">
+                <div><small>Plan</small><strong>${pipeNum(x.pulgadas_planificadas)}"</strong></div>
+                <div><small>Real soldado</small><strong>${pipeNum(x.pulgadas_soldadas)}"</strong></div>
+                <div><small>Avance</small><strong>${pipePct(pct)}</strong></div>
+              </div>
+              <div class="iso-barra"><div style="width:${ancho}%"></div></div>
+              <div class="curva-nota" style="margin-top:8px">${Number(x.juntas_soldadas||0)} juntas soldadas · Plan ${escapar(x.fecha_inicio||"—")} → ${escapar(x.fecha_fin||"—")}</div>
+            </div>
+          `;
+        }).join("")
+      : '<div class="iso-card"><h3>Sin datos por cuadernillo</h3><div class="curva-nota">No se pudo leer v_piping_lumber_cuadernillos.</div></div>';
 
     const curvaFilas = curvaLumber || [];
 
