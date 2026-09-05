@@ -271,25 +271,29 @@ h1{
 
 .desvio-valores{
   display:flex;
-  align-items:baseline;
-  gap:12px;
-  flex-wrap:wrap;
+  flex-direction:column-reverse;
+  align-items:flex-start;
+  gap:3px;
   margin-top:6px;
 }
-.desvio-valores #m3Desvio,
 .desvio-valores #pctDesvio{
-  display:inline-block;
-  font-size:22px;
+  display:block;
+  font-size:28px;
+  line-height:1.05;
   font-weight:800;
   color:#173650;
   text-transform:none;
 }
+.desvio-valores #m3Desvio{
+  display:block;
+  font-size:16px;
+  line-height:1.2;
+  font-weight:700;
+  color:#52677c;
+  text-transform:none;
+}
 .desvio-separador{
-  display:inline-block!important;
-  font-size:18px!important;
-  color:#9aa8b5!important;
-  font-weight:700!important;
-  text-transform:none!important;
+  display:none!important;
 }
 
 .grid-curva{
