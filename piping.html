@@ -72,6 +72,29 @@ h1{margin:0 0 6px;font-size:27px;color:#173650}
   color:#52677c;
   font-size:12px;
 }
+.kpi-desglose{
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid #e0e6ec;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  font-size:11px;
+  color:#718096;
+}
+.kpi-desglose-fila{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+.kpi-desglose-fila span:first-child{
+  font-weight:800;
+  color:#52677c;
+}
+.kpi-desglose-fila b{
+  color:#173650;
+  font-size:12px;
+}
 .kpi.verde{border-top:4px solid #179447}
 .kpi.naranja{border-top:4px solid #f28c28}
 .kpi.violeta{border-top:4px solid #6657b8}
@@ -319,8 +342,20 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
       <div class="kpi">
         <small>Pulgadas totales a ejecutar</small>
         <strong id="pipeTotal">—</strong>
+
         <div class="kpi-sub">
           <b id="pipeJuntas">—</b> juntas totales
+        </div>
+
+        <div class="kpi-desglose">
+          <div class="kpi-desglose-fila">
+            <span>LUMBER</span>
+            <b id="pipeTotalLumber">—</b>
+          </div>
+          <div class="kpi-desglose-fila">
+            <span>OBRA</span>
+            <b id="pipeTotalObra">—</b>
+          </div>
         </div>
       </div>
 
@@ -1176,6 +1211,24 @@ async function cargarPiping(){
         pipeNum(total.pulgadas_a_ejecutar)+'"'
       );
 
+      const pulgadasLumber = (isoFilas || []).reduce(
+        (suma,x)=>suma + Number(x.pulgadas_planificadas || 0),
+        0
+      );
+
+      const pulgadasTotales = Number(total.pulgadas_a_ejecutar || 0);
+      const pulgadasObra = Math.max(0, pulgadasTotales - pulgadasLumber);
+
+      setTexto(
+        "pipeTotalLumber",
+        pipeNum(pulgadasLumber)+'"'
+      );
+
+      setTexto(
+        "pipeTotalObra",
+        pipeNum(pulgadasObra)+'"'
+      );
+
       setTexto(
         "pipeEjecutadas",
         pipeNum(total.pulgadas_ejecutadas)+'"'
@@ -1197,6 +1250,8 @@ async function cargarPiping(){
       setTexto("pipeJuntasHero","—");
       setTexto("pipeJuntas","—");
       setTexto("pipeTotal","—");
+      setTexto("pipeTotalLumber","—");
+      setTexto("pipeTotalObra","—");
       setTexto("pipeEjecutadas","—");
       setTexto("pipePendientes","—");
       setTexto("pipeAvance","—");
