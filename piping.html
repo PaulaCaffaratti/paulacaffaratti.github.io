@@ -25,10 +25,53 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#2
 h1{margin:0 0 6px;font-size:27px;color:#173650}
 .subtitulo{margin:0 0 24px;color:#718096;font-size:14px}
 
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.total-principal{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:24px 28px;
+  background:linear-gradient(135deg,#102f52,#174b76);
+  color:white;
+  border-radius:14px;
+  margin-bottom:20px;
+}
+.total-principal small{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  opacity:.8;
+  text-transform:uppercase;
+}
+.total-pulgadas-numero{
+  font-size:42px;
+  font-weight:800;
+  margin-top:5px;
+}
+.total-pulgadas-detalle{
+  margin-top:5px;
+  font-size:12px;
+  opacity:.8;
+}
+@media(max-width:650px){
+  .total-principal{padding:20px}
+  .total-pulgadas-numero{font-size:34px}
+}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .kpi{background:white;border:1px solid #dce3ea;border-radius:12px;padding:18px;min-height:118px}
 .kpi small{display:block;font-size:10px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:9px}
 .kpi strong{display:block;font-size:28px;color:#173650}
+.kpi-sub{
+  margin-top:7px;
+  font-size:11px;
+  color:#718096;
+  font-weight:700;
+}
+.kpi-sub b{
+  color:#52677c;
+  font-size:12px;
+}
 .kpi.verde{border-top:4px solid #179447}
 .kpi.naranja{border-top:4px solid #f28c28}
 .kpi.violeta{border-top:4px solid #6657b8}
@@ -181,6 +224,15 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
     <h1>Resumen ejecutivo de Piping</h1>
     <p class="subtitulo">Datos actualizados automáticamente desde la última trazabilidad cargada.</p>
 
+    <div class="total-principal">
+      <div>
+        <small>Pulgadas totales a ejecutar</small>
+        <div class="total-pulgadas-numero" id="pipeTotalHero">—"</div>
+        <div class="total-pulgadas-detalle">
+          <span id="pipeJuntasHero">—</span> juntas totales
+        </div>
+      </div>
+    </div>
 
     <section class="flujo-spooles">
       <h2>🔄 Flujo de Spooles</h2>
@@ -191,13 +243,11 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 
     <div class="kpis">
       <div class="kpi">
-        <small>Juntas</small>
-        <strong id="pipeJuntas">—</strong>
-      </div>
-
-      <div class="kpi">
-        <small>Ø a ejecutar</small>
+        <small>Pulgadas totales a ejecutar</small>
         <strong id="pipeTotal">—</strong>
+        <div class="kpi-sub">
+          <b id="pipeJuntas">—</b> juntas totales
+        </div>
       </div>
 
       <div class="kpi verde">
@@ -907,6 +957,16 @@ async function cargarPiping(){
     if(total){
 
       setTexto(
+        "pipeTotalHero",
+        pipeNum(total.pulgadas_a_ejecutar)+'"'
+      );
+
+      setTexto(
+        "pipeJuntasHero",
+        Number(total.juntas || 0)
+      );
+
+      setTexto(
         "pipeJuntas",
         Number(total.juntas || 0)
       );
@@ -933,6 +993,8 @@ async function cargarPiping(){
 
     }else{
 
+      setTexto("pipeTotalHero","—");
+      setTexto("pipeJuntasHero","—");
       setTexto("pipeJuntas","—");
       setTexto("pipeTotal","—");
       setTexto("pipeEjecutadas","—");
