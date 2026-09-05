@@ -128,6 +128,18 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 .curva-kpi{background:#f7f9fb;border:1px solid #e0e6ec;border-radius:11px;padding:13px 14px}
 .curva-kpi small{display:block;font-size:9px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:6px}
 .curva-kpi strong{display:block;font-size:21px;color:#173650}
+.curva-kpi-secundario{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid #e0e6ec;
+  font-size:11px;
+  color:#718096;
+  line-height:1.35;
+}
+.curva-kpi-secundario b{
+  color:#173650;
+  font-size:12px;
+}
 .curva-kpi.desvio.positivo{border-top:3px solid #179447}
 .curva-kpi.desvio.negativo{border-top:3px solid #d83c3c}
 .curva-desvio-valores{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
@@ -235,10 +247,18 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
         <div class="curva-kpi">
           <small>Plan a hoy</small>
           <strong id="pipeCurvaPlan">—</strong>
+          <div class="curva-kpi-secundario">
+            Plan al <span id="pipeFechaUltimaTrazaPlan">—</span>:
+            <b id="pipeCurvaPlanUltimaTraza">—</b>
+          </div>
         </div>
         <div class="curva-kpi">
           <small>Real a hoy</small>
           <strong id="pipeCurvaReal">—</strong>
+          <div class="curva-kpi-secundario">
+            Real al <span id="pipeFechaUltimaTrazaReal">—</span>:
+            <b id="pipeCurvaRealUltimaTraza">—</b>
+          </div>
         </div>
         <div id="pipeCurvaDesvioCard" class="curva-kpi desvio">
           <small>Desvío</small>
@@ -528,22 +548,50 @@ async function cargarPiping(){
 
     if(curvaFilas.length){
 
-      const filaActual = [...curvaFilas]
+      const hoy = new Date();
+      const hoyISO =
+        hoy.getFullYear() + "-" +
+        String(hoy.getMonth()+1).padStart(2,"0") + "-" +
+        String(hoy.getDate()).padStart(2,"0");
+
+      const filaUltimaTraza = [...curvaFilas]
         .reverse()
         .find(x=>x.real_acumulado !== null && x.real_acumulado !== undefined);
 
-      if(filaActual){
+      const filasPlanHastaHoy = curvaFilas.filter(x=>String(x.fecha) <= hoyISO);
+      const filaPlanHoy = filasPlanHastaHoy.length
+        ? filasPlanHastaHoy[filasPlanHastaHoy.length - 1]
+        : curvaFilas[0];
 
-        const planHoy = Number(filaActual.plan_acumulado || 0);
-        const realHoy = Number(filaActual.real_acumulado || 0);
-        const desvioHoy = Number(filaActual.desvio_pulgadas || 0);
+      if(filaUltimaTraza){
+
+        const planHoy = Number(filaPlanHoy?.plan_acumulado || 0);
+
+        // El real "a hoy" es el último valor disponible de la trazabilidad.
+        const realHoy = Number(filaUltimaTraza.real_acumulado || 0);
+
+        // El desvío se mantiene calculado contra la fecha de la última trazabilidad,
+        // para no considerar como cero los días todavía no cargados.
+        const desvioHoy = Number(filaUltimaTraza.desvio_pulgadas || 0);
         const desvioPctHoy =
-          filaActual.desvio_porcentaje === null
+          filaUltimaTraza.desvio_porcentaje === null
           ? null
-          : Number(filaActual.desvio_porcentaje);
+          : Number(filaUltimaTraza.desvio_porcentaje);
+
+        const planUltimaTraza = Number(filaUltimaTraza.plan_acumulado || 0);
+        const realUltimaTraza = Number(filaUltimaTraza.real_acumulado || 0);
+
+        const [fy,fm,fd] = String(filaUltimaTraza.fecha).split("-");
+        const fechaUltimaTrazaCorta = `${fd}/${fm}`;
 
         setTexto("pipeCurvaPlan", pipeNum(planHoy)+'"');
         setTexto("pipeCurvaReal", pipeNum(realHoy)+'"');
+
+        setTexto("pipeFechaUltimaTrazaPlan", fechaUltimaTrazaCorta);
+        setTexto("pipeFechaUltimaTrazaReal", fechaUltimaTrazaCorta);
+        setTexto("pipeCurvaPlanUltimaTraza", pipeNum(planUltimaTraza)+'"');
+        setTexto("pipeCurvaRealUltimaTraza", pipeNum(realUltimaTraza)+'"');
+
         setTexto(
           "pipeCurvaDesvio",
           (desvioHoy>0 ? "+" : "") + pipeNum(desvioHoy)+'"'
@@ -669,6 +717,10 @@ async function cargarPiping(){
 
       setTexto("pipeCurvaPlan","—");
       setTexto("pipeCurvaReal","—");
+      setTexto("pipeCurvaPlanUltimaTraza","—");
+      setTexto("pipeCurvaRealUltimaTraza","—");
+      setTexto("pipeFechaUltimaTrazaPlan","—");
+      setTexto("pipeFechaUltimaTrazaReal","—");
       setTexto("pipeCurvaDesvio","—");
       setTexto("pipeCurvaDesvioPct","—");
 
