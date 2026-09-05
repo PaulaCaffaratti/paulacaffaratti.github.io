@@ -185,6 +185,80 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 }
 .curva-kpi.desvio.positivo{border-top:3px solid #179447}
 .curva-kpi.desvio.negativo{border-top:3px solid #d83c3c}
+.curva-kpi.desvio{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.curva-kpi.desvio:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(20,47,82,.10)}
+.curva-click-ayuda{display:block;margin-top:8px;font-size:10px;color:#718096;font-weight:700;text-transform:none}
+
+.modal-desvio-lumber{
+  position:fixed;
+  inset:0;
+  background:rgba(16,47,82,.46);
+  z-index:999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.modal-desvio-lumber.hidden{display:none!important}
+.modal-desvio-lumber-caja{
+  width:min(920px,96vw);
+  max-height:88vh;
+  overflow:auto;
+  background:white;
+  border-radius:14px;
+  border:1px solid #dce3ea;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+}
+.modal-desvio-lumber-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  padding:20px 22px 14px;
+  border-bottom:1px solid #e5eaf0;
+  position:sticky;
+  top:0;
+  background:white;
+  z-index:2;
+}
+.modal-desvio-lumber-head h3{margin:0;color:#173650;font-size:18px}
+.modal-desvio-lumber-head p{margin:5px 0 0;color:#718096;font-size:12px}
+.modal-desvio-lumber-cerrar{
+  border:0;background:#eef3f7;color:#173650;border-radius:8px;
+  width:34px;height:34px;cursor:pointer;font-size:18px;font-weight:800
+}
+.desvio-lumber-resumen{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  padding:18px 22px 8px;
+}
+.desvio-lumber-mini{
+  border:1px solid #dce4ec;border-radius:10px;padding:14px;background:#fafbfd
+}
+.desvio-lumber-mini span{
+  display:block;font-size:10px;color:#718096;font-weight:800;text-transform:uppercase
+}
+.desvio-lumber-mini strong{
+  display:block;margin-top:5px;font-size:20px;color:#173650
+}
+.tabla-desvio-lumber-wrap{padding:16px 22px 22px;overflow-x:auto}
+.tabla-desvio-lumber{width:100%;border-collapse:collapse;font-size:12px}
+.tabla-desvio-lumber th,
+.tabla-desvio-lumber td{
+  padding:11px 10px;border-bottom:1px solid #e5eaf0;text-align:right;white-space:nowrap
+}
+.tabla-desvio-lumber th:first-child,
+.tabla-desvio-lumber td:first-child{text-align:left}
+.tabla-desvio-lumber th{
+  background:#f7f9fb;color:#5f7185;font-size:10px;text-transform:uppercase
+}
+.estado-pendiente{color:#c23838;font-weight:800}
+.estado-adelantado{color:#198754;font-weight:800}
+.estado-linea{color:#c17c00;font-weight:800}
+@media(max-width:700px){
+  .desvio-lumber-resumen{grid-template-columns:1fr}
+}
 .curva-desvio-valores{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .curva-desvio-valores strong{display:inline-block}
 .curva-desvio-sep{font-size:18px;color:#9aa8b5;font-weight:700}
@@ -310,13 +384,16 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
             <b id="pipeCurvaRealUltimaTraza">—</b>
           </div>
         </div>
-        <div id="pipeCurvaDesvioCard" class="curva-kpi desvio">
+        <div id="pipeCurvaDesvioCard" class="curva-kpi desvio"
+             onclick="abrirDetalleDesvioLumber()"
+             title="Ver detalle del desvío por cuadernillo">
           <small>Desvío</small>
           <div class="curva-desvio-valores">
             <strong id="pipeCurvaDesvio">—</strong>
             <span class="curva-desvio-sep">|</span>
             <strong id="pipeCurvaDesvioPct">—</strong>
           </div>
+          <span class="curva-click-ayuda">Tocar para ver qué cuadernillo está pendiente o adelantado</span>
         </div>
       </div>
 
@@ -448,6 +525,48 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
   </main>
 </div>
 
+<div id="modalDesvioLumber" class="modal-desvio-lumber hidden" onclick="cerrarDetalleDesvioLumber(event)">
+  <div class="modal-desvio-lumber-caja" onclick="event.stopPropagation()">
+    <div class="modal-desvio-lumber-head">
+      <div>
+        <h3>Detalle del desvío Lumber por cuadernillo</h3>
+        <p id="modalDesvioLumberSub">Comparación entre plan y real a la última fecha de trazabilidad.</p>
+      </div>
+      <button class="modal-desvio-lumber-cerrar" onclick="cerrarDetalleDesvioLumber()">×</button>
+    </div>
+
+    <div class="desvio-lumber-resumen">
+      <div class="desvio-lumber-mini">
+        <span>Pulgadas pendientes</span>
+        <strong id="detalleLumberPendientes">0"</strong>
+      </div>
+      <div class="desvio-lumber-mini">
+        <span>Pulgadas adelantadas</span>
+        <strong id="detalleLumberAdelantadas">0"</strong>
+      </div>
+      <div class="desvio-lumber-mini">
+        <span>Desvío neto</span>
+        <strong id="detalleLumberNeto">0"</strong>
+      </div>
+    </div>
+
+    <div class="tabla-desvio-lumber-wrap">
+      <table class="tabla-desvio-lumber">
+        <thead>
+          <tr>
+            <th>Cuadernillo</th>
+            <th>Plan a fecha</th>
+            <th>Real soldado</th>
+            <th>Diferencia</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaDesvioLumberBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL =
 "https://mzgbtejfgsrskiuymtwh.supabase.co";
@@ -464,6 +583,84 @@ window.supabase.createClient(
 const PIPING_LIMITE_RECHAZO = null;
 let pipeCurvaChart = null;
 let pipeCurvaObraChart = null;
+let pipeCuadernillosLumberActuales = [];
+let pipeFechaUltimaTrazaLumber = null;
+
+function planCuadernilloAFecha(item, fechaISO){
+  const total = Number(item.pulgadas_planificadas || 0);
+  if(!item.fecha_inicio || !item.fecha_fin || !fechaISO) return 0;
+
+  const inicio = new Date(String(item.fecha_inicio).slice(0,10) + "T12:00:00");
+  const fin = new Date(String(item.fecha_fin).slice(0,10) + "T12:00:00");
+  const fecha = new Date(String(fechaISO).slice(0,10) + "T12:00:00");
+
+  if(fecha < inicio) return 0;
+  if(fecha >= fin) return total;
+
+  const msDia = 86400000;
+  const diasTotales = Math.round((fin - inicio) / msDia) + 1;
+  const diasTranscurridos = Math.round((fecha - inicio) / msDia) + 1;
+
+  return diasTotales > 0 ? total * (diasTranscurridos / diasTotales) : total;
+}
+
+function abrirDetalleDesvioLumber(){
+  const modal = document.getElementById("modalDesvioLumber");
+  const tbody = document.getElementById("tablaDesvioLumberBody");
+  if(!modal || !tbody) return;
+
+  const fecha = pipeFechaUltimaTrazaLumber;
+  const filas = pipeCuadernillosLumberActuales || [];
+
+  if(!fecha || !filas.length){
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#718096">Sin datos disponibles.</td></tr>';
+    modal.classList.remove("hidden");
+    return;
+  }
+
+  let pendientes = 0;
+  let adelantadas = 0;
+  let neto = 0;
+
+  tbody.innerHTML = filas.map(x=>{
+    const planFecha = planCuadernilloAFecha(x, fecha);
+    const real = Number(x.pulgadas_soldadas || 0);
+    const diferencia = real - planFecha;
+    neto += diferencia;
+
+    if(diferencia < 0) pendientes += Math.abs(diferencia);
+    if(diferencia > 0) adelantadas += diferencia;
+
+    let estado = "EN LÍNEA";
+    let clase = "estado-linea";
+    if(diferencia < -0.005){ estado = "PENDIENTE"; clase = "estado-pendiente"; }
+    else if(diferencia > 0.005){ estado = "ADELANTADO"; clase = "estado-adelantado"; }
+
+    return `
+      <tr>
+        <td><strong>${escapar(x.isometrico || ("IS-"+x.cuadernillo))}</strong></td>
+        <td>${pipeNum(planFecha)}"</td>
+        <td>${pipeNum(real)}"</td>
+        <td class="${clase}">${diferencia>0?"+":""}${pipeNum(diferencia)}"</td>
+        <td class="${clase}">${estado}</td>
+      </tr>
+    `;
+  }).join("");
+
+  const [y,m,d] = String(fecha).split("-");
+  setTexto("modalDesvioLumberSub", `Comparación por cuadernillo al ${d}/${m}/${y}, última fecha con trazabilidad real.`);
+  setTexto("detalleLumberPendientes", pipeNum(pendientes)+'"');
+  setTexto("detalleLumberAdelantadas", (adelantadas>0?"+":"") + pipeNum(adelantadas)+'"');
+  setTexto("detalleLumberNeto", (neto>0?"+":"") + pipeNum(neto)+'"');
+
+  modal.classList.remove("hidden");
+}
+
+function cerrarDetalleDesvioLumber(event){
+  if(event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById("modalDesvioLumber");
+  if(modal) modal.classList.add("hidden");
+}
 
 function escapar(v){
   return String(v ?? "")
@@ -579,6 +776,7 @@ async function cargarPiping(){
 
     const isoCont=document.getElementById("pipeIsometricos");
     const isoFilas=cuadernillosLumber || [];
+    pipeCuadernillosLumberActuales = isoFilas;
 
     isoCont.innerHTML = isoFilas.length
       ? isoFilas.map(x=>{
@@ -607,6 +805,8 @@ async function cargarPiping(){
       const filaUltimaTraza = [...curvaFilas]
         .reverse()
         .find(x=>x.real_acumulado !== null && x.real_acumulado !== undefined);
+
+      pipeFechaUltimaTrazaLumber = filaUltimaTraza ? String(filaUltimaTraza.fecha) : null;
 
       const filasPlanHastaHoy = curvaFilas.filter(x=>String(x.fecha) <= hoyISO);
       const filaPlanHoy = filasPlanHastaHoy.length
