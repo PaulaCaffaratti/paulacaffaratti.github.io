@@ -332,9 +332,30 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
     </div>
 
     <section class="flujo-spooles">
-      <h2>🔄 Flujo de Spooles</h2>
-      <div id="pipeFlujoSpooles" class="flujo-grid">
-        <div class="flujo-card"><small>Cargando flujo...</small><strong>—</strong></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:15px;">
+        <h2 style="margin:0;">🔄 Flujo de Spooles</h2>
+
+        <button
+          id="btnFlujoSpooles"
+          onclick="toggleFlujoSpooles()"
+          style="
+            border:1px solid #d8e0e8;
+            background:#f7f9fb;
+            border-radius:7px;
+            padding:8px 12px;
+            cursor:pointer;
+            font-size:12px;
+            font-weight:bold;
+            color:#45596f;
+          ">
+          Mostrar ▼
+        </button>
+      </div>
+
+      <div id="contenidoFlujoSpooles" style="display:none;margin-top:16px;">
+        <div id="pipeFlujoSpooles" class="flujo-grid">
+          <div class="flujo-card"><small>Cargando flujo...</small><strong>—</strong></div>
+        </div>
       </div>
     </section>
 
@@ -700,6 +721,22 @@ function cerrarDetalleDesvioLumber(event){
   if(event && event.target !== event.currentTarget) return;
   const modal = document.getElementById("modalDesvioLumber");
   if(modal) modal.classList.add("hidden");
+}
+
+function toggleFlujoSpooles(){
+  const contenido = document.getElementById("contenidoFlujoSpooles");
+  const boton = document.getElementById("btnFlujoSpooles");
+  if(!contenido || !boton) return;
+
+  const estaOculto = contenido.style.display === "none" || contenido.style.display === "";
+
+  if(estaOculto){
+    contenido.style.display = "block";
+    boton.textContent = "Ocultar ▲";
+  }else{
+    contenido.style.display = "none";
+    boton.textContent = "Mostrar ▼";
+  }
 }
 
 function escapar(v){
