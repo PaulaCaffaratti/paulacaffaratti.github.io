@@ -282,9 +282,29 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 @media(max-width:700px){
   .desvio-lumber-resumen{grid-template-columns:1fr}
 }
-.curva-desvio-valores{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.curva-desvio-valores strong{display:inline-block}
-.curva-desvio-sep{font-size:18px;color:#9aa8b5;font-weight:700}
+.curva-desvio-valores{
+  display:flex;
+  flex-direction:column-reverse;
+  align-items:flex-start;
+  gap:3px;
+}
+
+/* DESVÍO LUMBER: pulgadas secundarias y porcentaje principal */
+#pipeCurvaDesvio{
+  font-size:16px;
+  color:#52677c;
+  font-weight:700;
+}
+
+#pipeCurvaDesvioPct{
+  font-size:28px;
+  color:#173650;
+  font-weight:800;
+}
+
+.curva-desvio-sep{
+  display:none;
+}
 .curva-wrap{position:relative;height:360px}
 .curva-nota{margin-top:12px;font-size:11px;color:#718096;line-height:1.5}
 @media(max-width:900px){.curva-kpis{grid-template-columns:repeat(2,1fr)}.curva-wrap{height:320px}}
