@@ -265,9 +265,32 @@ h1{
   margin-top:6px;
 }
 
-.metrica.desvio-positivo{border-left:5px solid #198754;}
-.metrica.desvio-negativo{border-left:5px solid #c23838;}
-.metrica.desvio-neutro{border-left:5px solid #d59a20;}
+.metrica.desvio-positivo{border-top:3px solid #198754;}
+.metrica.desvio-negativo{border-top:3px solid #d83c3c;}
+.metrica.desvio-neutro{border-top:3px solid #d59a20;}
+
+.desvio-valores{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+.desvio-valores #m3Desvio,
+.desvio-valores #pctDesvio{
+  display:inline-block;
+  font-size:22px;
+  font-weight:800;
+  color:#173650;
+  text-transform:none;
+}
+.desvio-separador{
+  display:inline-block!important;
+  font-size:18px!important;
+  color:#9aa8b5!important;
+  font-weight:700!important;
+  text-transform:none!important;
+}
 
 .grid-curva{
   display:grid;
@@ -938,12 +961,12 @@ Ocultar ▲
 </div>
 
 <div class="metrica metrica-click" id="cardDesvioM3" onclick="abrirDetalleDesvio()" title="Ver detalle del desvío">
-<span>Desvío (Real - Plan)</span>
-<strong>
+<span>Desvío</span>
+<div class="desvio-valores">
   <span id="m3Desvio">0,00 m³</span>
-  <span style="color:#8a98a8;font-weight:700;margin:0 7px">|</span>
+  <span class="desvio-separador">|</span>
   <span id="pctDesvio">0,0%</span>
-</strong>
+</div>
 <small class="click-ayuda">Tocar para ver qué está pendiente o adelantado</small>
 </div>
 
