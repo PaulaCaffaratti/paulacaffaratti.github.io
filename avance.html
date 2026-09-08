@@ -685,6 +685,19 @@ function normalizarTipo(tipo){
 
 function volumenPieza(pieza){
 
+  // Primero toma el m³ real cargado en Base de Ingeniería / Supabase
+  const m3Base = Number(pieza.m3);
+
+  if(
+    pieza.m3 !== null &&
+    pieza.m3 !== undefined &&
+    pieza.m3 !== "" &&
+    !Number.isNaN(m3Base)
+  ){
+    return m3Base;
+  }
+
+  // Si no tiene m³ cargado, usa la tabla por tipo como respaldo
   const tipo =
     normalizarTipo(pieza.tipo);
 
