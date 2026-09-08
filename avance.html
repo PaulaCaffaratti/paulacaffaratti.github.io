@@ -643,6 +643,38 @@ table td{color:#344d64!important}
 }
 
 .filtros{gap:8px!important}.filtros .campo{min-width:180px!important}
+.filtro-montados{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:5px!important;
+  min-width:160px!important;
+}
+.filtro-montados .titulo-filtro{
+  font-size:10px!important;
+  font-weight:500!important;
+  color:#718498!important;
+}
+.toggle-montados{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  height:38px!important;
+  padding:0 11px!important;
+  border:1px solid var(--ui-line2)!important;
+  border-radius:7px!important;
+  background:#fff!important;
+  color:var(--ui-ink)!important;
+  cursor:pointer!important;
+  user-select:none!important;
+}
+.toggle-montados input{
+  width:16px!important;
+  height:16px!important;
+  margin:0!important;
+  accent-color:#287b54!important;
+  cursor:pointer!important;
+}
+.toggle-montados span{font-size:11px!important;font-weight:500!important}
 table{min-width:1050px!important;font-size:11px!important}
 th,td{padding:8px 9px!important}
 .check-etapa,.check-final{font-size:10px!important;font-weight:500!important;border-radius:7px!important}
@@ -791,6 +823,18 @@ FILTROS
 
 </select>
 
+</div>
+
+
+<div class="filtro-montados">
+  <div class="titulo-filtro">VISUALIZACIÓN</div>
+  <label class="toggle-montados">
+    <input
+      id="mostrarMontados"
+      type="checkbox"
+      onchange="mostrarTabla()">
+    <span>Mostrar montados</span>
+  </label>
 </div>
 
 
@@ -1372,6 +1416,11 @@ function mostrarTabla(){
       .getElementById("filtroEtapa")
       .value;
 
+  const mostrarMontados =
+    document
+      .getElementById("mostrarMontados")
+      .checked;
+
   const lista =
     premoldeados.filter(
       p => {
@@ -1404,9 +1453,14 @@ function mostrarTabla(){
           !filtro ||
           etapa === filtro;
 
+        const coincideMontaje =
+          mostrarMontados ||
+          p.montada !== true;
+
         return (
           coincideBusqueda &&
-          coincideEtapa
+          coincideEtapa &&
+          coincideMontaje
         );
 
       }
