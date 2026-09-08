@@ -1292,11 +1292,17 @@ MONTAJE
 
 function puedeMontar(){
 
+  /*
+  Raúl Naveda es un usuario operativo de MONTAJE.
+  Se le habilita Montaje aunque tenga otros permisos cargados
+  accidentalmente en permisos_usuarios.
+  */
   return Boolean(
     usuarioActual &&
     permisos &&
     (
       esAdmin() ||
+      esRaulNaveda() ||
       permisos.puede_montar
     )
   );
@@ -1349,6 +1355,30 @@ function esUsuarioSoloQAQC(){
 function esUsuarioSoloObra(){
   return tieneSoloPermiso("puede_llevar_obra");
 }
+
+function esRaulNaveda(){
+
+  if(!usuarioActual || !permisos){
+    return false;
+  }
+
+  const nombre = String(permisos.nombre || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+
+  const email = String(usuarioActual.email || "")
+    .trim()
+    .toLowerCase();
+
+  return (
+    nombre === "raul naveda" ||
+    (email.includes("raul") && email.includes("naveda"))
+  );
+
+}
+
 
 function esMarcosLagos(){
 
@@ -1560,15 +1590,17 @@ function mostrarTabla(){
         no vea el resto de las etapas.
         */
         const coincideVistaRol =
-          esMarcosLagos()
-            ? etapaNumero === 1
-            : esRolObra
+          esRaulNaveda()
+            ? etapaNumero === 3
+            : esMarcosLagos()
               ? etapaNumero === 1
-              : esRolQAQC
-                ? etapaNumero === 2
-                : esRolMontaje
-                  ? etapaNumero === 3
-                  : true;
+              : esRolObra
+                ? etapaNumero === 1
+                : esRolQAQC
+                  ? etapaNumero === 2
+                  : esRolMontaje
+                    ? etapaNumero === 3
+                    : true;
 
         return (
           coincideBusqueda &&
@@ -1588,12 +1620,12 @@ function mostrarTabla(){
         <td
           colspan="7"
           class="vacio">
-          ${esMarcosLagos() || esUsuarioSoloObra()
-            ? "No hay premoldeados liberados en taller pendientes de pasar a obra."
-            : esUsuarioSoloQAQC()
-              ? "No hay premoldeados en obra pendientes de liberación QA/QC."
-              : esUsuarioSoloMontaje()
-                ? "No hay premoldeados liberados por QA/QC pendientes de montaje."
+          ${esRaulNaveda() || esUsuarioSoloMontaje()
+            ? "No hay premoldeados liberados por QA/QC pendientes de montaje."
+            : esMarcosLagos() || esUsuarioSoloObra()
+              ? "No hay premoldeados liberados en taller pendientes de pasar a obra."
+              : esUsuarioSoloQAQC()
+                ? "No hay premoldeados en obra pendientes de liberación QA/QC."
                 : "No hay premoldeados que coincidan."}
         </td>
       </tr>
