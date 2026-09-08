@@ -1538,30 +1538,6 @@ async function cambiarEtapaCheck(
   }
 
 
-  /* ==============================
-  CONFIRMACIÓN
-  ============================== */
-
-  const confirmar =
-    confirm(
-      "¿Confirmás cambiar " +
-      (pieza.codigo ?? "") +
-      " de " +
-      etapas[anterior] +
-      " a " +
-      etapas[nuevaEtapa] +
-      "?"
-    );
-
-
-  if(!confirmar){
-
-    mostrarTabla();
-    return;
-
-  }
-
-
   estado(
     "⏳ Guardando cambio..."
   );
@@ -1742,18 +1718,6 @@ async function cambiarEstadoFinal(
     "Montaje"
     :
     "Pintura";
-
-
-  if(
-    !confirm(
-      `¿Confirmás cambiar ${nombre} de ${pieza.codigo}?`
-    )
-  ){
-
-    mostrarTabla();
-    return;
-
-  }
 
 
   estado(
