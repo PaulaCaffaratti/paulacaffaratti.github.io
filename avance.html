@@ -1311,27 +1311,43 @@ Si el usuario tiene únicamente permiso operativo de montaje,
 solo verá piezas que ya estén liberadas por QA/QC.
 */
 
-function esUsuarioSoloMontaje(){
+function tieneSoloPermiso(nombrePermiso){
 
   if(
     !usuarioActual ||
     !permisos ||
     esAdmin() ||
-    !permisos.puede_montar
+    !permisos[nombrePermiso]
   ){
     return false;
   }
 
-  const tieneOtroPermisoOperativo =
-    Boolean(
-      permisos.puede_liberar_taller ||
-      permisos.puede_llevar_obra ||
-      permisos.puede_liberar_qaqc ||
-      permisos.puede_pintar
-    );
+  const permisosOperativos = [
+    "puede_liberar_taller",
+    "puede_llevar_obra",
+    "puede_liberar_qaqc",
+    "puede_montar",
+    "puede_pintar"
+  ];
 
-  return !tieneOtroPermisoOperativo;
+  return permisosOperativos.every(
+    permiso =>
+      permiso === nombrePermiso ||
+      !permisos[permiso]
+  );
 
+}
+
+function esUsuarioSoloMontaje(){
+  return tieneSoloPermiso("puede_montar");
+}
+
+function esUsuarioSoloQAQC(){
+  return tieneSoloPermiso("puede_liberar_qaqc");
+}
+
+function esUsuarioSoloObra(){
+  return tieneSoloPermiso("puede_llevar_obra");
 }
 
 
@@ -1492,15 +1508,29 @@ function mostrarTabla(){
         Para un usuario que trabaja únicamente en MONTAJE,
         solo se muestran piezas que ya tienen QA/QC liberado.
         */
-        const coincideVistaMontaje =
-          !esUsuarioSoloMontaje() ||
-          Number(p.etapa ?? 0) === 3;
+        const etapaNumero =
+          Number(p.etapa ?? 0);
+
+        /*
+        COLA DE TRABAJO SEGÚN EL ROL:
+        - EN OBRA: recibe solamente piezas LIBERADAS EN TALLER (etapa 1).
+        - QA/QC: recibe solamente piezas que ya están EN OBRA (etapa 2).
+        - MONTAJE: recibe solamente piezas LIBERADAS QA/QC (etapa 3).
+        */
+        const coincideVistaRol =
+          esUsuarioSoloObra()
+            ? etapaNumero === 1
+            : esUsuarioSoloQAQC()
+              ? etapaNumero === 2
+              : esUsuarioSoloMontaje()
+                ? etapaNumero === 3
+                : true;
 
         return (
           coincideBusqueda &&
           coincideEtapa &&
           coincideMontaje &&
-          coincideVistaMontaje
+          coincideVistaRol
         );
 
       }
@@ -1514,9 +1544,13 @@ function mostrarTabla(){
         <td
           colspan="7"
           class="vacio">
-          ${esUsuarioSoloMontaje()
-            ? "No hay premoldeados liberados por QA/QC pendientes de montaje."
-            : "No hay premoldeados que coincidan."}
+          ${esUsuarioSoloObra()
+            ? "No hay premoldeados liberados en taller pendientes de pasar a obra."
+            : esUsuarioSoloQAQC()
+              ? "No hay premoldeados en obra pendientes de liberación QA/QC."
+              : esUsuarioSoloMontaje()
+                ? "No hay premoldeados liberados por QA/QC pendientes de montaje."
+                : "No hay premoldeados que coincidan."}
         </td>
       </tr>
     `;
