@@ -1350,6 +1350,18 @@ function esUsuarioSoloObra(){
   return tieneSoloPermiso("puede_llevar_obra");
 }
 
+function esMarcosLagos(){
+
+  return Boolean(
+    usuarioActual &&
+    String(usuarioActual.email || "")
+      .trim()
+      .toLowerCase() ===
+      "marcos.lagos@pecomenergia.com.ar"
+  );
+
+}
+
 
 /*
 PINTURA
@@ -1548,13 +1560,15 @@ function mostrarTabla(){
         no vea el resto de las etapas.
         */
         const coincideVistaRol =
-          esRolObra
+          esMarcosLagos()
             ? etapaNumero === 1
-            : esRolQAQC
-              ? etapaNumero === 2
-              : esRolMontaje
-                ? etapaNumero === 3
-                : true;
+            : esRolObra
+              ? etapaNumero === 1
+              : esRolQAQC
+                ? etapaNumero === 2
+                : esRolMontaje
+                  ? etapaNumero === 3
+                  : true;
 
         return (
           coincideBusqueda &&
@@ -1574,7 +1588,7 @@ function mostrarTabla(){
         <td
           colspan="7"
           class="vacio">
-          ${esUsuarioSoloObra()
+          ${esMarcosLagos() || esUsuarioSoloObra()
             ? "No hay premoldeados liberados en taller pendientes de pasar a obra."
             : esUsuarioSoloQAQC()
               ? "No hay premoldeados en obra pendientes de liberación QA/QC."
