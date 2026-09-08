@@ -1305,6 +1305,37 @@ function puedeMontar(){
 
 
 /*
+VISTA ESPECÍFICA DE MONTAJE
+
+Si el usuario tiene únicamente permiso operativo de montaje,
+solo verá piezas que ya estén liberadas por QA/QC.
+*/
+
+function esUsuarioSoloMontaje(){
+
+  if(
+    !usuarioActual ||
+    !permisos ||
+    esAdmin() ||
+    !permisos.puede_montar
+  ){
+    return false;
+  }
+
+  const tieneOtroPermisoOperativo =
+    Boolean(
+      permisos.puede_liberar_taller ||
+      permisos.puede_llevar_obra ||
+      permisos.puede_liberar_qaqc ||
+      permisos.puede_pintar
+    );
+
+  return !tieneOtroPermisoOperativo;
+
+}
+
+
+/*
 PINTURA
 */
 
@@ -1457,10 +1488,19 @@ function mostrarTabla(){
           mostrarMontados ||
           p.montada !== true;
 
+        /*
+        Para un usuario que trabaja únicamente en MONTAJE,
+        solo se muestran piezas que ya tienen QA/QC liberado.
+        */
+        const coincideVistaMontaje =
+          !esUsuarioSoloMontaje() ||
+          Number(p.etapa ?? 0) === 3;
+
         return (
           coincideBusqueda &&
           coincideEtapa &&
-          coincideMontaje
+          coincideMontaje &&
+          coincideVistaMontaje
         );
 
       }
@@ -1474,7 +1514,9 @@ function mostrarTabla(){
         <td
           colspan="7"
           class="vacio">
-          No hay premoldeados que coincidan.
+          ${esUsuarioSoloMontaje()
+            ? "No hay premoldeados liberados por QA/QC pendientes de montaje."
+            : "No hay premoldeados que coincidan."}
         </td>
       </tr>
     `;
@@ -1709,7 +1751,7 @@ function mostrarTabla(){
                   <input
                     type="checkbox"
                     ${montada ? "checked" : ""}
-                    ${puedeMontar() ? "" : "disabled"}
+                    ${(puedeMontar() && etapaActual === 3) ? "" : "disabled"}
                     onchange="
                       cambiarEstadoFinal(
                         ${p.id},
@@ -2073,6 +2115,29 @@ async function cambiarEstadoFinal(
 
     alert(
       "🔒 No tenés permiso para modificar Montaje."
+    );
+
+    mostrarTabla();
+    return;
+
+  }
+
+  /*
+  MONTAJE SOLO DESPUÉS DE QA/QC
+
+  Aunque alguien intente forzar el cambio desde el navegador,
+  no se permite marcar Montaje si la pieza todavía no llegó
+  a LIBERADA QA/QC EN OBRA (etapa 3).
+  */
+
+  if(
+    campo === "montada" &&
+    valor === true &&
+    Number(pieza.etapa ?? 0) !== 3
+  ){
+
+    alert(
+      "🔒 No se puede montar esta pieza hasta que tenga QA/QC liberado."
     );
 
     mostrarTabla();
