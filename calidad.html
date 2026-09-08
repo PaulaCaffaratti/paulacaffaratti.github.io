@@ -494,6 +494,79 @@ th,td{padding:8px 9px!important}
 .matrizKpi.naranja .matrizKpiPct{color:#a86b22}
 .matrizKpi.rojo .matrizKpiPct{color:#a94a4a}
 
+
+/* ===== CALIDAD · RESUMEN REALIZADOS / PENDIENTES ===== */
+.matrizResumenCabecera{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+}
+.matrizResumenCabecera .matrizKpi:first-child{
+  grid-column:1 / -1!important;
+  border-right:0!important;
+  border-bottom:1px solid #e6ebf0!important;
+}
+.matrizResumenCabecera .matrizKpi:nth-child(2){
+  border-right:1px solid #e6ebf0!important;
+}
+.matrizResumenCabecera .matrizKpi:nth-child(3){
+  border-right:0!important;
+}
+.matrizResumenCabecera .matrizKpi:nth-child(n+2){
+  min-height:108px!important;
+  padding:16px 20px!important;
+}
+.realizadosDetalle{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.realizadosMini{
+  border:1px solid #e1e8ee;
+  border-radius:10px;
+  padding:16px;
+  background:#f9fbfc;
+}
+.realizadosMini span{
+  display:block;
+  font-size:10px;
+  color:#718498;
+  margin-bottom:6px;
+}
+.realizadosMini strong{
+  display:block;
+  font-size:28px;
+  line-height:1;
+  color:#123451;
+  font-weight:600;
+}
+.realizadosMini small{
+  display:block;
+  margin-top:6px;
+  font-size:10px;
+  color:#8796a4;
+}
+@media(max-width:760px){
+  .matrizResumenCabecera{grid-template-columns:1fr!important}
+  .matrizResumenCabecera .matrizKpi:first-child{grid-column:auto!important}
+  .matrizResumenCabecera .matrizKpi:nth-child(2){border-right:0!important}
+  .realizadosDetalle{grid-template-columns:1fr!important}
+}
+
+
+/* ===== CALIDAD · 1P CLICKEABLE EN DETALLE DE REALIZADOS ===== */
+.realizadosMiniClickable{
+  cursor:pointer;
+  transition:background .15s ease,border-color .15s ease,transform .15s ease;
+}
+.realizadosMiniClickable:hover{
+  background:#fffaf3!important;
+  border-color:#d8b783!important;
+  transform:translateY(-1px);
+}
+.realizadosMiniClickable:active{
+  transform:translateY(0);
+}
+
 </style>
 </head>
 <body>
@@ -541,55 +614,25 @@ th,td{padding:8px 9px!important}
             <strong id="matrizAplicables">0</strong>
             <div class="matrizKpiNota">Total de registros requeridos</div>
           </div>
-          <div class="matrizKpi verde">
-            <small>Cerrados · 1</small>
+
+          <div class="matrizKpi verde matrizKpiClickable"
+               onclick="matrizAbrirDetalleRealizados()"
+               title="Ver desglose de realizados">
+            <small>Realizados</small>
             <div class="matrizKpiValorFila">
-              <strong id="matrizCerrados">0</strong>
-              <span class="matrizKpiPct" id="matrizCerradosKpiPct">0%</span>
+              <strong id="matrizRealizados">0</strong>
+              <span class="matrizKpiPct" id="matrizRealizadosPct">0%</span>
             </div>
-            <div class="matrizKpiNota">Firmados y completos</div>
+            <div class="matrizKpiNota">Cerrados + en poder del cliente · tocar para ver detalle</div>
           </div>
-          <div class="matrizKpi naranja matrizKpiClickable" onclick="matrizAbrirDetalleCliente()" title="Ver registros en poder del cliente">
-            <small>En poder del cliente · 1P</small>
-            <div class="matrizKpiValorFila">
-              <strong id="matrizCliente">0</strong>
-              <span class="matrizKpiPct" id="matrizClienteKpiPct">0%</span>
-            </div>
-            <div class="matrizKpiNota">Pendientes de firma · tocar para ver detalle</div>
-          </div>
+
           <div class="matrizKpi rojo">
-            <small>Pendientes · 0</small>
+            <small>Pendientes</small>
             <div class="matrizKpiValorFila">
               <strong id="matrizPendientes">0</strong>
               <span class="matrizKpiPct" id="matrizPendientesKpiPct">0%</span>
             </div>
             <div class="matrizKpiNota">Aún no elaborados</div>
-          </div>
-        </div>
-
-        <div class="matrizAvanceGrid">
-          <div class="matrizAvanceItem">
-            <div class="matrizAvanceTexto">
-              <h3>Avance elaborado</h3>
-              <div class="matrizAvanceDato">
-                <span class="matrizAvanceCantidad"><span id="matrizElaboradoCantidadNumero">0</span><small>registros</small></span>
-                <span class="matrizAvancePct">(<span id="matrizElaborado">0%</span>)</span>
-              </div>
-              <div class="matrizAvanceSub">Estados 1 + 1P sobre el total de registros</div>
-            </div>
-            <div class="matrizBarra naranja"><div id="matrizBarraElaborado" style="width:0%"></div></div>
-          </div>
-
-          <div class="matrizAvanceItem">
-            <div class="matrizAvanceTexto">
-              <h3>Avance cerrado</h3>
-              <div class="matrizAvanceDato">
-                <span class="matrizAvanceCantidad"><span id="matrizCerradoCantidadNumero">0</span><small>registros</small></span>
-                <span class="matrizAvancePct">(<span id="matrizCerradoPct">0%</span>)</span>
-              </div>
-              <div class="matrizAvanceSub">Estado 1 · registros firmados y completos</div>
-            </div>
-            <div class="matrizBarra"><div id="matrizBarraCerrado" style="width:0%"></div></div>
           </div>
         </div>
       </div>
@@ -699,18 +742,11 @@ async function cargarMatrizCalidad(){
   const elaborado=matrizPct(t.cliente+t.cerrado,t.aplicables);
   const cerrado=matrizPct(t.cerrado,t.aplicables);
   matrizSet("matrizAplicables",t.aplicables.toLocaleString("es-AR"));
+  const realizados=t.cliente+t.cerrado;
+  matrizSet("matrizRealizados",realizados.toLocaleString("es-AR"));
+  matrizSet("matrizRealizadosPct",matrizPct(realizados,t.aplicables).toFixed(1)+"%");
   matrizSet("matrizPendientes",t.pendiente.toLocaleString("es-AR"));
-  matrizSet("matrizCliente",t.cliente.toLocaleString("es-AR"));
-  matrizSet("matrizCerrados",t.cerrado.toLocaleString("es-AR"));
-  matrizSet("matrizCerradosKpiPct",matrizPct(t.cerrado,t.aplicables).toFixed(1)+"%");
-  matrizSet("matrizClienteKpiPct",matrizPct(t.cliente,t.aplicables).toFixed(1)+"%");
   matrizSet("matrizPendientesKpiPct",matrizPct(t.pendiente,t.aplicables).toFixed(1)+"%");
-  matrizSet("matrizElaborado",elaborado.toFixed(1)+"%");
-  matrizSet("matrizCerradoPct",cerrado.toFixed(1)+"%");
-  matrizSet("matrizElaboradoCantidadNumero",(t.cliente+t.cerrado).toLocaleString("es-AR"));
-  matrizSet("matrizCerradoCantidadNumero",t.cerrado.toLocaleString("es-AR"));
-  const b1=document.getElementById("matrizBarraElaborado");if(b1)b1.style.width=Math.min(elaborado,100)+"%";
-  const b2=document.getElementById("matrizBarraCerrado");if(b2)b2.style.width=Math.min(cerrado,100)+"%";
   const fechas=matrizFilas.map(f=>f.fecha_carga).filter(Boolean).sort();
   if(fechas.length){const d=new Date(fechas[fechas.length-1]);matrizSet("matrizFechaCarga",d.toLocaleString("es-AR"))}else matrizSet("matrizFechaCarga","Sin cargas");
   matrizPintarEspecialidades();matrizPintarSistemas();matrizPrepararFiltros();matrizPintarDetalle();
@@ -749,6 +785,40 @@ function matrizPintarDetalle(){
   const esp=String(document.getElementById("matrizFiltroEspecialidad")?.value||"");
   const filtradas=matrizFilas.filter(f=>{if(esp&&f.especialidad!==esp)return false;if(!q)return true;return [f.tag,f.descripcion,f.status_index,f.sistema,f.subsistema].some(v=>String(v||"").toLowerCase().includes(q))});
   tbody.innerHTML=filtradas.map(f=>{const t=matrizContar([f]),cerr=matrizPct(t.cerrado,t.aplicables);return `<tr><td>${matrizEsc(f.especialidad)}</td><td>${matrizEsc(f.tag)}</td><td>${matrizEsc(f.descripcion)}</td><td>${matrizEsc(f.status_index)}</td><td>${matrizEsc(f.sistema)}</td><td>${matrizEsc(f.subsistema)}</td><td>${t.pendiente}</td><td>${t.cliente}</td><td>${t.cerrado}</td><td class="matrizPct">${cerr.toFixed(1)}%</td></tr>`}).join("");
+}
+
+
+function matrizAbrirDetalleRealizados(){
+  const t=matrizContar(matrizFilas);
+  const realizados=t.cerrado+t.cliente;
+
+  document.getElementById("modalTitulo").textContent=
+    "Detalle de realizados ("+realizados.toLocaleString("es-AR")+")";
+
+  const body=document.getElementById("modalBody");
+  body.innerHTML=`
+    <div style="margin-bottom:14px;color:#687787;font-size:12px;line-height:1.5;">
+      Los realizados se componen de registros <strong>cerrados</strong> y registros
+      <strong>en poder del cliente</strong>.
+    </div>
+
+    <div class="realizadosDetalle">
+      <div class="realizadosMini">
+        <span>Cerrados · 1</span>
+        <strong>${t.cerrado.toLocaleString("es-AR")}</strong>
+        <small>${matrizPct(t.cerrado,t.aplicables).toFixed(1)}% del total</small>
+      </div>
+
+      <div class="realizadosMini realizadosMiniClickable"
+           onclick="matrizAbrirDetalleCliente()"
+           title="Ver cuáles están en poder del cliente">
+        <span>En poder del cliente · 1P</span>
+        <strong>${t.cliente.toLocaleString("es-AR")}</strong>
+        <small>${matrizPct(t.cliente,t.aplicables).toFixed(1)}% del total · tocar para ver detalle</small>
+      </div>
+    </div>
+  `;
+  mostrarModal();
 }
 
 function matrizAbrirDetalleCliente(){
