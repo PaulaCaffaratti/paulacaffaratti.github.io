@@ -1188,7 +1188,7 @@ async function iniciarAplicacion(){
   await db
     .from("permisos_usuarios")
     .select("*")
-    .eq("email",user.email)
+    .ilike("email",user.email)
     .maybeSingle();
 
   if(error){
@@ -1517,12 +1517,42 @@ function mostrarTabla(){
         - QA/QC: recibe solamente piezas que ya están EN OBRA (etapa 2).
         - MONTAJE: recibe solamente piezas LIBERADAS QA/QC (etapa 3).
         */
+        const esRolObra =
+          Boolean(
+            permisos &&
+            !esAdmin() &&
+            permisos.puede_llevar_obra
+          );
+
+        const esRolQAQC =
+          Boolean(
+            permisos &&
+            !esAdmin() &&
+            permisos.puede_liberar_qaqc
+          );
+
+        const esRolMontaje =
+          Boolean(
+            permisos &&
+            !esAdmin() &&
+            permisos.puede_montar
+          );
+
+        /*
+        Prioridad visual por rol:
+        - EN OBRA -> solo LIBERADAS EN TALLER (etapa 1)
+        - QA/QC   -> solo EN OBRA (etapa 2)
+        - MONTAJE -> solo QA/QC liberadas (etapa 3)
+
+        Esto hace que Marcos, si tiene puede_llevar_obra=true,
+        no vea el resto de las etapas.
+        */
         const coincideVistaRol =
-          esUsuarioSoloObra()
+          esRolObra
             ? etapaNumero === 1
-            : esUsuarioSoloQAQC()
+            : esRolQAQC
               ? etapaNumero === 2
-              : esUsuarioSoloMontaje()
+              : esRolMontaje
                 ? etapaNumero === 3
                 : true;
 
