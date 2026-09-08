@@ -138,6 +138,18 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
 .pipingBadge.alerta{background:#fdecec;color:#a62f2f}
 .soldadorSinDatos{color:#718096;font-size:12px;padding:10px 0}
 
+.soldadoresChartWrap{
+  position:relative;
+  height:320px;
+  margin-top:6px;
+}
+.soldadoresChartLeyenda{
+  margin-top:10px;
+  font-size:11px;
+  color:#68798c;
+  line-height:1.5;
+}
+
 @media(max-width:1100px){
   .kpis{grid-template-columns:repeat(3,1fr)}
   .grid2{grid-template-columns:1fr}
@@ -548,12 +560,12 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
       <section class="panel">
         <h2>% de rechazos por soldador</h2>
 
-        <div id="pipeSoldadores" class="soldadoresLista">
-          <div class="soldadorSinDatos">Sin datos de inspección por soldador.</div>
+        <div class="soldadoresChartWrap">
+          <canvas id="pipeSoldadoresChart"></canvas>
         </div>
 
-        <div class="nota">
-          La línea roja indica el límite máximo permitido de rechazo: 3,00%.
+        <div class="soldadoresChartLeyenda">
+          Cada punto representa un soldador. La línea roja horizontal marca el límite máximo permitido de 3,00%.
         </div>
       </section>
 
@@ -649,6 +661,7 @@ window.supabase.createClient(
 const PIPING_LIMITE_RECHAZO = 3;
 let pipeCurvaChart = null;
 let pipeCurvaObraChart = null;
+let pipeSoldadoresChart = null;
 let pipeCuadernillosLumberActuales = [];
 let pipeFechaUltimaTrazaLumber = null;
 
