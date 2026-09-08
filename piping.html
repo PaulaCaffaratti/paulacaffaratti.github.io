@@ -553,7 +553,7 @@ td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
         </div>
 
         <div class="nota">
-          La línea roja de límite aparecerá cuando definamos el porcentaje máximo permitido.
+          La línea roja indica el límite máximo permitido de rechazo: 3,00%.
         </div>
       </section>
 
@@ -646,7 +646,7 @@ window.supabase.createClient(
   SUPABASE_KEY
 );
 
-const PIPING_LIMITE_RECHAZO = null;
+const PIPING_LIMITE_RECHAZO = 3;
 let pipeCurvaChart = null;
 let pipeCurvaObraChart = null;
 let pipeCuadernillosLumberActuales = [];
