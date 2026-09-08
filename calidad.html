@@ -140,6 +140,54 @@ input,select{font-size:11px!important}
 table{font-size:11px!important}
 th,td{padding:8px 9px!important}
 
+
+/* ===== CALIDAD · TABLAS OCULTABLES Y COLUMNAS DESTACADAS ===== */
+.matrizCardHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+.matrizCardHead h3{
+  margin:0!important;
+}
+.matrizToggle{
+  border:1px solid #d6e0e8;
+  background:#f8fafc;
+  color:#42596d;
+  padding:7px 11px;
+  border-radius:7px;
+  cursor:pointer;
+  font-size:10px;
+  font-weight:600;
+}
+.matrizToggle:hover{
+  background:#eef3f7;
+}
+.matrizOculto{
+  display:none!important;
+}
+
+/* Destacar Sistema / Descripción sistema / Subsistema / Descripción subsistema */
+#tablaSistemasContenido .matrizTabla th:nth-child(-n+4){
+  background:#eaf1f7!important;
+  color:#123451!important;
+  font-weight:700!important;
+}
+#tablaSistemasContenido .matrizTabla td:nth-child(-n+4){
+  background:#f8fbfd!important;
+  color:#123451!important;
+}
+#tablaSistemasContenido .matrizTabla td:nth-child(1),
+#tablaSistemasContenido .matrizTabla td:nth-child(3){
+  font-weight:700!important;
+}
+#tablaSistemasContenido .matrizTabla td:nth-child(2),
+#tablaSistemasContenido .matrizTabla td:nth-child(4){
+  font-weight:600!important;
+}
+
 </style>
 </head>
 <body>
@@ -237,26 +285,42 @@ th,td{padding:8px 9px!important}
       </div>
 
       <div class="matrizCard">
-        <h3>Avance por sistema y subsistema</h3>
-        <div class="matrizTablaWrap">
-          <table class="matrizTabla">
-            <thead><tr><th>Sistema</th><th>Descripción sistema</th><th>Subsistema</th><th>Descripción subsistema</th><th>Registros</th><th>Pendientes</th><th>1P</th><th>Cerrados</th><th>Elaborado</th><th>Cerrado</th></tr></thead>
-            <tbody id="matrizTablaSistemas"></tbody>
-          </table>
+        <div class="matrizCardHead">
+          <h3>Avance por sistema y subsistema</h3>
+          <button id="btnTablaSistemas" class="matrizToggle" onclick="toggleTablaCalidad('tablaSistemasContenido','btnTablaSistemas')">
+            Ocultar ▲
+          </button>
+        </div>
+
+        <div id="tablaSistemasContenido">
+          <div class="matrizTablaWrap">
+            <table class="matrizTabla">
+              <thead><tr><th>Sistema</th><th>Descripción sistema</th><th>Subsistema</th><th>Descripción subsistema</th><th>Registros</th><th>Pendientes</th><th>1P</th><th>Cerrados</th><th>Elaborado</th><th>Cerrado</th></tr></thead>
+              <tbody id="matrizTablaSistemas"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       <div class="matrizCard">
-        <h3>Detalle de elementos</h3>
-        <div class="matrizFiltros">
-          <input id="matrizBuscar" type="search" placeholder="Buscar TAG, descripción o Status Index..." oninput="matrizPintarDetalle()">
-          <select id="matrizFiltroEspecialidad" onchange="matrizPintarDetalle()"><option value="">Todas las especialidades</option></select>
+        <div class="matrizCardHead">
+          <h3>Detalle de elementos</h3>
+          <button id="btnTablaDetalle" class="matrizToggle" onclick="toggleTablaCalidad('tablaDetalleContenido','btnTablaDetalle')">
+            Ocultar ▲
+          </button>
         </div>
-        <div class="matrizTablaWrap">
-          <table class="matrizTabla">
-            <thead><tr><th>Especialidad</th><th>TAG</th><th>Descripción</th><th>Status Index</th><th>Sistema</th><th>Subsistema</th><th>Pend.</th><th>1P</th><th>Cerrados</th><th>% cerrado</th></tr></thead>
-            <tbody id="matrizTablaDetalle"></tbody>
-          </table>
+
+        <div id="tablaDetalleContenido">
+          <div class="matrizFiltros">
+            <input id="matrizBuscar" type="search" placeholder="Buscar TAG, descripción o Status Index..." oninput="matrizPintarDetalle()">
+            <select id="matrizFiltroEspecialidad" onchange="matrizPintarDetalle()"><option value="">Todas las especialidades</option></select>
+          </div>
+          <div class="matrizTablaWrap">
+            <table class="matrizTabla">
+              <thead><tr><th>Especialidad</th><th>TAG</th><th>Descripción</th><th>Status Index</th><th>Sistema</th><th>Subsistema</th><th>Pend.</th><th>1P</th><th>Cerrados</th><th>% cerrado</th></tr></thead>
+              <tbody id="matrizTablaDetalle"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -382,6 +446,16 @@ function matrizAbrirDetalleCliente(){
 function mostrarModal(){document.getElementById("modalFondo").classList.add("activo")}
 function cerrarModal(){document.getElementById("modalFondo").classList.remove("activo")}
 function cerrarModalFondo(e){if(e.target.id==="modalFondo")cerrarModal()}
+
+
+function toggleTablaCalidad(contenidoId, botonId){
+  const contenido=document.getElementById(contenidoId);
+  const boton=document.getElementById(botonId);
+  if(!contenido||!boton)return;
+
+  const oculto=contenido.classList.toggle("matrizOculto");
+  boton.textContent=oculto ? "Mostrar ▼" : "Ocultar ▲";
+}
 
 document.addEventListener("DOMContentLoaded",cargarMatrizCalidad);
 setInterval(cargarMatrizCalidad,60000);
