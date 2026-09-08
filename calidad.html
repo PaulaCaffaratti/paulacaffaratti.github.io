@@ -29,49 +29,133 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#2
 .matrizCard{background:white;border:1px solid #dfe7ec;border-radius:14px;padding:20px}.matrizCard h3{margin:0 0 16px;color:#0b3568;font-size:16px}
 .matrizEspecialidades{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.matrizEsp{border:1px solid #dfe7ec;border-radius:14px;padding:16px;background:#fafcfd}.matrizEsp h4{margin:0 0 12px;color:#0b3568;font-size:16px}.matrizEspRegistros{font-size:10px;color:#687787;margin-bottom:13px}.matrizEspRegistros b{color:#0b3568;font-size:12px}.matrizEspAvance{padding:10px 0}.matrizEspAvance+.matrizEspAvance{border-top:1px solid #e7edf1}.matrizEspEtiqueta{font-size:10px;color:#687787;font-weight:700;margin-bottom:5px}.matrizEspValor{display:flex;align-items:baseline;gap:6px;white-space:nowrap}.matrizEspCantidad{font-size:25px;line-height:1;font-weight:800;color:#0b3568}.matrizEspCantidad small{font-size:10px;font-weight:700;color:#607386;margin-left:3px}.matrizEspPct{font-size:13px;font-weight:500;color:#7a8793}.matrizMiniBarra{height:7px;background:#e5ebef;border-radius:20px;overflow:hidden;margin-top:10px}.matrizMiniBarra>div{height:100%;background:#179447;border-radius:20px}.matrizMiniBarra.naranja>div{background:#f28c28}
 .matrizTablaWrap{overflow:auto;max-height:520px;border:1px solid #dfe7ec;border-radius:10px}.matrizTabla{width:100%;border-collapse:collapse;font-size:10px}.matrizTabla thead{position:sticky;top:0;z-index:2}.matrizTabla th{background:#0b3568;color:white;padding:10px;text-align:left;white-space:nowrap}.matrizTabla td{padding:9px 10px;border-bottom:1px solid #e7edf1;white-space:nowrap}.matrizPct{font-weight:700;color:#0b3568}.matrizEstado{font-size:10px;color:#687787;padding:10px 0}.matrizFiltros{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.matrizFiltros input,.matrizFiltros select{border:1px solid #ccd7df;border-radius:8px;padding:9px 10px;font-size:11px;background:white;color:#1d2a36}.matrizFiltros input{min-width:260px;flex:1}
-.matrizCardHead{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.matrizCardHead h3{margin:0}.matrizToggle{border:1px solid #d6e0e8;background:#f7fafc;color:#35516c;border-radius:9px;padding:9px 13px;font-size:11px;font-weight:800;cursor:pointer}.matrizToggle:hover{background:#eef4f8}.matrizOculto{display:none!important}
-.matrizTabla.sistemas th:nth-child(1),.matrizTabla.sistemas td:nth-child(1){background:#eef6ff;color:#0b3568;font-weight:800}.matrizTabla.sistemas th:nth-child(1){background:#0b3568;color:white}.matrizTabla.sistemas th:nth-child(2),.matrizTabla.sistemas td:nth-child(2){background:#f8fbff}.matrizTabla.sistemas th:nth-child(3),.matrizTabla.sistemas td:nth-child(3){background:#f2fbf5;color:#166c3b;font-weight:800}.matrizTabla.sistemas th:nth-child(3){background:#147d47;color:white}.matrizTabla.sistemas th:nth-child(4),.matrizTabla.sistemas td:nth-child(4){background:#fbfefc}.matrizTabla.sistemas td:nth-child(1),.matrizTabla.sistemas td:nth-child(3){font-size:11px}
-.matrizTabla thead tr.filtros-columnas th{background:#f5f8fb;padding:6px;border-bottom:1px solid #dfe7ec}.matrizTabla thead tr.filtros-columnas input{width:100%;min-width:90px;border:1px solid #cbd7e0;border-radius:6px;padding:7px 8px;font-size:9px;color:#26384a;background:white;outline:none}.matrizTabla thead tr.filtros-columnas input:focus{border-color:#5fa8df;box-shadow:0 0 0 2px rgba(95,168,223,.12)}
-.detalleConteo{font-size:10px;color:#687787;margin:0 0 10px}
 .modalFondo{display:none;position:fixed;inset:0;background:rgba(6,24,44,.62);z-index:1000;padding:30px;align-items:center;justify-content:center}.modalFondo.activo{display:flex}.modal{width:min(1200px,96vw);max-height:90vh;background:white;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.25);overflow:hidden;display:flex;flex-direction:column}.modalHeader{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid #e7edf1}.modalHeader h2{margin:0;color:#0b3568;font-size:18px}.cerrar{border:0;background:#eef3f7;color:#29435c;border-radius:8px;font-size:22px;width:38px;height:38px;cursor:pointer}.modalBody{padding:20px;overflow:auto}
 @media(max-width:1100px){.matrizResumenCabecera{grid-template-columns:1fr 1fr}.matrizKpi:nth-child(2){border-right:0}.matrizKpi:nth-child(-n+2){border-bottom:1px solid #e8eef2}.matrizEspecialidades{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:850px){.sidebar{position:relative;width:100%;bottom:auto}.main{margin-left:0}.contenido{padding:16px}}
 @media(max-width:760px){.matrizHero{flex-direction:column}.matrizActualizacion{text-align:left}.matrizResumenCabecera{grid-template-columns:1fr}.matrizKpi{border-right:0;border-bottom:1px solid #e8eef2}.matrizKpi:last-child{border-bottom:0}.matrizEspecialidades{grid-template-columns:1fr 1fr}.matrizAvanceCantidad{font-size:30px}}
 
-/* MENU LATERAL ADAPTATIVO: en pantallas de poca altura se compacta solo */
-.sidebar{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#6f89a3 transparent;}
-.sidebar::-webkit-scrollbar{width:7px;}
-.sidebar::-webkit-scrollbar-track{background:transparent;}
-.sidebar::-webkit-scrollbar-thumb{background:#6f89a3;border-radius:999px;}
+/* =========================================================
+   SISTEMA VISUAL UNIFICADO · EJECUTIVO LIMPIO
+   ========================================================= */
+:root{
+ --ui-navy:#123451;--ui-ink:#19344d;--ui-text:#42596d;--ui-muted:#7c8d9e;
+ --ui-bg:#f7f9fb;--ui-line:#e4eaf0;--ui-line2:#d6e0e8;
+ --ui-green:#287b54;--ui-blue:#3976a5;--ui-orange:#bd7b27;
+ --ui-purple:#6f5aaa;--ui-red:#b44a4a;
+}
+html,body{
+ font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif!important;
+ font-weight:400!important;letter-spacing:0!important;background:var(--ui-bg)!important;color:var(--ui-text)!important;
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+*{box-sizing:border-box}
+h1,h2,h3,h4{font-family:inherit!important;color:var(--ui-ink)!important;letter-spacing:-.015em!important}
+h1{font-weight:600!important} h2,h3,h4{font-weight:600!important}
+button,input,select,textarea{font-family:inherit!important}
+input,select,textarea{
+ border:1px solid var(--ui-line2)!important;border-radius:7px!important;background:#fff!important;color:var(--ui-ink)!important;
+}
+input:focus,select:focus,textarea:focus{
+ outline:none!important;border-color:#9db6ca!important;box-shadow:0 0 0 3px rgba(57,118,165,.07)!important;
+}
+button,.boton,.btn,.btnAzul,.btnVerde,.btnGris,.btn-primary,.btn-secondary,.btn-toggle{
+ font-family:inherit!important;font-weight:500!important;letter-spacing:0!important;border-radius:7px!important;box-shadow:none!important;
+}
+.panel,.card,.curva-panel,.flujo-spooles,.matrizResumenUnificado{
+ box-shadow:none!important;border-color:var(--ui-line)!important;
+}
+th{font-family:inherit!important;font-weight:600!important;letter-spacing:.02em!important;text-transform:none!important}
+td{font-weight:400!important}
 
-@media (max-height:950px) and (min-width:851px){
-  .sidebar{padding:16px 14px;}
-  .logo{font-size:16px;line-height:1.25;margin-bottom:16px;}
-  .sidebar .modulo-titulo{margin:11px 8px 5px;font-size:9px;line-height:1.1;}
-  .sidebar .modulo-titulo:first-of-type{margin-top:2px;}
-  .sidebar a{padding:9px 11px;margin-bottom:4px;font-size:12px;line-height:1.25;border-radius:8px;}
+/* BARRA LATERAL: idéntica en TODAS las páginas */
+.sidebar{
+ position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:214px!important;
+ background:#123451!important;color:#fff!important;padding:28px 14px 20px!important;overflow-y:auto!important;z-index:100!important;
+}
+.logo{
+ font-size:15px!important;line-height:1.45!important;font-weight:600!important;letter-spacing:0!important;
+ color:#fff!important;margin:0 4px 30px!important;
+}
+.modulo-titulo,.sidebar .modulo-titulo{
+ margin:22px 4px 8px!important;font-size:10px!important;line-height:1.2!important;font-weight:500!important;
+ letter-spacing:.06em!important;color:#91a9bd!important;text-transform:uppercase!important;
+}
+.sidebar a{
+ display:block!important;text-decoration:none!important;color:#e1e9f0!important;background:transparent!important;
+ padding:10px 9px!important;margin:0 0 4px!important;border-radius:7px!important;
+ font-size:11px!important;line-height:1.35!important;font-weight:400!important;letter-spacing:0!important;
+}
+.sidebar a:hover,.sidebar a.activo,.sidebar a.active{
+ background:#fff!important;color:#123451!important;
 }
 
-@media (max-height:760px) and (min-width:851px){
-  .sidebar{padding:12px;}
-  .logo{font-size:15px;margin-bottom:10px;}
-  .sidebar .modulo-titulo{margin:8px 7px 4px;font-size:8px;}
-  .sidebar a{padding:7px 9px;margin-bottom:3px;font-size:11px;}
+/* CONTENIDO */
+.main{margin-left:214px!important;min-height:100vh!important}
+.topbar{
+ min-height:52px!important;padding:0 26px!important;background:#fff!important;border-bottom:1px solid var(--ui-line)!important;
+ display:flex!important;align-items:center!important;
 }
+.topbar strong{font-size:12px!important;font-weight:500!important;color:#6d8093!important}
+.contenido{padding:22px 26px 30px!important;max-width:1460px!important;margin:auto!important}
+.contenido>h1,.hero h1,.matrizHero h1{
+ font-size:26px!important;font-weight:600!important;line-height:1.15!important;margin-bottom:5px!important;
+}
+.subtitulo,.hero p,.matrizHero p,.subtitle{font-size:12px!important;font-weight:400!important;color:var(--ui-muted)!important}
+.panel,.card{border-radius:11px!important}
+.panel h2,.card h2,.curva-panel h2,.flujo-spooles h2{font-size:15px!important;font-weight:600!important}
+.kpi small,.kpi .label,.matrizKpi small,.flujo-card small{
+ font-weight:500!important;text-transform:none!important;letter-spacing:.01em!important;
+}
+.kpi strong,.kpi .value,.matrizKpi strong,.flujo-card strong{font-weight:600!important;letter-spacing:-.02em!important}
+.estado,.status,.usuario,.nota,.info{font-weight:400!important}
+table{font-variant-numeric:tabular-nums}
+table th{background:#f8fafc!important;color:#687d91!important}
+table td{color:#344d64!important}
+
+/* 14" */
+@media(min-width:851px) and (max-width:1300px){
+ .sidebar{width:194px!important;padding-left:12px!important;padding-right:12px!important}
+ .main{margin-left:194px!important}
+ .contenido{padding:17px 18px 24px!important}
+ .sidebar a{font-size:10px!important;padding:9px 8px!important}
+}
+@media(max-width:850px){
+ .sidebar{position:relative!important;width:100%!important;bottom:auto!important}
+ .main{margin-left:0!important}
+ .contenido{padding:14px!important}
+}
+
+.matrizHero{margin-bottom:14px!important}
+.matrizActualizacion small,.matrizKpiNota{font-weight:400!important}
+.matrizKpi strong{font-weight:600!important}
+.matrizResumenUnificado,.matrizKpi,.avance{border-radius:9px!important}
+.matrizFiltros input,.matrizFiltros select{font-size:11px!important}
+.matrizTabla th,.tabla th{background:#f7f9fb!important;color:#61758a!important}
+
+.formulario,.fila,.login-box,.login,.archivo,.controls{gap:8px!important}
+.campo label,.field label,.buscador label{font-size:10px!important;font-weight:500!important;color:#718498!important}
+input,select{font-size:11px!important}
+.contador,.kpis{gap:8px!important}
+.card strong,.kpi strong{font-weight:600!important}
+table{font-size:11px!important}
+th,td{padding:8px 9px!important}
 
 </style>
 </head>
 <body>
 <aside class="sidebar">
   <div class="logo">🏗️ CONTROL DE<br>PRODUCCIÓN</div>
+
   <div class="modulo-titulo">PREMOLDEADOS</div>
   <a href="index.html">📊 RESUMEN</a>
   <a href="base.html">📋 BASE DE INGENIERÍA</a>
-  <a href="avance.html">📍 LOCALIZACIÓN DE PREMOLDEADOS</a>
+  <a href="avance.html">📍 LOCALIZACIÓN DE<br>PREMOLDEADOS</a>
+
   <div class="modulo-titulo">PIPING</div>
   <a href="piping.html">📊 RESUMEN</a>
-  <a href="piping-base.html">📋 BASE DE INGENIERÍA / TRAZABILIDAD</a>
-  <a href="spooles.html">📍 LOCALIZACIÓN DE SPOOLES</a>
+  <a href="piping-base.html">📋 BASE DE INGENIERÍA /<br>TRAZABILIDAD</a>
+  <a href="spooles.html">📍 LOCALIZACIÓN DE<br>SPOOLES</a>
+
   <div class="modulo-titulo">CALIDAD</div>
   <a href="calidad.html" class="activo">✅ MATRIZ DE CALIDAD</a>
   <a href="calidad-base.html">📤 BASE DE MATRIZ</a>
@@ -153,47 +237,26 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#2
       </div>
 
       <div class="matrizCard">
-        <div class="matrizCardHead">
-          <h3>Avance por sistema y subsistema</h3>
-          <button id="btnToggleSistemas" class="matrizToggle" onclick="matrizToggleBloque('matrizBloqueSistemas','btnToggleSistemas')">Ocultar ▲</button>
-        </div>
-        <div id="matrizBloqueSistemas">
-          <div class="matrizTablaWrap">
-            <table class="matrizTabla sistemas">
-              <thead><tr><th>Sistema</th><th>Descripción sistema</th><th>Subsistema</th><th>Descripción subsistema</th><th>Registros</th><th>Pendientes</th><th>1P</th><th>Cerrados</th><th>Elaborado</th><th>Cerrado</th></tr></thead>
-              <tbody id="matrizTablaSistemas"></tbody>
-            </table>
-          </div>
+        <h3>Avance por sistema y subsistema</h3>
+        <div class="matrizTablaWrap">
+          <table class="matrizTabla">
+            <thead><tr><th>Sistema</th><th>Descripción sistema</th><th>Subsistema</th><th>Descripción subsistema</th><th>Registros</th><th>Pendientes</th><th>1P</th><th>Cerrados</th><th>Elaborado</th><th>Cerrado</th></tr></thead>
+            <tbody id="matrizTablaSistemas"></tbody>
+          </table>
         </div>
       </div>
 
       <div class="matrizCard">
-        <div class="matrizCardHead">
-          <h3>Detalle de elementos</h3>
-          <button id="btnToggleDetalle" class="matrizToggle" onclick="matrizToggleBloque('matrizBloqueDetalle','btnToggleDetalle')">Ocultar ▲</button>
+        <h3>Detalle de elementos</h3>
+        <div class="matrizFiltros">
+          <input id="matrizBuscar" type="search" placeholder="Buscar TAG, descripción o Status Index..." oninput="matrizPintarDetalle()">
+          <select id="matrizFiltroEspecialidad" onchange="matrizPintarDetalle()"><option value="">Todas las especialidades</option></select>
         </div>
-        <div id="matrizBloqueDetalle">
-          <div class="detalleConteo" id="matrizDetalleConteo"></div>
-          <div class="matrizTablaWrap">
-            <table class="matrizTabla">
-              <thead>
-                <tr><th>Especialidad</th><th>TAG</th><th>Descripción</th><th>Status Index</th><th>Sistema</th><th>Subsistema</th><th>Pend.</th><th>1P</th><th>Cerrados</th><th>% cerrado</th></tr>
-                <tr class="filtros-columnas">
-                  <th><input id="fEsp" placeholder="Filtrar..." oninput="matrizPintarDetalle()"></th>
-                  <th><input id="fTag" placeholder="Filtrar..." oninput="matrizPintarDetalle()"></th>
-                  <th><input id="fDesc" placeholder="Filtrar..." oninput="matrizPintarDetalle()"></th>
-                  <th><input id="fStatus" placeholder="Filtrar..." oninput="matrizPintarDetalle()"></th>
-                  <th><input id="fSistema" placeholder="Filtrar..." oninput="matrizPintarDetalle()"></th>
-                  <th><input id="fSubsistema" placeholder="Filtrar..." oninput="matrizPintarDetalle()"></th>
-                  <th><input id="fPend" placeholder="Ej. 0" oninput="matrizPintarDetalle()"></th>
-                  <th><input id="f1p" placeholder="Ej. 1" oninput="matrizPintarDetalle()"></th>
-                  <th><input id="fCerrados" placeholder="Ej. 2" oninput="matrizPintarDetalle()"></th>
-                  <th><input id="fPct" placeholder="Ej. 100" oninput="matrizPintarDetalle()"></th>
-                </tr>
-              </thead>
-              <tbody id="matrizTablaDetalle"></tbody>
-            </table>
-          </div>
+        <div class="matrizTablaWrap">
+          <table class="matrizTabla">
+            <thead><tr><th>Especialidad</th><th>TAG</th><th>Descripción</th><th>Status Index</th><th>Sistema</th><th>Subsistema</th><th>Pend.</th><th>1P</th><th>Cerrados</th><th>% cerrado</th></tr></thead>
+            <tbody id="matrizTablaDetalle"></tbody>
+          </table>
         </div>
       </div>
 
@@ -292,33 +355,18 @@ function matrizPintarSistemas(){
 }
 
 function matrizPrepararFiltros(){
-  // Los filtros ahora están directamente debajo de cada columna.
+  const sel=document.getElementById("matrizFiltroEspecialidad");if(!sel)return;
+  const actual=sel.value, opciones=[...new Set(matrizFilas.map(f=>f.especialidad).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todas las especialidades</option>'+opciones.map(x=>`<option value="${matrizEsc(x)}">${matrizEsc(x)}</option>`).join("");
+  if(opciones.includes(actual))sel.value=actual;
 }
 
-function matrizValorFiltro(id){return String(document.getElementById(id)?.value||"").trim().toLowerCase()}
-function matrizCoincide(valor,filtro){return !filtro||String(valor??"").toLowerCase().includes(filtro)}
 function matrizPintarDetalle(){
   const tbody=document.getElementById("matrizTablaDetalle");if(!tbody)return;
-  const filtros={
-    esp:matrizValorFiltro("fEsp"),tag:matrizValorFiltro("fTag"),desc:matrizValorFiltro("fDesc"),status:matrizValorFiltro("fStatus"),
-    sistema:matrizValorFiltro("fSistema"),subsistema:matrizValorFiltro("fSubsistema"),pend:matrizValorFiltro("fPend"),p1:matrizValorFiltro("f1p"),
-    cerrados:matrizValorFiltro("fCerrados"),pct:matrizValorFiltro("fPct")
-  };
-  const filtradas=matrizFilas.filter(f=>{
-    const t=matrizContar([f]),cerr=matrizPct(t.cerrado,t.aplicables),pctTexto=cerr.toFixed(1).replace(".",",");
-    return matrizCoincide(f.especialidad,filtros.esp)&&matrizCoincide(f.tag,filtros.tag)&&matrizCoincide(f.descripcion,filtros.desc)&&
-      matrizCoincide(f.status_index,filtros.status)&&matrizCoincide(f.sistema,filtros.sistema)&&matrizCoincide(f.subsistema,filtros.subsistema)&&
-      matrizCoincide(t.pendiente,filtros.pend)&&matrizCoincide(t.cliente,filtros.p1)&&matrizCoincide(t.cerrado,filtros.cerrados)&&
-      (!filtros.pct||String(cerr.toFixed(1)).includes(filtros.pct.replace(",","."))||pctTexto.includes(filtros.pct));
-  });
-  const conteo=document.getElementById("matrizDetalleConteo");if(conteo)conteo.textContent=`Mostrando ${filtradas.length.toLocaleString("es-AR")} de ${matrizFilas.length.toLocaleString("es-AR")} elementos`;
+  const q=String(document.getElementById("matrizBuscar")?.value||"").trim().toLowerCase();
+  const esp=String(document.getElementById("matrizFiltroEspecialidad")?.value||"");
+  const filtradas=matrizFilas.filter(f=>{if(esp&&f.especialidad!==esp)return false;if(!q)return true;return [f.tag,f.descripcion,f.status_index,f.sistema,f.subsistema].some(v=>String(v||"").toLowerCase().includes(q))});
   tbody.innerHTML=filtradas.map(f=>{const t=matrizContar([f]),cerr=matrizPct(t.cerrado,t.aplicables);return `<tr><td>${matrizEsc(f.especialidad)}</td><td>${matrizEsc(f.tag)}</td><td>${matrizEsc(f.descripcion)}</td><td>${matrizEsc(f.status_index)}</td><td>${matrizEsc(f.sistema)}</td><td>${matrizEsc(f.subsistema)}</td><td>${t.pendiente}</td><td>${t.cliente}</td><td>${t.cerrado}</td><td class="matrizPct">${cerr.toFixed(1)}%</td></tr>`}).join("");
-}
-
-function matrizToggleBloque(id,btnId){
-  const bloque=document.getElementById(id),btn=document.getElementById(btnId);if(!bloque||!btn)return;
-  const oculto=bloque.classList.toggle("matrizOculto");
-  btn.textContent=oculto?"Mostrar ▼":"Ocultar ▲";
 }
 
 function matrizAbrirDetalleCliente(){
