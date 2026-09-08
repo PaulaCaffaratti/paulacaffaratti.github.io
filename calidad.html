@@ -188,6 +188,224 @@ th,td{padding:8px 9px!important}
   font-weight:600!important;
 }
 
+
+/* ===== MATRIZ DE CALIDAD · TÍTULO Y AVANCES COMPACTOS ===== */
+.matrizHero h1{
+  color:#ffffff!important;
+  font-weight:700!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.12);
+}
+.matrizHero p{
+  color:rgba(255,255,255,.88)!important;
+}
+
+.matrizAvanceGrid{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:0!important;
+  border-top:1px solid #e8eef2!important;
+  background:#fff!important;
+}
+.matrizAvanceItem{
+  padding:14px 18px!important;
+  min-height:auto!important;
+}
+.matrizAvanceItem + .matrizAvanceItem{
+  border-top:0!important;
+  border-left:1px solid #e8eef2!important;
+}
+.matrizAvanceTexto h3{
+  font-size:12px!important;
+  margin:0 0 6px!important;
+  color:#19344d!important;
+}
+.matrizAvanceDato{
+  gap:7px!important;
+}
+.matrizAvanceCantidad{
+  font-size:24px!important;
+  line-height:1!important;
+}
+.matrizAvanceCantidad small{
+  font-size:10px!important;
+  margin-left:3px!important;
+}
+.matrizAvancePct{
+  font-size:13px!important;
+}
+.matrizAvanceSub{
+  font-size:9px!important;
+  margin-top:5px!important;
+  line-height:1.35!important;
+}
+.matrizBarra{
+  height:5px!important;
+  margin-top:10px!important;
+}
+
+@media(max-width:700px){
+  .matrizAvanceGrid{
+    grid-template-columns:1fr!important;
+  }
+  .matrizAvanceItem + .matrizAvanceItem{
+    border-left:0!important;
+    border-top:1px solid #e8eef2!important;
+  }
+}
+
+
+/* ===== CALIDAD · MISMA ESTÉTICA QUE RESUMEN PREMOLDEADOS ===== */
+
+/* Título principal sin bloque azul */
+.matrizHero{
+  background:transparent!important;
+  color:var(--ui-ink)!important;
+  border-radius:0!important;
+  padding:14px 0 10px!important;
+  margin:0 0 8px!important;
+  box-shadow:none!important;
+  align-items:flex-end!important;
+}
+.matrizHero h1{
+  color:#123451!important;
+  font-size:30px!important;
+  font-weight:600!important;
+  line-height:1.15!important;
+  margin:0 0 7px!important;
+  text-shadow:none!important;
+}
+.matrizHero p{
+  color:#7c8d9e!important;
+  opacity:1!important;
+  font-size:13px!important;
+}
+.matrizActualizacion{
+  color:#718498!important;
+}
+.matrizActualizacion small{
+  color:#8a98a5!important;
+  opacity:1!important;
+}
+.matrizActualizacion strong{
+  color:#526a80!important;
+  font-weight:500!important;
+}
+
+/* Resumen general: blanco, limpio y sin azul fuerte */
+.matrizResumenUnificado{
+  background:#fff!important;
+  border:1px solid #e1e8ee!important;
+  border-radius:12px!important;
+  overflow:hidden!important;
+  box-shadow:none!important;
+}
+.matrizResumenCabecera{
+  grid-template-columns:repeat(4,1fr)!important;
+  background:#fff!important;
+}
+.matrizKpi,
+.matrizKpi.violeta{
+  background:#fff!important;
+  color:#42596d!important;
+  padding:18px 20px!important;
+  border-right:1px solid #e6ebf0!important;
+  border-radius:0!important;
+}
+.matrizKpi:last-child{
+  border-right:0!important;
+}
+.matrizKpi small,
+.matrizKpi.violeta small{
+  color:#718498!important;
+  font-size:10px!important;
+  margin-bottom:8px!important;
+}
+.matrizKpi strong,
+.matrizKpi.violeta strong{
+  color:#123451!important;
+  font-size:29px!important;
+  font-weight:600!important;
+}
+.matrizKpi .matrizKpiNota,
+.matrizKpi.violeta .matrizKpiNota{
+  color:#8796a4!important;
+  font-size:9px!important;
+  margin-top:6px!important;
+}
+
+/* Indicadores de color discretos */
+.matrizKpi small:before{
+  width:6px!important;
+  height:6px!important;
+  box-shadow:none!important;
+  background:#6f8294!important;
+}
+.matrizKpi.verde small:before{background:#287b54!important}
+.matrizKpi.naranja small:before{background:#bd7b27!important}
+.matrizKpi.rojo small:before{background:#b44a4a!important}
+.matrizKpi.violeta small:before{background:#3976a5!important}
+
+/* Avances juntos y compactos */
+.matrizAvanceGrid{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  background:#f9fbfc!important;
+  border-top:1px solid #e6ebf0!important;
+}
+.matrizAvanceItem{
+  padding:13px 20px!important;
+}
+.matrizAvanceItem + .matrizAvanceItem{
+  border-left:1px solid #e6ebf0!important;
+  border-top:0!important;
+}
+.matrizAvanceTexto h3{
+  color:#42596d!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  margin:0 0 5px!important;
+}
+.matrizAvanceCantidad{
+  color:#123451!important;
+  font-size:23px!important;
+  font-weight:600!important;
+}
+.matrizAvanceCantidad small{
+  color:#718498!important;
+  font-size:9px!important;
+  font-weight:500!important;
+}
+.matrizAvancePct{
+  color:#718498!important;
+  font-size:12px!important;
+}
+.matrizAvanceSub{
+  color:#8796a4!important;
+  font-size:9px!important;
+  margin-top:4px!important;
+}
+.matrizBarra{
+  height:4px!important;
+  background:#e7ecef!important;
+  margin-top:9px!important;
+}
+.matrizBarra>div{
+  background:#287b54!important;
+}
+.matrizBarra.naranja>div{
+  background:#bd7b27!important;
+}
+
+@media(max-width:760px){
+  .matrizHero{align-items:flex-start!important}
+  .matrizResumenCabecera{grid-template-columns:1fr 1fr!important}
+  .matrizAvanceGrid{grid-template-columns:1fr!important}
+  .matrizAvanceItem + .matrizAvanceItem{
+    border-left:0!important;
+    border-top:1px solid #e6ebf0!important;
+  }
+}
+
 </style>
 </head>
 <body>
