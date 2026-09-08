@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de Producción - Matriz de Calidad</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#24364b}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:270px;background:#102f52;color:white;padding:28px 18px;z-index:10;overflow:auto}
+.logo{font-size:19px;font-weight:800;line-height:1.35;margin-bottom:35px}
+.sidebar a{display:block;text-decoration:none;color:#dbe7f3;padding:13px 14px;margin-bottom:8px;border-radius:9px;font-size:13px;font-weight:bold}
+.sidebar a:hover,.sidebar a.activo{background:white;color:#102f52}
+.sidebar .modulo-titulo{margin:18px 8px 8px;font-size:10px;font-weight:800;letter-spacing:.8px;color:#89a6c3;text-transform:uppercase}
+.sidebar .modulo-titulo:first-of-type{margin-top:4px}
+.main{margin-left:270px;min-height:100vh}
+.topbar{background:white;border-bottom:1px solid #dfe5eb;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.conexion{font-size:12px;font-weight:bold;color:#68798c}.conexion.ok{color:#1c7a48}.conexion.error{color:#b33a3a}
+.contenido{padding:28px;max-width:1600px;margin:auto}
+.matrizWrap{display:flex;flex-direction:column;gap:18px}
+.matrizHero{background:linear-gradient(135deg,#0b3568,#174f86);color:white;border-radius:16px;padding:24px 26px;display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+.matrizHero h1{margin:0 0 7px;font-size:28px}.matrizHero p{margin:0;font-size:13px;opacity:.84;line-height:1.5}.matrizActualizacion{text-align:right;min-width:190px}.matrizActualizacion small{display:block;font-size:9px;letter-spacing:.08em;text-transform:uppercase;opacity:.75}.matrizActualizacion strong{display:block;margin-top:5px;font-size:12px}
+.matrizResumenUnificado{background:white;border:1px solid #dfe7ec;border-radius:20px;padding:0;overflow:hidden;box-shadow:0 8px 24px rgba(20,50,80,.06)}
+.matrizResumenCabecera{display:grid;grid-template-columns:1.15fr repeat(3,1fr);background:linear-gradient(180deg,#fff,#fbfdff)}
+.matrizKpi{padding:22px 24px;border-right:1px solid #e8eef2;position:relative}.matrizKpi:last-child{border-right:0}.matrizKpi small{display:flex;align-items:center;gap:8px;color:#687787;font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.04em;margin-bottom:8px}.matrizKpi small:before{content:'';width:8px;height:8px;border-radius:50%;background:#5ec5e7;box-shadow:0 0 0 4px rgba(94,197,231,.12)}.matrizKpi strong{display:block;color:#0b3568;font-size:34px;line-height:1;font-weight:800}.matrizKpi .matrizKpiNota{margin-top:7px;font-size:10px;color:#8a98a5}.matrizKpi.rojo small:before{background:#dc3b3b;box-shadow:0 0 0 4px rgba(220,59,59,.10)}.matrizKpi.naranja small:before{background:#f28c28;box-shadow:0 0 0 4px rgba(242,140,40,.12)}.matrizKpi.verde small:before{background:#179447;box-shadow:0 0 0 4px rgba(23,148,71,.11)}.matrizKpi.violeta{background:linear-gradient(135deg,#0b3568,#174f86);color:white}.matrizKpi.violeta small,.matrizKpi.violeta .matrizKpiNota{color:rgba(255,255,255,.78)}.matrizKpi.violeta small:before{background:#69d2f1;box-shadow:0 0 0 4px rgba(255,255,255,.12)}.matrizKpi.violeta strong{color:white}
+.matrizKpiClickable{cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,background .16s ease}.matrizKpiClickable:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(20,50,80,.10);background:#fffaf5}.matrizKpiClickable:active{transform:translateY(0)}
+.matrizAvanceGrid{display:flex;flex-direction:column;border-top:1px solid #e8eef2}.matrizAvanceItem{padding:18px 24px}.matrizAvanceItem+.matrizAvanceItem{border-top:1px solid #eef2f5}.matrizAvanceTexto h3{margin:0 0 8px;color:#0b3568;font-size:15px}.matrizAvanceSub{font-size:10px;color:#687787;line-height:1.45}.matrizAvanceDato{display:flex;align-items:baseline;gap:10px;white-space:nowrap}.matrizAvanceCantidad{font-size:36px;font-weight:800;line-height:1;color:#0b3568}.matrizAvanceCantidad small{font-size:13px;font-weight:700;color:#607386;margin-left:4px}.matrizAvancePct{font-size:18px;font-weight:600;color:#7a8793}.matrizBarra{height:8px;background:#e8edf1;border-radius:20px;overflow:hidden;margin-top:14px}.matrizBarra>div{height:100%;border-radius:20px;background:linear-gradient(90deg,#159447,#1fb661)}.matrizBarra.naranja>div{background:linear-gradient(90deg,#f28c28,#ffad47)}
+.matrizCard{background:white;border:1px solid #dfe7ec;border-radius:14px;padding:20px}.matrizCard h3{margin:0 0 16px;color:#0b3568;font-size:16px}
+.matrizEspecialidades{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.matrizEsp{border:1px solid #dfe7ec;border-radius:14px;padding:16px;background:#fafcfd}.matrizEsp h4{margin:0 0 12px;color:#0b3568;font-size:16px}.matrizEspRegistros{font-size:10px;color:#687787;margin-bottom:13px}.matrizEspRegistros b{color:#0b3568;font-size:12px}.matrizEspAvance{padding:10px 0}.matrizEspAvance+.matrizEspAvance{border-top:1px solid #e7edf1}.matrizEspEtiqueta{font-size:10px;color:#687787;font-weight:700;margin-bottom:5px}.matrizEspValor{display:flex;align-items:baseline;gap:6px;white-space:nowrap}.matrizEspCantidad{font-size:25px;line-height:1;font-weight:800;color:#0b3568}.matrizEspCantidad small{font-size:10px;font-weight:700;color:#607386;margin-left:3px}.matrizEspPct{font-size:13px;font-weight:500;color:#7a8793}.matrizMiniBarra{height:7px;background:#e5ebef;border-radius:20px;overflow:hidden;margin-top:10px}.matrizMiniBarra>div{height:100%;background:#179447;border-radius:20px}.matrizMiniBarra.naranja>div{background:#f28c28}
+.matrizTablaWrap{overflow:auto;max-height:520px;border:1px solid #dfe7ec;border-radius:10px}.matrizTabla{width:100%;border-collapse:collapse;font-size:10px}.matrizTabla thead{position:sticky;top:0;z-index:2}.matrizTabla th{background:#0b3568;color:white;padding:10px;text-align:left;white-space:nowrap}.matrizTabla td{padding:9px 10px;border-bottom:1px solid #e7edf1;white-space:nowrap}.matrizPct{font-weight:700;color:#0b3568}.matrizEstado{font-size:10px;color:#687787;padding:10px 0}.matrizFiltros{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.matrizFiltros input,.matrizFiltros select{border:1px solid #ccd7df;border-radius:8px;padding:9px 10px;font-size:11px;background:white;color:#1d2a36}.matrizFiltros input{min-width:260px;flex:1}
+.modalFondo{display:none;position:fixed;inset:0;background:rgba(6,24,44,.62);z-index:1000;padding:30px;align-items:center;justify-content:center}.modalFondo.activo{display:flex}.modal{width:min(1200px,96vw);max-height:90vh;background:white;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.25);overflow:hidden;display:flex;flex-direction:column}.modalHeader{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid #e7edf1}.modalHeader h2{margin:0;color:#0b3568;font-size:18px}.cerrar{border:0;background:#eef3f7;color:#29435c;border-radius:8px;font-size:22px;width:38px;height:38px;cursor:pointer}.modalBody{padding:20px;overflow:auto}
+@media(max-width:1100px){.matrizResumenCabecera{grid-template-columns:1fr 1fr}.matrizKpi:nth-child(2){border-right:0}.matrizKpi:nth-child(-n+2){border-bottom:1px solid #e8eef2}.matrizEspecialidades{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:850px){.sidebar{position:relative;width:100%;bottom:auto}.main{margin-left:0}.contenido{padding:16px}}
+@media(max-width:760px){.matrizHero{flex-direction:column}.matrizActualizacion{text-align:left}.matrizResumenCabecera{grid-template-columns:1fr}.matrizKpi{border-right:0;border-bottom:1px solid #e8eef2}.matrizKpi:last-child{border-bottom:0}.matrizEspecialidades{grid-template-columns:1fr 1fr}.matrizAvanceCantidad{font-size:30px}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo">🏗️ CONTROL DE<br>PRODUCCIÓN</div>
+  <div class="modulo-titulo">PREMOLDEADOS</div>
+  <a href="index.html">📊 RESUMEN</a>
+  <a href="base.html">📋 BASE DE INGENIERÍA</a>
+  <a href="avance.html">📍 LOCALIZACIÓN DE PREMOLDEADOS</a>
+  <div class="modulo-titulo">PIPING</div>
+  <a href="piping.html">📊 RESUMEN</a>
+  <a href="piping-base.html">📋 BASE DE INGENIERÍA / TRAZABILIDAD</a>
+  <a href="spooles.html">📍 LOCALIZACIÓN DE SPOOLES</a>
+  <div class="modulo-titulo">CALIDAD</div>
+  <a href="calidad.html" class="activo">✅ MATRIZ DE CALIDAD</a>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <strong>Seguimiento de Calidad</strong>
+    <div id="conexionTop" class="conexion">⏳ Actualizando matriz...</div>
+  </div>
+
+  <main class="contenido">
+    <div class="matrizWrap">
+      <div class="matrizHero">
+        <div>
+          <h1>Matriz de Calidad</h1>
+          <p>Seguimiento de registros de calidad por elemento, especialidad, sistema y subsistema.</p>
+        </div>
+        <div class="matrizActualizacion">
+          <small>Última carga de matriz</small>
+          <strong id="matrizFechaCarga">Consultando...</strong>
+        </div>
+      </div>
+
+      <div class="matrizResumenUnificado">
+        <div class="matrizResumenCabecera">
+          <div class="matrizKpi violeta">
+            <small>Registros</small>
+            <strong id="matrizAplicables">0</strong>
+            <div class="matrizKpiNota">Total de registros requeridos</div>
+          </div>
+          <div class="matrizKpi verde">
+            <small>Cerrados · 1</small>
+            <strong id="matrizCerrados">0</strong>
+            <div class="matrizKpiNota">Firmados y completos</div>
+          </div>
+          <div class="matrizKpi naranja matrizKpiClickable" onclick="matrizAbrirDetalleCliente()" title="Ver registros en poder del cliente">
+            <small>En poder del cliente · 1P</small>
+            <strong id="matrizCliente">0</strong>
+            <div class="matrizKpiNota">Pendientes de firma · tocar para ver detalle</div>
+          </div>
+          <div class="matrizKpi rojo">
+            <small>Pendientes · 0</small>
+            <strong id="matrizPendientes">0</strong>
+            <div class="matrizKpiNota">Aún no elaborados</div>
+          </div>
+        </div>
+
+        <div class="matrizAvanceGrid">
+          <div class="matrizAvanceItem">
+            <div class="matrizAvanceTexto">
+              <h3>Avance elaborado</h3>
+              <div class="matrizAvanceDato">
+                <span class="matrizAvanceCantidad"><span id="matrizElaboradoCantidadNumero">0</span><small>registros</small></span>
+                <span class="matrizAvancePct">(<span id="matrizElaborado">0%</span>)</span>
+              </div>
+              <div class="matrizAvanceSub">Estados 1 + 1P sobre el total de registros</div>
+            </div>
+            <div class="matrizBarra naranja"><div id="matrizBarraElaborado" style="width:0%"></div></div>
+          </div>
+
+          <div class="matrizAvanceItem">
+            <div class="matrizAvanceTexto">
+              <h3>Avance cerrado</h3>
+              <div class="matrizAvanceDato">
+                <span class="matrizAvanceCantidad"><span id="matrizCerradoCantidadNumero">0</span><small>registros</small></span>
+                <span class="matrizAvancePct">(<span id="matrizCerradoPct">0%</span>)</span>
+              </div>
+              <div class="matrizAvanceSub">Estado 1 · registros firmados y completos</div>
+            </div>
+            <div class="matrizBarra"><div id="matrizBarraCerrado" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="matrizCard">
+        <h3>Avance por especialidad</h3>
+        <div id="matrizEspecialidades" class="matrizEspecialidades"></div>
+      </div>
+
+      <div class="matrizCard">
+        <h3>Avance por sistema y subsistema</h3>
+        <div class="matrizTablaWrap">
+          <table class="matrizTabla">
+            <thead><tr><th>Sistema</th><th>Descripción sistema</th><th>Subsistema</th><th>Descripción subsistema</th><th>Registros</th><th>Pendientes</th><th>1P</th><th>Cerrados</th><th>Elaborado</th><th>Cerrado</th></tr></thead>
+            <tbody id="matrizTablaSistemas"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="matrizCard">
+        <h3>Detalle de elementos</h3>
+        <div class="matrizFiltros">
+          <input id="matrizBuscar" type="search" placeholder="Buscar TAG, descripción o Status Index..." oninput="matrizPintarDetalle()">
+          <select id="matrizFiltroEspecialidad" onchange="matrizPintarDetalle()"><option value="">Todas las especialidades</option></select>
+        </div>
+        <div class="matrizTablaWrap">
+          <table class="matrizTabla">
+            <thead><tr><th>Especialidad</th><th>TAG</th><th>Descripción</th><th>Status Index</th><th>Sistema</th><th>Subsistema</th><th>Pend.</th><th>1P</th><th>Cerrados</th><th>% cerrado</th></tr></thead>
+            <tbody id="matrizTablaDetalle"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="matrizConexion" class="matrizEstado">⏳ Actualizando matriz...</div>
+    </div>
+  </main>
+</div>
+
+<div id="modalFondo" class="modalFondo" onclick="cerrarModalFondo(event)">
+  <div class="modal">
+    <div class="modalHeader">
+      <h2 id="modalTitulo">Detalle</h2>
+      <button class="cerrar" onclick="cerrarModal()">×</button>
+    </div>
+    <div id="modalBody" class="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const CALIDAD_SUPABASE_URL="https://mzgbtejfgsrskiuymtwh.supabase.co";
+const CALIDAD_SUPABASE_KEY="sb_publishable_Wen9hxBnae8wRrEEaP5lOQ_aNl9OCGd";
+const calidadDb=window.supabase.createClient(CALIDAD_SUPABASE_URL,CALIDAD_SUPABASE_KEY);
+let matrizFilas=[];
+
+function matrizNormalizarEstado(valor){
+  const v=String(valor??"").trim().toUpperCase().replace(/\s+/g,"");
+  if(v==="N/A"||v==="NA"||v==="N.A.") return "N/A";
+  if(v==="1P"||v==="1-P") return "1P";
+  if(v==="1"||v==="1.0") return "1";
+  if(v==="0"||v==="0.0") return "0";
+  return "";
+}
+function matrizContar(filas){
+  let pendiente=0,cliente=0,cerrado=0,na=0;
+  (filas||[]).forEach(f=>Object.values(f.registros||{}).forEach(v=>{
+    const e=matrizNormalizarEstado(v);
+    if(e==="0")pendiente++; else if(e==="1P")cliente++; else if(e==="1")cerrado++; else if(e==="N/A")na++;
+  }));
+  return {pendiente,cliente,cerrado,na,aplicables:pendiente+cliente+cerrado};
+}
+function matrizPct(n,d){return d?(n/d)*100:0}
+function matrizEsc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function matrizSet(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
+
+async function cargarMatrizCalidad(){
+  const estado=document.getElementById("matrizConexion");
+  const top=document.getElementById("conexionTop");
+  if(estado)estado.textContent="⏳ Actualizando matriz...";
+  if(top){top.textContent="⏳ Actualizando matriz...";top.className="conexion"}
+  const {data,error}=await calidadDb.from("matriz_calidad")
+    .select("especialidad,tag,descripcion,pid_listado,status_index,sistema,descripcion_sistema,subsistema,descripcion_subsistema,registros,fecha_carga")
+    .order("id",{ascending:true});
+  if(error){
+    console.error(error);
+    if(estado)estado.textContent="❌ No se pudieron cargar los datos de la Matriz.";
+    if(top){top.textContent="● Error de conexión";top.className="conexion error"}
+    return;
+  }
+  matrizFilas=data||[];
+  const t=matrizContar(matrizFilas);
+  const elaborado=matrizPct(t.cliente+t.cerrado,t.aplicables);
+  const cerrado=matrizPct(t.cerrado,t.aplicables);
+  matrizSet("matrizAplicables",t.aplicables.toLocaleString("es-AR"));
+  matrizSet("matrizPendientes",t.pendiente.toLocaleString("es-AR"));
+  matrizSet("matrizCliente",t.cliente.toLocaleString("es-AR"));
+  matrizSet("matrizCerrados",t.cerrado.toLocaleString("es-AR"));
+  matrizSet("matrizElaborado",elaborado.toFixed(1)+"%");
+  matrizSet("matrizCerradoPct",cerrado.toFixed(1)+"%");
+  matrizSet("matrizElaboradoCantidadNumero",(t.cliente+t.cerrado).toLocaleString("es-AR"));
+  matrizSet("matrizCerradoCantidadNumero",t.cerrado.toLocaleString("es-AR"));
+  const b1=document.getElementById("matrizBarraElaborado");if(b1)b1.style.width=Math.min(elaborado,100)+"%";
+  const b2=document.getElementById("matrizBarraCerrado");if(b2)b2.style.width=Math.min(cerrado,100)+"%";
+  const fechas=matrizFilas.map(f=>f.fecha_carga).filter(Boolean).sort();
+  if(fechas.length){const d=new Date(fechas[fechas.length-1]);matrizSet("matrizFechaCarga",d.toLocaleString("es-AR"))}else matrizSet("matrizFechaCarga","Sin cargas");
+  matrizPintarEspecialidades();matrizPintarSistemas();matrizPrepararFiltros();matrizPintarDetalle();
+  if(estado)estado.textContent="● Datos actualizados automáticamente";
+  if(top){top.textContent="● Base online conectada";top.className="conexion ok"}
+}
+
+function matrizPintarEspecialidades(){
+  const nombres=["Civil","Piping","Mecánica","Electricidad","Instrumentación"];
+  const cont=document.getElementById("matrizEspecialidades");if(!cont)return;
+  cont.innerHTML=nombres.map(nombre=>{
+    const filas=matrizFilas.filter(f=>String(f.especialidad||"")===nombre);
+    const t=matrizContar(filas), elaborados=t.cliente+t.cerrado, elab=matrizPct(elaborados,t.aplicables), cerr=matrizPct(t.cerrado,t.aplicables);
+    return `<div class="matrizEsp"><h4>${matrizEsc(nombre)}</h4><div class="matrizEspRegistros">Registros: <b>${t.aplicables.toLocaleString("es-AR")}</b></div><div class="matrizEspAvance"><div class="matrizEspEtiqueta">Avance elaborado</div><div class="matrizEspValor"><span class="matrizEspCantidad">${elaborados.toLocaleString("es-AR")}<small>registros</small></span><span class="matrizEspPct">(${elab.toFixed(1)}%)</span></div><div class="matrizMiniBarra naranja"><div style="width:${Math.min(elab,100)}%"></div></div></div><div class="matrizEspAvance"><div class="matrizEspEtiqueta">Avance cerrado</div><div class="matrizEspValor"><span class="matrizEspCantidad">${t.cerrado.toLocaleString("es-AR")}<small>registros</small></span><span class="matrizEspPct">(${cerr.toFixed(1)}%)</span></div><div class="matrizMiniBarra"><div style="width:${Math.min(cerr,100)}%"></div></div></div></div>`;
+  }).join("");
+}
+
+function matrizPintarSistemas(){
+  const tbody=document.getElementById("matrizTablaSistemas");if(!tbody)return;
+  const grupos=new Map();
+  matrizFilas.forEach(f=>{const key=[f.sistema||"",f.descripcion_sistema||"",f.subsistema||"",f.descripcion_subsistema||""].join("||");if(!grupos.has(key))grupos.set(key,[]);grupos.get(key).push(f)});
+  const filas=[...grupos.entries()].map(([key,items])=>{const [sis,ds,sub,dsub]=key.split("||");const t=matrizContar(items);return {sis,ds,sub,dsub,t,elab:matrizPct(t.cliente+t.cerrado,t.aplicables),cerr:matrizPct(t.cerrado,t.aplicables)}}).sort((a,b)=>(a.sis+a.sub).localeCompare(b.sis+b.sub,undefined,{numeric:true}));
+  tbody.innerHTML=filas.map(x=>`<tr><td>${matrizEsc(x.sis)}</td><td>${matrizEsc(x.ds)}</td><td>${matrizEsc(x.sub)}</td><td>${matrizEsc(x.dsub)}</td><td>${x.t.aplicables.toLocaleString("es-AR")}</td><td>${x.t.pendiente.toLocaleString("es-AR")}</td><td>${x.t.cliente.toLocaleString("es-AR")}</td><td>${x.t.cerrado.toLocaleString("es-AR")}</td><td class="matrizPct">${x.elab.toFixed(1)}% · ${(x.t.cliente+x.t.cerrado).toLocaleString("es-AR")}</td><td class="matrizPct">${x.cerr.toFixed(1)}% · ${x.t.cerrado.toLocaleString("es-AR")}</td></tr>`).join("");
+}
+
+function matrizPrepararFiltros(){
+  const sel=document.getElementById("matrizFiltroEspecialidad");if(!sel)return;
+  const actual=sel.value, opciones=[...new Set(matrizFilas.map(f=>f.especialidad).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todas las especialidades</option>'+opciones.map(x=>`<option value="${matrizEsc(x)}">${matrizEsc(x)}</option>`).join("");
+  if(opciones.includes(actual))sel.value=actual;
+}
+
+function matrizPintarDetalle(){
+  const tbody=document.getElementById("matrizTablaDetalle");if(!tbody)return;
+  const q=String(document.getElementById("matrizBuscar")?.value||"").trim().toLowerCase();
+  const esp=String(document.getElementById("matrizFiltroEspecialidad")?.value||"");
+  const filtradas=matrizFilas.filter(f=>{if(esp&&f.especialidad!==esp)return false;if(!q)return true;return [f.tag,f.descripcion,f.status_index,f.sistema,f.subsistema].some(v=>String(v||"").toLowerCase().includes(q))});
+  tbody.innerHTML=filtradas.map(f=>{const t=matrizContar([f]),cerr=matrizPct(t.cerrado,t.aplicables);return `<tr><td>${matrizEsc(f.especialidad)}</td><td>${matrizEsc(f.tag)}</td><td>${matrizEsc(f.descripcion)}</td><td>${matrizEsc(f.status_index)}</td><td>${matrizEsc(f.sistema)}</td><td>${matrizEsc(f.subsistema)}</td><td>${t.pendiente}</td><td>${t.cliente}</td><td>${t.cerrado}</td><td class="matrizPct">${cerr.toFixed(1)}%</td></tr>`}).join("");
+}
+
+function matrizAbrirDetalleCliente(){
+  const registros=[];
+  matrizFilas.forEach(f=>Object.entries(f.registros||{}).forEach(([nombre,estado])=>{if(matrizNormalizarEstado(estado)==="1P")registros.push({especialidad:f.especialidad||"",tag:f.tag||"",descripcion:f.descripcion||"",status_index:f.status_index||"",sistema:f.sistema||"",descripcion_sistema:f.descripcion_sistema||"",subsistema:f.subsistema||"",descripcion_subsistema:f.descripcion_subsistema||"",registro:nombre||""})}));
+  registros.sort((a,b)=>(a.especialidad+a.tag+a.registro).localeCompare(b.especialidad+b.tag+b.registro,"es",{numeric:true,sensitivity:"base"}));
+  document.getElementById("modalTitulo").textContent="Registros en poder del cliente ("+registros.length+")";
+  const body=document.getElementById("modalBody");
+  if(!registros.length){body.innerHTML='<div style="padding:18px;color:#687787;">No hay registros con estado 1P.</div>';mostrarModal();return}
+  body.innerHTML=`<div style="margin-bottom:14px;color:#687787;font-size:12px;line-height:1.5;">Detalle de los registros marcados como <strong>1P</strong>, actualmente en poder del cliente para firma.</div><div style="overflow:auto;max-height:62vh;border:1px solid #dfe7ec;border-radius:10px;"><table class="matrizTabla" style="min-width:980px;"><thead><tr><th>Especialidad</th><th>TAG</th><th>Descripción</th><th>Registro / protocolo</th><th>Status Index</th><th>Sistema</th><th>Subsistema</th></tr></thead><tbody>${registros.map(r=>`<tr><td>${matrizEsc(r.especialidad)}</td><td><strong style="color:#0b3568;">${matrizEsc(r.tag||"-")}</strong></td><td>${matrizEsc(r.descripcion)}</td><td style="white-space:normal;min-width:300px;line-height:1.35;">${matrizEsc(r.registro)}</td><td>${matrizEsc(r.status_index)}</td><td>${matrizEsc(r.sistema)}${r.descripcion_sistema?" · "+matrizEsc(r.descripcion_sistema):""}</td><td>${matrizEsc(r.subsistema)}${r.descripcion_subsistema?" · "+matrizEsc(r.descripcion_subsistema):""}</td></tr>`).join("")}</tbody></table></div>`;
+  mostrarModal();
+}
+function mostrarModal(){document.getElementById("modalFondo").classList.add("activo")}
+function cerrarModal(){document.getElementById("modalFondo").classList.remove("activo")}
+function cerrarModalFondo(e){if(e.target.id==="modalFondo")cerrarModal()}
+
+document.addEventListener("DOMContentLoaded",cargarMatrizCalidad);
+setInterval(cargarMatrizCalidad,60000);
+</script>
+</body>
+</html>
