@@ -505,6 +505,58 @@ th,td{padding:8px 9px!important}
   .flujo-grid{grid-template-columns:1fr!important}
 }
 
+
+/* ===== AJUSTE FLUJO DE SPOOLES EN UNA SOLA LÍNEA ===== */
+.flujo-grid{
+  display:grid!important;
+  grid-template-columns:repeat(8,minmax(0,1fr))!important;
+  gap:8px!important;
+  overflow:visible!important;
+  padding:2px 0!important;
+}
+.flujo-card{
+  min-width:0!important;
+  min-height:150px!important;
+  padding:13px 12px!important;
+}
+.flujo-card .ico{
+  font-size:19px!important;
+  margin-bottom:7px!important;
+}
+.flujo-card small{
+  font-size:9px!important;
+  line-height:1.2!important;
+  margin-bottom:10px!important;
+}
+.flujo-card strong{
+  font-size:22px!important;
+}
+.flujo-card .unidad{
+  font-size:9px!important;
+}
+.flujo-card .meta{
+  margin-top:9px!important;
+  padding-top:8px!important;
+  font-size:9px!important;
+  line-height:1.5!important;
+}
+@media(max-width:1200px){
+  .flujo-grid{
+    grid-template-columns:repeat(8,minmax(120px,1fr))!important;
+    overflow-x:auto!important;
+    padding-bottom:8px!important;
+  }
+}
+
+
+/* ===== KPI PIPING: 3 TARJETAS ===== */
+.kpis{
+  grid-template-columns:repeat(3,1fr)!important;
+}
+@media(max-width:900px){
+  .kpis{grid-template-columns:1fr!important}
+}
+
 </style>
 </head>
 
@@ -592,16 +644,14 @@ th,td{padding:8px 9px!important}
       <div class="kpi verde">
         <small>Ø ejecutadas</small>
         <strong id="pipeEjecutadas">—</strong>
+        <div class="kpi-sub" style="margin-top:10px;padding-top:9px;border-top:1px solid #e0e6ec;">
+          Avance: <b id="pipeAvance">—</b>
+        </div>
       </div>
 
       <div class="kpi naranja">
         <small>Ø pendientes</small>
         <strong id="pipePendientes">—</strong>
-      </div>
-
-      <div class="kpi violeta">
-        <small>Avance general</small>
-        <strong id="pipeAvance">—</strong>
       </div>
     </div>
 
@@ -1454,26 +1504,30 @@ async function cargarPiping(){
 
     }
 
-    document.getElementById("pipeTablaTipos").innerHTML=
-      tipos.length
-      ? tipos.map(x=>`
+    const tablaTipos = document.getElementById("pipeTablaTipos");
+
+    if(tablaTipos){
+      tablaTipos.innerHTML=
+        tipos.length
+        ? tipos.map(x=>`
+            <tr>
+              <td><strong>${escapar(x.codigo || "")}</strong></td>
+              <td>${escapar(x.descripcion || "")}</td>
+              <td>${Number(x.juntas || 0)}</td>
+              <td>${pipeNum(x.pulgadas_a_ejecutar)}"</td>
+              <td>${pipeNum(x.pulgadas_ejecutadas)}"</td>
+              <td>${pipeNum(x.pulgadas_pendientes)}"</td>
+              <td><strong>${pipePct(x.avance_porcentaje)}</strong></td>
+            </tr>
+          `).join("")
+        : `
           <tr>
-            <td><strong>${escapar(x.codigo || "")}</strong></td>
-            <td>${escapar(x.descripcion || "")}</td>
-            <td>${Number(x.juntas || 0)}</td>
-            <td>${pipeNum(x.pulgadas_a_ejecutar)}"</td>
-            <td>${pipeNum(x.pulgadas_ejecutadas)}"</td>
-            <td>${pipeNum(x.pulgadas_pendientes)}"</td>
-            <td><strong>${pipePct(x.avance_porcentaje)}</strong></td>
+            <td colspan="7" style="text-align:center;color:#718096;padding:28px">
+              No hay datos cargados.
+            </td>
           </tr>
-        `).join("")
-      : `
-        <tr>
-          <td colspan="7" style="text-align:center;color:#718096;padding:28px">
-            No hay datos cargados.
-          </td>
-        </tr>
-      `;
+        `;
+    }
 
     const listaRechazos=rechazos || [];
 
