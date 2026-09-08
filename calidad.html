@@ -406,6 +406,94 @@ th,td{padding:8px 9px!important}
   }
 }
 
+
+/* ===== CALIDAD · REGISTROS ARRIBA, ESTADOS DEBAJO ===== */
+.matrizResumenCabecera{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  background:#fff!important;
+}
+
+/* REGISTROS ocupa toda la primera fila */
+.matrizResumenCabecera .matrizKpi:first-child{
+  grid-column:1 / -1!important;
+  border-right:0!important;
+  border-bottom:1px solid #e6ebf0!important;
+  padding:18px 20px!important;
+}
+
+/* Cerrados / En poder del cliente / Pendientes debajo */
+.matrizResumenCabecera .matrizKpi:nth-child(2),
+.matrizResumenCabecera .matrizKpi:nth-child(3),
+.matrizResumenCabecera .matrizKpi:nth-child(4){
+  padding:16px 20px!important;
+  min-height:105px!important;
+}
+
+.matrizResumenCabecera .matrizKpi:nth-child(2),
+.matrizResumenCabecera .matrizKpi:nth-child(3){
+  border-right:1px solid #e6ebf0!important;
+}
+
+.matrizResumenCabecera .matrizKpi:nth-child(4){
+  border-right:0!important;
+}
+
+/* Registro principal un poco más protagonista */
+.matrizResumenCabecera .matrizKpi:first-child strong{
+  font-size:32px!important;
+}
+.matrizResumenCabecera .matrizKpi:first-child .matrizKpiNota{
+  font-size:10px!important;
+}
+
+/* Los 3 estados secundarios, compactos */
+.matrizResumenCabecera .matrizKpi:nth-child(n+2) strong{
+  font-size:25px!important;
+}
+.matrizResumenCabecera .matrizKpi:nth-child(n+2) small{
+  font-size:9px!important;
+}
+.matrizResumenCabecera .matrizKpi:nth-child(n+2) .matrizKpiNota{
+  font-size:9px!important;
+}
+
+@media(max-width:760px){
+  .matrizResumenCabecera{
+    grid-template-columns:1fr!important;
+  }
+  .matrizResumenCabecera .matrizKpi:first-child{
+    grid-column:auto!important;
+  }
+  .matrizResumenCabecera .matrizKpi{
+    border-right:0!important;
+    border-bottom:1px solid #e6ebf0!important;
+  }
+  .matrizResumenCabecera .matrizKpi:last-child{
+    border-bottom:0!important;
+  }
+}
+
+
+/* ===== CALIDAD · PORCENTAJES EN KPI DE ESTADO ===== */
+.matrizKpiValorFila{
+  display:flex;
+  align-items:baseline;
+  gap:9px;
+  white-space:nowrap;
+}
+.matrizKpiValorFila strong{
+  display:inline-block!important;
+}
+.matrizKpiPct{
+  font-size:13px;
+  font-weight:600;
+  color:#7b8c9c;
+}
+.matrizKpi.verde .matrizKpiPct{color:#287b54}
+.matrizKpi.naranja .matrizKpiPct{color:#a86b22}
+.matrizKpi.rojo .matrizKpiPct{color:#a94a4a}
+
 </style>
 </head>
 <body>
@@ -455,17 +543,26 @@ th,td{padding:8px 9px!important}
           </div>
           <div class="matrizKpi verde">
             <small>Cerrados · 1</small>
-            <strong id="matrizCerrados">0</strong>
+            <div class="matrizKpiValorFila">
+              <strong id="matrizCerrados">0</strong>
+              <span class="matrizKpiPct" id="matrizCerradosKpiPct">0%</span>
+            </div>
             <div class="matrizKpiNota">Firmados y completos</div>
           </div>
           <div class="matrizKpi naranja matrizKpiClickable" onclick="matrizAbrirDetalleCliente()" title="Ver registros en poder del cliente">
             <small>En poder del cliente · 1P</small>
-            <strong id="matrizCliente">0</strong>
+            <div class="matrizKpiValorFila">
+              <strong id="matrizCliente">0</strong>
+              <span class="matrizKpiPct" id="matrizClienteKpiPct">0%</span>
+            </div>
             <div class="matrizKpiNota">Pendientes de firma · tocar para ver detalle</div>
           </div>
           <div class="matrizKpi rojo">
             <small>Pendientes · 0</small>
-            <strong id="matrizPendientes">0</strong>
+            <div class="matrizKpiValorFila">
+              <strong id="matrizPendientes">0</strong>
+              <span class="matrizKpiPct" id="matrizPendientesKpiPct">0%</span>
+            </div>
             <div class="matrizKpiNota">Aún no elaborados</div>
           </div>
         </div>
@@ -605,6 +702,9 @@ async function cargarMatrizCalidad(){
   matrizSet("matrizPendientes",t.pendiente.toLocaleString("es-AR"));
   matrizSet("matrizCliente",t.cliente.toLocaleString("es-AR"));
   matrizSet("matrizCerrados",t.cerrado.toLocaleString("es-AR"));
+  matrizSet("matrizCerradosKpiPct",matrizPct(t.cerrado,t.aplicables).toFixed(1)+"%");
+  matrizSet("matrizClienteKpiPct",matrizPct(t.cliente,t.aplicables).toFixed(1)+"%");
+  matrizSet("matrizPendientesKpiPct",matrizPct(t.pendiente,t.aplicables).toFixed(1)+"%");
   matrizSet("matrizElaborado",elaborado.toFixed(1)+"%");
   matrizSet("matrizCerradoPct",cerrado.toFixed(1)+"%");
   matrizSet("matrizElaboradoCantidadNumero",(t.cliente+t.cerrado).toLocaleString("es-AR"));
