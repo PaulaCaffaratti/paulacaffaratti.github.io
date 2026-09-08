@@ -711,6 +711,69 @@ h1{
   .desvio-resumen{grid-template-columns:1fr;}
 }
 
+
+/* =========================================================
+   MINIMALISTA PREMIUM · 14"
+   Capa visual: no modifica Supabase, permisos ni lógica JS
+   ========================================================= */
+:root{
+  --navy:#102f52; --navy2:#173650; --ink:#20364d; --muted:#74869a;
+  --line:#e5eaf0; --soft:#f7f9fb; --bg:#f6f8fa; --white:#fff;
+  --green:#18734a; --blue:#2f6f9f; --red:#b53a3a;
+}
+body{background:var(--bg)!important;color:var(--ink)!important;font-family:Inter,Arial,Helvetica,sans-serif!important;}
+.panel{background:#fff!important;border:1px solid var(--line)!important;border-radius:12px!important;
+       box-shadow:0 1px 2px rgba(16,47,82,.025)!important;padding:18px!important;margin-bottom:14px!important;}
+h1,h2,h3{letter-spacing:-.02em;color:var(--navy2);}
+button,.boton,.btn-toggle,input,select{font-family:inherit!important;}
+button,.boton,.btn-toggle{transition:.15s ease!important;}
+button:hover,.boton:hover,.btn-toggle:hover{transform:translateY(-1px);}
+input,select{border:1px solid #dce3ea!important;border-radius:8px!important;background:#fff!important;}
+input:focus,select:focus{outline:none!important;border-color:#8eb1cc!important;box-shadow:0 0 0 3px rgba(47,111,159,.08)!important;}
+table{font-variant-numeric:tabular-nums;}
+th{background:#f8fafb!important;color:#60758a!important;font-size:10px!important;letter-spacing:.035em!important;
+   text-transform:uppercase!important;padding:9px 10px!important;}
+td{padding:9px 10px!important;font-size:12px!important;border-color:#edf0f3!important;}
+tbody tr:hover{background:#fafcfd;}
+@media (min-width:851px) and (max-width:1500px){
+  .contenido,main{padding:18px!important;}
+}
+
+.sidebar{width:205px!important;padding:22px 12px!important;background:#102f52!important;}
+.logo{font-size:15px!important;margin:0 8px 24px!important;letter-spacing:.02em!important;}
+.sidebar .modulo-titulo{margin:16px 10px 6px!important;font-size:9px!important;}
+.sidebar a{padding:9px 10px!important;margin-bottom:3px!important;border-radius:7px!important;font-size:11px!important;}
+.main{margin-left:205px!important;}
+.topbar{padding:12px 22px!important;min-height:48px!important;}
+.contenido{padding:18px 22px!important;max-width:1450px!important;}
+h1{font-size:25px!important;margin-bottom:3px!important;}
+.subtitulo{font-size:12px!important;margin-bottom:16px!important;}
+.total-principal{padding:18px 22px!important;border-radius:12px!important;margin-bottom:14px!important;
+ background:#102f52!important;}
+.total-numero{font-size:36px!important;}
+.total-volumen strong{font-size:26px!important;}
+.panel-titulo{margin-bottom:12px!important;}
+.panel-titulo h2{font-size:15px!important;}
+.btn-toggle{padding:6px 10px!important;font-size:10px!important;background:#fff!important;}
+.metricas-m3{gap:8px!important;margin-bottom:12px!important;}
+.metrica{padding:11px 12px!important;border-radius:8px!important;background:#fff!important;}
+.metrica strong{font-size:19px!important;}
+.grid-curva{grid-template-columns:minmax(0,2.4fr) minmax(230px,.65fr)!important;gap:12px!important;}
+.chart-wrap{height:330px!important;}
+.estado-proyecto{padding:14px!important;border-radius:9px!important;background:#fafbfd!important;}
+.estado-grande{font-size:21px!important;margin:7px 0 10px!important;}
+.estado-fila{padding:7px 0!important;font-size:11px!important;}
+.flujo{gap:8px!important;}
+.etapa{min-height:112px!important;padding:11px!important;border-radius:8px!important;background:#fafbfd!important;}
+.etapa-icono{font-size:18px!important;margin-bottom:6px!important;}
+.etapa-nombre{font-size:9px!important;}
+.etapa-valor{font-size:21px!important;}
+.etapa-m3{font-size:11px!important;}
+@media(max-width:1150px) and (min-width:851px){
+ .sidebar{width:185px!important}.main{margin-left:185px!important}
+ .contenido{padding:14px!important}.chart-wrap{height:300px!important}
+}
+
 </style>
 </head>
 
