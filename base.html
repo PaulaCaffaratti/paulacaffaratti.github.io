@@ -764,16 +764,29 @@ input,select{font-size:11px!important}
 table{font-size:11px!important}
 th,td{padding:8px 9px!important}
 
-
-
-/* OCULTAR BLOQUE DE USUARIO AUTORIZADO */
-.planificacion-grid > .planificacion-caja:nth-child(2){
-  display:none !important;
+/* BLOQUES OCULTABLES · BASE DE INGENIERÍA */
+.panel-toggle-carga{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin:0 0 10px;
 }
-
-/* LA CARGA DE PLANIFICACIÓN OCUPA TODO EL ANCHO */
-.planificacion-grid{
-  grid-template-columns:1fr !important;
+.btn-toggle-carga{
+  background:#fff!important;
+  color:#123451!important;
+  border:1px solid #d6e0e8!important;
+  padding:8px 12px!important;
+  font-size:10px!important;
+  cursor:pointer;
+}
+.btn-toggle-carga:hover{
+  background:#f8fafc!important;
+}
+.bloque-oculto{
+  display:none;
+}
+.bloque-oculto.abierto{
+  display:block;
 }
 
 </style>
@@ -893,6 +906,14 @@ Podés escribir, por ejemplo, <strong>7,40</strong> o <strong>7.40</strong>.
 
 
 
+<div class="panel-toggle-carga">
+  <button id="btnToggleHerramientasCarga" class="boton btn-toggle-carga" type="button" onclick="toggleHerramientasCarga()">
+    ▾ Mostrar importación y planificación
+  </button>
+</div>
+
+<div id="herramientasCarga" class="bloque-oculto">
+
 <!-- =====================================================
 IMPORTAR EXCEL
 ===================================================== -->
@@ -1009,6 +1030,15 @@ La nueva carga reemplaza la planificación anterior.
 
 </section>
 
+</div>
+
+<div class="panel-toggle-carga">
+  <button id="btnTogglePremoldeados" class="boton btn-toggle-carga" type="button" onclick="togglePremoldeados()">
+    ▾ Mostrar premoldeados cargados
+  </button>
+</div>
+
+<div id="bloquePremoldeados" class="bloque-oculto">
 
 <!-- =====================================================
 BASE
@@ -1150,6 +1180,8 @@ onclick="exportarExcel()">
 </div>
 
 </section>
+
+</div>
 
 </main>
 
@@ -3182,6 +3214,29 @@ async function importarPlanificacion(){
   }
 }
 
+
+
+function toggleHerramientasCarga(){
+  const bloque=document.getElementById("herramientasCarga");
+  const boton=document.getElementById("btnToggleHerramientasCarga");
+  if(!bloque || !boton) return;
+
+  const abierto=bloque.classList.toggle("abierto");
+  boton.textContent=abierto
+    ? "▴ Ocultar importación y planificación"
+    : "▾ Mostrar importación y planificación";
+}
+
+function togglePremoldeados(){
+  const bloque=document.getElementById("bloquePremoldeados");
+  const boton=document.getElementById("btnTogglePremoldeados");
+  if(!bloque || !boton) return;
+
+  const abierto=bloque.classList.toggle("abierto");
+  boton.textContent=abierto
+    ? "▴ Ocultar premoldeados cargados"
+    : "▾ Mostrar premoldeados cargados";
+}
 
 /* =====================================================
 INICIAR
