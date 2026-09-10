@@ -664,6 +664,78 @@ function pintarPreview(){
   });
 }
 
+
+/* ============================================================
+   SINCRONIZAR LOCALIZACIÓN DE SPOOLES
+   ============================================================
+   Cada vez que se carga una nueva trazabilidad:
+   - toma combinaciones únicas Línea + Spool;
+   - agrega spooles nuevos a piping_spooles;
+   - actualiza Sistema/Subsistema de los existentes;
+   - NO toca ninguna tilde ni sus fechas/usuarios.
+*/
+async function sincronizarSpoolesDesdeTrazabilidad(){
+
+  const mapa = new Map();
+
+  for(const x of juntas){
+
+    const linea = txt(x.linea);
+    const spool = txt(x.spool);
+
+    if(!linea || !spool) continue;
+
+    const clave = `${linea.toLowerCase()}|||${spool.toLowerCase()}`;
+
+    if(!mapa.has(clave)){
+      mapa.set(clave,{
+        linea,
+        spool,
+        sistema:txt(x.sistema) || null,
+        subsistema:txt(x.subsistema) || null
+      });
+    }else{
+      // Si otra junta del mismo spool trae Sistema/Subsistema y la primera no,
+      // completamos el dato sin alterar el seguimiento del spool.
+      const actual = mapa.get(clave);
+
+      if(!actual.sistema && txt(x.sistema)){
+        actual.sistema = txt(x.sistema);
+      }
+
+      if(!actual.subsistema && txt(x.subsistema)){
+        actual.subsistema = txt(x.subsistema);
+      }
+    }
+  }
+
+  const spoolesUnicos = [...mapa.values()];
+
+  if(!spoolesUnicos.length){
+    return 0;
+  }
+
+  for(let i=0;i<spoolesUnicos.length;i+=200){
+
+    const bloque = spoolesUnicos.slice(i,i+200);
+
+    const {error} = await db
+      .from("piping_spooles")
+      .upsert(
+        bloque,
+        {
+          onConflict:"linea,spool",
+          ignoreDuplicates:false
+        }
+      );
+
+    if(error) throw error;
+  }
+
+  return spoolesUnicos.length;
+}
+
+
 async function subirDatos(){
   if(!juntas.length || !totalGeneral){
     setEstado("Primero analizá el Excel.","error");
@@ -726,8 +798,13 @@ async function subirDatos(){
 
     if(errorResumen) throw errorResumen;
 
+    setEstado("⏳ Actualizando Localización de Spooles...");
+
+    const spoolesSincronizados =
+      await sincronizarSpoolesDesdeTrazabilidad();
+
     setEstado(
-      `✓ Carga completada por ${email}: ${juntas.length} juntas · ${pulgadas(totalGeneral.pulgadas_ejecutadas)} ejecutadas · ${pct(totalGeneral.avance_porcentaje)} de avance.`,
+      `✓ Carga completada por ${email}: ${juntas.length} juntas · ${pulgadas(totalGeneral.pulgadas_ejecutadas)} ejecutadas · ${pct(totalGeneral.avance_porcentaje)} de avance · ${spoolesSincronizados} spooles sincronizados.`,
       "ok"
     );
 
