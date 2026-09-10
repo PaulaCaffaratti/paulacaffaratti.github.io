@@ -161,7 +161,55 @@ table td{color:#344d64!important}
 const SUPABASE_URL="https://mzgbtejfgsrskiuymtwh.supabase.co";
 const SUPABASE_KEY="sb_publishable_Wen9hxBnae8wRrEEaP5lOQ_aNl9OCGd";
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const permisos={despacho_lumber:["jorgefelipe.soto@pecomenergia.com.ar","maria.caffaratti@pecomenergia.com.ar"],recepcion_obra:["gerardo.machuca@pecomenergia.com.ar","alan.careaga@pecomenergia.com.ar","maria.caffaratti@pecomenergia.com.ar","joses.lara@pecomenergia.com.ar"],ph:["joses.lara@pecomenergia.com.ar","maria.caffaratti@pecomenergia.com.ar","jorgefelipe.soto@pecomenergia.com.ar"],montaje:["jorgefelipe.soto@pecomenergia.com.ar","joses.lara@pecomenergia.com.ar","maria.caffaratti@pecomenergia.com.ar"],torque:["jorgefelipe.soto@pecomenergia.com.ar","joses.lara@pecomenergia.com.ar","maria.caffaratti@pecomenergia.com.ar"],liberacion_calidad:["jorgefelipe.soto@pecomenergia.com.ar","joses.lara@pecomenergia.com.ar","maria.caffaratti@pecomenergia.com.ar"],liberacion_precom:["maria.caffaratti@pecomenergia.com.ar","kevin.rojas@pecomenergia.com.ar"]};
+const permisos={
+despacho_lumber:[
+"jorgefelipe.soto@pecomenergia.com.ar",
+"maria.caffaratti@pecomenergia.com.ar",
+"kevin.rojas@pecomenergia.com.ar",
+"agustin.schechtel@pecomenergia.com.ar"
+],
+recepcion_obra:[
+"gerardo.machuca@pecomenergia.com.ar",
+"alan.careaga@pecomenergia.com.ar",
+"maria.caffaratti@pecomenergia.com.ar",
+"joses.lara@pecomenergia.com.ar",
+"kevin.rojas@pecomenergia.com.ar",
+"agustin.schechtel@pecomenergia.com.ar"
+],
+ph:[
+"joses.lara@pecomenergia.com.ar",
+"maria.caffaratti@pecomenergia.com.ar",
+"jorgefelipe.soto@pecomenergia.com.ar",
+"kevin.rojas@pecomenergia.com.ar",
+"agustin.schechtel@pecomenergia.com.ar"
+],
+montaje:[
+"jorgefelipe.soto@pecomenergia.com.ar",
+"joses.lara@pecomenergia.com.ar",
+"maria.caffaratti@pecomenergia.com.ar",
+"kevin.rojas@pecomenergia.com.ar",
+"agustin.schechtel@pecomenergia.com.ar"
+],
+torque:[
+"jorgefelipe.soto@pecomenergia.com.ar",
+"joses.lara@pecomenergia.com.ar",
+"maria.caffaratti@pecomenergia.com.ar",
+"kevin.rojas@pecomenergia.com.ar",
+"agustin.schechtel@pecomenergia.com.ar"
+],
+liberacion_calidad:[
+"jorgefelipe.soto@pecomenergia.com.ar",
+"joses.lara@pecomenergia.com.ar",
+"maria.caffaratti@pecomenergia.com.ar",
+"kevin.rojas@pecomenergia.com.ar",
+"agustin.schechtel@pecomenergia.com.ar"
+],
+liberacion_precom:[
+"maria.caffaratti@pecomenergia.com.ar",
+"kevin.rojas@pecomenergia.com.ar",
+"agustin.schechtel@pecomenergia.com.ar"
+]
+};
 let usuarioEmail="",spooles=[];const etapas=["despacho_lumber","recepcion_obra","ph","montaje","torque","liberacion_calidad","liberacion_precom"];
 const norm=v=>(v||"").trim().toLowerCase();const puede=e=>(permisos[e]||[]).includes(usuarioEmail);const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 function fmt(v){if(!v)return"";try{return new Intl.DateTimeFormat("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"}).format(new Date(v))}catch{return""}}
