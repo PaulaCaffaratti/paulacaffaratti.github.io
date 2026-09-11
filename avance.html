@@ -681,6 +681,16 @@ th,td{padding:8px 9px!important}
 .check-etapa input,.check-final input{width:15px!important;height:15px!important}
 .etapas-checks{gap:5px!important}
 
+/* VISTA OPERATIVA RAÚL NAVEDA · SOLO MONTAJE */
+body.modo-raul-montaje #filtroEtapaWrap{display:none!important;}
+body.modo-raul-montaje table{min-width:620px!important;}
+body.modo-raul-montaje th:nth-child(6),
+body.modo-raul-montaje td:nth-child(6){display:none!important;}
+body.modo-raul-montaje .finales{min-width:110px!important;}
+@media(max-width:700px){
+  body.modo-raul-montaje table{min-width:560px!important;}
+}
+
 </style>
 
 </head>
@@ -807,7 +817,7 @@ FILTROS
 </div>
 
 
-<div class="campo">
+<div class="campo" id="filtroEtapaWrap">
 
 <label>FILTRAR ETAPA</label>
 
@@ -870,7 +880,7 @@ TABLA
 <th>MODELO</th>
 <th>m³ / UNIDAD</th>
 <th>LOCALIZACIÓN / ETAPA</th>
-<th>MONTAJE / PINTURA</th>
+<th id="thFinales">MONTAJE / PINTURA</th>
 </tr>
 
 </thead>
@@ -1203,6 +1213,15 @@ async function iniciarAplicacion(){
   }
 
   permisos = data;
+
+  // Raúl Naveda trabaja únicamente sobre Montaje.
+  // La vista se simplifica para mostrar solo su acción operativa.
+  const modoRaulMontaje = esRaulNaveda();
+  document.body.classList.toggle("modo-raul-montaje", modoRaulMontaje);
+  const thFinales = document.getElementById("thFinales");
+  if(thFinales){
+    thFinales.textContent = modoRaulMontaje ? "MONTAJE" : "MONTAJE / PINTURA";
+  }
 
   document
     .getElementById("loginPanel")
@@ -1875,6 +1894,7 @@ function mostrarTabla(){
                 </label>
 
 
+                ${!esRaulNaveda() ? `
                 <label
                   class="
                     check-final
@@ -1896,6 +1916,7 @@ function mostrarTabla(){
                   🎨 Pintura
 
                 </label>
+                ` : ""}
 
               </div>
 
