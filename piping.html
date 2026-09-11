@@ -655,6 +655,80 @@ th,td{padding:8px 9px!important}
   line-height:1.5;
 }
 
+
+/* ===== DETALLE DE SPOOLES LIBERADOS ===== */
+.spool-liberado-click{
+  cursor:pointer;
+  text-decoration:underline;
+  text-decoration-style:dotted;
+  text-underline-offset:4px;
+}
+.spool-liberado-click:hover{
+  background:#f2f8f4;
+}
+.modal-spooles-liberados{
+  position:fixed;
+  inset:0;
+  background:rgba(16,47,82,.46);
+  z-index:1200;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.modal-spooles-liberados.hidden{display:none!important}
+.modal-spooles-liberados-caja{
+  width:min(980px,96vw);
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border:1px solid #dce3ea;
+  border-radius:14px;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+}
+.modal-spooles-liberados-head{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding:20px 22px 14px;
+  background:#fff;
+  border-bottom:1px solid #e5eaf0;
+}
+.modal-spooles-liberados-head h3{margin:0;font-size:18px;color:#173650}
+.modal-spooles-liberados-head p{margin:5px 0 0;font-size:12px;color:#718096}
+.modal-spooles-liberados-cerrar{
+  border:0!important;
+  background:#eef3f7!important;
+  color:#173650!important;
+  border-radius:8px!important;
+  width:34px;
+  height:34px;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:700!important;
+}
+.modal-spooles-liberados-tabla-wrap{padding:18px 22px 22px;overflow-x:auto}
+.modal-spooles-liberados-tabla{width:100%;border-collapse:collapse;font-size:12px}
+.modal-spooles-liberados-tabla th{
+  background:#f7f9fb!important;
+  color:#687d91!important;
+  padding:10px 12px!important;
+  text-align:left;
+  white-space:nowrap;
+}
+.modal-spooles-liberados-tabla td{
+  padding:11px 12px!important;
+  border-bottom:1px solid #e5eaf0;
+  color:#344d64!important;
+  vertical-align:top;
+}
+.modal-spooles-liberados-tabla td:nth-child(2){font-weight:600;color:#173650!important}
+.modal-spooles-liberados-vacio{padding:28px;text-align:center;color:#718096}
+
 </style>
 </head>
 
@@ -1002,6 +1076,32 @@ th,td{padding:8px 9px!important}
   </div>
 </div>
 
+
+<div id="modalSpoolesLiberados" class="modal-spooles-liberados hidden" onclick="cerrarSpoolesLiberados(event)">
+  <div class="modal-spooles-liberados-caja" onclick="event.stopPropagation()">
+    <div class="modal-spooles-liberados-head">
+      <div>
+        <h3 id="tituloSpoolesLiberados">Spooles liberados</h3>
+        <p id="subSpoolesLiberados">Detalle de Línea + Spool + Lote aprobado.</p>
+      </div>
+      <button class="modal-spooles-liberados-cerrar" onclick="cerrarSpoolesLiberados()">×</button>
+    </div>
+
+    <div class="modal-spooles-liberados-tabla-wrap">
+      <table class="modal-spooles-liberados-tabla">
+        <thead>
+          <tr>
+            <th>Línea</th>
+            <th>Spool</th>
+            <th>Lote liberado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaSpoolesLiberadosDetalle"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL =
 "https://mzgbtejfgsrskiuymtwh.supabase.co";
@@ -1200,40 +1300,32 @@ function pintarSpoolesPorCuadernillo(filas){
     const spool = String(x.spool ?? "").trim();
     if(!linea || !spool) continue;
 
-    // Una misma LINEA + SPOOL cuenta siempre como un único spool.
+    // Una misma Línea + Spool representa un único spool, aunque tenga varias juntas/filas.
     const clave = `${linea.toLowerCase()}|||${spool.toLowerCase()}`;
-    const tipo = String(x.tipo_junta ?? "").trim().toUpperCase();
     const loteCargado = String(x.lote ?? "").trim() !== "";
+    const tipo = String(x.tipo_junta ?? "").trim().toUpperCase();
 
+    // Regla de liberación por spool:
+    // 1) Línea + Spool se agrupan como un único spool.
+    // 2) Debe existir al menos una fila con LOTE cargado.
+    // 3) Si existe alguna fila TIPO = SW sin LOTE, el spool queda INCOMPLETO
+    //    y NO se cuenta como liberado, aunque otras filas del mismo spool tengan LOTE.
     if(!resumen[cuadernillo].has(clave)){
       resumen[cuadernillo].set(clave,{
-        tieneSW:false,
-        swCompletas:true
+        tieneLote: loteCargado,
+        swPendiente: tipo === "SW" && !loteCargado
       });
-    }
-
-    const item = resumen[cuadernillo].get(clave);
-
-    // Para decidir si el spool está LIBERADO solamente se miran las filas SW.
-    // Las FW/FFW u otros tipos NO intervienen en esta condición.
-    if(tipo === "SW"){
-      item.tieneSW = true;
-
-      // Si UNA sola SW del mismo Línea + Spool tiene LOTE vacío,
-      // todo el spool queda INCOMPLETO.
-      if(!loteCargado){
-        item.swCompletas = false;
-      }
+    }else{
+      const item = resumen[cuadernillo].get(clave);
+      if(loteCargado) item.tieneLote = true;
+      if(tipo === "SW" && !loteCargado) item.swPendiente = true;
     }
   }
 
   tbody.innerHTML = codigos.map(codigo=>{
     const spooles = [...resumen[codigo].values()];
     const total = spooles.length;
-
-    // Liberado = tiene al menos una junta SW y TODAS sus SW tienen LOTE.
-    const liberados = spooles.filter(x=>x.tieneSW && x.swCompletas).length;
-
+    const liberados = spooles.filter(x=>x.tieneLote && !x.swPendiente).length;
     return `
       <tr>
         <td><strong>IS-${codigo}</strong></td>
@@ -1244,8 +1336,58 @@ function pintarSpoolesPorCuadernillo(filas){
   }).join("");
 
   if(nota){
-    nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para la liberación se consideran únicamente las juntas SW: el spool se cuenta como liberado sólo si tiene al menos una SW y todas las SW de ese mismo Línea + Spool tienen Lote cargado. Si una sola SW tiene Lote vacío, el spool queda incompleto.";
+    nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para contarlo como liberado debe tener Lote cargado y no puede existir ninguna fila TIPO = SW del mismo spool con Lote vacío; si existe, el spool se considera incompleto.";
   }
+}
+
+
+
+async function abrirSpoolesLiberados(cuadernillo){
+  const modal = document.getElementById("modalSpoolesLiberados");
+  const tbody = document.getElementById("tablaSpoolesLiberadosDetalle");
+  const titulo = document.getElementById("tituloSpoolesLiberados");
+  const sub = document.getElementById("subSpoolesLiberados");
+  if(!modal || !tbody) return;
+
+  titulo.textContent = `Spooles liberados · IS-${cuadernillo}`;
+  sub.textContent = "Se muestran únicamente spooles liberados según SW + Lote + AP.";
+  tbody.innerHTML = '<tr><td colspan="3" class="modal-spooles-liberados-vacio">Cargando detalle...</td></tr>';
+  modal.classList.remove("hidden");
+
+  try{
+    const {data,error} = await db
+      .from("v_piping_spooles_liberados_detalle")
+      .select("cuadernillo,linea,spool,lotes")
+      .eq("cuadernillo",cuadernillo)
+      .order("linea",{ascending:true})
+      .order("spool",{ascending:true});
+
+    if(error) throw error;
+
+    const filas = data || [];
+    if(!filas.length){
+      tbody.innerHTML = '<tr><td colspan="3" class="modal-spooles-liberados-vacio">No hay spooles liberados para este cuadernillo.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filas.map(x=>`
+      <tr>
+        <td>${escapar(x.linea || "-")}</td>
+        <td>${escapar(x.spool || "-")}</td>
+        <td>${escapar(x.lotes || "-")}</td>
+      </tr>
+    `).join("");
+
+  }catch(err){
+    console.error("No se pudo cargar el detalle de spooles liberados:",err);
+    tbody.innerHTML = '<tr><td colspan="3" class="modal-spooles-liberados-vacio" style="color:#b33a3a">No se pudo leer el detalle. Verificá que exista la vista v_piping_spooles_liberados_detalle en Supabase.</td></tr>';
+  }
+}
+
+function cerrarSpoolesLiberados(event){
+  if(event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById("modalSpoolesLiberados");
+  if(modal) modal.classList.add("hidden");
 }
 
 async function cargarSpoolesPorCuadernillo(){
@@ -1275,13 +1417,15 @@ async function cargarSpoolesPorCuadernillo(){
         <tr>
           <td><strong>IS-${codigo}</strong></td>
           <td class="spool-num">${x.total}</td>
-          <td class="spool-num spool-liberado">${x.liberados}</td>
+          <td class="spool-num spool-liberado spool-liberado-click"
+              onclick="abrirSpoolesLiberados('${codigo}')"
+              title="Ver líneas, spooles y lotes liberados de IS-${codigo}">${x.liberados}</td>
         </tr>
       `;
     }).join("");
 
     if(nota){
-      nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para la liberación se consideran únicamente las juntas SW: el spool queda liberado sólo si todas sus SW tienen Lote cargado. Si una SW tiene Lote vacío, queda incompleto.";
+      nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para liberación se consideran solo las SW: todas deben tener Lote y todos esos lotes deben tener al menos un RESULTADO AP. Tocá el número de liberados para ver el detalle.";
     }
 
   }catch(err){
