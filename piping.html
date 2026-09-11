@@ -1203,7 +1203,7 @@ function pintarSpoolesPorCuadernillo(filas){
     // Una misma Línea + Spool representa un único spool, aunque tenga varias juntas/filas.
     const clave = `${linea.toLowerCase()}|||${spool.toLowerCase()}`;
     const loteCargado = String(x.lote ?? "").trim() !== "";
-    const tipo = String(x.tipo ?? "").trim().toUpperCase();
+    const tipo = String(x.tipo_junta ?? "").trim().toUpperCase();
 
     // Regla de liberación por spool:
     // 1) Línea + Spool se agrupan como un único spool.
@@ -1258,7 +1258,7 @@ async function cargarSpoolesPorCuadernillo(){
 
     const {data:filas,error:errorJuntas} = await db
       .from("piping_juntas")
-      .select("cuadernillo,linea,spool,lote,tipo")
+      .select("cuadernillo,linea,spool,lote,tipo_junta")
       .eq("carga_id",ultimaCarga.id);
 
     if(errorJuntas) throw errorJuntas;
