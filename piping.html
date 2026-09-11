@@ -710,45 +710,6 @@ th,td{padding:8px 9px!important}
       </div>
     </section>
 
-    <section class="curva-panel">
-      <div class="curva-head">
-        <div>
-          <h2>🏗️ Curva S – Obra</h2>
-          <div class="curva-sub">
-            Planificado vs. montaje real de spooles en obra para los grupos vinculados al cronograma.
-          </div>
-        </div>
-        <div id="pipeCurvaObraEstado" class="curva-estado">NO INICIADO</div>
-      </div>
-
-      <div class="curva-kpis">
-        <div class="curva-kpi">
-          <small>Plan a hoy</small>
-          <strong id="pipeCurvaObraPlan">0,00"</strong>
-        </div>
-        <div class="curva-kpi">
-          <small>Real a hoy</small>
-          <strong id="pipeCurvaObraReal">0,00"</strong>
-        </div>
-        <div id="pipeCurvaObraDesvioCard" class="curva-kpi desvio">
-          <small>Desvío real - plan</small>
-          <strong id="pipeCurvaObraDesvio">0,00"</strong>
-        </div>
-        <div id="pipeCurvaObraDesvioPctCard" class="curva-kpi desvio">
-          <small>Desvío %</small>
-          <strong id="pipeCurvaObraDesvioPct">—</strong>
-        </div>
-      </div>
-
-      <div class="curva-wrap">
-        <canvas id="pipeCurvaObra"></canvas>
-      </div>
-
-      <div class="curva-nota">
-        El real se alimenta automáticamente cuando se marca Montaje en la localización de spooles.
-      </div>
-    </section>
-
     <div class="grid2">
 
       <section class="panel">
@@ -798,6 +759,52 @@ th,td{padding:8px 9px!important}
 
     </div>
 
+
+    <section class="curva-panel" id="seccionCurvaObra">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+        <div>
+          <h2 style="margin:0 0 5px;">🏗️ Curva S – Obra</h2>
+          <div class="curva-sub">
+            Planificado vs. montaje real de spooles en obra para los grupos vinculados al cronograma.
+          </div>
+        </div>
+        <button id="btnCurvaObra" onclick="toggleCurvaObra()" style="border:1px solid #d8e0e8;background:#f7f9fb;border-radius:7px;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:500;color:#45596f;white-space:nowrap;">Mostrar ▼</button>
+      </div>
+
+      <div id="contenidoCurvaObra" style="display:none;margin-top:18px;">
+        <div class="curva-head">
+          <div></div>
+          <div id="pipeCurvaObraEstado" class="curva-estado">NO INICIADO</div>
+        </div>
+
+        <div class="curva-kpis">
+          <div class="curva-kpi">
+            <small>Plan a hoy</small>
+            <strong id="pipeCurvaObraPlan">0,00&quot;</strong>
+          </div>
+          <div class="curva-kpi">
+            <small>Real a hoy</small>
+            <strong id="pipeCurvaObraReal">0,00&quot;</strong>
+          </div>
+          <div id="pipeCurvaObraDesvioCard" class="curva-kpi desvio">
+            <small>Desvío real - plan</small>
+            <strong id="pipeCurvaObraDesvio">0,00&quot;</strong>
+          </div>
+          <div id="pipeCurvaObraDesvioPctCard" class="curva-kpi desvio">
+            <small>Desvío %</small>
+            <strong id="pipeCurvaObraDesvioPct">—</strong>
+          </div>
+        </div>
+
+        <div class="curva-wrap">
+          <canvas id="pipeCurvaObra"></canvas>
+        </div>
+
+        <div class="curva-nota">
+          El real se alimenta automáticamente cuando se marca Montaje en la localización de spooles.
+        </div>
+      </div>
+    </section>
 
   </main>
 </div>
@@ -953,6 +960,28 @@ function toggleFlujoSpooles(){
   if(estaOculto){
     contenido.style.display = "block";
     boton.textContent = "Ocultar ▲";
+  }else{
+    contenido.style.display = "none";
+    boton.textContent = "Mostrar ▼";
+  }
+}
+
+function toggleCurvaObra(){
+  const contenido = document.getElementById("contenidoCurvaObra");
+  const boton = document.getElementById("btnCurvaObra");
+  if(!contenido || !boton) return;
+
+  const estaOculto = contenido.style.display === "none" || contenido.style.display === "";
+
+  if(estaOculto){
+    contenido.style.display = "block";
+    boton.textContent = "Ocultar ▲";
+
+    setTimeout(()=>{
+      if(pipeCurvaObraChart){
+        pipeCurvaObraChart.resize();
+      }
+    },50);
   }else{
     contenido.style.display = "none";
     boton.textContent = "Mostrar ▼";
