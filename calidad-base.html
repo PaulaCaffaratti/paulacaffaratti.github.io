@@ -261,17 +261,166 @@ function leerSistemas(sheet){
 }
 function desdeStatus(status,mapa){const r={sistema:"",descripcionSistema:"",subsistema:"",descripcionSubsistema:""};const m=texto(status).match(/\/\s*(\d+)\s*-\s*(\d+)\s*$/);if(!m)return r;r.sistema=String(m[1]).padStart(2,"0");r.subsistema=String(m[2]).padStart(3,"0");const x=mapa[r.sistema+"|"+r.subsistema];if(x){r.descripcionSistema=x.descripcionSistema;r.descripcionSubsistema=x.descripcionSubsistema}return r}
 function leerMatriz(sheet,mapa){
-  const datos=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:false});const r=buscarFilaMatriz(datos);if(r<0)throw new Error("No pude detectar la fila de encabezados de la hoja Matriz.");const e=(datos[r]||[]).map(texto);
-  const iE=buscarIndice(e,["Especialidad"]),iT=buscarIndice(e,["TAG"]),iD=buscarIndice(e,["Descripción","Descripcion"]),iP=buscarIndice(e,["PI&D/Listado","P&ID/Listado","PID/Listado","PI&D"]),iSI=buscarIndice(e,["Status Index"]),iS=buscarIndice(e,["Sistema"]),iDS=buscarIndice(e,["Descripcion Sistema","Descripción Sistema"]),iSS=buscarIndice(e,["Subsistema"]),iDSS=buscarIndice(e,["Descripcion Subsistema","Descripción Subsistema"]);
-  if([iE,iT,iD,iSI].some(i=>i<0))throw new Error("Faltan columnas principales: Especialidad, TAG, Descripción o Status Index.");
-  const fijos=new Set([iE,iT,iD,iP,iSI,iS,iDS,iSS,iDSS].filter(i=>i>=0));const cols=[];e.forEach((n,i)=>{if(n&&!fijos.has(i)&&!auxiliar(n))cols.push({indice:i,nombre:n})});columnasRegistrosDetectadas=cols.map(x=>x.nombre);const out=[];
-  for(let i=r+1;i<datos.length;i++){const f=datos[i]||[];const esp=texto(f[iE]),tag=texto(f[iT]),desc=texto(f[iD]),si=texto(f[iSI]);if(!esp&&!tag&&!desc&&!si)continue;const sx=desdeStatus(si,mapa);let sis=sx.sistema|| (iS>=0?texto(f[iS]):"");let ds=sx.descripcionSistema|| (iDS>=0?texto(f[iDS]):"");let ss=sx.subsistema|| (iSS>=0?normSub(f[iSS]):"");let dss=sx.descripcionSubsistema|| (iDSS>=0?texto(f[iDSS]):"");const regs={};cols.forEach(c=>regs[c.nombre]=estado(f[c.indice]));out.push({especialidad:especialidad(esp),tag:tag||null,descripcion:desc||null,pid_listado:iP>=0?(texto(f[iP])||null):null,status_index:si||null,sistema:sis||null,descripcion_sistema:ds||null,subsistema:ss||null,descripcion_subsistema:dss||null,registros:regs})}
+  const datos=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:false});
+  const r=buscarFilaMatriz(datos);
+  if(r<0)throw new Error("No pude detectar la fila de encabezados de la hoja Matriz.");
+
+  const e=(datos[r]||[]).map(texto);
+
+  const iE=buscarIndice(e,["Especialidad"]),
+        iT=buscarIndice(e,["TAG"]),
+        iD=buscarIndice(e,["Descripción","Descripcion"]),
+        iP=buscarIndice(e,["PI&D/Listado","P&ID/Listado","PID/Listado","PI&D"]),
+        iSI=buscarIndice(e,["Status Index"]),
+        iS=buscarIndice(e,["Sistema"]),
+        iDS=buscarIndice(e,["Descripcion Sistema","Descripción Sistema"]),
+        iSS=buscarIndice(e,["Subsistema"]),
+        iDSS=buscarIndice(e,["Descripcion Subsistema","Descripción Subsistema"]);
+
+  if([iE,iT,iD,iSI].some(i=>i<0)){
+    throw new Error("Faltan columnas principales: Especialidad, TAG, Descripción o Status Index.");
+  }
+
+  const fijos=new Set([iE,iT,iD,iP,iSI,iS,iDS,iSS,iDSS].filter(i=>i>=0));
+  const cols=[];
+
+  e.forEach((n,i)=>{
+    if(n&&!fijos.has(i)&&!auxiliar(n)){
+      cols.push({indice:i,nombre:n});
+    }
+  });
+
+  columnasRegistrosDetectadas=cols.map(x=>x.nombre);
+
+  const out=[];
+  const clavesVistas=new Set();
+  let duplicadas=0;
+
+  for(let i=r+1;i<datos.length;i++){
+    const f=datos[i]||[];
+    const esp=texto(f[iE]),
+          tag=texto(f[iT]),
+          desc=texto(f[iD]),
+          si=texto(f[iSI]);
+
+    if(!esp&&!tag&&!desc&&!si)continue;
+
+    const sx=desdeStatus(si,mapa);
+
+    const sis=sx.sistema||(iS>=0?texto(f[iS]):"");
+    const ds=sx.descripcionSistema||(iDS>=0?texto(f[iDS]):"");
+    const ss=sx.subsistema||(iSS>=0?normSub(f[iSS]):"");
+    const dss=sx.descripcionSubsistema||(iDSS>=0?texto(f[iDSS]):"");
+
+    const regs={};
+    cols.forEach(c=>regs[c.nombre]=estado(f[c.indice]));
+
+    const fila={
+      especialidad:especialidad(esp),
+      tag:tag||null,
+      descripcion:desc||null,
+      pid_listado:iP>=0?(texto(f[iP])||null):null,
+      status_index:si||null,
+      sistema:sis||null,
+      descripcion_sistema:ds||null,
+      subsistema:ss||null,
+      descripcion_subsistema:dss||null,
+      registros:regs
+    };
+
+    const claveFila=JSON.stringify({
+      especialidad:fila.especialidad,
+      tag:fila.tag,
+      descripcion:fila.descripcion,
+      pid_listado:fila.pid_listado,
+      status_index:fila.status_index,
+      sistema:fila.sistema,
+      descripcion_sistema:fila.descripcion_sistema,
+      subsistema:fila.subsistema,
+      descripcion_subsistema:fila.descripcion_subsistema,
+      registros:fila.registros
+    });
+
+    if(clavesVistas.has(claveFila)){
+      duplicadas++;
+      continue;
+    }
+
+    clavesVistas.add(claveFila);
+    out.push(fila);
+  }
+
+  window.matrizDuplicadosDetectados=duplicadas;
   return out;
 }
 function contar(filas){let pendiente=0,cliente=0,cerrado=0,na=0;filas.forEach(f=>Object.values(f.registros||{}).forEach(v=>{const e=estado(v);if(e==="0")pendiente++;else if(e==="1P")cliente++;else if(e==="1")cerrado++;else if(e==="N/A")na++}));return{pendiente,cliente,cerrado,na}}
 async function procesarArchivo(){
-  const file=document.getElementById("archivo").files[0];if(!file){mostrarEstado("Seleccioná primero un archivo Excel.","error");return}mostrarEstado("⏳ Leyendo Excel...","cargando");document.getElementById("btnGuardar").disabled=true;
-  try{const wb=XLSX.read(await file.arrayBuffer(),{type:"array",cellDates:true});const nm=wb.SheetNames.find(n=>clave(n)==="MATRIZ");if(!nm)throw new Error('No se encontró la hoja "Matriz".');const ns=wb.SheetNames.find(n=>clave(n).includes("LISTA DE SIS"));const mapa=leerSistemas(ns?wb.Sheets[ns]:null);filasMatriz=leerMatriz(wb.Sheets[nm],mapa);if(!filasMatriz.length)throw new Error("No se encontraron elementos válidos.");pintarResumen();pintarPreview();document.getElementById("resultado").style.display="block";document.getElementById("previewCard").style.display="block";document.getElementById("btnGuardar").disabled=false;const c=document.getElementById("columnas");c.style.display="block";c.innerHTML="<strong>Columnas de registros detectadas: "+columnasRegistrosDetectadas.length+"</strong><br><br>"+esc(columnasRegistrosDetectadas.join(" · "));mostrarEstado("✅ Excel leído correctamente. "+filasMatriz.length+" elementos encontrados.","ok")}catch(e){console.error(e);filasMatriz=[];mostrarEstado("❌ Error al leer el Excel: "+e.message,"error")}
+  const file=document.getElementById("archivo").files[0];
+
+  if(!file){
+    mostrarEstado("Seleccioná primero un archivo Excel.","error");
+    return;
+  }
+
+  mostrarEstado("⏳ Leyendo Excel...","cargando");
+  document.getElementById("btnGuardar").disabled=true;
+
+  try{
+    const wb=XLSX.read(await file.arrayBuffer(),{type:"array",cellDates:true});
+
+    const nm=wb.SheetNames.find(n=>clave(n)==="MATRIZ");
+    if(!nm)throw new Error('No se encontró la hoja "Matriz".');
+
+    const ns=wb.SheetNames.find(n=>clave(n).includes("LISTA DE SIS"));
+    const mapa=leerSistemas(ns?wb.Sheets[ns]:null);
+
+    window.matrizDuplicadosDetectados=0;
+    filasMatriz=leerMatriz(wb.Sheets[nm],mapa);
+
+    if(!filasMatriz.length){
+      throw new Error("No se encontraron elementos válidos.");
+    }
+
+    pintarResumen();
+    pintarPreview();
+
+    document.getElementById("resultado").style.display="block";
+    document.getElementById("previewCard").style.display="block";
+    document.getElementById("btnGuardar").disabled=false;
+
+    const c=document.getElementById("columnas");
+    c.style.display="block";
+    c.innerHTML=
+      "<strong>Columnas de registros detectadas: "+
+      columnasRegistrosDetectadas.length+
+      "</strong><br><br>"+
+      esc(columnasRegistrosDetectadas.join(" · "));
+
+    const duplicados=Number(window.matrizDuplicadosDetectados||0);
+
+    if(duplicados>0){
+      mostrarEstado(
+        "⚠️ Excel leído correctamente. "+
+        filasMatriz.length+
+        " elementos únicos encontrados. "+
+        duplicados+
+        " filas duplicadas fueron ignoradas automáticamente.",
+        "ok"
+      );
+    }else{
+      mostrarEstado(
+        "✅ Excel leído correctamente. "+
+        filasMatriz.length+
+        " elementos encontrados. No se detectaron filas duplicadas.",
+        "ok"
+      );
+    }
+
+  }catch(e){
+    console.error(e);
+    filasMatriz=[];
+    mostrarEstado("❌ Error al leer el Excel: "+e.message,"error");
+  }
 }
 function pintarResumen(){const t=contar(filasMatriz),reg=t.pendiente+t.cliente+t.cerrado,elab=t.cliente+t.cerrado,pE=reg?elab/reg*100:0,pC=reg?t.cerrado/reg*100:0;set("kRegistros",fmt(reg));set("kCerrados",fmt(t.cerrado));set("kCliente",fmt(t.cliente));set("kPendientes",fmt(t.pendiente));set("kElabCant",fmt(elab));set("kElabPct","("+pE.toFixed(1)+"%)");set("kCerrCant",fmt(t.cerrado));set("kCerrPct","("+pC.toFixed(1)+"%)")}
 function pintarPreview(){const tb=document.getElementById("tablaPreview");tb.innerHTML="";filasMatriz.slice(0,150).forEach(f=>{const t=contar([f]);const tr=document.createElement("tr");tr.innerHTML=`<td>${esc(f.especialidad||"")}</td><td>${esc(f.tag||"")}</td><td>${esc(f.descripcion||"")}</td><td>${esc(f.status_index||"")}</td><td>${esc(f.sistema||"")}</td><td>${esc(f.subsistema||"")}</td><td>${t.pendiente}</td><td>${t.cliente}</td><td>${t.cerrado}</td>`;tb.appendChild(tr)})}
