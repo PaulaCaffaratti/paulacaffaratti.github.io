@@ -1200,32 +1200,40 @@ function pintarSpoolesPorCuadernillo(filas){
     const spool = String(x.spool ?? "").trim();
     if(!linea || !spool) continue;
 
-    // Una misma Línea + Spool representa un único spool, aunque tenga varias juntas/filas.
+    // Una misma LINEA + SPOOL cuenta siempre como un único spool.
     const clave = `${linea.toLowerCase()}|||${spool.toLowerCase()}`;
-    const loteCargado = String(x.lote ?? "").trim() !== "";
     const tipo = String(x.tipo_junta ?? "").trim().toUpperCase();
+    const loteCargado = String(x.lote ?? "").trim() !== "";
 
-    // Regla de liberación por spool:
-    // 1) Línea + Spool se agrupan como un único spool.
-    // 2) Debe existir al menos una fila con LOTE cargado.
-    // 3) Si existe alguna fila TIPO = SW sin LOTE, el spool queda INCOMPLETO
-    //    y NO se cuenta como liberado, aunque otras filas del mismo spool tengan LOTE.
     if(!resumen[cuadernillo].has(clave)){
       resumen[cuadernillo].set(clave,{
-        tieneLote: loteCargado,
-        swPendiente: tipo === "SW" && !loteCargado
+        tieneSW:false,
+        swCompletas:true
       });
-    }else{
-      const item = resumen[cuadernillo].get(clave);
-      if(loteCargado) item.tieneLote = true;
-      if(tipo === "SW" && !loteCargado) item.swPendiente = true;
+    }
+
+    const item = resumen[cuadernillo].get(clave);
+
+    // Para decidir si el spool está LIBERADO solamente se miran las filas SW.
+    // Las FW/FFW u otros tipos NO intervienen en esta condición.
+    if(tipo === "SW"){
+      item.tieneSW = true;
+
+      // Si UNA sola SW del mismo Línea + Spool tiene LOTE vacío,
+      // todo el spool queda INCOMPLETO.
+      if(!loteCargado){
+        item.swCompletas = false;
+      }
     }
   }
 
   tbody.innerHTML = codigos.map(codigo=>{
     const spooles = [...resumen[codigo].values()];
     const total = spooles.length;
-    const liberados = spooles.filter(x=>x.tieneLote && !x.swPendiente).length;
+
+    // Liberado = tiene al menos una junta SW y TODAS sus SW tienen LOTE.
+    const liberados = spooles.filter(x=>x.tieneSW && x.swCompletas).length;
+
     return `
       <tr>
         <td><strong>IS-${codigo}</strong></td>
@@ -1236,44 +1244,55 @@ function pintarSpoolesPorCuadernillo(filas){
   }).join("");
 
   if(nota){
-    nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para contarlo como liberado debe tener Lote cargado y no puede existir ninguna fila TIPO = SW del mismo spool con Lote vacío; si existe, el spool se considera incompleto.";
+    nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para la liberación se consideran únicamente las juntas SW: el spool se cuenta como liberado sólo si tiene al menos una SW y todas las SW de ese mismo Línea + Spool tienen Lote cargado. Si una sola SW tiene Lote vacío, el spool queda incompleto.";
   }
 }
 
 async function cargarSpoolesPorCuadernillo(){
   try{
-    const {data:ultimaCarga,error:errorCarga} = await db
-      .from("piping_cargas")
-      .select("id")
-      .order("id",{ascending:false})
-      .limit(1)
-      .maybeSingle();
+    const {data:filas,error} = await db
+      .from("v_piping_spooles_cuadernillo")
+      .select("cuadernillo,total_spooles,spooles_liberados")
+      .order("cuadernillo",{ascending:true});
 
-    if(errorCarga) throw errorCarga;
+    if(error) throw error;
 
-    if(!ultimaCarga?.id){
-      pintarSpoolesPorCuadernillo([]);
-      return;
+    const tbody = document.getElementById("tablaSpoolesCuadernillo");
+    const nota = document.getElementById("notaSpoolesCuadernillo");
+    if(!tbody) return;
+
+    const mapa = new Map((filas || []).map(x=>[
+      normalizarCuadernillo(x.cuadernillo),
+      {
+        total:Number(x.total_spooles || 0),
+        liberados:Number(x.spooles_liberados || 0)
+      }
+    ]));
+
+    tbody.innerHTML = ["001","002","003"].map(codigo=>{
+      const x = mapa.get(codigo) || {total:0,liberados:0};
+      return `
+        <tr>
+          <td><strong>IS-${codigo}</strong></td>
+          <td class="spool-num">${x.total}</td>
+          <td class="spool-num spool-liberado">${x.liberados}</td>
+        </tr>
+      `;
+    }).join("");
+
+    if(nota){
+      nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para la liberación se consideran únicamente las juntas SW: el spool queda liberado sólo si todas sus SW tienen Lote cargado. Si una SW tiene Lote vacío, queda incompleto.";
     }
-
-    const {data:filas,error:errorJuntas} = await db
-      .from("piping_juntas")
-      .select("cuadernillo,linea,spool,lote,tipo_junta")
-      .eq("carga_id",ultimaCarga.id);
-
-    if(errorJuntas) throw errorJuntas;
-
-    pintarSpoolesPorCuadernillo(filas || []);
 
   }catch(err){
     console.error("No se pudo cargar el resumen de spooles por cuadernillo:",err);
     const tbody = document.getElementById("tablaSpoolesCuadernillo");
     const nota = document.getElementById("notaSpoolesCuadernillo");
     if(tbody){
-      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#718096">No se pudo leer el detalle de spooles de la última trazabilidad.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#b33a3a">No se pudo leer el resumen de spooles. Falta crear o habilitar la vista v_piping_spooles_cuadernillo en Supabase.</td></tr>';
     }
     if(nota){
-      nota.textContent = "El resto del dashboard continúa funcionando normalmente.";
+      nota.textContent = err?.message ? "Detalle: "+err.message : "El resto del dashboard continúa funcionando normalmente.";
     }
   }
 }
