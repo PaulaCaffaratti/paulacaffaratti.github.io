@@ -1203,19 +1203,29 @@ function pintarSpoolesPorCuadernillo(filas){
     // Una misma Línea + Spool representa un único spool, aunque tenga varias juntas/filas.
     const clave = `${linea.toLowerCase()}|||${spool.toLowerCase()}`;
     const loteCargado = String(x.lote ?? "").trim() !== "";
+    const tipo = String(x.tipo ?? "").trim().toUpperCase();
 
+    // Regla de liberación por spool:
+    // 1) Línea + Spool se agrupan como un único spool.
+    // 2) Debe existir al menos una fila con LOTE cargado.
+    // 3) Si existe alguna fila TIPO = SW sin LOTE, el spool queda INCOMPLETO
+    //    y NO se cuenta como liberado, aunque otras filas del mismo spool tengan LOTE.
     if(!resumen[cuadernillo].has(clave)){
-      resumen[cuadernillo].set(clave,{liberado:loteCargado});
-    }else if(loteCargado){
-      // Si cualquiera de las filas del mismo spool tiene Lote, el spool cuenta como liberado.
-      resumen[cuadernillo].get(clave).liberado = true;
+      resumen[cuadernillo].set(clave,{
+        tieneLote: loteCargado,
+        swPendiente: tipo === "SW" && !loteCargado
+      });
+    }else{
+      const item = resumen[cuadernillo].get(clave);
+      if(loteCargado) item.tieneLote = true;
+      if(tipo === "SW" && !loteCargado) item.swPendiente = true;
     }
   }
 
   tbody.innerHTML = codigos.map(codigo=>{
     const spooles = [...resumen[codigo].values()];
     const total = spooles.length;
-    const liberados = spooles.filter(x=>x.liberado).length;
+    const liberados = spooles.filter(x=>x.tieneLote && !x.swPendiente).length;
     return `
       <tr>
         <td><strong>IS-${codigo}</strong></td>
@@ -1226,7 +1236,7 @@ function pintarSpoolesPorCuadernillo(filas){
   }).join("");
 
   if(nota){
-    nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Se considera liberado cuando al menos una fila de ese spool tiene información cargada en la columna Lote.";
+    nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para contarlo como liberado debe tener Lote cargado y no puede existir ninguna fila TIPO = SW del mismo spool con Lote vacío; si existe, el spool se considera incompleto.";
   }
 }
 
@@ -1248,7 +1258,7 @@ async function cargarSpoolesPorCuadernillo(){
 
     const {data:filas,error:errorJuntas} = await db
       .from("piping_juntas")
-      .select("cuadernillo,linea,spool,lote")
+      .select("cuadernillo,linea,spool,lote,tipo")
       .eq("carga_id",ultimaCarga.id);
 
     if(errorJuntas) throw errorJuntas;
