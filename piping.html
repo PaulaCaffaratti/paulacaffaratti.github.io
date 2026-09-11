@@ -604,6 +604,57 @@ th,td{padding:8px 9px!important}
   .piping-vista-btn{flex:1;padding:10px 8px!important;}
 }
 
+/* ===== RESUMEN DE SPOOLES POR CUADERNILLO ===== */
+.spool-cuadernillos-panel{
+  margin-top:20px;
+}
+.spool-cuadernillos-panel h2{
+  margin-bottom:6px!important;
+}
+.spool-cuadernillos-sub{
+  margin:0 0 14px;
+  font-size:11px;
+  color:#718096;
+  line-height:1.5;
+}
+.spool-cuadernillos-tabla-wrap{
+  overflow-x:auto;
+  border:1px solid #e0e6ec;
+  border-radius:10px;
+}
+.spool-cuadernillos-tabla{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+.spool-cuadernillos-tabla th{
+  background:#f8fafc!important;
+  color:#687d91!important;
+  padding:10px 12px!important;
+  text-align:left;
+}
+.spool-cuadernillos-tabla td{
+  padding:11px 12px!important;
+  border-bottom:1px solid #e8edf1;
+}
+.spool-cuadernillos-tabla tbody tr:last-child td{
+  border-bottom:0;
+}
+.spool-cuadernillos-tabla .spool-num{
+  font-size:18px;
+  font-weight:600!important;
+  color:#173650!important;
+}
+.spool-cuadernillos-tabla .spool-liberado{
+  color:#287b54!important;
+}
+.spool-cuadernillos-nota{
+  margin-top:10px;
+  font-size:10px;
+  color:#7c8d9e;
+  line-height:1.5;
+}
+
 </style>
 </head>
 
@@ -779,6 +830,34 @@ th,td{padding:8px 9px!important}
 
         <div class="curva-nota">
           El plan continúa hasta el fin programado. La curva real se detiene en la última fecha con avance registrado.
+        </div>
+      </section>
+
+      <section class="panel spool-cuadernillos-panel">
+        <h2>Spooles por cuadernillo isométrico</h2>
+        <p class="spool-cuadernillos-sub">
+          Total de spooles y spooles liberados para los cuadernillos IS-001, IS-002 e IS-003.
+        </p>
+
+        <div class="spool-cuadernillos-tabla-wrap">
+          <table class="spool-cuadernillos-tabla">
+            <thead>
+              <tr>
+                <th>Cuadernillo isométrico</th>
+                <th>Total de spooles</th>
+                <th>Total de spooles liberados</th>
+              </tr>
+            </thead>
+            <tbody id="tablaSpoolesCuadernillo">
+              <tr><td>IS-001</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+              <tr><td>IS-002</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+              <tr><td>IS-003</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="notaSpoolesCuadernillo" class="spool-cuadernillos-nota">
+          Cada spool se cuenta una sola vez por combinación Línea + Spool. Se considera liberado cuando el spool tiene información cargada en la columna Lote.
         </div>
       </section>
 
@@ -1098,6 +1177,97 @@ function pipePct(v){
   return Number(v).toFixed(2).replace(".",",")+"%";
 }
 
+function normalizarCuadernillo(v){
+  const texto = String(v ?? "").trim();
+  const digitos = texto.replace(/\D/g,"");
+  if(!digitos) return null;
+  return digitos.padStart(3,"0").slice(-3);
+}
+
+function pintarSpoolesPorCuadernillo(filas){
+  const tbody = document.getElementById("tablaSpoolesCuadernillo");
+  const nota = document.getElementById("notaSpoolesCuadernillo");
+  if(!tbody) return;
+
+  const codigos = ["001","002","003"];
+  const resumen = Object.fromEntries(codigos.map(c=>[c,new Map()]));
+
+  for(const x of (filas || [])){
+    const cuadernillo = normalizarCuadernillo(x.cuadernillo);
+    if(!cuadernillo || !resumen[cuadernillo]) continue;
+
+    const linea = String(x.linea ?? "").trim();
+    const spool = String(x.spool ?? "").trim();
+    if(!linea || !spool) continue;
+
+    // Una misma Línea + Spool representa un único spool, aunque tenga varias juntas/filas.
+    const clave = `${linea.toLowerCase()}|||${spool.toLowerCase()}`;
+    const loteCargado = String(x.lote ?? "").trim() !== "";
+
+    if(!resumen[cuadernillo].has(clave)){
+      resumen[cuadernillo].set(clave,{liberado:loteCargado});
+    }else if(loteCargado){
+      // Si cualquiera de las filas del mismo spool tiene Lote, el spool cuenta como liberado.
+      resumen[cuadernillo].get(clave).liberado = true;
+    }
+  }
+
+  tbody.innerHTML = codigos.map(codigo=>{
+    const spooles = [...resumen[codigo].values()];
+    const total = spooles.length;
+    const liberados = spooles.filter(x=>x.liberado).length;
+    return `
+      <tr>
+        <td><strong>IS-${codigo}</strong></td>
+        <td class="spool-num">${total}</td>
+        <td class="spool-num spool-liberado">${liberados}</td>
+      </tr>
+    `;
+  }).join("");
+
+  if(nota){
+    nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Se considera liberado cuando al menos una fila de ese spool tiene información cargada en la columna Lote.";
+  }
+}
+
+async function cargarSpoolesPorCuadernillo(){
+  try{
+    const {data:ultimaCarga,error:errorCarga} = await db
+      .from("piping_cargas")
+      .select("id")
+      .order("id",{ascending:false})
+      .limit(1)
+      .maybeSingle();
+
+    if(errorCarga) throw errorCarga;
+
+    if(!ultimaCarga?.id){
+      pintarSpoolesPorCuadernillo([]);
+      return;
+    }
+
+    const {data:filas,error:errorJuntas} = await db
+      .from("piping_juntas")
+      .select("cuadernillo,linea,spool,lote")
+      .eq("carga_id",ultimaCarga.id);
+
+    if(errorJuntas) throw errorJuntas;
+
+    pintarSpoolesPorCuadernillo(filas || []);
+
+  }catch(err){
+    console.error("No se pudo cargar el resumen de spooles por cuadernillo:",err);
+    const tbody = document.getElementById("tablaSpoolesCuadernillo");
+    const nota = document.getElementById("notaSpoolesCuadernillo");
+    if(tbody){
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#718096">No se pudo leer el detalle de spooles de la última trazabilidad.</td></tr>';
+    }
+    if(nota){
+      nota.textContent = "El resto del dashboard continúa funcionando normalmente.";
+    }
+  }
+}
+
 async function cargarPiping(){
 
   const estado=document.getElementById("pipeConexion");
@@ -1149,6 +1319,10 @@ async function cargarPiping(){
     if(errorCurvaLumber) throw errorCurvaLumber;
     if(errorCuadernillosLumber) throw errorCuadernillosLumber;
     if(errorCurvaObra) throw errorCurvaObra;
+
+    // Resumen de spooles por cuadernillo desde la última trazabilidad cargada.
+    // Se carga de forma independiente para no bloquear el resto del dashboard.
+    cargarSpoolesPorCuadernillo();
 
 
     const flujoConfig = {
