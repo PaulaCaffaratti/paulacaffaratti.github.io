@@ -1534,6 +1534,10 @@ async function cargarPiping(){
     const isoFilas=cuadernillosLumber || [];
     pipeCuadernillosLumberActuales = isoFilas;
 
+    // Ejecutadas globales = real Lumber + real Obra
+    let pulgadasEjecutadasLumber = 0;
+    let pulgadasEjecutadasObra = 0;
+
     const curvaFilas = curvaLumber || [];
 
     if(curvaFilas.length){
@@ -1561,6 +1565,7 @@ async function cargarPiping(){
 
         // El real "a hoy" es el último valor disponible de la trazabilidad.
         const realHoy = Number(filaUltimaTraza.real_acumulado || 0);
+        pulgadasEjecutadasLumber = realHoy;
 
         // El desvío se mantiene calculado contra la fecha de la última trazabilidad,
         // para no considerar como cero los días todavía no cargados.
@@ -1740,6 +1745,7 @@ async function cargarPiping(){
       if(filaHoyObra){
         planHoyObra = Number(filaHoyObra.plan_acumulado || 0);
         realHoyObra = Number(filaHoyObra.real_acumulado || 0);
+        pulgadasEjecutadasObra = realHoyObra;
         desvioHoyObra = Number(filaHoyObra.desvio_pulgadas || 0);
         desvioPctObra =
           filaHoyObra.desvio_porcentaje === null
@@ -1936,19 +1942,33 @@ async function cargarPiping(){
         pipeNum(pulgadasObra)+'"'
       );
 
+      // KPI superior: ejecutadas = Lumber real + Obra real
+      const pulgadasEjecutadasGlobal =
+        Number(pulgadasEjecutadasLumber || 0) +
+        Number(pulgadasEjecutadasObra || 0);
+
+      const pulgadasPendientesGlobal = Math.max(
+        0,
+        pulgadasTotales - pulgadasEjecutadasGlobal
+      );
+
+      const avanceGlobal = pulgadasTotales > 0
+        ? (pulgadasEjecutadasGlobal / pulgadasTotales) * 100
+        : 0;
+
       setTexto(
         "pipeEjecutadas",
-        pipeNum(total.pulgadas_ejecutadas)+'"'
+        pipeNum(pulgadasEjecutadasGlobal)+'"'
       );
 
       setTexto(
         "pipePendientes",
-        pipeNum(total.pulgadas_pendientes)+'"'
+        pipeNum(pulgadasPendientesGlobal)+'"'
       );
 
       setTexto(
         "pipeAvance",
-        pipePct(total.avance_porcentaje)
+        pipePct(avanceGlobal)
       );
 
     }else{
