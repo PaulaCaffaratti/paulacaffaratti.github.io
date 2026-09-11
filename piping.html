@@ -557,6 +557,53 @@ th,td{padding:8px 9px!important}
   .kpis{grid-template-columns:1fr!important}
 }
 
+
+/* ===== SELECTOR PREFABRICADO LUMBER / EN OBRA ===== */
+.piping-vistas-tabs{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin:-4px 0 20px;
+  padding:4px;
+  width:max-content;
+  max-width:100%;
+  background:#eef2f6;
+  border:1px solid #e0e6ec;
+  border-radius:10px;
+}
+
+.piping-vista-btn{
+  border:0!important;
+  background:transparent!important;
+  color:#61758a!important;
+  padding:10px 16px!important;
+  border-radius:7px!important;
+  cursor:pointer;
+  font-size:12px!important;
+  font-weight:500!important;
+  white-space:nowrap;
+  transition:background .15s ease,color .15s ease,box-shadow .15s ease;
+}
+
+.piping-vista-btn:hover{
+  color:#173650!important;
+}
+
+.piping-vista-btn.activo{
+  background:#fff!important;
+  color:#173650!important;
+  box-shadow:0 1px 4px rgba(20,47,82,.10)!important;
+}
+
+.piping-vista-contenido{
+  width:100%;
+}
+
+@media(max-width:520px){
+  .piping-vistas-tabs{width:100%;}
+  .piping-vista-btn{flex:1;padding:10px 8px!important;}
+}
+
 </style>
 </head>
 
@@ -655,125 +702,146 @@ th,td{padding:8px 9px!important}
       </div>
     </div>
 
-    <section class="curva-panel">
-      <div class="curva-head">
-        <div>
-          <h2>📈 Curva S – Prefabricación Lumber</h2>
-          <div class="curva-sub">
-            Planificado vs. ejecución real de soldadura para los 3 cuadernillos isométricos IS-001, IS-002 e IS-003.
-          </div>
-        </div>
-        <div id="pipeCurvaEstado" class="curva-estado">Calculando...</div>
-      </div>
+    <!-- VISTAS PRINCIPALES: PREFABRICADO / OBRA -->
+    <div class="piping-vistas-tabs" role="tablist" aria-label="Vistas de Piping">
+      <button
+        id="btnVistaLumber"
+        class="piping-vista-btn activo"
+        type="button"
+        onclick="cambiarVistaPiping('lumber')">
+        Prefabricado Lumber
+      </button>
 
-      <div class="curva-kpis">
-        <div class="curva-kpi">
-          <small>
-            Plan al <span id="pipeFechaUltimaTrazaPlan">—</span>
-          </small>
-          <strong id="pipeCurvaPlanUltimaTraza">—</strong>
-          <div class="curva-kpi-secundario">
-            Plan a hoy:
-            <b id="pipeCurvaPlan">—</b>
-          </div>
-        </div>
-
-        <div class="curva-kpi">
-          <small>
-            Real al <span id="pipeFechaUltimaTrazaReal">—</span>
-          </small>
-          <strong id="pipeCurvaRealUltimaTraza">—</strong>
-          <div class="curva-kpi-secundario">
-            Real a hoy:
-            <b id="pipeCurvaReal">—</b>
-          </div>
-        </div>
-        <div id="pipeCurvaDesvioCard" class="curva-kpi desvio"
-             onclick="abrirDetalleDesvioLumber()"
-             title="Ver detalle del desvío por cuadernillo">
-          <small>Desvío</small>
-          <div class="curva-desvio-valores">
-            <strong id="pipeCurvaDesvio">—</strong>
-            <span class="curva-desvio-sep">|</span>
-            <strong id="pipeCurvaDesvioPct">—</strong>
-          </div>
-          <span class="curva-click-ayuda">Tocar para ver qué cuadernillo está pendiente o adelantado</span>
-        </div>
-      </div>
-
-      <div class="curva-wrap">
-        <canvas id="pipeCurvaLumber"></canvas>
-      </div>
-
-      <div class="curva-nota">
-        El plan continúa hasta el fin programado. La curva real se detiene en la última fecha con avance registrado.
-      </div>
-    </section>
-
-    <div class="grid2">
-
-      <section class="panel">
-        <h2>% de rechazos · total</h2>
-
-        <div class="rechazoTotal">
-
-          <div id="pipeDonut" class="rechazoDonut">
-            <div class="rechazoDonutCentro">
-              <strong id="pipeRechazoTotal">—</strong>
-              <span>rechazo</span>
-            </div>
-          </div>
-
-          <div class="rechazoInfo">
-            <div><strong>Límite de rechazo:</strong> <span id="pipeLimiteTexto">No definido</span></div>
-
-            <div class="rechazoLinea">
-              <div id="pipeRechazoValor" class="rechazoValor"></div>
-              <div id="pipeRechazoLimite" class="rechazoLimite"></div>
-            </div>
-
-            <div class="rechazoEscala">
-              <span>0%</span>
-              <span>100%</span>
-            </div>
-
-            <div id="pipeRechazoDetalle" class="nota">
-              Sin datos de inspección.
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>% de rechazos por soldador</h2>
-
-        <div class="soldadoresChartWrap">
-          <canvas id="pipeSoldadoresChart"></canvas>
-        </div>
-
-        <div class="soldadoresChartLeyenda">
-          Cada punto representa un soldador. La línea roja horizontal marca el límite máximo permitido de 3,00%.
-        </div>
-      </section>
-
+      <button
+        id="btnVistaObra"
+        class="piping-vista-btn"
+        type="button"
+        onclick="cambiarVistaPiping('obra')">
+        En obra
+      </button>
     </div>
 
+    <!-- ========================================
+         VISTA: PREFABRICADO LUMBER
+    ========================================= -->
+    <div id="vistaPipingLumber" class="piping-vista-contenido">
 
-    <section class="curva-panel" id="seccionCurvaObra">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
-        <div>
-          <h2 style="margin:0 0 5px;">🏗️ Curva S – Obra</h2>
-          <div class="curva-sub">
-            Planificado vs. montaje real de spooles en obra para los grupos vinculados al cronograma.
+      <section class="curva-panel">
+        <div class="curva-head">
+          <div>
+            <h2>📈 Curva S – Prefabricación Lumber</h2>
+            <div class="curva-sub">
+              Planificado vs. ejecución real de soldadura para los 3 cuadernillos isométricos IS-001, IS-002 e IS-003.
+            </div>
+          </div>
+          <div id="pipeCurvaEstado" class="curva-estado">Calculando...</div>
+        </div>
+
+        <div class="curva-kpis">
+          <div class="curva-kpi">
+            <small>
+              Plan al <span id="pipeFechaUltimaTrazaPlan">—</span>
+            </small>
+            <strong id="pipeCurvaPlanUltimaTraza">—</strong>
+            <div class="curva-kpi-secundario">
+              Plan a hoy:
+              <b id="pipeCurvaPlan">—</b>
+            </div>
+          </div>
+
+          <div class="curva-kpi">
+            <small>
+              Real al <span id="pipeFechaUltimaTrazaReal">—</span>
+            </small>
+            <strong id="pipeCurvaRealUltimaTraza">—</strong>
+            <div class="curva-kpi-secundario">
+              Real a hoy:
+              <b id="pipeCurvaReal">—</b>
+            </div>
+          </div>
+
+          <div id="pipeCurvaDesvioCard" class="curva-kpi desvio"
+               onclick="abrirDetalleDesvioLumber()"
+               title="Ver detalle del desvío por cuadernillo">
+            <small>Desvío</small>
+            <div class="curva-desvio-valores">
+              <strong id="pipeCurvaDesvio">—</strong>
+              <span class="curva-desvio-sep">|</span>
+              <strong id="pipeCurvaDesvioPct">—</strong>
+            </div>
+            <span class="curva-click-ayuda">Tocar para ver qué cuadernillo está pendiente o adelantado</span>
           </div>
         </div>
-        <button id="btnCurvaObra" onclick="toggleCurvaObra()" style="border:1px solid #d8e0e8;background:#f7f9fb;border-radius:7px;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:500;color:#45596f;white-space:nowrap;">Mostrar ▼</button>
-      </div>
 
-      <div id="contenidoCurvaObra" style="display:none;margin-top:18px;">
+        <div class="curva-wrap">
+          <canvas id="pipeCurvaLumber"></canvas>
+        </div>
+
+        <div class="curva-nota">
+          El plan continúa hasta el fin programado. La curva real se detiene en la última fecha con avance registrado.
+        </div>
+      </section>
+
+      <div class="grid2">
+
+        <section class="panel">
+          <h2>% de rechazos · total</h2>
+
+          <div class="rechazoTotal">
+            <div id="pipeDonut" class="rechazoDonut">
+              <div class="rechazoDonutCentro">
+                <strong id="pipeRechazoTotal">—</strong>
+                <span>rechazo</span>
+              </div>
+            </div>
+
+            <div class="rechazoInfo">
+              <div><strong>Límite de rechazo:</strong> <span id="pipeLimiteTexto">No definido</span></div>
+
+              <div class="rechazoLinea">
+                <div id="pipeRechazoValor" class="rechazoValor"></div>
+                <div id="pipeRechazoLimite" class="rechazoLimite"></div>
+              </div>
+
+              <div class="rechazoEscala">
+                <span>0%</span>
+                <span>100%</span>
+              </div>
+
+              <div id="pipeRechazoDetalle" class="nota">
+                Sin datos de inspección.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>% de rechazos por soldador</h2>
+
+          <div class="soldadoresChartWrap">
+            <canvas id="pipeSoldadoresChart"></canvas>
+          </div>
+
+          <div class="soldadoresChartLeyenda">
+            Cada punto representa un soldador. La línea roja horizontal marca el límite máximo permitido de 3,00%.
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ========================================
+         VISTA: OBRA
+    ========================================= -->
+    <div id="vistaPipingObra" class="piping-vista-contenido" style="display:none;">
+      <section class="curva-panel" id="seccionCurvaObra">
         <div class="curva-head">
-          <div></div>
+          <div>
+            <h2>🏗️ Curva S – Obra</h2>
+            <div class="curva-sub">
+              Planificado vs. montaje real de spooles en obra para los grupos vinculados al cronograma.
+            </div>
+          </div>
           <div id="pipeCurvaObraEstado" class="curva-estado">NO INICIADO</div>
         </div>
 
@@ -782,14 +850,17 @@ th,td{padding:8px 9px!important}
             <small>Plan a hoy</small>
             <strong id="pipeCurvaObraPlan">0,00&quot;</strong>
           </div>
+
           <div class="curva-kpi">
             <small>Real a hoy</small>
             <strong id="pipeCurvaObraReal">0,00&quot;</strong>
           </div>
+
           <div id="pipeCurvaObraDesvioCard" class="curva-kpi desvio">
             <small>Desvío real - plan</small>
             <strong id="pipeCurvaObraDesvio">0,00&quot;</strong>
           </div>
+
           <div id="pipeCurvaObraDesvioPctCard" class="curva-kpi desvio">
             <small>Desvío %</small>
             <strong id="pipeCurvaObraDesvioPct">—</strong>
@@ -803,8 +874,8 @@ th,td{padding:8px 9px!important}
         <div class="curva-nota">
           El real se alimenta automáticamente cuando se marca Montaje en la localización de spooles.
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
   </main>
 </div>
@@ -966,26 +1037,39 @@ function toggleFlujoSpooles(){
   }
 }
 
-function toggleCurvaObra(){
-  const contenido = document.getElementById("contenidoCurvaObra");
-  const boton = document.getElementById("btnCurvaObra");
-  if(!contenido || !boton) return;
+function cambiarVistaPiping(vista){
+  const vistaLumber = document.getElementById("vistaPipingLumber");
+  const vistaObra = document.getElementById("vistaPipingObra");
+  const btnLumber = document.getElementById("btnVistaLumber");
+  const btnObra = document.getElementById("btnVistaObra");
 
-  const estaOculto = contenido.style.display === "none" || contenido.style.display === "";
+  if(!vistaLumber || !vistaObra || !btnLumber || !btnObra) return;
 
-  if(estaOculto){
-    contenido.style.display = "block";
-    boton.textContent = "Ocultar ▲";
+  const mostrarObra = vista === "obra";
 
-    setTimeout(()=>{
+  vistaLumber.style.display = mostrarObra ? "none" : "block";
+  vistaObra.style.display = mostrarObra ? "block" : "none";
+
+  btnLumber.classList.toggle("activo", !mostrarObra);
+  btnObra.classList.toggle("activo", mostrarObra);
+
+  setTimeout(()=>{
+    if(mostrarObra){
       if(pipeCurvaObraChart){
         pipeCurvaObraChart.resize();
+        pipeCurvaObraChart.update("none");
       }
-    },50);
-  }else{
-    contenido.style.display = "none";
-    boton.textContent = "Mostrar ▼";
-  }
+    }else{
+      if(pipeCurvaChart){
+        pipeCurvaChart.resize();
+        pipeCurvaChart.update("none");
+      }
+      if(pipeSoldadoresChart){
+        pipeSoldadoresChart.resize();
+        pipeSoldadoresChart.update("none");
+      }
+    }
+  },60);
 }
 
 function escapar(v){
