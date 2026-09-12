@@ -1,0 +1,10 @@
+{
+  "name": "Control de Premoldeados",
+  "short_name": "Premoldeados",
+  "start_url": "/avance.html",
+  "display": "standalone",
+  "background_color": "#f7f9fb",
+  "theme_color": "#123451",
+  "description": "Localización y actualización de premoldeados",
+  "lang": "es-AR"
+}
