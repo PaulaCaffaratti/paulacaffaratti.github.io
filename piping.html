@@ -729,6 +729,21 @@ th,td{padding:8px 9px!important}
 .modal-spooles-liberados-tabla td:nth-child(2){font-weight:600;color:#173650!important}
 .modal-spooles-liberados-vacio{padding:28px;text-align:center;color:#718096}
 
+
+/* ===== UBICACIÓN DE SPOOLES LIBERADOS ===== */
+.spool-ubicacion-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.spool-ubicacion-badge.obra{background:#eaf7ef;color:#21734b;border:1px solid #cfe9d9}
+.spool-ubicacion-badge.lumber{background:#eef3f7;color:#52677c;border:1px solid #dce5ec}
+
 </style>
 </head>
 
@@ -1082,7 +1097,7 @@ th,td{padding:8px 9px!important}
     <div class="modal-spooles-liberados-head">
       <div>
         <h3 id="tituloSpoolesLiberados">Spooles liberados</h3>
-        <p id="subSpoolesLiberados">Detalle de Línea + Spool + Lote aprobado.</p>
+        <p id="subSpoolesLiberados">Detalle de Línea + Spool + Lote aprobado + ubicación.</p>
       </div>
       <button class="modal-spooles-liberados-cerrar" onclick="cerrarSpoolesLiberados()">×</button>
     </div>
@@ -1094,6 +1109,7 @@ th,td{padding:8px 9px!important}
             <th>Línea</th>
             <th>Spool</th>
             <th>Lote liberado</th>
+            <th>Ubicación</th>
           </tr>
         </thead>
         <tbody id="tablaSpoolesLiberadosDetalle"></tbody>
@@ -1350,37 +1366,59 @@ async function abrirSpoolesLiberados(cuadernillo){
   if(!modal || !tbody) return;
 
   titulo.textContent = `Spooles liberados · IS-${cuadernillo}`;
-  sub.textContent = "Se muestran únicamente spooles liberados según SW + Lote + AP.";
-  tbody.innerHTML = '<tr><td colspan="3" class="modal-spooles-liberados-vacio">Cargando detalle...</td></tr>';
+  sub.textContent = "Ubicación según la tilde de Recepción en obra: con tilde = EN OBRA; sin tilde = LUMBER.";
+  tbody.innerHTML = '<tr><td colspan="4" class="modal-spooles-liberados-vacio">Cargando detalle...</td></tr>';
   modal.classList.remove("hidden");
 
   try{
-    const {data,error} = await db
-      .from("v_piping_spooles_liberados_detalle")
-      .select("cuadernillo,linea,spool,lotes")
-      .eq("cuadernillo",cuadernillo)
-      .order("linea",{ascending:true})
-      .order("spool",{ascending:true});
+    const [{data:liberados,error:errorLiberados},{data:localizacion,error:errorLocalizacion}] = await Promise.all([
+      db
+        .from("v_piping_spooles_liberados_detalle")
+        .select("cuadernillo,linea,spool,lotes")
+        .eq("cuadernillo",cuadernillo)
+        .order("linea",{ascending:true})
+        .order("spool",{ascending:true}),
+      db
+        .from("piping_spooles")
+        .select("linea,spool,recepcion_obra")
+    ]);
 
-    if(error) throw error;
+    if(errorLiberados) throw errorLiberados;
+    if(errorLocalizacion) throw errorLocalizacion;
 
-    const filas = data || [];
+    const filas = liberados || [];
     if(!filas.length){
-      tbody.innerHTML = '<tr><td colspan="3" class="modal-spooles-liberados-vacio">No hay spooles liberados para este cuadernillo.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" class="modal-spooles-liberados-vacio">No hay spooles liberados para este cuadernillo.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = filas.map(x=>`
-      <tr>
-        <td>${escapar(x.linea || "-")}</td>
-        <td>${escapar(x.spool || "-")}</td>
-        <td>${escapar(x.lotes || "-")}</td>
-      </tr>
-    `).join("");
+    const claveSpool = (linea,spool) =>
+      String(linea ?? "").trim().toUpperCase() + "||" + String(spool ?? "").trim().toUpperCase();
+
+    const mapaLocalizacion = new Map();
+    for(const s of (localizacion || [])){
+      mapaLocalizacion.set(claveSpool(s.linea,s.spool), !!s.recepcion_obra);
+    }
+
+    tbody.innerHTML = filas.map(x=>{
+      const enObra = mapaLocalizacion.get(claveSpool(x.linea,x.spool)) === true;
+      const ubicacion = enObra ? "EN OBRA" : "LUMBER";
+      const claseUbicacion = enObra ? "obra" : "lumber";
+      const iconoUbicacion = enObra ? "📍" : "🏭";
+
+      return `
+        <tr>
+          <td>${escapar(x.linea || "-")}</td>
+          <td>${escapar(x.spool || "-")}</td>
+          <td>${escapar(x.lotes || "-")}</td>
+          <td><span class="spool-ubicacion-badge ${claseUbicacion}">${iconoUbicacion} ${ubicacion}</span></td>
+        </tr>
+      `;
+    }).join("");
 
   }catch(err){
     console.error("No se pudo cargar el detalle de spooles liberados:",err);
-    tbody.innerHTML = '<tr><td colspan="3" class="modal-spooles-liberados-vacio" style="color:#b33a3a">No se pudo leer el detalle. Verificá que exista la vista v_piping_spooles_liberados_detalle en Supabase.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="modal-spooles-liberados-vacio" style="color:#b33a3a">No se pudo leer el detalle o la ubicación de los spooles. Verificá permisos de lectura sobre piping_spooles.</td></tr>';
   }
 }
 
