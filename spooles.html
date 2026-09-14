@@ -1240,6 +1240,11 @@ function matchEstado(s,f){
 
 function etapaUsuario(){
 
+ /* Jorge Soto despacha desde Lumber y debe ver siempre
+    el universo completo de spooles, sin filtro automático. */
+ if(usuarioEmail==="jorgefelipe.soto@pecomenergia.com.ar")
+  return"";
+
  if(puede("recepcion_obra"))
   return"recepcion_obra";
 
