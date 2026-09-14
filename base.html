@@ -827,6 +827,10 @@ Gestión de la base maestra de premoldeados.
 ⏳ Conectando con la base de datos...
 </div>
 
+<p class="ayuda" style="margin-top:-4px;margin-bottom:12px;">
+La edición requiere un usuario con <strong>puede_modificar_base = TRUE</strong>.
+</p>
+
 
 <!-- =====================================================
 AGREGAR PREMOLDEADO
@@ -887,9 +891,7 @@ placeholder="Ej: 7,40">
 </div>
 
 
-<button
-class="boton agregar"
-onclick="agregarPremoldeado()">
+<button id="btnAgregarPremoldeado" class="boton agregar" onclick="agregarPremoldeado()">
 
 ➕ AGREGAR
 
@@ -935,9 +937,7 @@ type="file"
 id="excel"
 accept=".xlsx,.xls,.csv">
 
-<button
-class="boton importar"
-onclick="importarExcel()">
+<button id="btnImportarPremoldeados" class="boton importar" onclick="importarExcel()">
 
 📥 IMPORTAR EXCEL
 
@@ -976,7 +976,7 @@ La nueva carga reemplaza la planificación anterior.
 
     <input type="file" id="excelPlanificacion" accept=".xlsx,.xls,.csv">
 
-    <button class="boton importar" onclick="importarPlanificacion()">
+    <button id="btnImportarPlanificacion" class="boton importar" onclick="importarPlanificacion()">
       📅 CARGAR PLANIFICACIÓN
     </button>
 
@@ -1226,6 +1226,12 @@ let listaVisible = [];
 
 let idEditando = null;
 
+let usuarioBase = null;
+
+let permisosBase = null;
+
+let puedeModificarBase = false;
+
 
 /*
 ETAPA SECUENCIAL
@@ -1345,6 +1351,101 @@ function formatoM3(valor){
 
 }
 
+
+
+/* =====================================================
+PERMISOS DE BASE DE INGENIERÍA
+===================================================== */
+
+async function consultarPermisoBase(){
+
+  const {data:{session}} =
+  await db.auth.getSession();
+
+  usuarioBase = session?.user || null;
+  permisosBase = null;
+  puedeModificarBase = false;
+
+  if(!usuarioBase?.email){
+    return false;
+  }
+
+  const {data,error} =
+  await db
+    .from("permisos_usuarios")
+    .select("email,nombre,puede_modificar_base")
+    .eq("email",usuarioBase.email)
+    .maybeSingle();
+
+  if(error){
+    console.error("Error consultando permiso de base:",error);
+    return false;
+  }
+
+  permisosBase = data || null;
+
+  puedeModificarBase = Boolean(
+    permisosBase &&
+    permisosBase.puede_modificar_base === true
+  );
+
+  return puedeModificarBase;
+}
+
+
+async function exigirPermisoBase(destino="estado"){
+
+  const autorizado =
+  await consultarPermisoBase();
+
+  if(autorizado){
+    return true;
+  }
+
+  const mensaje =
+  usuarioBase?.email
+    ? "⛔ Tu usuario no tiene permiso para modificar la Base de Ingeniería."
+    : "🔐 Iniciá sesión con un usuario autorizado para modificar la Base de Ingeniería.";
+
+  if(destino==="planificacion"){
+    estadoPlanificacion(mensaje,"error");
+  }else{
+    estado(mensaje,"error");
+  }
+
+  aplicarPermisosBase();
+
+  return false;
+}
+
+
+function aplicarPermisosBase(){
+
+  ["codigo","tipo","modelo","m3","excel","excelPlanificacion"]
+  .forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.disabled=!puedeModificarBase;
+  });
+
+  ["btnAgregarPremoldeado","btnImportarPremoldeados","btnImportarPlanificacion"]
+  .forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.disabled=!puedeModificarBase;
+    el.style.opacity=puedeModificarBase ? "1" : ".45";
+    el.style.cursor=puedeModificarBase ? "pointer" : "not-allowed";
+  });
+
+  if(Array.isArray(premoldeados)){
+    mostrarTabla();
+  }
+}
+
+
+async function actualizarPermisoBase(){
+  await consultarPermisoBase();
+  aplicarPermisosBase();
+}
 
 
 /* =====================================================
@@ -1883,31 +1984,27 @@ function mostrarTabla(){
 
 
       <td>
+      ${
+        puedeModificarBase
+        ?
+        `
+        <div class="acciones-fila">
+          <button
+            class="boton editar"
+            onclick="editarPremoldeado(${p.id})">
+            ✏️ Editar
+          </button>
 
-      <div class="acciones-fila">
-
-        <button
-        class="boton editar"
-        onclick="editarPremoldeado(${p.id})">
-
-        ✏️ Editar
-
-        </button>
-
-        <button
-        class="boton eliminar"
-        onclick="
-        eliminarPremoldeado(
-          ${p.id}
-        )
-        ">
-
-        🗑️ Eliminar
-
-        </button>
-
-      </div>
-
+          <button
+            class="boton eliminar"
+            onclick="eliminarPremoldeado(${p.id})">
+            🗑️ Eliminar
+          </button>
+        </div>
+        `
+        :
+        `<span class="estado-extra no">Solo lectura</span>`
+      }
       </td>
 
 
@@ -1946,6 +2043,10 @@ function cancelarEdicion(){
 
 
 async function guardarEdicion(id){
+
+  if(!await exigirPermisoBase()){
+    return;
+  }
 
   const codigo =
   document
@@ -2110,6 +2211,10 @@ AGREGAR
 ===================================================== */
 
 async function agregarPremoldeado(){
+
+  if(!await exigirPermisoBase()){
+    return;
+  }
 
   const codigo =
   document
@@ -2288,6 +2393,10 @@ IMPORTAR EXCEL
 ===================================================== */
 
 async function importarExcel(){
+
+  if(!await exigirPermisoBase()){
+    return;
+  }
 
   const archivo =
   document
@@ -2843,6 +2952,10 @@ async function eliminarPremoldeado(
   id
 ){
 
+  if(!await exigirPermisoBase()){
+    return;
+  }
+
   if(
     !confirm(
 
@@ -3032,21 +3145,61 @@ function buscarColumnaPlan(encabezados,opciones){
 }
 
 async function actualizarSesionPlanificacion(){
-  const {data}=await db.auth.getSession();
-  const sesion=data?.session || null;
-  const usuario=document.getElementById("usuarioPlanificacion");
-  const btn=document.getElementById("btnSalirPlan");
+
+  const {data} =
+  await db.auth.getSession();
+
+  const sesion =
+  data?.session || null;
+
+  const usuario =
+  document.getElementById("usuarioPlanificacion");
+
+  const btn =
+  document.getElementById("btnSalirPlan");
+
+  await actualizarPermisoBase();
 
   if(sesion?.user?.email){
-    usuario.innerHTML=`✅ Sesión iniciada: <strong>${escapeHtml(sesion.user.email)}</strong>`;
+
     btn.style.display="inline-block";
-    estadoPlanificacion("✅ Podés cargar o reemplazar la planificación.","ok");
+
+    if(puedeModificarBase){
+
+      const nombre =
+      permisosBase?.nombre ||
+      sesion.user.email;
+
+      usuario.innerHTML =
+      `✅ Usuario autorizado: <strong>${escapeHtml(nombre)}</strong>`;
+
+      estadoPlanificacion(
+        "✅ Podés agregar, editar, eliminar, importar Excel y reemplazar la planificación.",
+        "ok"
+      );
+
+    }else{
+
+      usuario.innerHTML =
+      `⛔ Sin permiso de edición: <strong>${escapeHtml(sesion.user.email)}</strong>`;
+
+      estadoPlanificacion(
+        "Este usuario puede visualizar, pero no modificar la Base de Ingeniería.",
+        "error"
+      );
+    }
+
   }else{
+
     usuario.textContent="Sin sesión iniciada.";
     btn.style.display="none";
-    estadoPlanificacion("Iniciá sesión para cargar o reemplazar la planificación.");
+
+    estadoPlanificacion(
+      "Iniciá sesión para habilitar la edición de la Base de Ingeniería."
+    );
   }
 }
+
 
 async function loginPlanificacion(){
   const email=document.getElementById("planEmail").value.trim();
@@ -3103,8 +3256,13 @@ async function importarPlanificacion(){
 
   const {data:sdata}=await db.auth.getSession();
   const email=sdata?.session?.user?.email || null;
+
   if(!email){
     estadoPlanificacion("❌ Tenés que iniciar sesión antes de cargar la planificación.","error");
+    return;
+  }
+
+  if(!await exigirPermisoBase("planificacion")){
     return;
   }
 
@@ -3242,9 +3400,18 @@ function togglePremoldeados(){
 INICIAR
 ===================================================== */
 
-cargarDatos();
-actualizarSesionPlanificacion();
-cargarResumenPlanificacion();
+async function iniciarBaseIngenieria(){
+
+  await actualizarSesionPlanificacion();
+
+  await cargarDatos();
+
+  aplicarPermisosBase();
+
+  await cargarResumenPlanificacion();
+}
+
+iniciarBaseIngenieria();
 
 </script>
 
