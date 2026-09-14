@@ -1678,27 +1678,38 @@ async function cargarSpoolesDespachadosLumber(){
       const g = porSpool.get(k);
 
       let endAprobado = false;
+      let aplicaEND = false;
       let pintado = false;
 
       if(g){
         pintado = !!g.pintado;
 
-        // END aprobado:
-        // 1) el spool debe tener por lo menos una SW,
-        // 2) todas sus SW deben tener Lote,
-        // 3) todos esos lotes deben tener al menos un RESULTADO AP.
+        // END aprobado: SOLO se evalúan juntas SW.
+        // FW y FFW quedan totalmente excluidas.
+        // Si el spool no tiene ninguna SW, END figura como "NO APLICA"
+        // y no se cuenta como un spool sin END.
         if(g.sw.length){
-          const todasConLote = g.sw.every(x=>!!x.lote);
-          const todosLosLotesAP = todasConLote &&
-            g.sw.every(x=>lotesAP.has(x.lote));
+          aplicaEND = true;
 
-          endAprobado = todasConLote && todosLosLotesAP;
+          const lotesSW = [...new Set(
+            g.sw
+              .map(x=>String(x.lote ?? "").trim().toUpperCase())
+              .filter(Boolean)
+          )];
+
+          // Para aprobar END:
+          // - debe existir al menos un lote asociado a las SW;
+          // - cada lote SW debe tener un resultado AP.
+          endAprobado =
+            lotesSW.length > 0 &&
+            lotesSW.every(lote=>lotesAP.has(lote));
         }
       }
 
       return {
         linea:String(s.linea ?? "").trim(),
         spool:String(s.spool ?? "").trim(),
+        aplicaEND,
         endAprobado,
         pintado
       };
@@ -1710,9 +1721,13 @@ async function cargarSpoolesDespachadosLumber(){
             <td>${escapar(x.linea || "-")}</td>
             <td>${escapar(x.spool || "-")}</td>
             <td>
-              <span class="estado-badge ${x.endAprobado ? "si" : "no"}">
-                ${x.endAprobado ? "✓ SÍ" : "✕ NO"}
-              </span>
+              ${
+                !x.aplicaEND
+                  ? '<span class="estado-badge" style="color:#68798c;background:#f1f4f7;border:1px solid #dce3ea">— NO APLICA</span>'
+                  : `<span class="estado-badge ${x.endAprobado ? "si" : "no"}">
+                       ${x.endAprobado ? "✓ SÍ" : "✕ NO"}
+                     </span>`
+              }
             </td>
             <td>
               <span class="estado-badge ${x.pintado ? "si" : "no"}">
@@ -1725,9 +1740,10 @@ async function cargarSpoolesDespachadosLumber(){
 
     if(resumen){
       const total = filas.length;
-      const conEnd = filas.filter(x=>x.endAprobado).length;
+      const aplicanEND = filas.filter(x=>x.aplicaEND).length;
+      const conEnd = filas.filter(x=>x.aplicaEND && x.endAprobado).length;
       const pintados = filas.filter(x=>x.pintado).length;
-      resumen.textContent = `${total} despachados · ${conEnd} con END · ${pintados} pintados`;
+      resumen.textContent = `${total} despachados · ${conEnd}/${aplicanEND} con END SW · ${pintados} pintados`;
     }
 
   }catch(err){
