@@ -744,6 +744,47 @@ th,td{padding:8px 9px!important}
 .spool-ubicacion-badge.obra{background:#eaf7ef;color:#21734b;border:1px solid #cfe9d9}
 .spool-ubicacion-badge.lumber{background:#eef3f7;color:#52677c;border:1px solid #dce5ec}
 
+
+/* ===== INDICADORES DE AVANCE DE SPOOLES ===== */
+.spool-avance-kpis{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:18px 0 20px;
+}
+.spool-avance-kpi{
+  background:#fff;
+  border:1px solid var(--ui-line);
+  border-radius:11px;
+  padding:18px 20px;
+}
+.spool-avance-kpi small{
+  display:block;
+  font-size:10px;
+  color:#718498;
+  font-weight:500;
+  margin-bottom:7px;
+}
+.spool-avance-kpi strong{
+  display:block;
+  font-size:31px;
+  line-height:1;
+  color:#173650;
+  font-weight:600;
+  letter-spacing:-.025em;
+}
+.spool-avance-kpi .detalle{
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid #e6ebf0;
+  font-size:11px;
+  color:#718096;
+}
+.spool-avance-kpi .detalle b{color:#173650}
+.spool-avance-kpi.end{border-top:3px solid #287b54}
+.spool-avance-kpi.pintura{border-top:3px solid #3976a5}
+@media(max-width:650px){.spool-avance-kpis{grid-template-columns:1fr}}
+
 </style>
 </head>
 
@@ -949,6 +990,20 @@ th,td{padding:8px 9px!important}
           Cada spool se cuenta una sola vez por combinación Línea + Spool. Se considera liberado cuando el spool tiene información cargada en la columna Lote.
         </div>
       </section>
+
+      <div class="spool-avance-kpis">
+        <div class="spool-avance-kpi end">
+          <small>% de spooles liberados por END</small>
+          <strong id="kpiSpoolesEndPct">—</strong>
+          <div class="detalle"><b id="kpiSpoolesEndCant">—</b> spooles liberados de <b id="kpiSpoolesEndTotal">—</b></div>
+        </div>
+
+        <div class="spool-avance-kpi pintura">
+          <small>% de spooles pintados</small>
+          <strong id="kpiSpoolesPintadosPct">—</strong>
+          <div class="detalle"><b id="kpiSpoolesPintadosCant">—</b> spooles con Fecha Pintura de <b id="kpiSpoolesPintadosTotal">—</b></div>
+        </div>
+      </div>
 
       <div class="grid2">
 
@@ -1428,6 +1483,68 @@ function cerrarSpoolesLiberados(event){
   if(modal) modal.classList.add("hidden");
 }
 
+
+async function cargarIndicadoresAvanceSpooles(){
+  try{
+    const [{data:resumen,error:errorResumen},{data:ultimaCarga,error:errorCarga}] = await Promise.all([
+      db
+        .from("v_piping_spooles_cuadernillo")
+        .select("cuadernillo,total_spooles,spooles_liberados"),
+      db
+        .from("piping_cargas")
+        .select("id")
+        .order("id",{ascending:false})
+        .limit(1)
+        .maybeSingle()
+    ]);
+
+    if(errorResumen) throw errorResumen;
+    if(errorCarga) throw errorCarga;
+
+    const filasResumen = resumen || [];
+    const totalSpooles = filasResumen.reduce((acc,x)=>acc + Number(x.total_spooles || 0),0);
+    const liberadosEnd = filasResumen.reduce((acc,x)=>acc + Number(x.spooles_liberados || 0),0);
+    const pctEnd = totalSpooles > 0 ? (liberadosEnd / totalSpooles) * 100 : 0;
+
+    setTexto("kpiSpoolesEndPct", pipePct(pctEnd));
+    setTexto("kpiSpoolesEndCant", liberadosEnd);
+    setTexto("kpiSpoolesEndTotal", totalSpooles);
+
+    let pintados = 0;
+
+    if(ultimaCarga?.id){
+      const {data:juntas,error:errorJuntas} = await db
+        .from("piping_juntas")
+        .select("linea,spool,fecha_pintura")
+        .eq("carga_id",ultimaCarga.id);
+
+      if(errorJuntas) throw errorJuntas;
+
+      const pintadosUnicos = new Set();
+      for(const x of (juntas || [])){
+        const linea = String(x.linea ?? "").trim();
+        const spool = String(x.spool ?? "").trim();
+        const fechaPintura = String(x.fecha_pintura ?? "").trim();
+        if(!linea || !spool || !fechaPintura) continue;
+        pintadosUnicos.add(linea.toUpperCase()+"|||"+spool.toUpperCase());
+      }
+      pintados = pintadosUnicos.size;
+    }
+
+    const pctPintados = totalSpooles > 0 ? (pintados / totalSpooles) * 100 : 0;
+    setTexto("kpiSpoolesPintadosPct", pipePct(pctPintados));
+    setTexto("kpiSpoolesPintadosCant", pintados);
+    setTexto("kpiSpoolesPintadosTotal", totalSpooles);
+
+  }catch(err){
+    console.error("No se pudieron cargar los indicadores de spooles:",err);
+    [
+      "kpiSpoolesEndPct","kpiSpoolesEndCant","kpiSpoolesEndTotal",
+      "kpiSpoolesPintadosPct","kpiSpoolesPintadosCant","kpiSpoolesPintadosTotal"
+    ].forEach(id=>setTexto(id,"—"));
+  }
+}
+
 async function cargarSpoolesPorCuadernillo(){
   try{
     const {data:filas,error} = await db
@@ -1534,6 +1651,7 @@ async function cargarPiping(){
     // Resumen de spooles por cuadernillo desde la última trazabilidad cargada.
     // Se carga de forma independiente para no bloquear el resto del dashboard.
     cargarSpoolesPorCuadernillo();
+    cargarIndicadoresAvanceSpooles();
 
 
     const flujoConfig = {
