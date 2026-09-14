@@ -1532,7 +1532,7 @@ async function cargarIndicadoresAvanceSpooles(){
           en piping-base.html la columna Fecha pintura quedó corrida una posición
           y fue guardada en OT. Se toma fecha_pintura y, si está vacía, OT.
         */
-        const fechaPintura = String(x.fecha_pintura ?? x.ot ?? "").trim();
+        const fechaPintura = String(x.fecha_pintura || x.ot || "").trim();
         if(linea && spool && fechaPintura){
           pintadosUnicos.add(linea.toUpperCase()+"|||"+spool.toUpperCase());
         }
