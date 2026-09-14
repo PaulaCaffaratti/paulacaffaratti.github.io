@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,202 +5,678 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Localización de Spooles</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--bg:#f4f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#dbe3ee;--nav:#17365d;--nav2:#244d7c;--ok:#198754;--danger:#dc3545;--blue:#2563eb}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}aside{background:var(--nav);color:#fff;padding:24px 18px}.brand{font-size:20px;font-weight:800;margin-bottom:26px}.section-title{font-size:12px;color:#bdd0e7;font-weight:700;margin:20px 10px 8px;letter-spacing:.7px}nav a{display:block;color:#fff;text-decoration:none;padding:11px 12px;border-radius:8px;margin:3px 0;font-size:14px}nav a:hover,nav a.active{background:var(--nav2)}main{padding:24px;overflow:hidden}h1{margin:0;font-size:26px}.subtitle{color:var(--muted);margin-top:5px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 3px 12px rgba(0,0,0,.04)}.login-card{padding:16px;margin:18px 0}.login-row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.field{display:flex;flex-direction:column;gap:6px;min-width:220px;flex:1}label{font-size:12px;color:var(--muted);font-weight:700}input,select,button{font:inherit}input,select{border:1px solid var(--line);border-radius:8px;padding:10px 11px;background:#fff}button{border:0;border-radius:8px;padding:10px 14px;cursor:pointer;font-weight:700}.btn-primary{background:var(--blue);color:#fff}.btn-secondary{background:#e8eef7;color:var(--text)}.status{margin-top:10px;font-size:13px;color:var(--muted)}.status.ok{color:var(--ok)}.status.err{color:var(--danger)}.controls{display:grid;grid-template-columns:1.6fr 1fr auto;gap:10px;padding:16px;margin-bottom:18px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.kpi{padding:16px}.kpi .label{color:var(--muted);font-size:12px;font-weight:700}.kpi .value{font-size:26px;font-weight:800;margin-top:5px}.table-card{overflow:hidden}.table-wrap{overflow:auto;max-height:68vh}table{width:100%;border-collapse:collapse;min-width:1450px;font-size:13px}th{position:sticky;top:0;z-index:2;background:#eef3f8;padding:11px 8px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}td{padding:9px 8px;border-bottom:1px solid #edf1f5;text-align:center;vertical-align:middle}td.left{text-align:left}tr:hover td{background:#fafcff}.spool{font-weight:800}.stage{min-width:135px}.check-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}.check-wrap input[type=checkbox]{width:20px;height:20px;cursor:pointer;accent-color:var(--ok)}.check-wrap input[type=checkbox]:disabled{cursor:not-allowed;opacity:.55}.mini{font-size:10px;color:var(--muted);max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.estado{font-size:11px;font-weight:800;padding:5px 8px;border-radius:999px;display:inline-block;white-space:nowrap;background:#eef2f7}.estado.fin{background:#dff4e8;color:#146c43}.empty{padding:30px;text-align:center;color:var(--muted)}@media(max-width:1000px){.layout{grid-template-columns:1fr}aside{display:none}main{padding:14px}.controls{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+:root{
+  --bg:#f4f7fb;
+  --card:#fff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --line:#dbe3ee;
+  --nav:#17365d;
+  --nav2:#244d7c;
+  --ok:#198754;
+  --danger:#dc3545;
+  --blue:#2563eb;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  min-height:100vh;
+}
+
+aside{
+  background:var(--nav);
+  color:#fff;
+  padding:24px 18px;
+}
+
+main{
+  padding:24px;
+  overflow:hidden;
+}
+
+h1{
+  margin:0;
+  font-size:26px;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,.04);
+}
+
+.login-card{
+  padding:16px;
+  margin:18px 0;
+}
+
+.login-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:end;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:220px;
+  flex:1;
+}
+
+label{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:700;
+}
+
+input,select,button{
+  font:inherit;
+}
+
+input,select{
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:10px 11px;
+  background:#fff;
+}
+
+button{
+  border:0;
+  border-radius:8px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.btn-primary{
+  background:var(--blue);
+  color:#fff;
+}
+
+.btn-secondary{
+  background:#e8eef7;
+  color:var(--text);
+}
+
+.status{
+  margin-top:10px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.status.ok{color:var(--ok)}
+.status.err{color:var(--danger)}
+
+.controls{
+  display:grid;
+  grid-template-columns:1.5fr 1fr auto auto;
+  gap:10px;
+  padding:16px;
+  margin-bottom:18px;
+}
+
+.btn-vista{
+  white-space:nowrap;
+  background:#eef4f8;
+  color:#264b69;
+  border:1px solid #d8e3ec;
+}
+
+.btn-vista.todos{
+  background:#fff4df;
+  color:#855d18;
+  border-color:#efd7a5;
+}
+
+.info-filtro{
+  grid-column:1/-1;
+  font-size:11px;
+  color:#718396;
+  padding-top:2px;
+}
+
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.kpi{
+  padding:16px;
+}
+
+.kpi .label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+
+.kpi .value{
+  font-size:26px;
+  font-weight:800;
+  margin-top:5px;
+}
+
+.table-card{
+  overflow:hidden;
+}
+
+.table-wrap{
+  overflow:auto;
+  max-height:68vh;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1450px;
+  font-size:13px;
+}
+
+th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#eef3f8;
+  padding:11px 8px;
+  border-bottom:1px solid var(--line);
+  text-align:center;
+  white-space:nowrap;
+}
+
+td{
+  padding:9px 8px;
+  border-bottom:1px solid #edf1f5;
+  text-align:center;
+  vertical-align:middle;
+}
+
+td.left{text-align:left}
+
+tr:hover td{
+  background:#fafcff;
+}
+
+.spool{font-weight:800}
+
+.stage{
+  min-width:135px;
+}
+
+.check-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+
+.check-wrap input[type=checkbox]{
+  width:20px;
+  height:20px;
+  cursor:pointer;
+  accent-color:var(--ok);
+}
+
+.check-wrap input[type=checkbox]:disabled{
+  cursor:not-allowed;
+  opacity:.55;
+}
+
+.mini{
+  font-size:10px;
+  color:var(--muted);
+  max-width:125px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.estado{
+  font-size:11px;
+  font-weight:800;
+  padding:5px 8px;
+  border-radius:999px;
+  display:inline-block;
+  white-space:nowrap;
+  background:#eef2f7;
+}
+
+.estado.fin{
+  background:#dff4e8;
+  color:#146c43;
+}
+
+.empty{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+}
 
 /* =========================================================
-   SISTEMA VISUAL UNIFICADO · EJECUTIVO LIMPIO
+   SISTEMA VISUAL UNIFICADO
    ========================================================= */
+
 :root{
- --ui-navy:#123451;--ui-ink:#19344d;--ui-text:#42596d;--ui-muted:#7c8d9e;
- --ui-bg:#f7f9fb;--ui-line:#e4eaf0;--ui-line2:#d6e0e8;
- --ui-green:#287b54;--ui-blue:#3976a5;--ui-orange:#bd7b27;
- --ui-purple:#6f5aaa;--ui-red:#b44a4a;
+ --ui-navy:#123451;
+ --ui-ink:#19344d;
+ --ui-text:#42596d;
+ --ui-muted:#7c8d9e;
+ --ui-bg:#f7f9fb;
+ --ui-line:#e4eaf0;
+ --ui-line2:#d6e0e8;
+ --ui-green:#287b54;
+ --ui-blue:#3976a5;
+ --ui-orange:#bd7b27;
+ --ui-purple:#6f5aaa;
+ --ui-red:#b44a4a;
 }
 
 html,body{
  font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif!important;
- font-weight:400!important;letter-spacing:0!important;background:var(--ui-bg)!important;color:var(--ui-text)!important;
- -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+ font-weight:400!important;
+ letter-spacing:0!important;
+ background:var(--ui-bg)!important;
+ color:var(--ui-text)!important;
+ -webkit-font-smoothing:antialiased;
+ text-rendering:optimizeLegibility;
 }
 
-*{box-sizing:border-box}
-h1,h2,h3,h4{font-family:inherit!important;color:var(--ui-ink)!important;letter-spacing:-.015em!important}
-h1{font-weight:600!important} h2,h3,h4{font-weight:600!important}
-button,input,select,textarea{font-family:inherit!important}
+h1,h2,h3,h4{
+ font-family:inherit!important;
+ color:var(--ui-ink)!important;
+ letter-spacing:-.015em!important;
+}
+
+h1{font-weight:600!important}
+
+button,input,select,textarea{
+ font-family:inherit!important;
+}
+
 input,select,textarea{
- border:1px solid var(--ui-line2)!important;border-radius:7px!important;background:#fff!important;color:var(--ui-ink)!important;
+ border:1px solid var(--ui-line2)!important;
+ border-radius:7px!important;
+ background:#fff!important;
+ color:var(--ui-ink)!important;
 }
 
 input:focus,select:focus,textarea:focus{
- outline:none!important;border-color:#9db6ca!important;box-shadow:0 0 0 3px rgba(57,118,165,.07)!important;
+ outline:none!important;
+ border-color:#9db6ca!important;
+ box-shadow:0 0 0 3px rgba(57,118,165,.07)!important;
 }
 
-button,.boton,.btn,.btnAzul,.btnVerde,.btnGris,.btn-primary,.btn-secondary,.btn-toggle{
- font-family:inherit!important;font-weight:500!important;letter-spacing:0!important;border-radius:7px!important;box-shadow:none!important;
+button,.btn-primary,.btn-secondary,.btn-vista{
+ font-family:inherit!important;
+ font-weight:500!important;
+ letter-spacing:0!important;
+ border-radius:7px!important;
+ box-shadow:none!important;
 }
 
-.panel,.card,.curva-panel,.flujo-spooles,.matrizResumenUnificado{
- box-shadow:none!important;border-color:var(--ui-line)!important;
+.card{
+ box-shadow:none!important;
+ border-color:var(--ui-line)!important;
 }
 
-th{font-family:inherit!important;font-weight:600!important;letter-spacing:.02em!important;text-transform:none!important}
-td{font-weight:400!important}
+th{
+ font-family:inherit!important;
+ font-weight:600!important;
+ letter-spacing:.02em!important;
+ text-transform:none!important;
+}
+
+td{
+ font-weight:400!important;
+}
 
 /* BARRA LATERAL */
+
 .sidebar{
- position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:214px!important;
- background:#123451!important;color:#fff!important;padding:28px 14px 20px!important;overflow-y:auto!important;z-index:100!important;
+ position:fixed!important;
+ left:0!important;
+ top:0!important;
+ bottom:0!important;
+ width:214px!important;
+ background:#123451!important;
+ color:#fff!important;
+ padding:28px 14px 20px!important;
+ overflow-y:auto!important;
+ z-index:100!important;
 }
 
 .logo{
- font-size:15px!important;line-height:1.45!important;font-weight:600!important;letter-spacing:0!important;
- color:#fff!important;margin:0 4px 30px!important;
+ font-size:15px!important;
+ line-height:1.45!important;
+ font-weight:600!important;
+ color:#fff!important;
+ margin:0 4px 30px!important;
 }
 
-.modulo-titulo,.sidebar .modulo-titulo{
- margin:22px 4px 8px!important;font-size:10px!important;line-height:1.2!important;font-weight:500!important;
- letter-spacing:.06em!important;color:#91a9bd!important;text-transform:uppercase!important;
+.modulo-titulo{
+ margin:22px 4px 8px!important;
+ font-size:10px!important;
+ line-height:1.2!important;
+ font-weight:500!important;
+ letter-spacing:.06em!important;
+ color:#91a9bd!important;
+ text-transform:uppercase!important;
 }
 
 .sidebar a{
- display:block!important;text-decoration:none!important;color:#e1e9f0!important;background:transparent!important;
- padding:10px 9px!important;margin:0 0 4px!important;border-radius:7px!important;
- font-size:11px!important;line-height:1.35!important;font-weight:400!important;letter-spacing:0!important;
+ display:block!important;
+ text-decoration:none!important;
+ color:#e1e9f0!important;
+ background:transparent!important;
+ padding:10px 9px!important;
+ margin:0 0 4px!important;
+ border-radius:7px!important;
+ font-size:11px!important;
+ line-height:1.35!important;
+ font-weight:400!important;
 }
 
-.sidebar a:hover,.sidebar a.activo,.sidebar a.active{
- background:#fff!important;color:#123451!important;
+.sidebar a:hover,
+.sidebar a.activo,
+.sidebar a.active{
+ background:#fff!important;
+ color:#123451!important;
 }
 
 /* CONTENIDO */
-.main{margin-left:214px!important;min-height:100vh!important}
-.topbar{
- min-height:52px!important;padding:0 26px!important;background:#fff!important;border-bottom:1px solid var(--ui-line)!important;
- display:flex!important;align-items:center!important;
+
+.layout{
+ display:block!important;
+ min-height:100vh!important;
 }
 
-.topbar strong{font-size:12px!important;font-weight:500!important;color:#6d8093!important}
-.contenido{padding:22px 26px 30px!important;max-width:1460px!important;margin:auto!important}
-.contenido>h1,.hero h1,.matrizHero h1{
- font-size:26px!important;font-weight:600!important;line-height:1.15!important;margin-bottom:5px!important;
+.layout>aside{
+ display:block!important;
 }
 
-.subtitulo,.hero p,.matrizHero p,.subtitle{font-size:12px!important;font-weight:400!important;color:var(--ui-muted)!important}
-.panel,.card{border-radius:11px!important}
-.panel h2,.card h2,.curva-panel h2,.flujo-spooles h2{font-size:15px!important;font-weight:600!important}
-.kpi small,.kpi .label,.matrizKpi small,.flujo-card small{
- font-weight:500!important;text-transform:none!important;letter-spacing:.01em!important;
-}
-
-.kpi strong,.kpi .value,.matrizKpi strong,.flujo-card strong{font-weight:600!important;letter-spacing:-.02em!important}
-.estado,.status,.usuario,.nota,.info{font-weight:400!important}
-table{font-variant-numeric:tabular-nums}
-table th{background:#f8fafc!important;color:#687d91!important}
-table td{color:#344d64!important}
-
-@media(min-width:851px) and (max-width:1300px){
- .sidebar{width:194px!important;padding-left:12px!important;padding-right:12px!important}
- .main{margin-left:194px!important}
- .contenido{padding:17px 18px 24px!important}
- .sidebar a{font-size:10px!important;padding:9px 8px!important}
-}
-
-@media(max-width:850px){
- .sidebar{position:relative!important;width:100%!important;bottom:auto!important}
- .main{margin-left:0!important}
- .contenido{padding:14px!important}
-}
-
-/* spooles usa una estructura distinta */
-.layout{display:block!important;min-height:100vh!important}
-.layout>aside{display:block!important}
 .layout>main{
- margin-left:214px!important;padding:22px 26px 30px!important;max-width:none!important;min-height:100vh!important;background:var(--ui-bg)!important;
+ margin-left:214px!important;
+ padding:22px 26px 30px!important;
+ max-width:none!important;
+ min-height:100vh!important;
+ background:var(--ui-bg)!important;
 }
 
-.layout>main>h1{font-size:26px!important;font-weight:600!important;margin:0 0 5px!important;color:var(--ui-ink)!important}
-.layout>main>.subtitle{margin-bottom:16px!important}
-.brand,.section-title{display:none!important}
-.card{border:1px solid var(--ui-line)!important;border-radius:11px!important;background:#fff!important}
-.kpi .value{font-weight:600!important}
-.spool{font-weight:600!important}
-.estado{font-weight:500!important}
+.layout>main>h1{
+ font-size:26px!important;
+ font-weight:600!important;
+ margin:0 0 5px!important;
+ color:var(--ui-ink)!important;
+}
+
+.layout>main>.subtitle{
+ margin-bottom:16px!important;
+}
+
+.card{
+ border:1px solid var(--ui-line)!important;
+ border-radius:11px!important;
+ background:#fff!important;
+}
+
+.kpi .value{
+ font-weight:600!important;
+}
+
+.spool{
+ font-weight:600!important;
+}
+
+.estado{
+ font-weight:500!important;
+}
+
+table{
+ font-variant-numeric:tabular-nums;
+}
+
+table th{
+ background:#f8fafc!important;
+ color:#687d91!important;
+}
+
+table td{
+ color:#344d64!important;
+}
 
 @media(min-width:851px) and (max-width:1300px){
- .layout>main{margin-left:194px!important;padding:17px 18px 24px!important}
+
+ .sidebar{
+  width:194px!important;
+  padding-left:12px!important;
+  padding-right:12px!important;
+ }
+
+ .layout>main{
+  margin-left:194px!important;
+  padding:17px 18px 24px!important;
+ }
+
+ .sidebar a{
+  font-size:10px!important;
+  padding:9px 8px!important;
+ }
+
+ .controls{
+  grid-template-columns:1.3fr 1fr auto;
+ }
+
+ .btn-vista{
+  grid-column:1/-1;
+  justify-self:start;
+ }
 }
 
 @media(max-width:850px){
- .layout>main{margin-left:0!important;padding:14px!important}
+
+ .sidebar{
+  position:relative!important;
+  width:100%!important;
+  bottom:auto!important;
+ }
+
+ .layout>main{
+  margin-left:0!important;
+  padding:14px!important;
+ }
+
+ .controls{
+  grid-template-columns:1fr;
+ }
+
+ .info-filtro{
+  grid-column:auto;
+ }
+
+ .kpis{
+  grid-template-columns:repeat(2,1fr);
+ }
 }
 </style>
 </head>
 
 <body>
+
 <div class="layout">
 
 <aside class="sidebar">
-  <div class="logo">🏗️ CONTROL DE<br>PRODUCCIÓN</div>
 
-  <div class="modulo-titulo">PREMOLDEADOS</div>
-  <a href="index.html">📊 RESUMEN</a>
-  <a href="base.html">📋 BASE DE INGENIERÍA</a>
-  <a href="avance.html">📍 LOCALIZACIÓN DE<br>PREMOLDEADOS</a>
+<div class="logo">🏗️ CONTROL DE<br>PRODUCCIÓN</div>
 
-  <div class="modulo-titulo">PIPING</div>
-  <a href="piping.html">📊 RESUMEN</a>
-  <a href="piping-base.html">📋 BASE DE INGENIERÍA /<br>TRAZABILIDAD</a>
-  <a href="spooles.html" class="activo">📍 LOCALIZACIÓN DE<br>SPOOLES</a>
+<div class="modulo-titulo">PREMOLDEADOS</div>
+<a href="index.html">📊 RESUMEN</a>
+<a href="base.html">📋 BASE DE INGENIERÍA</a>
+<a href="avance.html">📍 LOCALIZACIÓN DE<br>PREMOLDEADOS</a>
 
-  <div class="modulo-titulo">CALIDAD</div>
-  <a href="calidad.html">✅ MATRIZ DE CALIDAD</a>
-  <a href="calidad-base.html">📤 BASE DE MATRIZ</a>
+<div class="modulo-titulo">PIPING</div>
+<a href="piping.html">📊 RESUMEN</a>
+<a href="piping-base.html">📋 BASE DE INGENIERÍA /<br>TRAZABILIDAD</a>
+<a href="spooles.html" class="activo">📍 LOCALIZACIÓN DE<br>SPOOLES</a>
+
+<div class="modulo-titulo">CALIDAD</div>
+<a href="calidad.html">✅ MATRIZ DE CALIDAD</a>
+<a href="calidad-base.html">📤 BASE DE MATRIZ</a>
+
 </aside>
 
 <main>
+
 <h1>📍 Localización y flujo de Spooles</h1>
-<div class="subtitle">Seguimiento por spool desde Lumber hasta Liberación PRECOM</div>
+
+<div class="subtitle">
+Seguimiento por spool desde Lumber hasta Liberación PRECOM
+</div>
 
 <div class="card login-card">
+
 <div class="login-row">
-<div class="field"><label>Correo</label><input id="email" type="email" placeholder="usuario@pecomenergia.com.ar"></div>
-<div class="field"><label>Contraseña</label><input id="password" type="password" placeholder="Contraseña"></div>
-<button id="btnLogin" class="btn-primary">Ingresar</button>
-<button id="btnLogout" class="btn-secondary" style="display:none">Cerrar sesión</button>
+
+<div class="field">
+<label>Correo</label>
+<input id="email" type="email" placeholder="usuario@pecomenergia.com.ar">
 </div>
-<div id="sessionStatus" class="status">Iniciá sesión para ver y actualizar los spooles.</div>
+
+<div class="field">
+<label>Contraseña</label>
+<input id="password" type="password" placeholder="Contraseña">
+</div>
+
+<button id="btnLogin" class="btn-primary">
+Ingresar
+</button>
+
+<button id="btnLogout" class="btn-secondary" style="display:none">
+Cerrar sesión
+</button>
+
+</div>
+
+<div id="sessionStatus" class="status">
+Iniciá sesión para ver y actualizar los spooles.
+</div>
+
 </div>
 
 <div id="contenido" style="display:none">
 
 <div class="card controls">
-<input id="buscar" type="text" placeholder="Buscar spool o línea...">
+
+<input
+ id="buscar"
+ type="text"
+ placeholder="Buscar spool o línea..."
+>
+
 <select id="filtroEstado">
-<option value="">Todos los estados</option>
-<option value="sin_despachar">Sin despachar</option>
-<option value="en_transito">Despachado / no recibido</option>
-<option value="en_obra">Recibido en obra</option>
-<option value="ph">PH realizada</option>
-<option value="montaje">Montado</option>
-<option value="torque">Torque completo</option>
-<option value="calidad">Liberado Calidad</option>
-<option value="precom">Liberado PRECOM</option>
+
+<option value="">
+Todos los estados
+</option>
+
+<option value="sin_despachar">
+Sin despachar
+</option>
+
+<option value="en_transito">
+Despachado / no recibido
+</option>
+
+<option value="en_obra">
+Recibido en obra
+</option>
+
+<option value="ph">
+PH realizada
+</option>
+
+<option value="montaje">
+Montado
+</option>
+
+<option value="torque">
+Torque completo
+</option>
+
+<option value="calidad">
+Liberado Calidad
+</option>
+
+<option value="precom">
+Liberado PRECOM
+</option>
+
 </select>
-<button id="btnActualizar" class="btn-secondary">↻ Actualizar</button>
+
+<button id="btnActualizar" class="btn-secondary">
+↻ Actualizar
+</button>
+
+<button id="btnVista" class="btn-vista">
+Mostrar todos los spooles
+</button>
+
+<div id="infoFiltro" class="info-filtro"></div>
+
 </div>
+
 
 <div class="kpis">
-<div class="card kpi"><div class="label">SPOOLES</div><div id="kpiTotal" class="value">0</div></div>
-<div class="card kpi"><div class="label">EN LUMBER / SIN DESPACHAR</div><div id="kpiLumber" class="value">0</div></div>
-<div class="card kpi"><div class="label">RECIBIDOS EN OBRA</div><div id="kpiObra" class="value">0</div></div>
-<div class="card kpi"><div class="label">LIBERADOS PRECOM</div><div id="kpiPrecom" class="value">0</div></div>
+
+<div class="card kpi">
+<div class="label">SPOOLES</div>
+<div id="kpiTotal" class="value">0</div>
 </div>
 
+<div class="card kpi">
+<div class="label">EN LUMBER / SIN DESPACHAR</div>
+<div id="kpiLumber" class="value">0</div>
+</div>
+
+<div class="card kpi">
+<div class="label">RECIBIDOS EN OBRA</div>
+<div id="kpiObra" class="value">0</div>
+</div>
+
+<div class="card kpi">
+<div class="label">LIBERADOS PRECOM</div>
+<div id="kpiPrecom" class="value">0</div>
+</div>
+
+</div>
+
+
 <div class="card table-card">
+
 <div class="table-wrap">
+
 <table>
+
 <thead>
 <tr>
 <th>Sistema</th>
@@ -218,31 +693,59 @@ table td{color:#344d64!important}
 <th>Estado</th>
 </tr>
 </thead>
+
 <tbody id="tbody"></tbody>
+
 </table>
-<div id="empty" class="empty" style="display:none">No hay spooles para mostrar.</div>
-</div>
+
+<div id="empty" class="empty" style="display:none">
+No hay spooles para mostrar.
 </div>
 
 </div>
-</main>
+
 </div>
+
+</div>
+
+</main>
+
+</div>
+
 
 <script>
-const SUPABASE_URL="https://mzgbtejfgsrskiuymtwh.supabase.co";
-const SUPABASE_KEY="sb_publishable_Wen9hxBnae8wRrEEaP5lOQ_aNl9OCGd";
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const SUPABASE_URL=
+"https://mzgbtejfgsrskiuymtwh.supabase.co";
+
+const SUPABASE_KEY=
+"sb_publishable_Wen9hxBnae8wRrEEaP5lOQ_aNl9OCGd";
+
+const db=
+supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
+
+
+/* =====================================================
+   PERMISOS
+   ===================================================== */
 
 const permisos={
 
 despacho_lumber:[
+
 "jorgefelipe.soto@pecomenergia.com.ar",
 "maria.caffaratti@pecomenergia.com.ar",
 "kevin.rojas@pecomenergia.com.ar",
 "agustin.schechtel@pecomenergia.com.ar"
+
 ],
 
+
 recepcion_obra:[
+
 "gerardo.machuca@pecomenergia.com.ar",
 "alan.careaga@pecomenergia.com.ar",
 "diego.escalada@pecomenergia.com.ar",
@@ -250,249 +753,1068 @@ recepcion_obra:[
 "joses.lara@pecomenergia.com.ar",
 "kevin.rojas@pecomenergia.com.ar",
 "agustin.schechtel@pecomenergia.com.ar"
+
 ],
+
 
 ph:[
+
 "joses.lara@pecomenergia.com.ar",
 "maria.caffaratti@pecomenergia.com.ar",
 "jorgefelipe.soto@pecomenergia.com.ar",
 "kevin.rojas@pecomenergia.com.ar",
 "agustin.schechtel@pecomenergia.com.ar"
+
 ],
+
 
 montaje:[
+
 "jorgefelipe.soto@pecomenergia.com.ar",
 "joses.lara@pecomenergia.com.ar",
 "maria.caffaratti@pecomenergia.com.ar",
 "kevin.rojas@pecomenergia.com.ar",
 "agustin.schechtel@pecomenergia.com.ar"
+
 ],
+
 
 torque:[
+
 "jorgefelipe.soto@pecomenergia.com.ar",
 "joses.lara@pecomenergia.com.ar",
 "maria.caffaratti@pecomenergia.com.ar",
 "kevin.rojas@pecomenergia.com.ar",
 "agustin.schechtel@pecomenergia.com.ar"
+
 ],
+
 
 liberacion_calidad:[
+
 "jorgefelipe.soto@pecomenergia.com.ar",
 "joses.lara@pecomenergia.com.ar",
 "maria.caffaratti@pecomenergia.com.ar",
 "kevin.rojas@pecomenergia.com.ar",
 "agustin.schechtel@pecomenergia.com.ar"
+
 ],
 
+
 liberacion_precom:[
+
 "maria.caffaratti@pecomenergia.com.ar",
 "kevin.rojas@pecomenergia.com.ar",
 "agustin.schechtel@pecomenergia.com.ar"
+
 ]
 
 };
 
-let usuarioEmail="",spooles=[];
-const etapas=["despacho_lumber","recepcion_obra","ph","montaje","torque","liberacion_calidad","liberacion_precom"];
 
-const norm=v=>(v||"").trim().toLowerCase();
-const puede=e=>(permisos[e]||[]).includes(usuarioEmail);
-const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+/* =====================================================
+   VARIABLES
+   ===================================================== */
+
+let usuarioEmail="";
+
+let spooles=[];
+
+/*
+ false = vista automática según permiso
+ true  = mostrar todos
+*/
+let mostrarTodos=false;
+
+
+/* =====================================================
+   FUNCIONES GENERALES
+   ===================================================== */
+
+const norm=v=>
+(v||"").trim().toLowerCase();
+
+
+const puede=e=>
+(permisos[e]||[]).includes(usuarioEmail);
+
+
+const esc=v=>
+String(v??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
 
 function fmt(v){
+
  if(!v)return"";
+
  try{
-  return new Intl.DateTimeFormat("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"}).format(new Date(v))
- }catch{return""}
+
+  return new Intl.DateTimeFormat(
+   "es-AR",
+   {
+    day:"2-digit",
+    month:"2-digit",
+    year:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit"
+   }
+  ).format(new Date(v));
+
+ }catch{
+
+  return"";
+
+ }
+
 }
 
-function corto(e){return e?e.split("@")[0]:""}
+
+function corto(e){
+
+ return e
+ ?e.split("@")[0]
+ :"";
+
+}
+
+
+/* =====================================================
+   ESTADO DEL SPOOL
+   ===================================================== */
 
 function est(s){
- if(s.liberacion_precom)return"Liberado PRECOM";
- if(s.liberacion_calidad)return"Liberado Calidad";
- if(s.torque)return"Torque";
- if(s.montaje)return"Montado";
- if(s.ph)return"PH realizada";
- if(s.recepcion_obra)return"En obra";
- if(s.despacho_lumber)return"En tránsito";
- return"En Lumber"
+
+ if(s.liberacion_precom)
+  return"Liberado PRECOM";
+
+ if(s.liberacion_calidad)
+  return"Liberado Calidad";
+
+ if(s.torque)
+  return"Torque";
+
+ if(s.montaje)
+  return"Montado";
+
+ if(s.ph)
+  return"PH realizada";
+
+ if(s.recepcion_obra)
+  return"En obra";
+
+ if(s.despacho_lumber)
+  return"En tránsito";
+
+ return"En Lumber";
+
 }
+
+
+/* =====================================================
+   FILTRO MANUAL DE ESTADO
+   ===================================================== */
 
 function matchEstado(s,f){
- if(!f)return true;
- if(f==="sin_despachar")return !s.despacho_lumber;
- if(f==="en_transito")return s.despacho_lumber&&!s.recepcion_obra;
- if(f==="en_obra")return s.recepcion_obra&&!s.ph;
- if(f==="ph")return s.ph&&!s.montaje;
- if(f==="montaje")return s.montaje&&!s.torque;
- if(f==="torque")return s.torque&&!s.liberacion_calidad;
- if(f==="calidad")return s.liberacion_calidad&&!s.liberacion_precom;
- if(f==="precom")return s.liberacion_precom;
- return true
+
+ if(!f)
+  return true;
+
+ if(f==="sin_despachar")
+  return !s.despacho_lumber;
+
+ if(f==="en_transito")
+  return s.despacho_lumber &&
+         !s.recepcion_obra;
+
+ if(f==="en_obra")
+  return s.recepcion_obra &&
+         !s.ph;
+
+ if(f==="ph")
+  return s.ph &&
+         !s.montaje;
+
+ if(f==="montaje")
+  return s.montaje &&
+         !s.torque;
+
+ if(f==="torque")
+  return s.torque &&
+         !s.liberacion_calidad;
+
+ if(f==="calidad")
+  return s.liberacion_calidad &&
+         !s.liberacion_precom;
+
+ if(f==="precom")
+  return s.liberacion_precom;
+
+ return true;
+
 }
+
+
+/* =====================================================
+   ETAPA PRINCIPAL DEL USUARIO
+
+   Se busca la primera etapa desde Recepción obra en
+   adelante para la que el usuario tiene permiso.
+   ===================================================== */
+
+function etapaUsuario(){
+
+ if(puede("recepcion_obra"))
+  return"recepcion_obra";
+
+ if(puede("ph"))
+  return"ph";
+
+ if(puede("montaje"))
+  return"montaje";
+
+ if(puede("torque"))
+  return"torque";
+
+ if(puede("liberacion_calidad"))
+  return"liberacion_calidad";
+
+ if(puede("liberacion_precom"))
+  return"liberacion_precom";
+
+ return"";
+
+}
+
+
+/* =====================================================
+   FILTRO AUTOMÁTICO SEGÚN ETAPA ANTERIOR
+   ===================================================== */
+
+function habilitadoParaUsuario(s){
+
+ if(mostrarTodos)
+  return true;
+
+ const etapa=
+ etapaUsuario();
+
+
+ /*
+ Recepción obra:
+ solo spooles que ya fueron despachados de Lumber
+ */
+ if(etapa==="recepcion_obra")
+  return !!s.despacho_lumber;
+
+
+ /*
+ PH:
+ solo spooles ya recibidos en obra
+ */
+ if(etapa==="ph")
+  return !!s.recepcion_obra;
+
+
+ /*
+ Montaje:
+ también se habilita a partir de recepción en obra
+ */
+ if(etapa==="montaje")
+  return !!s.recepcion_obra;
+
+
+ /*
+ Torque:
+ solo spooles ya montados
+ */
+ if(etapa==="torque")
+  return !!s.montaje;
+
+
+ /*
+ Calidad:
+ solo spooles con torque
+ */
+ if(etapa==="liberacion_calidad")
+  return !!s.torque;
+
+
+ /*
+ PRECOM:
+ solo spooles liberados por Calidad
+ */
+ if(etapa==="liberacion_precom")
+  return !!s.liberacion_calidad;
+
+
+ /*
+ Usuario que solo carga despacho
+ o usuario sin una etapa específica:
+ ve todos
+ */
+ return true;
+
+}
+
+
+/* =====================================================
+   DESCRIPCIÓN DEL FILTRO AUTOMÁTICO
+   ===================================================== */
+
+function textoFiltro(){
+
+ if(mostrarTodos)
+  return"Mostrando todos los spooles.";
+
+ const etapa=
+ etapaUsuario();
+
+
+ if(etapa==="recepcion_obra")
+
+  return(
+   "Vista automática: se muestran solamente " +
+   "spooles con Despacho Lumber."
+  );
+
+
+ if(etapa==="ph")
+
+  return(
+   "Vista automática: se muestran solamente " +
+   "spooles recibidos en obra."
+  );
+
+
+ if(etapa==="montaje")
+
+  return(
+   "Vista automática: se muestran solamente " +
+   "spooles recibidos en obra."
+  );
+
+
+ if(etapa==="torque")
+
+  return(
+   "Vista automática: se muestran solamente " +
+   "spooles montados."
+  );
+
+
+ if(etapa==="liberacion_calidad")
+
+  return(
+   "Vista automática: se muestran solamente " +
+   "spooles con Torque."
+  );
+
+
+ if(etapa==="liberacion_precom")
+
+  return(
+   "Vista automática: se muestran solamente " +
+   "spooles liberados por Calidad."
+  );
+
+
+ return"Mostrando todos los spooles.";
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR BOTÓN DE VISTA
+   ===================================================== */
+
+function actualizarBotonVista(){
+
+ const etapa=
+ etapaUsuario();
+
+
+ /*
+ Si el usuario no tiene una etapa desde recepción,
+ no hace falta mostrar botón de filtro automático.
+ */
+ if(!etapa){
+
+  btnVista.style.display="none";
+
+  infoFiltro.textContent=
+  "Mostrando todos los spooles.";
+
+  return;
+
+ }
+
+
+ btnVista.style.display="";
+
+
+ if(mostrarTodos){
+
+  btnVista.textContent=
+  "Ver solo habilitados para mi etapa";
+
+  btnVista.classList.add("todos");
+
+ }else{
+
+  btnVista.textContent=
+  "Mostrar todos los spooles";
+
+  btnVista.classList.remove("todos");
+
+ }
+
+
+ infoFiltro.textContent=
+ textoFiltro();
+
+}
+
+
+/* =====================================================
+   REGLAS DE FLUJO
+   ===================================================== */
 
 function ant(s,e){
- if(e==="despacho_lumber")return true;
- if(e==="recepcion_obra")return !!s.despacho_lumber;
- if(e==="ph"||e==="montaje")return !!s.recepcion_obra;
- if(e==="torque")return !!s.montaje;
- if(e==="liberacion_calidad")return !!s.torque;
- if(e==="liberacion_precom")return !!s.liberacion_calidad;
- return true
+
+ if(e==="despacho_lumber")
+  return true;
+
+ if(e==="recepcion_obra")
+  return !!s.despacho_lumber;
+
+ if(
+  e==="ph" ||
+  e==="montaje"
+ )
+  return !!s.recepcion_obra;
+
+ if(e==="torque")
+  return !!s.montaje;
+
+ if(e==="liberacion_calidad")
+  return !!s.torque;
+
+ if(e==="liberacion_precom")
+  return !!s.liberacion_calidad;
+
+ return true;
+
 }
+
+
+/*
+ Evita destildar una etapa si ya existe
+ una etapa posterior.
+*/
 
 function sig(s,e){
- if(e==="despacho_lumber")return !!s.recepcion_obra;
- if(e==="recepcion_obra")return !!s.ph||!!s.montaje;
- if(e==="ph")return false;
- if(e==="montaje")return !!s.torque;
- if(e==="torque")return !!s.liberacion_calidad;
- if(e==="liberacion_calidad")return !!s.liberacion_precom;
- return false
+
+ if(e==="despacho_lumber")
+  return !!s.recepcion_obra;
+
+ if(e==="recepcion_obra")
+  return !!s.ph ||
+         !!s.montaje;
+
+ if(e==="ph")
+  return false;
+
+ if(e==="montaje")
+  return !!s.torque;
+
+ if(e==="torque")
+  return !!s.liberacion_calidad;
+
+ if(e==="liberacion_calidad")
+  return !!s.liberacion_precom;
+
+ return false;
+
 }
+
+
+/* =====================================================
+   SESIÓN
+   ===================================================== */
 
 async function verificar(){
- const {data:{session}}=await db.auth.getSession();
+
+ const {
+  data:{session}
+ }=
+ await db.auth.getSession();
+
 
  if(!session){
+
   usuarioEmail="";
-  contenido.style.display="none";
-  btnLogin.style.display="";
-  btnLogout.style.display="none";
-  sessionStatus.textContent="Iniciá sesión para ver y actualizar los spooles.";
-  sessionStatus.className="status";
-  return
+
+  contenido.style.display=
+  "none";
+
+  btnLogin.style.display=
+  "";
+
+  btnLogout.style.display=
+  "none";
+
+  sessionStatus.textContent=
+  "Iniciá sesión para ver y actualizar los spooles.";
+
+  sessionStatus.className=
+  "status";
+
+  return;
+
  }
 
- usuarioEmail=norm(session.user.email);
- email.value=session.user.email||"";
- btnLogin.style.display="none";
- btnLogout.style.display="";
- contenido.style.display="";
- sessionStatus.textContent="● Sesión activa: "+usuarioEmail;
- sessionStatus.className="status ok";
- await cargar()
+
+ usuarioEmail=
+ norm(session.user.email);
+
+
+ email.value=
+ session.user.email||"";
+
+
+ btnLogin.style.display=
+ "none";
+
+
+ btnLogout.style.display=
+ "";
+
+
+ contenido.style.display=
+ "";
+
+
+ /*
+ Cada vez que inicia sesión:
+ vuelve a la vista automática.
+ */
+
+ mostrarTodos=false;
+
+
+ sessionStatus.textContent=
+ "● Sesión activa: "+usuarioEmail;
+
+
+ sessionStatus.className=
+ "status ok";
+
+
+ actualizarBotonVista();
+
+
+ await cargar();
+
 }
+
+
+/* =====================================================
+   LOGIN
+   ===================================================== */
 
 async function login(){
- sessionStatus.textContent="Ingresando...";
- const {error}=await db.auth.signInWithPassword({
-  email:norm(email.value),
-  password:password.value
+
+ sessionStatus.textContent=
+ "Ingresando...";
+
+
+ const {error}=
+ await db.auth.signInWithPassword({
+
+  email:
+  norm(email.value),
+
+  password:
+  password.value
+
  });
 
+
  if(error){
-  sessionStatus.textContent="❌ "+error.message;
-  sessionStatus.className="status err";
-  return
+
+  sessionStatus.textContent=
+  "❌ "+error.message;
+
+  sessionStatus.className=
+  "status err";
+
+  return;
+
  }
+
 
  password.value="";
- await verificar()
+
+
+ await verificar();
+
 }
+
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
 
 async function logout(){
+
  await db.auth.signOut();
+
  spooles=[];
+
+ mostrarTodos=false;
+
  render();
- await verificar()
+
+ await verificar();
+
 }
+
+
+/* =====================================================
+   CARGAR SPOOLES
+   ===================================================== */
 
 async function cargar(){
- sessionStatus.textContent="Cargando spooles...";
 
- const {data,error}=await db
-  .from("piping_spooles")
-  .select("*")
-  .order("linea",{ascending:true})
-  .order("spool",{ascending:true});
+ sessionStatus.textContent=
+ "Cargando spooles...";
+
+
+ const {
+  data,
+  error
+ }=
+ await db
+ .from("piping_spooles")
+ .select("*")
+ .order(
+  "linea",
+  {ascending:true}
+ )
+ .order(
+  "spool",
+  {ascending:true}
+ );
+
 
  if(error){
-  sessionStatus.textContent="❌ No se pudieron cargar los spooles: "+error.message;
-  sessionStatus.className="status err";
-  return
+
+  sessionStatus.textContent=
+  "❌ No se pudieron cargar los spooles: "+
+  error.message;
+
+  sessionStatus.className=
+  "status err";
+
+  return;
+
  }
 
- spooles=data||[];
+
+ spooles=
+ data||[];
+
+
  render();
- sessionStatus.textContent="● Sesión activa: "+usuarioEmail+" · "+spooles.length+" spooles";
- sessionStatus.className="status ok"
+
+
+ sessionStatus.textContent=
+ "● Sesión activa: "+
+ usuarioEmail+
+ " · "+
+ spooles.length+
+ " spooles";
+
+
+ sessionStatus.className=
+ "status ok";
+
 }
+
+
+/* =====================================================
+   CELDA CHECKBOX
+   ===================================================== */
 
 function celda(s,e){
- const ch=!!s[e];
- let dis=!puede(e)||(!ch&&!ant(s,e))||(ch&&sig(s,e));
- const f=s[e+"_fecha"],u=s[e+"_usuario"];
 
- return `<td class="stage">
+ const ch=
+ !!s[e];
+
+
+ let dis=
+
+ !puede(e)
+
+ ||
+
+ (!ch && !ant(s,e))
+
+ ||
+
+ (ch && sig(s,e));
+
+
+ const f=
+ s[e+"_fecha"];
+
+
+ const u=
+ s[e+"_usuario"];
+
+
+ return`
+
+ <td class="stage">
+
  <div class="check-wrap">
- <input type="checkbox" ${ch?"checked":""} ${dis?"disabled":""}
- onchange="cambiar(${s.id},'${e}',this.checked,this)">
- ${ch?`<div class="mini" title="${esc(u||"")}">${esc(corto(u))}</div>
- <div class="mini">${esc(fmt(f))}</div>`:""}
+
+ <input
+ type="checkbox"
+
+ ${ch?"checked":""}
+
+ ${dis?"disabled":""}
+
+ onchange="
+ cambiar(
+  ${s.id},
+  '${e}',
+  this.checked,
+  this
+ )
+ "
+ >
+
+ ${
+ ch
+ ?
+ `
+ <div
+ class="mini"
+ title="${esc(u||"")}"
+ >
+ ${esc(corto(u))}
  </div>
- </td>`
-}
 
-async function cambiar(id,e,v,cb){
- cb.disabled=true;
-
- const {error}=await db
-  .from("piping_spooles")
-  .update({[e]:v})
-  .eq("id",id);
-
- if(error){
-  alert(error.message);
-  cb.checked=!v
+ <div class="mini">
+ ${esc(fmt(f))}
+ </div>
+ `
+ :
+ ""
  }
 
- await cargar()
+ </div>
+
+ </td>
+
+ `;
+
 }
+
+
+/* =====================================================
+   CAMBIAR ETAPA
+   ===================================================== */
+
+async function cambiar(
+ id,
+ e,
+ v,
+ cb
+){
+
+ cb.disabled=true;
+
+
+ const {error}=
+ await db
+ .from("piping_spooles")
+ .update({
+  [e]:v
+ })
+ .eq(
+  "id",
+  id
+ );
+
+
+ if(error){
+
+  alert(
+   error.message
+  );
+
+  cb.checked=
+  !v;
+
+ }
+
+
+ await cargar();
+
+}
+
+
+/* =====================================================
+   RENDER
+   ===================================================== */
 
 function render(){
- const q=buscar.value.trim().toLowerCase();
- const fe=filtroEstado.value;
 
- const fs=spooles.filter(s=>{
-  const t=`${s.linea||""} ${s.spool||""} ${s.sistema||""} ${s.subsistema||""}`.toLowerCase();
-  return(!q||t.includes(q))&&matchEstado(s,fe)
+ if(!document.getElementById("tbody"))
+  return;
+
+
+ const q=
+ buscar.value
+ .trim()
+ .toLowerCase();
+
+
+ const fe=
+ filtroEstado.value;
+
+
+ /*
+ Primero aplicamos:
+ 1. vista automática según permiso
+ 2. búsqueda
+ 3. filtro manual de estado
+ */
+
+ const fs=
+ spooles.filter(s=>{
+
+
+  if(
+   !habilitadoParaUsuario(s)
+  )
+   return false;
+
+
+  const t=
+  `${
+   s.linea||""
+  } ${
+   s.spool||""
+  } ${
+   s.sistema||""
+  } ${
+   s.subsistema||""
+  }`
+  .toLowerCase();
+
+
+  return(
+
+   (!q || t.includes(q))
+
+   &&
+
+   matchEstado(s,fe)
+
+  );
+
  });
 
- tbody.innerHTML=fs.map(s=>`
+
+ tbody.innerHTML=
+ fs.map(s=>`
+
  <tr>
- <td class="left">${esc(s.sistema||"")}</td>
- <td class="left">${esc(s.subsistema||"")}</td>
- <td class="left">${esc(s.linea||"")}</td>
- <td class="left spool">${esc(s.spool||"")}</td>
- ${celda(s,"despacho_lumber")}
- ${celda(s,"recepcion_obra")}
- ${celda(s,"ph")}
- ${celda(s,"montaje")}
- ${celda(s,"torque")}
- ${celda(s,"liberacion_calidad")}
- ${celda(s,"liberacion_precom")}
- <td><span class="estado ${s.liberacion_precom?"fin":""}">${esc(est(s))}</span></td>
- </tr>`).join("");
 
- empty.style.display=fs.length?"none":"";
+ <td class="left">
+ ${esc(s.sistema||"")}
+ </td>
 
- kpiTotal.textContent=spooles.length;
- kpiLumber.textContent=spooles.filter(s=>!s.despacho_lumber).length;
- kpiObra.textContent=spooles.filter(s=>s.recepcion_obra).length;
- kpiPrecom.textContent=spooles.filter(s=>s.liberacion_precom).length
+ <td class="left">
+ ${esc(s.subsistema||"")}
+ </td>
+
+ <td class="left">
+ ${esc(s.linea||"")}
+ </td>
+
+ <td class="left spool">
+ ${esc(s.spool||"")}
+ </td>
+
+ ${celda(
+  s,
+  "despacho_lumber"
+ )}
+
+ ${celda(
+  s,
+  "recepcion_obra"
+ )}
+
+ ${celda(
+  s,
+  "ph"
+ )}
+
+ ${celda(
+  s,
+  "montaje"
+ )}
+
+ ${celda(
+  s,
+  "torque"
+ )}
+
+ ${celda(
+  s,
+  "liberacion_calidad"
+ )}
+
+ ${celda(
+  s,
+  "liberacion_precom"
+ )}
+
+ <td>
+
+ <span
+ class="estado ${
+ s.liberacion_precom
+ ?"fin"
+ :""
+ }"
+ >
+
+ ${esc(est(s))}
+
+ </span>
+
+ </td>
+
+ </tr>
+
+ `).join("");
+
+
+ empty.style.display=
+ fs.length
+ ?"none"
+ :"";
+
+
+ /*
+ Los KPI siguen mostrando el TOTAL REAL
+ de la base, no solamente lo filtrado.
+ */
+
+ kpiTotal.textContent=
+ spooles.length;
+
+
+ kpiLumber.textContent=
+ spooles.filter(
+  s=>!s.despacho_lumber
+ ).length;
+
+
+ kpiObra.textContent=
+ spooles.filter(
+  s=>s.recepcion_obra
+ ).length;
+
+
+ kpiPrecom.textContent=
+ spooles.filter(
+  s=>s.liberacion_precom
+ ).length;
+
+
+ actualizarBotonVista();
+
 }
 
-btnLogin.addEventListener("click",login);
-btnLogout.addEventListener("click",logout);
-btnActualizar.addEventListener("click",cargar);
-buscar.addEventListener("input",render);
-filtroEstado.addEventListener("change",render);
-password.addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+
+/* =====================================================
+   EVENTOS
+   ===================================================== */
+
+btnLogin.addEventListener(
+ "click",
+ login
+);
+
+
+btnLogout.addEventListener(
+ "click",
+ logout
+);
+
+
+btnActualizar.addEventListener(
+ "click",
+ cargar
+);
+
+
+buscar.addEventListener(
+ "input",
+ render
+);
+
+
+filtroEstado.addEventListener(
+ "change",
+ render
+);
+
+
+btnVista.addEventListener(
+ "click",
+ ()=>{
+
+  mostrarTodos=
+  !mostrarTodos;
+
+  render();
+
+ }
+);
+
+
+password.addEventListener(
+ "keydown",
+ e=>{
+
+  if(e.key==="Enter")
+   login();
+
+ }
+);
+
+
+/* =====================================================
+   INICIO
+   ===================================================== */
 
 verificar();
+
 </script>
+
 </body>
 </html>
-```
