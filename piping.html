@@ -745,45 +745,97 @@ th,td{padding:8px 9px!important}
 .spool-ubicacion-badge.lumber{background:#eef3f7;color:#52677c;border:1px solid #dce5ec}
 
 
-/* ===== INDICADORES DE AVANCE DE SPOOLES ===== */
-.spool-avance-kpis{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-  margin:18px 0 20px;
+/* ===== TABLA SPOOLES DESPACHADOS DE LUMBER ===== */
+.spool-despachados-panel{margin-top:22px}
+.spool-despachados-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
 }
-.spool-avance-kpi{
-  background:#fff;
-  border:1px solid var(--ui-line);
-  border-radius:11px;
-  padding:18px 20px;
-}
-.spool-avance-kpi small{
-  display:block;
-  font-size:10px;
-  color:#718498;
-  font-weight:500;
-  margin-bottom:7px;
-}
-.spool-avance-kpi strong{
-  display:block;
-  font-size:31px;
-  line-height:1;
-  color:#173650;
-  font-weight:600;
-  letter-spacing:-.025em;
-}
-.spool-avance-kpi .detalle{
-  margin-top:9px;
-  padding-top:9px;
-  border-top:1px solid #e6ebf0;
-  font-size:11px;
+.spool-despachados-head h2{margin:0}
+.spool-despachados-sub{
+  margin:5px 0 0;
   color:#718096;
+  font-size:12px;
 }
-.spool-avance-kpi .detalle b{color:#173650}
-.spool-avance-kpi.end{border-top:3px solid #287b54}
-.spool-avance-kpi.pintura{border-top:3px solid #3976a5}
-@media(max-width:650px){.spool-avance-kpis{grid-template-columns:1fr}}
+.spool-despachados-resumen{
+  font-size:12px;
+  color:#52677c;
+  background:#f7f9fb;
+  border:1px solid #e1e7ed;
+  border-radius:8px;
+  padding:8px 11px;
+  white-space:nowrap;
+}
+.spool-despachados-wrap{
+  overflow:auto;
+  max-height:520px;
+  border:1px solid #e1e7ed;
+  border-radius:10px;
+}
+.spool-despachados-tabla{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  background:#fff;
+}
+.spool-despachados-tabla th{
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:#f7f9fb;
+  color:#687d91;
+  padding:11px 12px;
+  text-align:left;
+  border-bottom:1px solid #dfe6ec;
+  white-space:nowrap;
+}
+.spool-despachados-tabla td{
+  padding:10px 12px;
+  border-bottom:1px solid #edf1f4;
+  color:#344d64;
+}
+.spool-despachados-tabla td:nth-child(2){
+  font-weight:700;
+  color:#173650;
+}
+.estado-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.estado-badge.si{
+  color:#147a45;
+  background:#eaf7ef;
+  border:1px solid #cce9d8;
+}
+.estado-badge.no{
+  color:#a33a32;
+  background:#fff0ee;
+  border:1px solid #f2d1cd;
+}
+
+
+.spool-despachados-toggle{
+  border:1px solid #d6e0e8;
+  background:#f7f9fb;
+  color:#35516a;
+  border-radius:9px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+.spool-despachados-toggle:hover{background:#eef3f7}
+.spool-despachados-contenido.oculto{display:none}
 
 </style>
 </head>
@@ -991,19 +1043,52 @@ th,td{padding:8px 9px!important}
         </div>
       </section>
 
-      <div class="spool-avance-kpis">
-        <div class="spool-avance-kpi end">
-          <small>% de spooles liberados por END</small>
-          <strong id="kpiSpoolesEndPct">—</strong>
-          <div class="detalle"><b id="kpiSpoolesEndCant">—</b> spooles liberados de <b id="kpiSpoolesEndTotal">—</b></div>
+      <section class="panel spool-despachados-panel">
+        <div class="spool-despachados-head">
+          <div>
+            <h2>Spooles despachados de Lumber</h2>
+            <p class="spool-despachados-sub">
+              Estado de END y pintura para cada spool que ya tiene Despacho Lumber.
+            </p>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div id="resumenSpoolesDespachados" class="spool-despachados-resumen">
+              Cargando...
+            </div>
+            <button
+              id="btnToggleSpoolesDespachados"
+              class="spool-despachados-toggle"
+              type="button"
+              onclick="toggleSpoolesDespachados()"
+            >
+              Mostrar ▼
+            </button>
+          </div>
         </div>
 
-        <div class="spool-avance-kpi pintura">
-          <small>% de spooles pintados</small>
-          <strong id="kpiSpoolesPintadosPct">—</strong>
-          <div class="detalle"><b id="kpiSpoolesPintadosCant">—</b> spooles con Fecha Pintura de <b id="kpiSpoolesPintadosTotal">—</b></div>
+        <div id="contenidoSpoolesDespachados" class="spool-despachados-contenido oculto">
+        <div class="spool-despachados-wrap">
+          <table class="spool-despachados-tabla">
+            <thead>
+              <tr>
+                <th>Línea</th>
+                <th>Spool</th>
+                <th>END aprobado</th>
+                <th>Pintado</th>
+              </tr>
+            </thead>
+            <tbody id="tablaSpoolesDespachados">
+              <tr>
+                <td colspan="4" style="text-align:center;color:#718096;padding:24px">
+                  Cargando spooles despachados...
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
+        </div>
+      </section>
 
       <div class="grid2">
 
@@ -1484,64 +1569,171 @@ function cerrarSpoolesLiberados(event){
 }
 
 
-async function cargarIndicadoresAvanceSpooles(){
+
+function toggleSpoolesDespachados(){
+  const contenido = document.getElementById("contenidoSpoolesDespachados");
+  const btn = document.getElementById("btnToggleSpoolesDespachados");
+  if(!contenido || !btn) return;
+
+  const estaOculto = contenido.classList.contains("oculto");
+
+  if(estaOculto){
+    contenido.classList.remove("oculto");
+    btn.textContent = "Ocultar ▲";
+  }else{
+    contenido.classList.add("oculto");
+    btn.textContent = "Mostrar ▼";
+  }
+}
+
+async function cargarSpoolesDespachadosLumber(){
+  const tbody = document.getElementById("tablaSpoolesDespachados");
+  const resumen = document.getElementById("resumenSpoolesDespachados");
+  if(!tbody) return;
+
   try{
-    const [{data:resumen,error:errorResumen},{data:ultimaCarga,error:errorCarga}] = await Promise.all([
-      db
-        .from("v_piping_spooles_cuadernillo")
-        .select("cuadernillo,total_spooles,spooles_liberados"),
+    const [
+      {data:ultimaCarga,error:errorCarga},
+      {data:despachados,error:errorDespachados}
+    ] = await Promise.all([
       db
         .from("piping_cargas")
         .select("id")
         .order("id",{ascending:false})
         .limit(1)
-        .maybeSingle()
+        .maybeSingle(),
+
+      db
+        .from("piping_spooles")
+        .select("linea,spool,despacho_lumber")
+        .eq("despacho_lumber",true)
+        .order("linea",{ascending:true})
+        .order("spool",{ascending:true})
     ]);
 
-    if(errorResumen) throw errorResumen;
     if(errorCarga) throw errorCarga;
+    if(errorDespachados) throw errorDespachados;
 
-    const filasResumen = resumen || [];
-    const totalSpooles = filasResumen.reduce((acc,x)=>acc + Number(x.total_spooles || 0),0);
-    const liberadosEnd = filasResumen.reduce((acc,x)=>acc + Number(x.spooles_liberados || 0),0);
-    const pctEnd = totalSpooles > 0 ? (liberadosEnd / totalSpooles) * 100 : 0;
-
-    setTexto("kpiSpoolesEndPct", pipePct(pctEnd));
-    setTexto("kpiSpoolesEndCant", liberadosEnd);
-    setTexto("kpiSpoolesEndTotal", totalSpooles);
-
-    let pintados = 0;
-
-    if(ultimaCarga?.id){
-      const {data:juntas,error:errorJuntas} = await db
-        .from("piping_juntas")
-        .select("linea,spool,fecha_pintura")
-        .eq("carga_id",ultimaCarga.id);
-
-      if(errorJuntas) throw errorJuntas;
-
-      const pintadosUnicos = new Set();
-      for(const x of (juntas || [])){
-        const linea = String(x.linea ?? "").trim();
-        const spool = String(x.spool ?? "").trim();
-        const fechaPintura = String(x.fecha_pintura ?? "").trim();
-        if(!linea || !spool || !fechaPintura) continue;
-        pintadosUnicos.add(linea.toUpperCase()+"|||"+spool.toUpperCase());
-      }
-      pintados = pintadosUnicos.size;
+    if(!ultimaCarga?.id){
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#718096;padding:24px">No hay una trazabilidad cargada.</td></tr>';
+      if(resumen) resumen.textContent = "Sin trazabilidad";
+      return;
     }
 
-    const pctPintados = totalSpooles > 0 ? (pintados / totalSpooles) * 100 : 0;
-    setTexto("kpiSpoolesPintadosPct", pipePct(pctPintados));
-    setTexto("kpiSpoolesPintadosCant", pintados);
-    setTexto("kpiSpoolesPintadosTotal", totalSpooles);
+    const {data:juntas,error:errorJuntas} = await db
+      .from("piping_juntas")
+      .select("linea,spool,tipo_junta,lote,resultado_1,resultado_2,fecha_pintura")
+      .eq("carga_id",ultimaCarga.id);
+
+    if(errorJuntas) throw errorJuntas;
+
+    const clave = (linea,spool) =>
+      String(linea ?? "").trim().toUpperCase() + "|||" +
+      String(spool ?? "").trim().toUpperCase();
+
+    // Lotes que tienen al menos un resultado AP en la última trazabilidad.
+    const lotesAP = new Set();
+    for(const j of (juntas || [])){
+      const lote = String(j.lote ?? "").trim().toUpperCase();
+      const r1 = String(j.resultado_1 ?? "").trim().toUpperCase();
+      const r2 = String(j.resultado_2 ?? "").trim().toUpperCase();
+
+      if(lote && (r1==="AP" || r2==="AP")){
+        lotesAP.add(lote);
+      }
+    }
+
+    // Agrupar la trazabilidad por Línea + Spool.
+    const porSpool = new Map();
+
+    for(const j of (juntas || [])){
+      const linea = String(j.linea ?? "").trim();
+      const spool = String(j.spool ?? "").trim();
+      if(!linea || !spool) continue;
+
+      const k = clave(linea,spool);
+
+      if(!porSpool.has(k)){
+        porSpool.set(k,{
+          sw:[],
+          pintado:false
+        });
+      }
+
+      const g = porSpool.get(k);
+
+      if(String(j.fecha_pintura ?? "").trim()){
+        g.pintado = true;
+      }
+
+      if(String(j.tipo_junta ?? "").trim().toUpperCase()==="SW"){
+        g.sw.push({
+          lote:String(j.lote ?? "").trim().toUpperCase()
+        });
+      }
+    }
+
+    const filas = (despachados || []).map(s=>{
+      const k = clave(s.linea,s.spool);
+      const g = porSpool.get(k);
+
+      let endAprobado = false;
+      let pintado = false;
+
+      if(g){
+        pintado = !!g.pintado;
+
+        // END aprobado:
+        // 1) el spool debe tener por lo menos una SW,
+        // 2) todas sus SW deben tener Lote,
+        // 3) todos esos lotes deben tener al menos un RESULTADO AP.
+        if(g.sw.length){
+          const todasConLote = g.sw.every(x=>!!x.lote);
+          const todosLosLotesAP = todasConLote &&
+            g.sw.every(x=>lotesAP.has(x.lote));
+
+          endAprobado = todasConLote && todosLosLotesAP;
+        }
+      }
+
+      return {
+        linea:String(s.linea ?? "").trim(),
+        spool:String(s.spool ?? "").trim(),
+        endAprobado,
+        pintado
+      };
+    });
+
+    tbody.innerHTML = filas.length
+      ? filas.map(x=>`
+          <tr>
+            <td>${escapar(x.linea || "-")}</td>
+            <td>${escapar(x.spool || "-")}</td>
+            <td>
+              <span class="estado-badge ${x.endAprobado ? "si" : "no"}">
+                ${x.endAprobado ? "✓ SÍ" : "✕ NO"}
+              </span>
+            </td>
+            <td>
+              <span class="estado-badge ${x.pintado ? "si" : "no"}">
+                ${x.pintado ? "✓ SÍ" : "✕ NO"}
+              </span>
+            </td>
+          </tr>
+        `).join("")
+      : '<tr><td colspan="4" style="text-align:center;color:#718096;padding:24px">No hay spooles despachados de Lumber.</td></tr>';
+
+    if(resumen){
+      const total = filas.length;
+      const conEnd = filas.filter(x=>x.endAprobado).length;
+      const pintados = filas.filter(x=>x.pintado).length;
+      resumen.textContent = `${total} despachados · ${conEnd} con END · ${pintados} pintados`;
+    }
 
   }catch(err){
-    console.error("No se pudieron cargar los indicadores de spooles:",err);
-    [
-      "kpiSpoolesEndPct","kpiSpoolesEndCant","kpiSpoolesEndTotal",
-      "kpiSpoolesPintadosPct","kpiSpoolesPintadosCant","kpiSpoolesPintadosTotal"
-    ].forEach(id=>setTexto(id,"—"));
+    console.error("No se pudo cargar la tabla de spooles despachados:",err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#b33a3a;padding:24px">No se pudo cargar la tabla de spooles despachados.</td></tr>';
+    if(resumen) resumen.textContent = "Error al cargar";
   }
 }
 
@@ -1651,7 +1843,7 @@ async function cargarPiping(){
     // Resumen de spooles por cuadernillo desde la última trazabilidad cargada.
     // Se carga de forma independiente para no bloquear el resto del dashboard.
     cargarSpoolesPorCuadernillo();
-    cargarIndicadoresAvanceSpooles();
+    cargarSpoolesDespachadosLumber();
 
 
     const flujoConfig = {
