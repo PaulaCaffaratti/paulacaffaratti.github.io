@@ -3,2116 +3,2499 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Localización de Spooles</title>
+<title>Piping - Resumen</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
 <style>
-:root{
-  --bg:#f4f7fb;
-  --card:#fff;
-  --text:#1f2937;
-  --muted:#6b7280;
-  --line:#dbe3ee;
-  --nav:#17365d;
-  --nav2:#244d7c;
-  --ok:#198754;
-  --danger:#dc3545;
-  --blue:#2563eb;
-}
-
 *{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#24364b}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:270px;background:#102f52;color:white;padding:28px 18px;z-index:10;overflow:auto}
+.logo{font-size:19px;font-weight:800;line-height:1.35;margin-bottom:28px}
+.modulo-titulo{margin:18px 8px 8px;font-size:10px;font-weight:800;letter-spacing:.8px;color:#89a6c3;text-transform:uppercase}
+.sidebar a{display:block;text-decoration:none;color:#dbe7f3;padding:13px 14px;margin-bottom:8px;border-radius:9px;font-size:13px;font-weight:bold}
+.sidebar a:hover,.sidebar a.activo{background:white;color:#102f52}
+.main{margin-left:270px;min-height:100vh}
+.topbar{background:white;border-bottom:1px solid #dfe5eb;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.conexion{font-size:12px;font-weight:bold;color:#68798c}
+.conexion.ok{color:#1c7a48}
+.conexion.error{color:#b33a3a}
+.contenido{padding:28px;max-width:1500px;margin:auto}
+h1{margin:0 0 6px;font-size:27px;color:#173650}
+.subtitulo{margin:0 0 24px;color:#718096;font-size:14px}
 
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-
-.layout{
-  display:grid;
-  grid-template-columns:260px 1fr;
-  min-height:100vh;
-}
-
-aside{
-  background:var(--nav);
-  color:#fff;
-  padding:24px 18px;
-}
-
-main{
-  padding:24px;
-  overflow:hidden;
-}
-
-h1{
-  margin:0;
-  font-size:26px;
-}
-
-.subtitle{
-  color:var(--muted);
-  margin-top:5px;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
+.total-principal{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:24px 28px;
+  background:linear-gradient(135deg,#102f52,#174b76);
+  color:white;
   border-radius:14px;
-  box-shadow:0 3px 12px rgba(0,0,0,.04);
+  margin-bottom:20px;
 }
-
-.login-card{
-  padding:16px;
-  margin:18px 0;
-}
-
-.login-row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:end;
-}
-
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  min-width:220px;
-  flex:1;
-}
-
-label{
+.total-principal small{
+  display:block;
   font-size:12px;
-  color:var(--muted);
-  font-weight:700;
+  font-weight:800;
+  opacity:.8;
+  text-transform:uppercase;
 }
-
-input,select,button{
-  font:inherit;
-}
-
-input,select{
-  border:1px solid var(--line);
-  border-radius:8px;
-  padding:10px 11px;
-  background:#fff;
-}
-
-button{
-  border:0;
-  border-radius:8px;
-  padding:10px 14px;
-  cursor:pointer;
-  font-weight:700;
-}
-
-.btn-primary{
-  background:var(--blue);
-  color:#fff;
-}
-
-.btn-secondary{
-  background:#e8eef7;
-  color:var(--text);
-}
-
-.status{
-  margin-top:10px;
-  font-size:13px;
-  color:var(--muted);
-}
-
-.status.ok{color:var(--ok)}
-.status.err{color:var(--danger)}
-
-.controls{
-  display:grid;
-  grid-template-columns:1.5fr 1fr auto auto;
-  gap:10px;
-  padding:16px;
-  margin-bottom:18px;
-}
-
-.btn-vista{
-  white-space:nowrap;
-  background:#eef4f8;
-  color:#264b69;
-  border:1px solid #d8e3ec;
-}
-
-.btn-vista.todos{
-  background:#fff4df;
-  color:#855d18;
-  border-color:#efd7a5;
-}
-
-.info-filtro{
-  grid-column:1/-1;
-  font-size:11px;
-  color:#718396;
-  padding-top:2px;
-}
-
-.kpis{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.kpi{
-  padding:16px;
-}
-
-.kpi .label{
-  color:var(--muted);
-  font-size:12px;
-  font-weight:700;
-}
-
-.kpi .value{
-  font-size:26px;
+.total-pulgadas-numero{
+  font-size:42px;
   font-weight:800;
   margin-top:5px;
 }
-
-.table-card{
-  overflow:hidden;
+.total-pulgadas-detalle{
+  margin-top:5px;
+  font-size:12px;
+  opacity:.8;
+}
+@media(max-width:650px){
+  .total-principal{padding:20px}
+  .total-pulgadas-numero{font-size:34px}
 }
 
-.table-wrap{
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:white;border:1px solid #dce3ea;border-radius:12px;padding:18px;min-height:118px}
+.kpi small{display:block;font-size:10px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:9px}
+.kpi strong{display:block;font-size:28px;color:#173650}
+.kpi-sub{
+  margin-top:7px;
+  font-size:11px;
+  color:#718096;
+  font-weight:700;
+}
+.kpi-sub b{
+  color:#52677c;
+  font-size:12px;
+}
+.kpi-desglose{
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid #e0e6ec;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  font-size:11px;
+  color:#718096;
+}
+.kpi-desglose-fila{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+.kpi-desglose-fila span:first-child{
+  font-weight:800;
+  color:#52677c;
+}
+.kpi-desglose-fila b{
+  color:#173650;
+  font-size:12px;
+}
+.kpi.verde{border-top:4px solid #179447}
+.kpi.naranja{border-top:4px solid #f28c28}
+.kpi.violeta{border-top:4px solid #6657b8}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}
+.panel{background:white;border:1px solid #dce3ea;border-radius:14px;padding:22px;margin-bottom:20px}
+.panel h2{font-size:17px;margin:0 0 18px;color:#173650}
+.tabla-wrap{overflow:auto;border:1px solid #dce3ea;border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#102f52;color:white;padding:11px;text-align:left;white-space:nowrap}
+td{padding:10px 11px;border-bottom:1px solid #e5eaf0;white-space:nowrap}
+
+.rechazoTotal{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center}
+.rechazoDonut{
+  width:140px;height:140px;border-radius:50%;
+  background:conic-gradient(#e8edf1 0deg 360deg);
+  display:grid;place-items:center;position:relative
+}
+.rechazoDonut::after{
+  content:"";position:absolute;width:96px;height:96px;border-radius:50%;background:white
+}
+.rechazoDonutCentro{position:relative;z-index:2;text-align:center}
+.rechazoDonutCentro strong{display:block;font-size:25px;color:#173650}
+.rechazoDonutCentro span{font-size:10px;color:#718096;text-transform:uppercase;font-weight:bold}
+.rechazoInfo{font-size:12px;color:#4d6277}
+.rechazoLinea{height:14px;background:#e8edf1;border-radius:20px;position:relative;margin:16px 0 5px;overflow:visible}
+.rechazoValor{height:100%;width:0%;border-radius:20px;background:#179447}
+.rechazoLimite{display:none;position:absolute;top:-4px;bottom:-4px;width:2px;background:#d83c3c}
+.rechazoEscala{display:flex;justify-content:space-between;font-size:9px;color:#8a98a8}
+.nota{margin-top:12px;color:#68798c;font-size:11px;line-height:1.5}
+
+.soldadoresLista{display:flex;flex-direction:column;gap:12px}
+.soldadorFila{display:grid;grid-template-columns:150px 65px 1fr 115px;gap:10px;align-items:center}
+.soldadorNombre{font-size:12px;font-weight:bold;color:#334e68;overflow:hidden;text-overflow:ellipsis}
+.soldadorPct{font-size:12px;font-weight:bold;text-align:right}
+.soldadorBarra{height:12px;background:#e8edf1;border-radius:20px;position:relative}
+.soldadorBarraFill{height:100%;border-radius:20px}
+.soldadorBarraLimite{position:absolute;top:-3px;bottom:-3px;width:2px;background:#d83c3c}
+.pipingBadge{display:inline-block;text-align:center;padding:5px 7px;border-radius:15px;background:#edf1f5;color:#66788a;font-size:9px;font-weight:bold}
+.pipingBadge.ok{background:#eaf8ef;color:#176d3c}
+.pipingBadge.alerta{background:#fdecec;color:#a62f2f}
+.soldadorSinDatos{color:#718096;font-size:12px;padding:10px 0}
+
+.soldadoresChartWrap{
+  position:relative;
+  height:320px;
+  margin-top:6px;
+}
+.soldadoresChartLeyenda{
+  margin-top:10px;
+  font-size:11px;
+  color:#68798c;
+  line-height:1.5;
+}
+
+@media(max-width:1100px){
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .grid2{grid-template-columns:1fr}
+}
+@media(max-width:850px){
+  .sidebar{position:relative;width:100%}
+  .main{margin-left:0}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .contenido{padding:14px}
+  .kpis{grid-template-columns:1fr}
+  .rechazoTotal{grid-template-columns:1fr}
+  .soldadorFila{grid-template-columns:1fr}
+}
+
+.flujo-spooles{background:white;border:1px solid #dce3ea;border-radius:14px;padding:18px 22px;margin-bottom:20px}
+.flujo-spooles h2{font-size:17px;margin:0 0 16px;color:#173650}
+.flujo-grid{display:grid;grid-template-columns:repeat(8,minmax(150px,1fr));gap:10px;overflow-x:auto;padding-bottom:2px}
+.flujo-card{background:#f7f9fb;border:1px solid #dce3ea;border-radius:11px;padding:14px;min-height:142px}
+.flujo-card .ico{font-size:20px;margin-bottom:7px}
+.flujo-card small{display:block;font-size:9px;font-weight:800;color:#718096;text-transform:uppercase;line-height:1.2;min-height:22px}
+.flujo-card strong{display:block;font-size:24px;color:#173650;margin:5px 0 1px}
+.flujo-card .unidad{font-size:10px;color:#718096}
+.flujo-card .meta{margin-top:8px;font-size:11px;color:#52677c;line-height:1.55}
+.flujo-card .meta b{color:#173650}
+.flujo-card.total{background:#163d66;color:white;border-color:#163d66}
+.flujo-card.total small,.flujo-card.total .unidad,.flujo-card.total .meta{color:#d7e4f0}
+.flujo-card.total strong,.flujo-card.total .meta b{color:white}
+@media(max-width:1100px){.flujo-grid{grid-template-columns:repeat(4,minmax(160px,1fr))}}
+@media(max-width:650px){.flujo-grid{grid-template-columns:repeat(2,minmax(150px,1fr))}}
+
+
+.curva-panel{background:white;border:1px solid #dce3ea;border-radius:14px;padding:22px;margin-bottom:20px}
+.curva-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:16px}
+.curva-head h2{font-size:18px;margin:0 0 5px;color:#173650}
+.curva-sub{font-size:12px;color:#718096;line-height:1.45}
+.curva-estado{padding:8px 12px;border-radius:20px;font-size:11px;font-weight:800;white-space:nowrap;background:#edf1f5;color:#52677c}
+.curva-estado.adelantado{background:#eaf8ef;color:#176d3c}
+.curva-estado.atrasado{background:#fdecec;color:#a62f2f}
+.curva-estado.linea{background:#eef3ff;color:#3559a7}
+.iso-tabla-wrap{margin-bottom:18px;border:1px solid #e0e6ec;border-radius:11px;overflow:hidden;background:#fff}
+.iso-tabla{width:100%;border-collapse:collapse;font-size:13px}
+.iso-tabla thead th{background:#f7f9fb;color:#718096;font-size:9px;text-transform:uppercase;letter-spacing:.04em;text-align:left;padding:10px 14px;border-bottom:1px solid #e0e6ec}
+.iso-tabla tbody td{padding:11px 14px;border-bottom:1px solid #edf1f5;color:#52677c;vertical-align:middle}
+.iso-tabla tbody tr:last-child td{border-bottom:none}
+.iso-tabla tbody tr:hover{background:#fafbfd}
+.iso-tabla .iso-nombre{font-weight:800;color:#173650;font-size:14px}
+.iso-tabla .iso-num{font-weight:700;color:#173650;white-space:nowrap}
+.iso-tabla .iso-avance{font-weight:800;color:#173650;white-space:nowrap}
+@media(max-width:700px){.iso-tabla{font-size:12px}.iso-tabla thead th,.iso-tabla tbody td{padding:9px 8px}}
+
+.curva-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.curva-kpi{background:#f7f9fb;border:1px solid #e0e6ec;border-radius:11px;padding:13px 14px}
+.curva-kpi small{display:block;font-size:9px;font-weight:800;color:#718096;text-transform:uppercase;margin-bottom:6px}
+.curva-kpi strong{display:block;font-size:21px;color:#173650}
+.curva-kpi-secundario{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid #e0e6ec;
+  font-size:11px;
+  color:#718096;
+  line-height:1.35;
+}
+.curva-kpi-secundario b{
+  color:#173650;
+  font-size:12px;
+}
+.curva-kpi.desvio.positivo{border-top:3px solid #179447}
+.curva-kpi.desvio.negativo{border-top:3px solid #d83c3c}
+.curva-kpi.desvio{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.curva-kpi.desvio:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(20,47,82,.10)}
+.curva-click-ayuda{display:block;margin-top:8px;font-size:10px;color:#718096;font-weight:700;text-transform:none}
+
+.modal-desvio-lumber{
+  position:fixed;
+  inset:0;
+  background:rgba(16,47,82,.46);
+  z-index:999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.modal-desvio-lumber.hidden{display:none!important}
+.modal-desvio-lumber-caja{
+  width:min(920px,96vw);
+  max-height:88vh;
   overflow:auto;
-  max-height:68vh;
+  background:white;
+  border-radius:14px;
+  border:1px solid #dce3ea;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
 }
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:1450px;
-  font-size:13px;
-}
-
-th{
+.modal-desvio-lumber-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  padding:20px 22px 14px;
+  border-bottom:1px solid #e5eaf0;
   position:sticky;
   top:0;
+  background:white;
   z-index:2;
-  background:#eef3f8;
-  padding:11px 8px;
-  border-bottom:1px solid var(--line);
-  text-align:center;
-  white-space:nowrap;
 }
-
-td{
-  padding:9px 8px;
-  border-bottom:1px solid #edf1f5;
-  text-align:center;
-  vertical-align:middle;
+.modal-desvio-lumber-head h3{margin:0;color:#173650;font-size:18px}
+.modal-desvio-lumber-head p{margin:5px 0 0;color:#718096;font-size:12px}
+.modal-desvio-lumber-cerrar{
+  border:0;background:#eef3f7;color:#173650;border-radius:8px;
+  width:34px;height:34px;cursor:pointer;font-size:18px;font-weight:800
 }
-
-td.left{text-align:left}
-
-tr:hover td{
-  background:#fafcff;
+.desvio-lumber-resumen{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  padding:18px 22px 8px;
 }
-
-.spool{font-weight:800}
-
-.stage{
-  min-width:135px;
+.desvio-lumber-mini{
+  border:1px solid #dce4ec;border-radius:10px;padding:14px;background:#fafbfd
 }
-
-.check-wrap{
+.desvio-lumber-mini span{
+  display:block;font-size:10px;color:#718096;font-weight:800;text-transform:uppercase
+}
+.desvio-lumber-mini strong{
+  display:block;margin-top:5px;font-size:20px;color:#173650
+}
+.tabla-desvio-lumber-wrap{padding:16px 22px 22px;overflow-x:auto}
+.tabla-desvio-lumber{width:100%;border-collapse:collapse;font-size:12px}
+.tabla-desvio-lumber th,
+.tabla-desvio-lumber td{
+  padding:11px 10px;border-bottom:1px solid #e5eaf0;text-align:right;white-space:nowrap
+}
+.tabla-desvio-lumber th:first-child,
+.tabla-desvio-lumber td:first-child{text-align:left}
+.tabla-desvio-lumber th{
+  background:#f7f9fb;color:#5f7185;font-size:10px;text-transform:uppercase
+}
+.estado-pendiente{color:#c23838;font-weight:800}
+.estado-adelantado{color:#198754;font-weight:800}
+.estado-linea{color:#c17c00;font-weight:800}
+@media(max-width:700px){
+  .desvio-lumber-resumen{grid-template-columns:1fr}
+}
+.curva-desvio-valores{
   display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
+  flex-direction:column-reverse;
+  align-items:flex-start;
+  gap:3px;
 }
 
-.check-wrap input[type=checkbox]{
-  width:20px;
-  height:20px;
-  cursor:pointer;
-  accent-color:var(--ok);
+/* DESVÍO LUMBER: pulgadas secundarias y porcentaje principal */
+#pipeCurvaDesvio{
+  font-size:16px;
+  color:#52677c;
+  font-weight:700;
 }
 
-.check-wrap input[type=checkbox]:disabled{
-  cursor:not-allowed;
-  opacity:.55;
-}
-
-.mini{
-  font-size:10px;
-  color:var(--muted);
-  max-width:125px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.estado{
-  font-size:11px;
+#pipeCurvaDesvioPct{
+  font-size:28px;
+  color:#173650;
   font-weight:800;
-  padding:5px 8px;
-  border-radius:999px;
-  display:inline-block;
-  white-space:nowrap;
-  background:#eef2f7;
 }
 
-.estado.fin{
-  background:#dff4e8;
-  color:#146c43;
+.curva-desvio-sep{
+  display:none;
 }
+.curva-wrap{position:relative;height:360px}
+.curva-nota{margin-top:12px;font-size:11px;color:#718096;line-height:1.5}
+@media(max-width:900px){.curva-kpis{grid-template-columns:repeat(2,1fr)}.curva-wrap{height:320px}}
+@media(max-width:520px){.curva-kpis{grid-template-columns:1fr}.curva-head{flex-direction:column}.curva-wrap{height:300px}}
 
-.empty{
-  padding:30px;
-  text-align:center;
-  color:var(--muted);
-}
 
 /* =========================================================
-   SISTEMA VISUAL UNIFICADO
+   SISTEMA VISUAL UNIFICADO · EJECUTIVO LIMPIO
    ========================================================= */
-
 :root{
- --ui-navy:#123451;
- --ui-ink:#19344d;
- --ui-text:#42596d;
- --ui-muted:#7c8d9e;
- --ui-bg:#f7f9fb;
- --ui-line:#e4eaf0;
- --ui-line2:#d6e0e8;
- --ui-green:#287b54;
- --ui-blue:#3976a5;
- --ui-orange:#bd7b27;
- --ui-purple:#6f5aaa;
- --ui-red:#b44a4a;
+ --ui-navy:#123451;--ui-ink:#19344d;--ui-text:#42596d;--ui-muted:#7c8d9e;
+ --ui-bg:#f7f9fb;--ui-line:#e4eaf0;--ui-line2:#d6e0e8;
+ --ui-green:#287b54;--ui-blue:#3976a5;--ui-orange:#bd7b27;
+ --ui-purple:#6f5aaa;--ui-red:#b44a4a;
 }
-
 html,body{
  font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif!important;
- font-weight:400!important;
- letter-spacing:0!important;
- background:var(--ui-bg)!important;
- color:var(--ui-text)!important;
- -webkit-font-smoothing:antialiased;
- text-rendering:optimizeLegibility;
+ font-weight:400!important;letter-spacing:0!important;background:var(--ui-bg)!important;color:var(--ui-text)!important;
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
-
-h1,h2,h3,h4{
- font-family:inherit!important;
- color:var(--ui-ink)!important;
- letter-spacing:-.015em!important;
-}
-
-h1{font-weight:600!important}
-
-button,input,select,textarea{
- font-family:inherit!important;
-}
-
+*{box-sizing:border-box}
+h1,h2,h3,h4{font-family:inherit!important;color:var(--ui-ink)!important;letter-spacing:-.015em!important}
+h1{font-weight:600!important} h2,h3,h4{font-weight:600!important}
+button,input,select,textarea{font-family:inherit!important}
 input,select,textarea{
- border:1px solid var(--ui-line2)!important;
- border-radius:7px!important;
- background:#fff!important;
- color:var(--ui-ink)!important;
+ border:1px solid var(--ui-line2)!important;border-radius:7px!important;background:#fff!important;color:var(--ui-ink)!important;
 }
-
 input:focus,select:focus,textarea:focus{
- outline:none!important;
- border-color:#9db6ca!important;
- box-shadow:0 0 0 3px rgba(57,118,165,.07)!important;
+ outline:none!important;border-color:#9db6ca!important;box-shadow:0 0 0 3px rgba(57,118,165,.07)!important;
 }
-
-button,.btn-primary,.btn-secondary,.btn-vista{
- font-family:inherit!important;
- font-weight:500!important;
- letter-spacing:0!important;
- border-radius:7px!important;
- box-shadow:none!important;
+button,.boton,.btn,.btnAzul,.btnVerde,.btnGris,.btn-primary,.btn-secondary,.btn-toggle{
+ font-family:inherit!important;font-weight:500!important;letter-spacing:0!important;border-radius:7px!important;box-shadow:none!important;
 }
-
-.card{
- box-shadow:none!important;
- border-color:var(--ui-line)!important;
+.panel,.card,.curva-panel,.flujo-spooles,.matrizResumenUnificado{
+ box-shadow:none!important;border-color:var(--ui-line)!important;
 }
+th{font-family:inherit!important;font-weight:600!important;letter-spacing:.02em!important;text-transform:none!important}
+td{font-weight:400!important}
 
-th{
- font-family:inherit!important;
- font-weight:600!important;
- letter-spacing:.02em!important;
- text-transform:none!important;
-}
-
-td{
- font-weight:400!important;
-}
-
-/* BARRA LATERAL */
-
+/* BARRA LATERAL: idéntica en TODAS las páginas */
 .sidebar{
- position:fixed!important;
- left:0!important;
- top:0!important;
- bottom:0!important;
- width:214px!important;
- background:#123451!important;
- color:#fff!important;
- padding:28px 14px 20px!important;
- overflow-y:auto!important;
- z-index:100!important;
+ position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:214px!important;
+ background:#123451!important;color:#fff!important;padding:28px 14px 20px!important;overflow-y:auto!important;z-index:100!important;
 }
-
 .logo{
- font-size:15px!important;
- line-height:1.45!important;
- font-weight:600!important;
- color:#fff!important;
- margin:0 4px 30px!important;
+ font-size:15px!important;line-height:1.45!important;font-weight:600!important;letter-spacing:0!important;
+ color:#fff!important;margin:0 4px 30px!important;
 }
-
-.modulo-titulo{
- margin:22px 4px 8px!important;
- font-size:10px!important;
- line-height:1.2!important;
- font-weight:500!important;
- letter-spacing:.06em!important;
- color:#91a9bd!important;
- text-transform:uppercase!important;
+.modulo-titulo,.sidebar .modulo-titulo{
+ margin:22px 4px 8px!important;font-size:10px!important;line-height:1.2!important;font-weight:500!important;
+ letter-spacing:.06em!important;color:#91a9bd!important;text-transform:uppercase!important;
 }
-
 .sidebar a{
- display:block!important;
- text-decoration:none!important;
- color:#e1e9f0!important;
- background:transparent!important;
- padding:10px 9px!important;
- margin:0 0 4px!important;
- border-radius:7px!important;
- font-size:11px!important;
- line-height:1.35!important;
- font-weight:400!important;
+ display:block!important;text-decoration:none!important;color:#e1e9f0!important;background:transparent!important;
+ padding:10px 9px!important;margin:0 0 4px!important;border-radius:7px!important;
+ font-size:11px!important;line-height:1.35!important;font-weight:400!important;letter-spacing:0!important;
 }
-
-.sidebar a:hover,
-.sidebar a.activo,
-.sidebar a.active{
- background:#fff!important;
- color:#123451!important;
+.sidebar a:hover,.sidebar a.activo,.sidebar a.active{
+ background:#fff!important;color:#123451!important;
 }
 
 /* CONTENIDO */
-
-.layout{
- display:block!important;
- min-height:100vh!important;
+.main{margin-left:214px!important;min-height:100vh!important}
+.topbar{
+ min-height:52px!important;padding:0 26px!important;background:#fff!important;border-bottom:1px solid var(--ui-line)!important;
+ display:flex!important;align-items:center!important;
 }
-
-.layout>aside{
- display:block!important;
+.topbar strong{font-size:12px!important;font-weight:500!important;color:#6d8093!important}
+.contenido{padding:22px 26px 30px!important;max-width:1460px!important;margin:auto!important}
+.contenido>h1,.hero h1,.matrizHero h1{
+ font-size:26px!important;font-weight:600!important;line-height:1.15!important;margin-bottom:5px!important;
 }
-
-.layout>main{
- margin-left:214px!important;
- padding:22px 26px 30px!important;
- max-width:none!important;
- min-height:100vh!important;
- background:var(--ui-bg)!important;
+.subtitulo,.hero p,.matrizHero p,.subtitle{font-size:12px!important;font-weight:400!important;color:var(--ui-muted)!important}
+.panel,.card{border-radius:11px!important}
+.panel h2,.card h2,.curva-panel h2,.flujo-spooles h2{font-size:15px!important;font-weight:600!important}
+.kpi small,.kpi .label,.matrizKpi small,.flujo-card small{
+ font-weight:500!important;text-transform:none!important;letter-spacing:.01em!important;
 }
+.kpi strong,.kpi .value,.matrizKpi strong,.flujo-card strong{font-weight:600!important;letter-spacing:-.02em!important}
+.estado,.status,.usuario,.nota,.info{font-weight:400!important}
+table{font-variant-numeric:tabular-nums}
+table th{background:#f8fafc!important;color:#687d91!important}
+table td{color:#344d64!important}
 
-.layout>main>h1{
- font-size:26px!important;
- font-weight:600!important;
- margin:0 0 5px!important;
- color:var(--ui-ink)!important;
-}
-
-.layout>main>.subtitle{
- margin-bottom:16px!important;
-}
-
-.card{
- border:1px solid var(--ui-line)!important;
- border-radius:11px!important;
- background:#fff!important;
-}
-
-.kpi .value{
- font-weight:600!important;
-}
-
-.spool{
- font-weight:600!important;
-}
-
-.estado{
- font-weight:500!important;
-}
-
-table{
- font-variant-numeric:tabular-nums;
-}
-
-table th{
- background:#f8fafc!important;
- color:#687d91!important;
-}
-
-table td{
- color:#344d64!important;
-}
-
+/* 14" */
 @media(min-width:851px) and (max-width:1300px){
-
- .sidebar{
-  width:194px!important;
-  padding-left:12px!important;
-  padding-right:12px!important;
- }
-
- .layout>main{
-  margin-left:194px!important;
-  padding:17px 18px 24px!important;
- }
-
- .sidebar a{
-  font-size:10px!important;
-  padding:9px 8px!important;
- }
-
- .controls{
-  grid-template-columns:1.3fr 1fr auto;
- }
-
- .btn-vista{
-  grid-column:1/-1;
-  justify-self:start;
- }
+ .sidebar{width:194px!important;padding-left:12px!important;padding-right:12px!important}
+ .main{margin-left:194px!important}
+ .contenido{padding:17px 18px 24px!important}
+ .sidebar a{font-size:10px!important;padding:9px 8px!important}
 }
-
 @media(max-width:850px){
-
- .sidebar{
-  position:relative!important;
-  width:100%!important;
-  bottom:auto!important;
- }
-
- .layout>main{
-  margin-left:0!important;
-  padding:14px!important;
- }
-
- .controls{
-  grid-template-columns:1fr;
- }
-
- .info-filtro{
-  grid-column:auto;
- }
-
- .kpis{
-  grid-template-columns:repeat(2,1fr);
- }
+ .sidebar{position:relative!important;width:100%!important;bottom:auto!important}
+ .main{margin-left:0!important}
+ .contenido{padding:14px!important}
 }
 
-/* =========================================================
-   RESUMEN DE DESPACHO PARA MAIL
-   ========================================================= */
-.despacho-tools{
-  grid-column:1/-1;
-  display:none;
-  align-items:center;
-  gap:9px;
-  flex-wrap:wrap;
-  padding-top:2px;
+.total-principal{border-radius:11px!important}
+.total-pulgadas-numero{font-weight:600!important;letter-spacing:-.025em!important}
+.flujo-card{border-radius:9px!important}
+.flujo-card small{font-size:9px!important}
+.flujo-card strong{font-size:23px!important}
+.kpi{border-radius:9px!important}
+.kpi small{font-size:9px!important}
+.kpi strong{font-size:24px!important}
+.curva-kpi small{font-weight:500!important;text-transform:none!important}
+.curva-kpi strong{font-weight:600!important}
+
+.formulario,.fila,.login-box,.login,.archivo,.controls{gap:8px!important}
+.campo label,.field label,.buscador label{font-size:10px!important;font-weight:500!important;color:#718498!important}
+input,select{font-size:11px!important}
+.contador,.kpis{gap:8px!important}
+.card strong,.kpi strong{font-weight:600!important}
+table{font-size:11px!important}
+th,td{padding:8px 9px!important}
+
+
+/* ===== FLUJO DE SPOOLES · TARJETAS EJECUTIVAS ===== */
+.flujo-spooles{
+  padding:20px 22px!important;
+  overflow:hidden!important;
 }
-.btn-despacho{
-  background:#17365d;
-  color:#fff;
-  border:1px solid #17365d;
-}
-.btn-despacho:hover{background:#244d7c}
-.btn-despacho-limpiar{
-  background:#fff;
-  color:#687d91;
-  border:1px solid var(--ui-line2);
-}
-.despacho-contador{
-  font-size:11px;
-  color:#718396;
-}
-.despacho-msg{
+#contenidoFlujoSpooles{
   width:100%;
-  font-size:11px;
-  color:#287b54;
-  min-height:15px;
+  overflow:hidden;
+}
+.flujo-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;
+  overflow:visible!important;
+  padding:2px 0!important;
+}
+.flujo-card{
+  min-width:0!important;
+  min-height:158px!important;
+  padding:16px 17px!important;
+  border:1px solid var(--ui-line)!important;
+  border-radius:10px!important;
+  background:#f8fafc!important;
+}
+.flujo-card.total{
+  background:#173f68!important;
+  border-color:#173f68!important;
+}
+.flujo-card .ico{
+  font-size:21px!important;
+  margin-bottom:9px!important;
+}
+.flujo-card small{
+  min-height:0!important;
+  margin-bottom:14px!important;
+  font-size:10px!important;
+  line-height:1.3!important;
+  color:#718498!important;
+}
+.flujo-card.total small{color:#d7e4f0!important}
+.flujo-card strong{
+  font-size:27px!important;
+  line-height:1!important;
+  margin:0 0 5px!important;
+}
+.flujo-card .unidad{
+  font-size:10px!important;
+}
+.flujo-card .meta{
+  margin-top:12px!important;
+  padding-top:10px!important;
+  border-top:1px solid #e5ebf0!important;
+  font-size:11px!important;
+  line-height:1.65!important;
+}
+.flujo-card.total .meta{
+  border-top-color:rgba(255,255,255,.18)!important;
+}
+#btnFlujoSpooles{
+  min-width:92px;
+}
+@media(max-width:1150px){
+  .flujo-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
 @media(max-width:850px){
-  .despacho-tools{grid-column:auto}
+  .flujo-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+@media(max-width:520px){
+  .flujo-grid{grid-template-columns:1fr!important}
+}
+
+
+/* ===== AJUSTE FLUJO DE SPOOLES EN UNA SOLA LÍNEA ===== */
+.flujo-grid{
+  display:grid!important;
+  grid-template-columns:repeat(8,minmax(0,1fr))!important;
+  gap:8px!important;
+  overflow:visible!important;
+  padding:2px 0!important;
+}
+.flujo-card{
+  min-width:0!important;
+  min-height:150px!important;
+  padding:13px 12px!important;
+}
+.flujo-card .ico{
+  font-size:19px!important;
+  margin-bottom:7px!important;
+}
+.flujo-card small{
+  font-size:9px!important;
+  line-height:1.2!important;
+  margin-bottom:10px!important;
+}
+.flujo-card strong{
+  font-size:22px!important;
+}
+.flujo-card .unidad{
+  font-size:9px!important;
+}
+.flujo-card .meta{
+  margin-top:9px!important;
+  padding-top:8px!important;
+  font-size:9px!important;
+  line-height:1.5!important;
+}
+@media(max-width:1200px){
+  .flujo-grid{
+    grid-template-columns:repeat(8,minmax(120px,1fr))!important;
+    overflow-x:auto!important;
+    padding-bottom:8px!important;
+  }
+}
+
+
+/* ===== KPI PIPING: 3 TARJETAS ===== */
+.kpis{
+  grid-template-columns:repeat(3,1fr)!important;
+}
+@media(max-width:900px){
+  .kpis{grid-template-columns:1fr!important}
+}
+
+
+/* ===== SELECTOR PREFABRICADO LUMBER / EN OBRA ===== */
+.piping-vistas-tabs{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin:-4px 0 20px;
+  padding:4px;
+  width:max-content;
+  max-width:100%;
+  background:#eef2f6;
+  border:1px solid #e0e6ec;
+  border-radius:10px;
+}
+
+.piping-vista-btn{
+  border:0!important;
+  background:transparent!important;
+  color:#61758a!important;
+  padding:10px 16px!important;
+  border-radius:7px!important;
+  cursor:pointer;
+  font-size:12px!important;
+  font-weight:500!important;
+  white-space:nowrap;
+  transition:background .15s ease,color .15s ease,box-shadow .15s ease;
+}
+
+.piping-vista-btn:hover{
+  color:#173650!important;
+}
+
+.piping-vista-btn.activo{
+  background:#fff!important;
+  color:#173650!important;
+  box-shadow:0 1px 4px rgba(20,47,82,.10)!important;
+}
+
+.piping-vista-contenido{
+  width:100%;
+}
+
+@media(max-width:520px){
+  .piping-vistas-tabs{width:100%;}
+  .piping-vista-btn{flex:1;padding:10px 8px!important;}
+}
+
+/* ===== RESUMEN DE SPOOLES POR CUADERNILLO ===== */
+.spool-cuadernillos-panel{
+  margin-top:20px;
+}
+.spool-cuadernillos-panel h2{
+  margin-bottom:6px!important;
+}
+.spool-cuadernillos-sub{
+  margin:0 0 14px;
+  font-size:11px;
+  color:#718096;
+  line-height:1.5;
+}
+.spool-cuadernillos-tabla-wrap{
+  overflow-x:auto;
+  border:1px solid #e0e6ec;
+  border-radius:10px;
+}
+.spool-cuadernillos-tabla{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+.spool-cuadernillos-tabla th{
+  background:#f8fafc!important;
+  color:#687d91!important;
+  padding:10px 12px!important;
+  text-align:left;
+}
+.spool-cuadernillos-tabla td{
+  padding:11px 12px!important;
+  border-bottom:1px solid #e8edf1;
+}
+.spool-cuadernillos-tabla tbody tr:last-child td{
+  border-bottom:0;
+}
+.spool-cuadernillos-tabla .spool-num{
+  font-size:18px;
+  font-weight:600!important;
+  color:#173650!important;
+}
+.spool-cuadernillos-tabla .spool-liberado{
+  color:#287b54!important;
+}
+.spool-cuadernillos-nota{
+  margin-top:10px;
+  font-size:10px;
+  color:#7c8d9e;
+  line-height:1.5;
+}
+
+
+/* ===== DETALLE DE SPOOLES LIBERADOS ===== */
+.spool-liberado-click{
+  cursor:pointer;
+  text-decoration:underline;
+  text-decoration-style:dotted;
+  text-underline-offset:4px;
+}
+.spool-liberado-click:hover{
+  background:#f2f8f4;
+}
+.modal-spooles-liberados{
+  position:fixed;
+  inset:0;
+  background:rgba(16,47,82,.46);
+  z-index:1200;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.modal-spooles-liberados.hidden{display:none!important}
+.modal-spooles-liberados-caja{
+  width:min(980px,96vw);
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border:1px solid #dce3ea;
+  border-radius:14px;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+}
+.modal-spooles-liberados-head{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding:20px 22px 14px;
+  background:#fff;
+  border-bottom:1px solid #e5eaf0;
+}
+.modal-spooles-liberados-head h3{margin:0;font-size:18px;color:#173650}
+.modal-spooles-liberados-head p{margin:5px 0 0;font-size:12px;color:#718096}
+.modal-spooles-liberados-cerrar{
+  border:0!important;
+  background:#eef3f7!important;
+  color:#173650!important;
+  border-radius:8px!important;
+  width:34px;
+  height:34px;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:700!important;
+}
+.modal-spooles-liberados-tabla-wrap{padding:18px 22px 22px;overflow-x:auto}
+.modal-spooles-liberados-tabla{width:100%;border-collapse:collapse;font-size:12px}
+.modal-spooles-liberados-tabla th{
+  background:#f7f9fb!important;
+  color:#687d91!important;
+  padding:10px 12px!important;
+  text-align:left;
+  white-space:nowrap;
+}
+.modal-spooles-liberados-tabla td{
+  padding:11px 12px!important;
+  border-bottom:1px solid #e5eaf0;
+  color:#344d64!important;
+  vertical-align:top;
+}
+.modal-spooles-liberados-tabla td:nth-child(2){font-weight:600;color:#173650!important}
+.modal-spooles-liberados-vacio{padding:28px;text-align:center;color:#718096}
+
+
+/* ===== UBICACIÓN DE SPOOLES LIBERADOS ===== */
+.spool-ubicacion-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.spool-ubicacion-badge.obra{background:#eaf7ef;color:#21734b;border:1px solid #cfe9d9}
+.spool-ubicacion-badge.lumber{background:#eef3f7;color:#52677c;border:1px solid #dce5ec}
+
+
+/* ===== INDICADORES DE AVANCE DE SPOOLES ===== */
+.spool-avance-kpis{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:18px 0 20px;
+}
+.spool-avance-kpi{
+  background:#fff;
+  border:1px solid var(--ui-line);
+  border-radius:11px;
+  padding:18px 20px;
+}
+.spool-avance-kpi small{
+  display:block;
+  font-size:10px;
+  color:#718498;
+  font-weight:500;
+  margin-bottom:7px;
+}
+.spool-avance-kpi strong{
+  display:block;
+  font-size:31px;
+  line-height:1;
+  color:#173650;
+  font-weight:600;
+  letter-spacing:-.025em;
+}
+.spool-avance-kpi .detalle{
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid #e6ebf0;
+  font-size:11px;
+  color:#718096;
+}
+.spool-avance-kpi .detalle b{color:#173650}
+.spool-avance-kpi.end{border-top:3px solid #287b54}
+.spool-avance-kpi.pintura{border-top:3px solid #3976a5}
+@media(max-width:650px){.spool-avance-kpis{grid-template-columns:1fr}}
 
 </style>
 </head>
 
 <body>
 
-<div class="layout">
-
 <aside class="sidebar">
+  <div class="logo">🏗️ CONTROL DE<br>PRODUCCIÓN</div>
 
-<div class="logo">🏗️ CONTROL DE<br>PRODUCCIÓN</div>
+  <div class="modulo-titulo">PREMOLDEADOS</div>
+  <a href="index.html">📊 RESUMEN</a>
+  <a href="base.html">📋 BASE DE INGENIERÍA</a>
+  <a href="avance.html">📍 LOCALIZACIÓN DE<br>PREMOLDEADOS</a>
 
-<div class="modulo-titulo">PREMOLDEADOS</div>
-<a href="index.html">📊 RESUMEN</a>
-<a href="base.html">📋 BASE DE INGENIERÍA</a>
-<a href="avance.html">📍 LOCALIZACIÓN DE<br>PREMOLDEADOS</a>
+  <div class="modulo-titulo">PIPING</div>
+  <a href="piping.html" class="activo">📊 RESUMEN</a>
+  <a href="piping-base.html">📋 BASE DE INGENIERÍA /<br>TRAZABILIDAD</a>
+  <a href="spooles.html">📍 LOCALIZACIÓN DE<br>SPOOLES</a>
 
-<div class="modulo-titulo">PIPING</div>
-<a href="piping.html">📊 RESUMEN</a>
-<a href="piping-base.html">📋 BASE DE INGENIERÍA /<br>TRAZABILIDAD</a>
-<a href="spooles.html" class="activo">📍 LOCALIZACIÓN DE<br>SPOOLES</a>
-
-<div class="modulo-titulo">CALIDAD</div>
-<a href="calidad.html">✅ MATRIZ DE CALIDAD</a>
-<a href="calidad-base.html">📤 BASE DE MATRIZ</a>
-
+  <div class="modulo-titulo">CALIDAD</div>
+  <a href="calidad.html">✅ MATRIZ DE CALIDAD</a>
+  <a href="calidad-base.html">📤 BASE DE MATRIZ</a>
 </aside>
 
-<main>
+<div class="main">
 
-<h1>📍 Localización y flujo de Spooles</h1>
+  <div class="topbar">
+    <strong>Seguimiento de Piping</strong>
+    <div id="pipeConexion" class="conexion">⏳ Actualizando datos...</div>
+  </div>
 
-<div class="subtitle">
-Seguimiento por spool desde Lumber hasta Liberación PRECOM
+  <main class="contenido">
+
+    <h1>Resumen ejecutivo de Piping</h1>
+    <p class="subtitulo">Datos actualizados automáticamente desde la última trazabilidad cargada.</p>
+
+    <section class="flujo-spooles">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:15px;">
+        <h2 style="margin:0;">🔄 Flujo de Spooles</h2>
+
+        <button
+          id="btnFlujoSpooles"
+          onclick="toggleFlujoSpooles()"
+          style="
+            border:1px solid #d8e0e8;
+            background:#f7f9fb;
+            border-radius:7px;
+            padding:8px 12px;
+            cursor:pointer;
+            font-size:12px;
+            font-weight:bold;
+            color:#45596f;
+          ">
+          Mostrar ▼
+        </button>
+      </div>
+
+      <div id="contenidoFlujoSpooles" style="display:none;margin-top:16px;">
+        <div id="pipeFlujoSpooles" class="flujo-grid">
+          <div class="flujo-card"><small>Cargando flujo...</small><strong>—</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="kpis">
+      <div class="kpi">
+        <small>Pulgadas totales a ejecutar</small>
+        <strong id="pipeTotal">—</strong>
+
+        <div class="kpi-sub">
+          <b id="pipeJuntas">—</b> juntas totales
+        </div>
+
+        <div class="kpi-desglose">
+          <div class="kpi-desglose-fila">
+            <span>LUMBER</span>
+            <b id="pipeTotalLumber">—</b>
+          </div>
+          <div class="kpi-desglose-fila">
+            <span>OBRA</span>
+            <b id="pipeTotalObra">—</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi verde">
+        <small>Ø ejecutadas</small>
+        <strong id="pipeEjecutadas">—</strong>
+        <div class="kpi-sub" style="margin-top:10px;padding-top:9px;border-top:1px solid #e0e6ec;">
+          Avance: <b id="pipeAvance">—</b>
+        </div>
+      </div>
+
+      <div class="kpi naranja">
+        <small>Ø pendientes</small>
+        <strong id="pipePendientes">—</strong>
+      </div>
+    </div>
+
+    <!-- VISTAS PRINCIPALES: PREFABRICADO / OBRA -->
+    <div class="piping-vistas-tabs" role="tablist" aria-label="Vistas de Piping">
+      <button
+        id="btnVistaLumber"
+        class="piping-vista-btn activo"
+        type="button"
+        onclick="cambiarVistaPiping('lumber')">
+        Prefabricado Lumber
+      </button>
+
+      <button
+        id="btnVistaObra"
+        class="piping-vista-btn"
+        type="button"
+        onclick="cambiarVistaPiping('obra')">
+        En obra
+      </button>
+    </div>
+
+    <!-- ========================================
+         VISTA: PREFABRICADO LUMBER
+    ========================================= -->
+    <div id="vistaPipingLumber" class="piping-vista-contenido">
+
+      <section class="curva-panel">
+        <div class="curva-head">
+          <div>
+            <h2>📈 Curva S – Prefabricación Lumber</h2>
+            <div class="curva-sub">
+              Planificado vs. ejecución real de soldadura para los 3 cuadernillos isométricos IS-001, IS-002 e IS-003.
+            </div>
+          </div>
+          <div id="pipeCurvaEstado" class="curva-estado">Calculando...</div>
+        </div>
+
+        <div class="curva-kpis">
+          <div class="curva-kpi">
+            <small>
+              Plan al <span id="pipeFechaUltimaTrazaPlan">—</span>
+            </small>
+            <strong id="pipeCurvaPlanUltimaTraza">—</strong>
+            <div class="curva-kpi-secundario">
+              Plan a hoy:
+              <b id="pipeCurvaPlan">—</b>
+            </div>
+          </div>
+
+          <div class="curva-kpi">
+            <small>
+              Real al <span id="pipeFechaUltimaTrazaReal">—</span>
+            </small>
+            <strong id="pipeCurvaRealUltimaTraza">—</strong>
+            <div class="curva-kpi-secundario">
+              Real a hoy:
+              <b id="pipeCurvaReal">—</b>
+            </div>
+          </div>
+
+          <div id="pipeCurvaDesvioCard" class="curva-kpi desvio"
+               onclick="abrirDetalleDesvioLumber()"
+               title="Ver detalle del desvío por cuadernillo">
+            <small>Desvío</small>
+            <div class="curva-desvio-valores">
+              <strong id="pipeCurvaDesvio">—</strong>
+              <span class="curva-desvio-sep">|</span>
+              <strong id="pipeCurvaDesvioPct">—</strong>
+            </div>
+            <span class="curva-click-ayuda">Tocar para ver qué cuadernillo está pendiente o adelantado</span>
+          </div>
+        </div>
+
+        <div class="curva-wrap">
+          <canvas id="pipeCurvaLumber"></canvas>
+        </div>
+
+        <div class="curva-nota">
+          El plan continúa hasta el fin programado. La curva real se detiene en la última fecha con avance registrado.
+        </div>
+      </section>
+
+      <section class="panel spool-cuadernillos-panel">
+        <h2>Spooles por cuadernillo isométrico</h2>
+        <p class="spool-cuadernillos-sub">
+          Total de spooles y spooles liberados para los cuadernillos IS-001, IS-002 e IS-003.
+        </p>
+
+        <div class="spool-cuadernillos-tabla-wrap">
+          <table class="spool-cuadernillos-tabla">
+            <thead>
+              <tr>
+                <th>Cuadernillo isométrico</th>
+                <th>Total de spooles</th>
+                <th>Total de spooles liberados por END</th>
+              </tr>
+            </thead>
+            <tbody id="tablaSpoolesCuadernillo">
+              <tr><td>IS-001</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+              <tr><td>IS-002</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+              <tr><td>IS-003</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="notaSpoolesCuadernillo" class="spool-cuadernillos-nota">
+          Cada spool se cuenta una sola vez por combinación Línea + Spool. Se considera liberado cuando el spool tiene información cargada en la columna Lote.
+        </div>
+      </section>
+
+      <div class="spool-avance-kpis">
+        <div class="spool-avance-kpi end">
+          <small>% de spooles liberados por END</small>
+          <strong id="kpiSpoolesEndPct">—</strong>
+          <div class="detalle"><b id="kpiSpoolesEndCant">—</b> spooles liberados de <b id="kpiSpoolesEndTotal">—</b></div>
+        </div>
+
+        <div class="spool-avance-kpi pintura">
+          <small>% de spooles pintados</small>
+          <strong id="kpiSpoolesPintadosPct">—</strong>
+          <div class="detalle"><b id="kpiSpoolesPintadosCant">—</b> spooles con Fecha Pintura de <b id="kpiSpoolesPintadosTotal">—</b></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+
+        <section class="panel">
+          <h2>% de rechazos · total</h2>
+
+          <div class="rechazoTotal">
+            <div id="pipeDonut" class="rechazoDonut">
+              <div class="rechazoDonutCentro">
+                <strong id="pipeRechazoTotal">—</strong>
+                <span>rechazo</span>
+              </div>
+            </div>
+
+            <div class="rechazoInfo">
+              <div><strong>Límite de rechazo:</strong> <span id="pipeLimiteTexto">No definido</span></div>
+
+              <div class="rechazoLinea">
+                <div id="pipeRechazoValor" class="rechazoValor"></div>
+                <div id="pipeRechazoLimite" class="rechazoLimite"></div>
+              </div>
+
+              <div class="rechazoEscala">
+                <span>0%</span>
+                <span>100%</span>
+              </div>
+
+              <div id="pipeRechazoDetalle" class="nota">
+                Sin datos de inspección.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>% de rechazos por soldador</h2>
+
+          <div class="soldadoresChartWrap">
+            <canvas id="pipeSoldadoresChart"></canvas>
+          </div>
+
+          <div class="soldadoresChartLeyenda">
+            Cada punto representa un soldador. La línea roja horizontal marca el límite máximo permitido de 3,00%.
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ========================================
+         VISTA: OBRA
+    ========================================= -->
+    <div id="vistaPipingObra" class="piping-vista-contenido" style="display:none;">
+      <section class="curva-panel" id="seccionCurvaObra">
+        <div class="curva-head">
+          <div>
+            <h2>🏗️ Curva S – Obra</h2>
+            <div class="curva-sub">
+              Planificado vs. montaje real de spooles en obra para los grupos vinculados al cronograma.
+            </div>
+          </div>
+          <div id="pipeCurvaObraEstado" class="curva-estado">NO INICIADO</div>
+        </div>
+
+        <div class="curva-kpis">
+          <div class="curva-kpi">
+            <small>Plan a hoy</small>
+            <strong id="pipeCurvaObraPlan">0,00&quot;</strong>
+          </div>
+
+          <div class="curva-kpi">
+            <small>Real a hoy</small>
+            <strong id="pipeCurvaObraReal">0,00&quot;</strong>
+          </div>
+
+          <div id="pipeCurvaObraDesvioCard" class="curva-kpi desvio">
+            <small>Desvío real - plan</small>
+            <strong id="pipeCurvaObraDesvio">0,00&quot;</strong>
+          </div>
+
+          <div id="pipeCurvaObraDesvioPctCard" class="curva-kpi desvio">
+            <small>Desvío %</small>
+            <strong id="pipeCurvaObraDesvioPct">—</strong>
+          </div>
+        </div>
+
+        <div class="curva-wrap">
+          <canvas id="pipeCurvaObra"></canvas>
+        </div>
+
+        <div class="curva-nota">
+          El real se alimenta automáticamente cuando se marca Montaje en la localización de spooles.
+        </div>
+      </section>
+    </div>
+
+  </main>
 </div>
 
-<div class="card login-card">
+<div id="modalDesvioLumber" class="modal-desvio-lumber hidden" onclick="cerrarDetalleDesvioLumber(event)">
+  <div class="modal-desvio-lumber-caja" onclick="event.stopPropagation()">
+    <div class="modal-desvio-lumber-head">
+      <div>
+        <h3>Detalle del desvío Lumber por cuadernillo</h3>
+        <p id="modalDesvioLumberSub">Comparación entre plan y real a la última fecha de trazabilidad.</p>
+      </div>
+      <button class="modal-desvio-lumber-cerrar" onclick="cerrarDetalleDesvioLumber()">×</button>
+    </div>
 
-<div class="login-row">
+    <div class="desvio-lumber-resumen">
+      <div class="desvio-lumber-mini">
+        <span>Pulgadas pendientes</span>
+        <strong id="detalleLumberPendientes">0"</strong>
+      </div>
+      <div class="desvio-lumber-mini">
+        <span>Pulgadas adelantadas</span>
+        <strong id="detalleLumberAdelantadas">0"</strong>
+      </div>
+      <div class="desvio-lumber-mini">
+        <span>Desvío neto</span>
+        <strong id="detalleLumberNeto">0"</strong>
+      </div>
+    </div>
 
-<div class="field">
-<label>Correo</label>
-<input id="email" type="email" placeholder="usuario@pecomenergia.com.ar">
-</div>
-
-<div class="field">
-<label>Contraseña</label>
-<input id="password" type="password" placeholder="Contraseña">
-</div>
-
-<button id="btnLogin" class="btn-primary">
-Ingresar
-</button>
-
-<button id="btnLogout" class="btn-secondary" style="display:none">
-Cerrar sesión
-</button>
-
-</div>
-
-<div id="sessionStatus" class="status">
-Iniciá sesión para ver y actualizar los spooles.
-</div>
-
-</div>
-
-<div id="contenido" style="display:none">
-
-<div class="card controls">
-
-<input
- id="buscar"
- type="text"
- placeholder="Buscar spool o línea..."
->
-
-<select id="filtroEstado">
-
-<option value="">
-Todos los estados
-</option>
-
-<option value="sin_despachar">
-Sin despachar
-</option>
-
-<option value="en_transito">
-Despachado / no recibido
-</option>
-
-<option value="en_obra">
-Recibido en obra
-</option>
-
-<option value="ph">
-PH realizada
-</option>
-
-<option value="montaje">
-Montado
-</option>
-
-<option value="torque">
-Torque completo
-</option>
-
-<option value="calidad">
-Liberado Calidad
-</option>
-
-<option value="precom">
-Liberado PRECOM
-</option>
-
-</select>
-
-<button id="btnActualizar" class="btn-secondary">
-↻ Actualizar
-</button>
-
-<button id="btnVista" class="btn-vista">
-Mostrar todos los spooles
-</button>
-
-<div id="infoFiltro" class="info-filtro"></div>
-
-<div id="despachoTools" class="despacho-tools">
-  <button id="btnCopiarDespacho" class="btn-despacho" type="button">
-    📋 Copiar tabla del despacho
-  </button>
-
-  <button id="btnLimpiarDespacho" class="btn-despacho-limpiar" type="button">
-    Nuevo despacho
-  </button>
-
-  <span id="despachoContador" class="despacho-contador">
-    0 spooles en el despacho actual
-  </span>
-
-  <div id="despachoMsg" class="despacho-msg"></div>
-</div>
-
+    <div class="tabla-desvio-lumber-wrap">
+      <table class="tabla-desvio-lumber">
+        <thead>
+          <tr>
+            <th>Cuadernillo</th>
+            <th>Total pulgadas</th>
+            <th>Plan a fecha</th>
+            <th>Real soldado</th>
+            <th>Diferencia</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaDesvioLumberBody"></tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 
-<div class="kpis">
+<div id="modalSpoolesLiberados" class="modal-spooles-liberados hidden" onclick="cerrarSpoolesLiberados(event)">
+  <div class="modal-spooles-liberados-caja" onclick="event.stopPropagation()">
+    <div class="modal-spooles-liberados-head">
+      <div>
+        <h3 id="tituloSpoolesLiberados">Spooles liberados</h3>
+        <p id="subSpoolesLiberados">Detalle de Línea + Spool + Lote aprobado + ubicación.</p>
+      </div>
+      <button class="modal-spooles-liberados-cerrar" onclick="cerrarSpoolesLiberados()">×</button>
+    </div>
 
-<div class="card kpi">
-<div class="label">SPOOLES</div>
-<div id="kpiTotal" class="value">0</div>
+    <div class="modal-spooles-liberados-tabla-wrap">
+      <table class="modal-spooles-liberados-tabla">
+        <thead>
+          <tr>
+            <th>Línea</th>
+            <th>Spool</th>
+            <th>Lote liberado</th>
+            <th>Ubicación</th>
+          </tr>
+        </thead>
+        <tbody id="tablaSpoolesLiberadosDetalle"></tbody>
+      </table>
+    </div>
+  </div>
 </div>
-
-<div class="card kpi">
-<div class="label">EN LUMBER / SIN DESPACHAR</div>
-<div id="kpiLumber" class="value">0</div>
-</div>
-
-<div class="card kpi">
-<div class="label">RECIBIDOS EN OBRA</div>
-<div id="kpiObra" class="value">0</div>
-</div>
-
-<div class="card kpi">
-<div class="label">LIBERADOS PRECOM</div>
-<div id="kpiPrecom" class="value">0</div>
-</div>
-
-</div>
-
-
-<div class="card table-card">
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-<tr>
-<th>Sistema</th>
-<th>Subsistema</th>
-<th>Línea</th>
-<th>Spool</th>
-<th>Despacho Lumber</th>
-<th>Recepción obra</th>
-<th>PH</th>
-<th>Montaje</th>
-<th>Torque</th>
-<th>Lib. Calidad</th>
-<th>Lib. PRECOM</th>
-<th>Estado</th>
-</tr>
-</thead>
-
-<tbody id="tbody"></tbody>
-
-</table>
-
-<div id="empty" class="empty" style="display:none">
-No hay spooles para mostrar.
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</main>
-
-</div>
-
 
 <script>
-
-const SUPABASE_URL=
+const SUPABASE_URL =
 "https://mzgbtejfgsrskiuymtwh.supabase.co";
 
-const SUPABASE_KEY=
+const SUPABASE_KEY =
 "sb_publishable_Wen9hxBnae8wRrEEaP5lOQ_aNl9OCGd";
 
-const db=
-supabase.createClient(
- SUPABASE_URL,
- SUPABASE_KEY
+const db =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
+const PIPING_LIMITE_RECHAZO = 3;
+const PIPING_LIMITE_RECHAZO_TOTAL = 5;
+let pipeCurvaChart = null;
+let pipeCurvaObraChart = null;
+let pipeSoldadoresChart = null;
+let pipeCuadernillosLumberActuales = [];
+let pipeFechaUltimaTrazaLumber = null;
 
-/* =====================================================
-   PERMISOS
-   ===================================================== */
+function planCuadernilloAFecha(item, fechaISO){
+  const total = Number(item.pulgadas_planificadas || 0);
+  if(!item.fecha_inicio || !item.fecha_fin || !fechaISO) return 0;
 
-const permisos={
+  const inicio = new Date(String(item.fecha_inicio).slice(0,10) + "T12:00:00");
+  const fin = new Date(String(item.fecha_fin).slice(0,10) + "T12:00:00");
+  const fecha = new Date(String(fechaISO).slice(0,10) + "T12:00:00");
 
-despacho_lumber:[
+  if(fecha < inicio) return 0;
+  if(fecha >= fin) return total;
 
-"jorgefelipe.soto@pecomenergia.com.ar",
-"maria.caffaratti@pecomenergia.com.ar",
-"kevin.rojas@pecomenergia.com.ar",
-"agustin.schechtel@pecomenergia.com.ar"
+  const msDia = 86400000;
+  const diasTotales = Math.round((fin - inicio) / msDia) + 1;
+  const diasTranscurridos = Math.round((fecha - inicio) / msDia) + 1;
 
-],
-
-
-recepcion_obra:[
-
-"gerardo.machuca@pecomenergia.com.ar",
-"alan.careaga@pecomenergia.com.ar",
-"diego.escalada@pecomenergia.com.ar",
-"maria.caffaratti@pecomenergia.com.ar",
-"joses.lara@pecomenergia.com.ar",
-"kevin.rojas@pecomenergia.com.ar",
-"agustin.schechtel@pecomenergia.com.ar"
-
-],
-
-
-ph:[
-
-"joses.lara@pecomenergia.com.ar",
-"maria.caffaratti@pecomenergia.com.ar",
-"jorgefelipe.soto@pecomenergia.com.ar",
-"kevin.rojas@pecomenergia.com.ar",
-"agustin.schechtel@pecomenergia.com.ar"
-
-],
-
-
-montaje:[
-
-"jorgefelipe.soto@pecomenergia.com.ar",
-"joses.lara@pecomenergia.com.ar",
-"maria.caffaratti@pecomenergia.com.ar",
-"kevin.rojas@pecomenergia.com.ar",
-"agustin.schechtel@pecomenergia.com.ar"
-
-],
-
-
-torque:[
-
-"jorgefelipe.soto@pecomenergia.com.ar",
-"joses.lara@pecomenergia.com.ar",
-"maria.caffaratti@pecomenergia.com.ar",
-"kevin.rojas@pecomenergia.com.ar",
-"agustin.schechtel@pecomenergia.com.ar"
-
-],
-
-
-liberacion_calidad:[
-
-"jorgefelipe.soto@pecomenergia.com.ar",
-"joses.lara@pecomenergia.com.ar",
-"maria.caffaratti@pecomenergia.com.ar",
-"kevin.rojas@pecomenergia.com.ar",
-"agustin.schechtel@pecomenergia.com.ar"
-
-],
-
-
-liberacion_precom:[
-
-"maria.caffaratti@pecomenergia.com.ar",
-"kevin.rojas@pecomenergia.com.ar",
-"agustin.schechtel@pecomenergia.com.ar"
-
-]
-
-};
-
-
-/* =====================================================
-   VARIABLES
-   ===================================================== */
-
-let usuarioEmail="";
-
-let spooles=[];
-
-/*
- false = vista automática según permiso
- true  = mostrar todos
-*/
-let mostrarTodos=false;
-let despachoActual=new Set();
-
-
-/* =====================================================
-   FUNCIONES GENERALES
-   ===================================================== */
-
-const norm=v=>
-(v||"").trim().toLowerCase();
-
-
-const puede=e=>
-(permisos[e]||[]).includes(usuarioEmail);
-
-
-const esc=v=>
-String(v??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-
-function fmt(v){
-
- if(!v)return"";
-
- try{
-
-  return new Intl.DateTimeFormat(
-   "es-AR",
-   {
-    day:"2-digit",
-    month:"2-digit",
-    year:"2-digit",
-    hour:"2-digit",
-    minute:"2-digit"
-   }
-  ).format(new Date(v));
-
- }catch{
-
-  return"";
-
- }
-
+  return diasTotales > 0 ? total * (diasTranscurridos / diasTotales) : total;
 }
 
+function abrirDetalleDesvioLumber(){
+  const modal = document.getElementById("modalDesvioLumber");
+  const tbody = document.getElementById("tablaDesvioLumberBody");
+  if(!modal || !tbody) return;
 
-function corto(e){
+  const fecha = pipeFechaUltimaTrazaLumber;
+  const filas = pipeCuadernillosLumberActuales || [];
 
- return e
- ?e.split("@")[0]
- :"";
-
-}
-
-
-
-/* =====================================================
-   RESUMEN DE DESPACHO PARA MAIL
-   ===================================================== */
-
-function fechaLocalClave(fecha=new Date()){
-  const partes=new Intl.DateTimeFormat(
-    "en-CA",
-    {
-      timeZone:"America/Argentina/Buenos_Aires",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit"
-    }
-  ).formatToParts(fecha);
-
-  const get=t=>partes.find(p=>p.type===t)?.value||"";
-  return `${get("year")}-${get("month")}-${get("day")}`;
-}
-
-function claveDespachoActual(){
-  return "spooles_despacho_actual_"+usuarioEmail+"_"+fechaLocalClave();
-}
-
-function cargarDespachoActual(){
-  despachoActual=new Set();
-  if(!usuarioEmail)return;
-
-  try{
-    const guardado=JSON.parse(
-      localStorage.getItem(claveDespachoActual())||"[]"
-    );
-    if(Array.isArray(guardado)){
-      guardado.forEach(id=>despachoActual.add(Number(id)));
-    }
-  }catch{
-    despachoActual=new Set();
-  }
-}
-
-function guardarDespachoActual(){
-  if(!usuarioEmail)return;
-  try{
-    localStorage.setItem(
-      claveDespachoActual(),
-      JSON.stringify([...despachoActual])
-    );
-  }catch{}
-}
-
-function spoolesDespachoActual(){
-  return spooles
-    .filter(s=>despachoActual.has(Number(s.id)) && !!s.despacho_lumber)
-    .sort((a,b)=>{
-      const ca=String(a.cuadernillo||a.cuadernillo_nro||"");
-      const cb=String(b.cuadernillo||b.cuadernillo_nro||"");
-      const la=String(a.linea||"");
-      const lb=String(b.linea||"");
-      const sa=String(a.spool||"");
-      const sb=String(b.spool||"");
-
-      return ca.localeCompare(cb,"es",{numeric:true}) ||
-             la.localeCompare(lb,"es",{numeric:true}) ||
-             sa.localeCompare(sb,"es",{numeric:true});
-    });
-}
-
-function actualizarHerramientasDespacho(){
-  const tools=document.getElementById("despachoTools");
-  if(!tools)return;
-
-  if(!puede("despacho_lumber")){
-    tools.style.display="none";
+  if(!fecha || !filas.length){
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#718096">Sin datos disponibles.</td></tr>';
+    modal.classList.remove("hidden");
     return;
   }
 
-  tools.style.display="flex";
+  let pendientes = 0;
+  let adelantadas = 0;
+  let neto = 0;
 
-  const lista=spoolesDespachoActual();
+  tbody.innerHTML = filas.map(x=>{
+    const planFecha = planCuadernilloAFecha(x, fecha);
+    const real = Number(x.pulgadas_soldadas || 0);
+    const diferencia = real - planFecha;
+    neto += diferencia;
 
-  despachoContador.textContent=
-    lista.length+
-    (lista.length===1
-      ?" spool en el despacho actual"
-      :" spooles en el despacho actual");
+    if(diferencia < 0) pendientes += Math.abs(diferencia);
+    if(diferencia > 0) adelantadas += diferencia;
 
-  btnCopiarDespacho.disabled=lista.length===0;
-}
-
-function agregarAlDespachoActual(id){
-  despachoActual.add(Number(id));
-  guardarDespachoActual();
-}
-
-function quitarDelDespachoActual(id){
-  despachoActual.delete(Number(id));
-  guardarDespachoActual();
-}
-
-function limpiarDespachoActual(){
-  if(
-    despachoActual.size>0 &&
-    !confirm(
-      "¿Iniciar un nuevo despacho? Se limpiará solamente la lista usada para copiar el mail. Los tildes de la base NO se modifican."
-    )
-  ) return;
-
-  despachoActual.clear();
-  guardarDespachoActual();
-
-  despachoMsg.textContent=
-    "Lista del despacho actual vaciada. Ya podés comenzar un nuevo despacho.";
-
-  actualizarHerramientasDespacho();
-}
-
-function despachoComoTexto(lista){
-  const filas=lista.map((s,i)=>{
-    const cuadernillo=s.cuadernillo||s.cuadernillo_nro||"";
-    return [
-      i+1,
-      cuadernillo,
-      s.linea||"",
-      s.spool||""
-    ].join("\t");
-  });
-
-  return [
-    "N°\tCuadernillo\tLínea / Isométrico\tN° Spool",
-    ...filas
-  ].join("\n");
-}
-
-function despachoComoHtml(lista){
-  const filas=lista.map((s,i)=>{
-    const cuadernillo=s.cuadernillo||s.cuadernillo_nro||"";
+    let estado = "EN LÍNEA";
+    let clase = "estado-linea";
+    if(diferencia < -0.005){ estado = "PENDIENTE"; clase = "estado-pendiente"; }
+    else if(diferencia > 0.005){ estado = "ADELANTADO"; clase = "estado-adelantado"; }
 
     return `
       <tr>
-        <td style="border:1px solid #000;padding:6px 9px;text-align:center;">${i+1}</td>
-        <td style="border:1px solid #000;padding:6px 9px;text-align:center;">${esc(cuadernillo)}</td>
-        <td style="border:1px solid #000;padding:6px 9px;text-align:left;">${esc(s.linea||"")}</td>
-        <td style="border:1px solid #000;padding:6px 9px;text-align:center;">${esc(s.spool||"")}</td>
+        <td><strong>${escapar(x.isometrico || ("IS-"+x.cuadernillo))}</strong></td>
+        <td><strong>${pipeNum(x.pulgadas_planificadas || 0)}"</strong></td>
+        <td>${pipeNum(planFecha)}"</td>
+        <td>${pipeNum(real)}"</td>
+        <td class="${clase}">${diferencia>0?"+":""}${pipeNum(diferencia)}"</td>
+        <td class="${clase}">${estado}</td>
       </tr>
     `;
   }).join("");
 
-  return `
-    <table style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:12pt;">
-      <thead>
-        <tr>
-          <th style="border:1px solid #000;padding:7px 9px;background:#245781;color:#fff;text-align:center;">N°</th>
-          <th style="border:1px solid #000;padding:7px 9px;background:#245781;color:#fff;text-align:center;">Cuadernillo</th>
-          <th style="border:1px solid #000;padding:7px 9px;background:#245781;color:#fff;text-align:center;">Línea / Isométrico</th>
-          <th style="border:1px solid #000;padding:7px 9px;background:#245781;color:#fff;text-align:center;">N° Spool</th>
-        </tr>
-      </thead>
-      <tbody>${filas}</tbody>
-    </table>
-  `;
+  const [y,m,d] = String(fecha).split("-");
+  setTexto("modalDesvioLumberSub", `Comparación por cuadernillo al ${d}/${m}/${y}, última fecha con trazabilidad real.`);
+  setTexto("detalleLumberPendientes", pipeNum(pendientes)+'"');
+  setTexto("detalleLumberAdelantadas", (adelantadas>0?"+":"") + pipeNum(adelantadas)+'"');
+  setTexto("detalleLumberNeto", (neto>0?"+":"") + pipeNum(neto)+'"');
+
+  modal.classList.remove("hidden");
 }
 
-async function copiarTablaDespacho(){
-  const lista=spoolesDespachoActual();
-  despachoMsg.textContent="";
+function cerrarDetalleDesvioLumber(event){
+  if(event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById("modalDesvioLumber");
+  if(modal) modal.classList.add("hidden");
+}
 
-  if(!lista.length){
-    despachoMsg.textContent="No hay spooles agregados al despacho actual.";
-    return;
+function toggleFlujoSpooles(){
+  const contenido = document.getElementById("contenidoFlujoSpooles");
+  const boton = document.getElementById("btnFlujoSpooles");
+  if(!contenido || !boton) return;
+
+  const estaOculto = contenido.style.display === "none" || contenido.style.display === "";
+
+  if(estaOculto){
+    contenido.style.display = "block";
+    boton.textContent = "Ocultar ▲";
+  }else{
+    contenido.style.display = "none";
+    boton.textContent = "Mostrar ▼";
+  }
+}
+
+function cambiarVistaPiping(vista){
+  const vistaLumber = document.getElementById("vistaPipingLumber");
+  const vistaObra = document.getElementById("vistaPipingObra");
+  const btnLumber = document.getElementById("btnVistaLumber");
+  const btnObra = document.getElementById("btnVistaObra");
+
+  if(!vistaLumber || !vistaObra || !btnLumber || !btnObra) return;
+
+  const mostrarObra = vista === "obra";
+
+  vistaLumber.style.display = mostrarObra ? "none" : "block";
+  vistaObra.style.display = mostrarObra ? "block" : "none";
+
+  btnLumber.classList.toggle("activo", !mostrarObra);
+  btnObra.classList.toggle("activo", mostrarObra);
+
+  setTimeout(()=>{
+    if(mostrarObra){
+      if(pipeCurvaObraChart){
+        pipeCurvaObraChart.resize();
+        pipeCurvaObraChart.update("none");
+      }
+    }else{
+      if(pipeCurvaChart){
+        pipeCurvaChart.resize();
+        pipeCurvaChart.update("none");
+      }
+      if(pipeSoldadoresChart){
+        pipeSoldadoresChart.resize();
+        pipeSoldadoresChart.update("none");
+      }
+    }
+  },60);
+}
+
+function escapar(v){
+  return String(v ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function setTexto(id,valor){
+  const e=document.getElementById(id);
+  if(e) e.textContent=valor;
+}
+
+function pipeNum(v){
+  return Number(v || 0).toLocaleString(
+    "es-AR",
+    {minimumFractionDigits:0,maximumFractionDigits:2}
+  );
+}
+
+function pipePct(v){
+  if(v===null || v===undefined || v==="") return "—";
+  return Number(v).toFixed(2).replace(".",",")+"%";
+}
+
+function normalizarCuadernillo(v){
+  const texto = String(v ?? "").trim();
+  const digitos = texto.replace(/\D/g,"");
+  if(!digitos) return null;
+  return digitos.padStart(3,"0").slice(-3);
+}
+
+function pintarSpoolesPorCuadernillo(filas){
+  const tbody = document.getElementById("tablaSpoolesCuadernillo");
+  const nota = document.getElementById("notaSpoolesCuadernillo");
+  if(!tbody) return;
+
+  const codigos = ["001","002","003"];
+  const resumen = Object.fromEntries(codigos.map(c=>[c,new Map()]));
+
+  for(const x of (filas || [])){
+    const cuadernillo = normalizarCuadernillo(x.cuadernillo);
+    if(!cuadernillo || !resumen[cuadernillo]) continue;
+
+    const linea = String(x.linea ?? "").trim();
+    const spool = String(x.spool ?? "").trim();
+    if(!linea || !spool) continue;
+
+    // Una misma Línea + Spool representa un único spool, aunque tenga varias juntas/filas.
+    const clave = `${linea.toLowerCase()}|||${spool.toLowerCase()}`;
+    const loteCargado = String(x.lote ?? "").trim() !== "";
+    const tipo = String(x.tipo_junta ?? "").trim().toUpperCase();
+
+    // Regla de liberación por spool:
+    // 1) Línea + Spool se agrupan como un único spool.
+    // 2) Debe existir al menos una fila con LOTE cargado.
+    // 3) Si existe alguna fila TIPO = SW sin LOTE, el spool queda INCOMPLETO
+    //    y NO se cuenta como liberado, aunque otras filas del mismo spool tengan LOTE.
+    if(!resumen[cuadernillo].has(clave)){
+      resumen[cuadernillo].set(clave,{
+        tieneLote: loteCargado,
+        swPendiente: tipo === "SW" && !loteCargado
+      });
+    }else{
+      const item = resumen[cuadernillo].get(clave);
+      if(loteCargado) item.tieneLote = true;
+      if(tipo === "SW" && !loteCargado) item.swPendiente = true;
+    }
   }
 
-  const texto=despachoComoTexto(lista);
-  const htmlTabla=despachoComoHtml(lista);
+  tbody.innerHTML = codigos.map(codigo=>{
+    const spooles = [...resumen[codigo].values()];
+    const total = spooles.length;
+    const liberados = spooles.filter(x=>x.tieneLote && !x.swPendiente).length;
+    return `
+      <tr>
+        <td><strong>IS-${codigo}</strong></td>
+        <td class="spool-num">${total}</td>
+        <td class="spool-num spool-liberado">${liberados}</td>
+      </tr>
+    `;
+  }).join("");
+
+  if(nota){
+    nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para contarlo como liberado debe tener Lote cargado y no puede existir ninguna fila TIPO = SW del mismo spool con Lote vacío; si existe, el spool se considera incompleto.";
+  }
+}
+
+
+
+async function abrirSpoolesLiberados(cuadernillo){
+  const modal = document.getElementById("modalSpoolesLiberados");
+  const tbody = document.getElementById("tablaSpoolesLiberadosDetalle");
+  const titulo = document.getElementById("tituloSpoolesLiberados");
+  const sub = document.getElementById("subSpoolesLiberados");
+  if(!modal || !tbody) return;
+
+  titulo.textContent = `Spooles liberados · IS-${cuadernillo}`;
+  sub.textContent = "Ubicación según la tilde de Recepción en obra: con tilde = EN OBRA; sin tilde = LUMBER.";
+  tbody.innerHTML = '<tr><td colspan="4" class="modal-spooles-liberados-vacio">Cargando detalle...</td></tr>';
+  modal.classList.remove("hidden");
 
   try{
-    if(navigator.clipboard && window.ClipboardItem){
-      const item=new ClipboardItem({
-        "text/plain":new Blob([texto],{type:"text/plain"}),
-        "text/html":new Blob([htmlTabla],{type:"text/html"})
-      });
-      await navigator.clipboard.write([item]);
-    }else{
-      const zona=document.createElement("div");
-      zona.contentEditable="true";
-      zona.style.position="fixed";
-      zona.style.left="-9999px";
-      zona.innerHTML=htmlTabla;
-      document.body.appendChild(zona);
+    const [{data:liberados,error:errorLiberados},{data:localizacion,error:errorLocalizacion}] = await Promise.all([
+      db
+        .from("v_piping_spooles_liberados_detalle")
+        .select("cuadernillo,linea,spool,lotes")
+        .eq("cuadernillo",cuadernillo)
+        .order("linea",{ascending:true})
+        .order("spool",{ascending:true}),
+      db
+        .from("piping_spooles")
+        .select("linea,spool,recepcion_obra")
+    ]);
 
-      const rango=document.createRange();
-      rango.selectNodeContents(zona);
+    if(errorLiberados) throw errorLiberados;
+    if(errorLocalizacion) throw errorLocalizacion;
 
-      const seleccion=window.getSelection();
-      seleccion.removeAllRanges();
-      seleccion.addRange(rango);
-
-      document.execCommand("copy");
-      seleccion.removeAllRanges();
-      zona.remove();
+    const filas = liberados || [];
+    if(!filas.length){
+      tbody.innerHTML = '<tr><td colspan="4" class="modal-spooles-liberados-vacio">No hay spooles liberados para este cuadernillo.</td></tr>';
+      return;
     }
 
-    despachoMsg.textContent=
-      "✓ Tabla copiada. Pegala directamente en el cuerpo del mail.";
+    const claveSpool = (linea,spool) =>
+      String(linea ?? "").trim().toUpperCase() + "||" + String(spool ?? "").trim().toUpperCase();
 
-  }catch(error){
-    console.error(error);
+    const mapaLocalizacion = new Map();
+    for(const s of (localizacion || [])){
+      mapaLocalizacion.set(claveSpool(s.linea,s.spool), !!s.recepcion_obra);
+    }
 
-    try{
-      await navigator.clipboard.writeText(texto);
-      despachoMsg.textContent=
-        "✓ Tabla copiada como texto. Pegala directamente en el mail.";
-    }catch{
-      despachoMsg.textContent=
-        "No se pudo copiar automáticamente. Probá nuevamente desde Chrome o Edge.";
+    tbody.innerHTML = filas.map(x=>{
+      const enObra = mapaLocalizacion.get(claveSpool(x.linea,x.spool)) === true;
+      const ubicacion = enObra ? "EN OBRA" : "LUMBER";
+      const claseUbicacion = enObra ? "obra" : "lumber";
+      const iconoUbicacion = enObra ? "📍" : "🏭";
+
+      return `
+        <tr>
+          <td>${escapar(x.linea || "-")}</td>
+          <td>${escapar(x.spool || "-")}</td>
+          <td>${escapar(x.lotes || "-")}</td>
+          <td><span class="spool-ubicacion-badge ${claseUbicacion}">${iconoUbicacion} ${ubicacion}</span></td>
+        </tr>
+      `;
+    }).join("");
+
+  }catch(err){
+    console.error("No se pudo cargar el detalle de spooles liberados:",err);
+    tbody.innerHTML = '<tr><td colspan="4" class="modal-spooles-liberados-vacio" style="color:#b33a3a">No se pudo leer el detalle o la ubicación de los spooles. Verificá permisos de lectura sobre piping_spooles.</td></tr>';
+  }
+}
+
+function cerrarSpoolesLiberados(event){
+  if(event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById("modalSpoolesLiberados");
+  if(modal) modal.classList.add("hidden");
+}
+
+
+async function cargarIndicadoresAvanceSpooles(){
+  try{
+    const [{data:resumen,error:errorResumen},{data:ultimaCarga,error:errorCarga}] = await Promise.all([
+      db
+        .from("v_piping_spooles_cuadernillo")
+        .select("cuadernillo,total_spooles,spooles_liberados"),
+      db
+        .from("piping_cargas")
+        .select("id")
+        .order("id",{ascending:false})
+        .limit(1)
+        .maybeSingle()
+    ]);
+
+    if(errorResumen) throw errorResumen;
+    if(errorCarga) throw errorCarga;
+
+    const filasResumen = resumen || [];
+    const totalSpooles = filasResumen.reduce((acc,x)=>acc + Number(x.total_spooles || 0),0);
+    const liberadosEnd = filasResumen.reduce((acc,x)=>acc + Number(x.spooles_liberados || 0),0);
+    const pctEnd = totalSpooles > 0 ? (liberadosEnd / totalSpooles) * 100 : 0;
+
+    setTexto("kpiSpoolesEndPct", pipePct(pctEnd));
+    setTexto("kpiSpoolesEndCant", liberadosEnd);
+    setTexto("kpiSpoolesEndTotal", totalSpooles);
+
+    let pintados = 0;
+
+    if(ultimaCarga?.id){
+      const {data:juntas,error:errorJuntas} = await db
+        .from("piping_juntas")
+        .select("linea,spool,fecha_pintura")
+        .eq("carga_id",ultimaCarga.id);
+
+      if(errorJuntas) throw errorJuntas;
+
+      const pintadosUnicos = new Set();
+      for(const x of (juntas || [])){
+        const linea = String(x.linea ?? "").trim();
+        const spool = String(x.spool ?? "").trim();
+        const fechaPintura = String(x.fecha_pintura ?? "").trim();
+        if(!linea || !spool || !fechaPintura) continue;
+        pintadosUnicos.add(linea.toUpperCase()+"|||"+spool.toUpperCase());
+      }
+      pintados = pintadosUnicos.size;
+    }
+
+    const pctPintados = totalSpooles > 0 ? (pintados / totalSpooles) * 100 : 0;
+    setTexto("kpiSpoolesPintadosPct", pipePct(pctPintados));
+    setTexto("kpiSpoolesPintadosCant", pintados);
+    setTexto("kpiSpoolesPintadosTotal", totalSpooles);
+
+  }catch(err){
+    console.error("No se pudieron cargar los indicadores de spooles:",err);
+    [
+      "kpiSpoolesEndPct","kpiSpoolesEndCant","kpiSpoolesEndTotal",
+      "kpiSpoolesPintadosPct","kpiSpoolesPintadosCant","kpiSpoolesPintadosTotal"
+    ].forEach(id=>setTexto(id,"—"));
+  }
+}
+
+async function cargarSpoolesPorCuadernillo(){
+  try{
+    const {data:filas,error} = await db
+      .from("v_piping_spooles_cuadernillo")
+      .select("cuadernillo,total_spooles,spooles_liberados")
+      .order("cuadernillo",{ascending:true});
+
+    if(error) throw error;
+
+    const tbody = document.getElementById("tablaSpoolesCuadernillo");
+    const nota = document.getElementById("notaSpoolesCuadernillo");
+    if(!tbody) return;
+
+    const mapa = new Map((filas || []).map(x=>[
+      normalizarCuadernillo(x.cuadernillo),
+      {
+        total:Number(x.total_spooles || 0),
+        liberados:Number(x.spooles_liberados || 0)
+      }
+    ]));
+
+    tbody.innerHTML = ["001","002","003"].map(codigo=>{
+      const x = mapa.get(codigo) || {total:0,liberados:0};
+      return `
+        <tr>
+          <td><strong>IS-${codigo}</strong></td>
+          <td class="spool-num">${x.total}</td>
+          <td class="spool-num spool-liberado spool-liberado-click"
+              onclick="abrirSpoolesLiberados('${codigo}')"
+              title="Ver líneas, spooles y lotes liberados de IS-${codigo}">${x.liberados}</td>
+        </tr>
+      `;
+    }).join("");
+
+    if(nota){
+      nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para liberación se consideran solo las SW: todas deben tener Lote y todos esos lotes deben tener al menos un RESULTADO AP. Tocá el número de liberados para ver el detalle.";
+    }
+
+  }catch(err){
+    console.error("No se pudo cargar el resumen de spooles por cuadernillo:",err);
+    const tbody = document.getElementById("tablaSpoolesCuadernillo");
+    const nota = document.getElementById("notaSpoolesCuadernillo");
+    if(tbody){
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#b33a3a">No se pudo leer el resumen de spooles. Falta crear o habilitar la vista v_piping_spooles_cuadernillo en Supabase.</td></tr>';
+    }
+    if(nota){
+      nota.textContent = err?.message ? "Detalle: "+err.message : "El resto del dashboard continúa funcionando normalmente.";
     }
   }
 }
 
-/* =====================================================
-   ESTADO DEL SPOOL
-   ===================================================== */
+async function cargarPiping(){
 
-function est(s){
+  const estado=document.getElementById("pipeConexion");
 
- if(s.liberacion_precom)
-  return"Liberado PRECOM";
+  try{
 
- if(s.liberacion_calidad)
-  return"Liberado Calidad";
+    const [
+      {data:resumen,error:errorResumen},
+      {data:rechazos,error:errorRechazos},
+      {data:flujoSpooles,error:errorFlujoSpooles},
+      {data:curvaLumber,error:errorCurvaLumber},
+      {data:cuadernillosLumber,error:errorCuadernillosLumber},
+      {data:curvaObra,error:errorCurvaObra}
+    ] = await Promise.all([
 
- if(s.torque)
-  return"Torque";
+      db
+        .from("v_piping_dashboard")
+        .select("*"),
 
- if(s.montaje)
-  return"Montado";
+      db
+        .from("v_piping_rechazos")
+        .select("*"),
 
- if(s.ph)
-  return"PH realizada";
+      db
+        .from("v_piping_flujo_spooles")
+        .select("*")
+        .order("orden", {ascending:true}),
 
- if(s.recepcion_obra)
-  return"En obra";
+      db
+        .from("v_piping_curva_lumber")
+        .select("*")
+        .order("fecha", {ascending:true}),
 
- if(s.despacho_lumber)
-  return"En tránsito";
+      db
+        .from("v_piping_lumber_cuadernillos")
+        .select("*")
+        .order("cuadernillo", {ascending:true}),
 
- return"En Lumber";
+      db
+        .from("v_piping_curva_obra")
+        .select("*")
+        .order("fecha", {ascending:true})
+
+    ]);
+
+    if(errorResumen) throw errorResumen;
+    if(errorRechazos) throw errorRechazos;
+    if(errorFlujoSpooles) throw errorFlujoSpooles;
+    if(errorCurvaLumber) throw errorCurvaLumber;
+    if(errorCuadernillosLumber) throw errorCuadernillosLumber;
+    if(errorCurvaObra) throw errorCurvaObra;
+
+    // Resumen de spooles por cuadernillo desde la última trazabilidad cargada.
+    // Se carga de forma independiente para no bloquear el resto del dashboard.
+    cargarSpoolesPorCuadernillo();
+    cargarIndicadoresAvanceSpooles();
+
+
+    const flujoConfig = {
+      TOTAL:{nombre:"Spooles totales",ico:"🧩"},
+      DESPACHO_LUMBER:{nombre:"Despacho Lumber",ico:"🚚"},
+      RECEPCION_OBRA:{nombre:"Recepción en obra",ico:"📥"},
+      PH:{nombre:"PH",ico:"🧪"},
+      MONTAJE:{nombre:"Montaje",ico:"🏗️"},
+      TORQUE:{nombre:"Torque",ico:"🔩"},
+      LIBERACION_CALIDAD:{nombre:"Liberación Calidad",ico:"✅"},
+      LIBERACION_PRECOM:{nombre:"Liberación PRECOM",ico:"🏁"}
+    };
+
+    const flujoCont=document.getElementById("pipeFlujoSpooles");
+    const flujoFilas=flujoSpooles || [];
+
+    flujoCont.innerHTML = flujoFilas.length
+      ? flujoFilas.map(x=>{
+          const cfg=flujoConfig[x.etapa] || {nombre:x.etapa,ico:"•"};
+          return `
+            <div class="flujo-card ${x.etapa==="TOTAL" ? "total" : ""}">
+              <div class="ico">${cfg.ico}</div>
+              <small>${escapar(cfg.nombre)}</small>
+              <strong>${Number(x.spooles || 0)}</strong>
+              <div class="unidad">spooles</div>
+              <div class="meta">
+                <div><b>${pipeNum(x.pulgadas)}"</b></div>
+                <div><b>${pipePct(x.porcentaje)}</b> del total</div>
+              </div>
+            </div>
+          `;
+        }).join("")
+      : '<div class="flujo-card"><small>Sin datos de spooles</small><strong>0</strong></div>';
+
+    const isoFilas=cuadernillosLumber || [];
+    pipeCuadernillosLumberActuales = isoFilas;
+
+    // Ejecutadas globales = real Lumber + real Obra
+    let pulgadasEjecutadasLumber = 0;
+    let pulgadasEjecutadasObra = 0;
+
+    const curvaFilas = curvaLumber || [];
+
+    if(curvaFilas.length){
+
+      const hoy = new Date();
+      const hoyISO =
+        hoy.getFullYear() + "-" +
+        String(hoy.getMonth()+1).padStart(2,"0") + "-" +
+        String(hoy.getDate()).padStart(2,"0");
+
+      const filaUltimaTraza = [...curvaFilas]
+        .reverse()
+        .find(x=>x.real_acumulado !== null && x.real_acumulado !== undefined);
+
+      pipeFechaUltimaTrazaLumber = filaUltimaTraza ? String(filaUltimaTraza.fecha) : null;
+
+      const filasPlanHastaHoy = curvaFilas.filter(x=>String(x.fecha) <= hoyISO);
+      const filaPlanHoy = filasPlanHastaHoy.length
+        ? filasPlanHastaHoy[filasPlanHastaHoy.length - 1]
+        : curvaFilas[0];
+
+      if(filaUltimaTraza){
+
+        const planHoy = Number(filaPlanHoy?.plan_acumulado || 0);
+
+        // El real "a hoy" es el último valor disponible de la trazabilidad.
+        const realHoy = Number(filaUltimaTraza.real_acumulado || 0);
+        pulgadasEjecutadasLumber = realHoy;
+
+        // El desvío se mantiene calculado contra la fecha de la última trazabilidad,
+        // para no considerar como cero los días todavía no cargados.
+        const desvioHoy = Number(filaUltimaTraza.desvio_pulgadas || 0);
+        const desvioPctHoy =
+          filaUltimaTraza.desvio_porcentaje === null
+          ? null
+          : Number(filaUltimaTraza.desvio_porcentaje);
+
+        const planUltimaTraza = Number(filaUltimaTraza.plan_acumulado || 0);
+        const realUltimaTraza = Number(filaUltimaTraza.real_acumulado || 0);
+
+        const [fy,fm,fd] = String(filaUltimaTraza.fecha).split("-");
+        const fechaUltimaTrazaCorta = `${fd}/${fm}`;
+
+        setTexto("pipeCurvaPlan", pipeNum(planHoy)+'"');
+        setTexto("pipeCurvaReal", pipeNum(realHoy)+'"');
+
+        setTexto("pipeFechaUltimaTrazaPlan", fechaUltimaTrazaCorta);
+        setTexto("pipeFechaUltimaTrazaReal", fechaUltimaTrazaCorta);
+        setTexto("pipeCurvaPlanUltimaTraza", pipeNum(planUltimaTraza)+'"');
+        setTexto("pipeCurvaRealUltimaTraza", pipeNum(realUltimaTraza)+'"');
+
+        setTexto(
+          "pipeCurvaDesvio",
+          (desvioHoy>0 ? "+" : "") + pipeNum(desvioHoy)+'"'
+        );
+        setTexto(
+          "pipeCurvaDesvioPct",
+          desvioPctHoy === null
+          ? "—"
+          : (desvioPctHoy>0 ? "+" : "") + pipePct(desvioPctHoy)
+        );
+
+        const estadoCurva=document.getElementById("pipeCurvaEstado");
+        const cardDesvio=document.getElementById("pipeCurvaDesvioCard");
+
+        cardDesvio.classList.remove("positivo","negativo");
+
+        if(desvioHoy>0){
+          estadoCurva.textContent="ADELANTADO";
+          estadoCurva.className="curva-estado adelantado";
+          cardDesvio.classList.add("positivo");
+        }else if(desvioHoy<0){
+          estadoCurva.textContent="ATRASADO";
+          estadoCurva.className="curva-estado atrasado";
+          cardDesvio.classList.add("negativo");
+        }else{
+          estadoCurva.textContent="EN LÍNEA";
+          estadoCurva.className="curva-estado linea";
+        }
+      }
+
+      const labels = curvaFilas.map(x=>{
+        const [y,m,d]=String(x.fecha).split("-");
+        return `${d}/${m}`;
+      });
+
+      const datosPlan = curvaFilas.map(x=>Number(x.plan_acumulado || 0));
+
+      const datosReal = curvaFilas.map(x=>
+        x.real_acumulado === null || x.real_acumulado === undefined
+        ? null
+        : Number(x.real_acumulado)
+      );
+
+      const ctx=document.getElementById("pipeCurvaLumber");
+
+      if(pipeCurvaChart){
+        pipeCurvaChart.destroy();
+      }
+
+      pipeCurvaChart = new Chart(ctx,{
+        type:"line",
+        data:{
+          labels,
+          datasets:[
+            {
+              label:'Planificado acumulado (")',
+              data:datosPlan,
+              borderColor:"#2f6fb5",
+              backgroundColor:"rgba(47,111,181,.08)",
+              borderWidth:3,
+              pointRadius:2,
+              pointHoverRadius:5,
+              tension:.28,
+              fill:false
+            },
+            {
+              label:'Real ejecutado acumulado (")',
+              data:datosReal,
+              borderColor:"#179447",
+              backgroundColor:"rgba(23,148,71,.08)",
+              borderWidth:3,
+              pointRadius:3,
+              pointHoverRadius:5,
+              tension:.28,
+              spanGaps:false,
+              fill:false
+            }
+          ]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          interaction:{mode:"index",intersect:false},
+          plugins:{
+            legend:{
+              position:"top",
+              labels:{usePointStyle:true,boxWidth:8,font:{size:11}}
+            },
+            tooltip:{
+              callbacks:{
+                label:function(context){
+                  if(context.raw===null) return null;
+                  return `${context.dataset.label}: ${pipeNum(context.raw)}"`;
+                }
+              }
+            }
+          },
+          scales:{
+            x:{
+              grid:{display:false},
+              ticks:{
+                maxRotation:0,
+                autoSkip:true,
+                maxTicksLimit:12,
+                font:{size:10}
+              }
+            },
+            y:{
+              beginAtZero:true,
+              title:{
+                display:true,
+                text:'Pulgadas acumuladas (")',
+                font:{size:11}
+              },
+              ticks:{callback:value=>pipeNum(value)+'"'},
+              grid:{color:"#edf1f5"}
+            }
+          }
+        }
+      });
+
+    }else{
+
+      setTexto("pipeCurvaPlan","—");
+      setTexto("pipeCurvaReal","—");
+      setTexto("pipeCurvaPlanUltimaTraza","—");
+      setTexto("pipeCurvaRealUltimaTraza","—");
+      setTexto("pipeFechaUltimaTrazaPlan","—");
+      setTexto("pipeFechaUltimaTrazaReal","—");
+      setTexto("pipeCurvaDesvio","—");
+      setTexto("pipeCurvaDesvioPct","—");
+
+      const estadoCurva=document.getElementById("pipeCurvaEstado");
+      estadoCurva.textContent="Sin datos";
+      estadoCurva.className="curva-estado";
+    }
+
+
+    const obraFilas = curvaObra || [];
+
+    if(obraFilas.length){
+
+      const hoyISO = new Date().toLocaleDateString("en-CA");
+      const filasHastaHoy = obraFilas.filter(x=>String(x.fecha) <= hoyISO);
+      const filaHoyObra = filasHastaHoy.length
+        ? filasHastaHoy[filasHastaHoy.length - 1]
+        : null;
+
+      let planHoyObra = 0;
+      let realHoyObra = 0;
+      let desvioHoyObra = 0;
+      let desvioPctObra = null;
+
+      if(filaHoyObra){
+        planHoyObra = Number(filaHoyObra.plan_acumulado || 0);
+        realHoyObra = Number(filaHoyObra.real_acumulado || 0);
+        pulgadasEjecutadasObra = realHoyObra;
+        desvioHoyObra = Number(filaHoyObra.desvio_pulgadas || 0);
+        desvioPctObra =
+          filaHoyObra.desvio_porcentaje === null
+          ? null
+          : Number(filaHoyObra.desvio_porcentaje);
+      }
+
+      setTexto("pipeCurvaObraPlan", pipeNum(planHoyObra)+'"');
+      setTexto("pipeCurvaObraReal", pipeNum(realHoyObra)+'"');
+      setTexto(
+        "pipeCurvaObraDesvio",
+        (desvioHoyObra>0 ? "+" : "") + pipeNum(desvioHoyObra)+'"'
+      );
+      setTexto(
+        "pipeCurvaObraDesvioPct",
+        desvioPctObra === null
+        ? "—"
+        : (desvioPctObra>0 ? "+" : "") + pipePct(desvioPctObra)
+      );
+
+      const estadoObra=document.getElementById("pipeCurvaObraEstado");
+      const cardObraDesvio=document.getElementById("pipeCurvaObraDesvioCard");
+      const cardObraPct=document.getElementById("pipeCurvaObraDesvioPctCard");
+
+      cardObraDesvio.classList.remove("positivo","negativo");
+      cardObraPct.classList.remove("positivo","negativo");
+
+      if(!filaHoyObra || planHoyObra===0){
+        estadoObra.textContent="NO INICIADO";
+        estadoObra.className="curva-estado";
+      }else if(desvioHoyObra>0){
+        estadoObra.textContent="ADELANTADO";
+        estadoObra.className="curva-estado adelantado";
+        cardObraDesvio.classList.add("positivo");
+        cardObraPct.classList.add("positivo");
+      }else if(desvioHoyObra<0){
+        estadoObra.textContent="ATRASADO";
+        estadoObra.className="curva-estado atrasado";
+        cardObraDesvio.classList.add("negativo");
+        cardObraPct.classList.add("negativo");
+      }else{
+        estadoObra.textContent="EN LÍNEA";
+        estadoObra.className="curva-estado linea";
+      }
+
+      const labelsObra = obraFilas.map(x=>{
+        const [y,m,d]=String(x.fecha).split("-");
+        return `${d}/${m}`;
+      });
+
+      const datosPlanObra = obraFilas.map(x=>Number(x.plan_acumulado || 0));
+
+      const datosRealObra = obraFilas.map(x=>
+        x.real_acumulado === null || x.real_acumulado === undefined
+        ? null
+        : Number(x.real_acumulado)
+      );
+
+      const ctxObra=document.getElementById("pipeCurvaObra");
+
+      if(pipeCurvaObraChart){
+        pipeCurvaObraChart.destroy();
+      }
+
+      pipeCurvaObraChart = new Chart(ctxObra,{
+        type:"line",
+        data:{
+          labels:labelsObra,
+          datasets:[
+            {
+              label:'Planificado acumulado (")',
+              data:datosPlanObra,
+              borderColor:"#2f6fb5",
+              backgroundColor:"rgba(47,111,181,.08)",
+              borderWidth:3,
+              pointRadius:2,
+              pointHoverRadius:5,
+              tension:.28,
+              fill:false
+            },
+            {
+              label:'Real montado acumulado (")',
+              data:datosRealObra,
+              borderColor:"#179447",
+              backgroundColor:"rgba(23,148,71,.08)",
+              borderWidth:3,
+              pointRadius:3,
+              pointHoverRadius:5,
+              tension:.28,
+              spanGaps:false,
+              fill:false
+            }
+          ]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          interaction:{mode:"index",intersect:false},
+          plugins:{
+            legend:{
+              position:"top",
+              labels:{usePointStyle:true,boxWidth:8,font:{size:11}}
+            },
+            tooltip:{
+              callbacks:{
+                label:function(context){
+                  if(context.raw===null) return null;
+                  return `${context.dataset.label}: ${pipeNum(context.raw)}"`;
+                }
+              }
+            }
+          },
+          scales:{
+            x:{
+              grid:{display:false},
+              ticks:{
+                maxRotation:0,
+                autoSkip:true,
+                maxTicksLimit:12,
+                font:{size:10}
+              }
+            },
+            y:{
+              beginAtZero:true,
+              title:{
+                display:true,
+                text:'Pulgadas acumuladas (")',
+                font:{size:11}
+              },
+              ticks:{callback:value=>pipeNum(value)+'"'},
+              grid:{color:"#edf1f5"}
+            }
+          }
+        }
+      });
+
+    }else{
+      setTexto("pipeCurvaObraPlan",'0,00"');
+      setTexto("pipeCurvaObraReal",'0,00"');
+      setTexto("pipeCurvaObraDesvio",'0,00"');
+      setTexto("pipeCurvaObraDesvioPct","—");
+
+      const estadoObra=document.getElementById("pipeCurvaObraEstado");
+      estadoObra.textContent="NO INICIADO";
+      estadoObra.className="curva-estado";
+    }
+
+
+    const filas=resumen || [];
+
+    const total=
+      filas.find(x=>x.categoria==="TOTAL_GENERAL");
+
+    const tipos=
+      filas.filter(x=>x.categoria==="TIPO_JUNTA");
+
+    if(total){
+
+      setTexto(
+        "pipeTotalHero",
+        pipeNum(total.pulgadas_a_ejecutar)+'"'
+      );
+
+      setTexto(
+        "pipeJuntasHero",
+        Number(total.juntas || 0)
+      );
+
+      setTexto(
+        "pipeJuntas",
+        Number(total.juntas || 0)
+      );
+
+      setTexto(
+        "pipeTotal",
+        pipeNum(total.pulgadas_a_ejecutar)+'"'
+      );
+
+      const pulgadasLumber = (isoFilas || []).reduce(
+        (suma,x)=>suma + Number(x.pulgadas_planificadas || 0),
+        0
+      );
+
+      const pulgadasTotales = Number(total.pulgadas_a_ejecutar || 0);
+      const pulgadasObra = Math.max(0, pulgadasTotales - pulgadasLumber);
+
+      setTexto(
+        "pipeTotalLumber",
+        pipeNum(pulgadasLumber)+'"'
+      );
+
+      setTexto(
+        "pipeTotalObra",
+        pipeNum(pulgadasObra)+'"'
+      );
+
+      // KPI superior: ejecutadas = Lumber real + Obra real
+      const pulgadasEjecutadasGlobal =
+        Number(pulgadasEjecutadasLumber || 0) +
+        Number(pulgadasEjecutadasObra || 0);
+
+      const pulgadasPendientesGlobal = Math.max(
+        0,
+        pulgadasTotales - pulgadasEjecutadasGlobal
+      );
+
+      const avanceGlobal = pulgadasTotales > 0
+        ? (pulgadasEjecutadasGlobal / pulgadasTotales) * 100
+        : 0;
+
+      setTexto(
+        "pipeEjecutadas",
+        pipeNum(pulgadasEjecutadasGlobal)+'"'
+      );
+
+      setTexto(
+        "pipePendientes",
+        pipeNum(pulgadasPendientesGlobal)+'"'
+      );
+
+      setTexto(
+        "pipeAvance",
+        pipePct(avanceGlobal)
+      );
+
+    }else{
+
+      setTexto("pipeTotalHero","—");
+      setTexto("pipeJuntasHero","—");
+      setTexto("pipeJuntas","—");
+      setTexto("pipeTotal","—");
+      setTexto("pipeTotalLumber","—");
+      setTexto("pipeTotalObra","—");
+      setTexto("pipeEjecutadas","—");
+      setTexto("pipePendientes","—");
+      setTexto("pipeAvance","—");
+
+    }
+
+    const tablaTipos = document.getElementById("pipeTablaTipos");
+
+    if(tablaTipos){
+      tablaTipos.innerHTML=
+        tipos.length
+        ? tipos.map(x=>`
+            <tr>
+              <td><strong>${escapar(x.codigo || "")}</strong></td>
+              <td>${escapar(x.descripcion || "")}</td>
+              <td>${Number(x.juntas || 0)}</td>
+              <td>${pipeNum(x.pulgadas_a_ejecutar)}"</td>
+              <td>${pipeNum(x.pulgadas_ejecutadas)}"</td>
+              <td>${pipeNum(x.pulgadas_pendientes)}"</td>
+              <td><strong>${pipePct(x.avance_porcentaje)}</strong></td>
+            </tr>
+          `).join("")
+        : `
+          <tr>
+            <td colspan="7" style="text-align:center;color:#718096;padding:28px">
+              No hay datos cargados.
+            </td>
+          </tr>
+        `;
+    }
+
+    const listaRechazos=rechazos || [];
+
+    const totalRechazo=
+      listaRechazos.find(x=>x.tipo==="TOTAL");
+
+    const soldadores=
+      listaRechazos
+        .filter(x=>x.tipo==="SOLDADOR")
+        .sort(
+          (a,b)=>
+          Number(b.rechazo_porcentaje ?? -1) -
+          Number(a.rechazo_porcentaje ?? -1)
+        );
+
+    const limite=PIPING_LIMITE_RECHAZO;
+    const limiteTotal=PIPING_LIMITE_RECHAZO_TOTAL;
+
+    document.getElementById("pipeLimiteTexto").textContent=
+      Number.isFinite(limiteTotal)
+      ? pipePct(limiteTotal)
+      : "No definido";
+
+    const limiteGeneral=
+      document.getElementById("pipeRechazoLimite");
+
+    if(Number.isFinite(limiteTotal)){
+
+      limiteGeneral.style.display="block";
+      limiteGeneral.style.left=
+        Math.min(100,Math.max(0,limiteTotal))+"%";
+
+    }else{
+
+      limiteGeneral.style.display="none";
+
+    }
+
+    if(
+      totalRechazo &&
+      totalRechazo.rechazo_porcentaje !== null
+    ){
+
+      const p=
+        Number(totalRechazo.rechazo_porcentaje || 0);
+
+      const inspeccionadas=
+        Number(totalRechazo.juntas_inspeccionadas || 0);
+
+      const rechazadas=
+        Number(totalRechazo.juntas_rechazadas || 0);
+
+      setTexto(
+        "pipeRechazoTotal",
+        pipePct(p)
+      );
+
+      const fill=
+        document.getElementById("pipeRechazoValor");
+
+      fill.style.width=
+        Math.min(100,Math.max(0,p))+"%";
+
+      const fuera=
+        Number.isFinite(limiteTotal) &&
+        p>limiteTotal;
+
+      fill.style.background=
+        fuera ? "#d83c3c" : "#179447";
+
+      const donut=
+        document.getElementById("pipeDonut");
+
+      const grados=
+        Math.min(
+          360,
+          Math.max(0,p*3.6)
+        );
+
+      donut.style.background=
+        `conic-gradient(
+          ${fuera ? "#d83c3c" : "#179447"}
+          0deg ${grados}deg,
+          #e8edf1 ${grados}deg 360deg
+        )`;
+
+      document.getElementById(
+        "pipeRechazoDetalle"
+      ).textContent=
+        `${rechazadas} rechazadas de ${inspeccionadas} juntas inspeccionadas`;
+
+    }else{
+
+      setTexto(
+        "pipeRechazoTotal",
+        "—"
+      );
+
+      document.getElementById(
+        "pipeRechazoValor"
+      ).style.width="0%";
+
+      document.getElementById(
+        "pipeDonut"
+      ).style.background=
+        "conic-gradient(#e8edf1 0deg 360deg)";
+
+      document.getElementById(
+        "pipeRechazoDetalle"
+      ).textContent=
+        "Sin datos de inspección / END con resultado registrado.";
+
+    }
+
+    const ctxSoldadores =
+      document.getElementById("pipeSoldadoresChart");
+
+    if(pipeSoldadoresChart){
+      pipeSoldadoresChart.destroy();
+      pipeSoldadoresChart = null;
+    }
+
+    const soldadoresConDatos =
+      soldadores.filter(
+        x =>
+          x.rechazo_porcentaje !== null &&
+          x.rechazo_porcentaje !== undefined
+      );
+
+    if(ctxSoldadores){
+
+      const nombres =
+        soldadoresConDatos.map(
+          x => String(x.soldador || "-")
+        );
+
+      const porcentajes =
+        soldadoresConDatos.map(
+          x => Number(x.rechazo_porcentaje || 0)
+        );
+
+      const maxValor =
+        porcentajes.length
+        ? Math.max(...porcentajes, limite)
+        : limite;
+
+      const maxEje =
+        Math.max(
+          5,
+          Math.ceil(maxValor + 1)
+        );
+
+      pipeSoldadoresChart =
+        new Chart(
+          ctxSoldadores,
+          {
+            type:"line",
+
+            data:{
+              labels:
+                nombres.length
+                ? nombres
+                : ["Sin datos"],
+
+              datasets:[
+                {
+                  label:"% rechazo por soldador",
+
+                  data:
+                    porcentajes.length
+                    ? porcentajes
+                    : [null],
+
+                  showLine:false,
+
+                  pointRadius:7,
+                  pointHoverRadius:9,
+
+                  pointBackgroundColor:
+                    porcentajes.length
+                    ? porcentajes.map(
+                        p =>
+                          p > limite
+                          ? "#d83c3c"
+                          : "#179447"
+                      )
+                    : ["#9aa7b4"],
+
+                  pointBorderColor:
+                    porcentajes.length
+                    ? porcentajes.map(
+                        p =>
+                          p > limite
+                          ? "#d83c3c"
+                          : "#179447"
+                      )
+                    : ["#9aa7b4"],
+
+                  pointBorderWidth:2
+                },
+
+                {
+                  label:"Límite 3,00%",
+
+                  data:
+                    (nombres.length ? nombres : ["Sin datos"])
+                    .map(
+                      () => limite
+                    ),
+
+                  borderColor:"#d83c3c",
+                  backgroundColor:"transparent",
+                  borderWidth:2,
+                  pointRadius:0,
+                  pointHoverRadius:0,
+                  tension:0,
+                  fill:false
+                }
+              ]
+            },
+
+            options:{
+              responsive:true,
+              maintainAspectRatio:false,
+
+              interaction:{
+                mode:"nearest",
+                intersect:true
+              },
+
+              plugins:{
+                legend:{
+                  position:"top",
+                  labels:{
+                    usePointStyle:true,
+                    boxWidth:8,
+                    font:{size:11}
+                  }
+                },
+
+                tooltip:{
+                  callbacks:{
+                    label:function(context){
+
+                      if(context.datasetIndex===1){
+                        return "Límite: 3,00%";
+                      }
+
+                      if(context.raw===null){
+                        return "Sin datos";
+                      }
+
+                      return "Rechazo: " +
+                        pipePct(context.raw);
+                    }
+                  }
+                }
+              },
+
+              scales:{
+                x:{
+                  title:{
+                    display:true,
+                    text:"Soldadores",
+                    font:{size:11}
+                  },
+
+                  grid:{
+                    display:false
+                  },
+
+                  ticks:{
+                    autoSkip:false,
+                    maxRotation:0,
+                    minRotation:0,
+                    font:{size:10}
+                  }
+                },
+
+                y:{
+                  beginAtZero:true,
+                  min:0,
+                  max:maxEje,
+
+                  title:{
+                    display:true,
+                    text:"% de rechazo",
+                    font:{size:11}
+                  },
+
+                  ticks:{
+                    stepSize:1,
+                    callback:
+                      value => value + "%"
+                  },
+
+                  grid:{
+                    color:"#edf1f5"
+                  }
+                }
+              }
+            }
+          }
+        );
+    }
+
+    estado.textContent=
+      "● Datos de Piping actualizados automáticamente";
+
+    estado.className=
+      "conexion ok";
+
+  }catch(err){
+
+    console.error(err);
+
+    estado.textContent=
+      "❌ No se pudieron actualizar los datos de Piping";
+
+    estado.className=
+      "conexion error";
+
+  }
 
 }
 
-
-/* =====================================================
-   FILTRO MANUAL DE ESTADO
-   ===================================================== */
-
-function matchEstado(s,f){
-
- if(!f)
-  return true;
-
- if(f==="sin_despachar")
-  return !s.despacho_lumber;
-
- if(f==="en_transito")
-  return s.despacho_lumber &&
-         !s.recepcion_obra;
-
- if(f==="en_obra")
-  return s.recepcion_obra &&
-         !s.ph;
-
- if(f==="ph")
-  return s.ph &&
-         !s.montaje;
-
- if(f==="montaje")
-  return s.montaje &&
-         !s.torque;
-
- if(f==="torque")
-  return s.torque &&
-         !s.liberacion_calidad;
-
- if(f==="calidad")
-  return s.liberacion_calidad &&
-         !s.liberacion_precom;
-
- if(f==="precom")
-  return s.liberacion_precom;
-
- return true;
-
-}
-
-
-/* =====================================================
-   ETAPA PRINCIPAL DEL USUARIO
-
-   Se busca la primera etapa desde Recepción obra en
-   adelante para la que el usuario tiene permiso.
-   ===================================================== */
-
-function etapaUsuario(){
-
- /*
- Jorge Soto es quien realiza la primera etapa:
- Despacho Lumber. Aunque tenga permisos adicionales,
- su vista principal es Despacho Lumber.
- */
- if(usuarioEmail==="jorgefelipe.soto@pecomenergia.com.ar")
-  return"despacho_lumber";
-
- if(puede("recepcion_obra"))
-  return"recepcion_obra";
-
- if(puede("ph"))
-  return"ph";
-
- if(puede("montaje"))
-  return"montaje";
-
- if(puede("torque"))
-  return"torque";
-
- if(puede("liberacion_calidad"))
-  return"liberacion_calidad";
-
- if(puede("liberacion_precom"))
-  return"liberacion_precom";
-
- /*
- Si en el futuro se agrega otro usuario que solamente
- despacha desde Lumber, también tendrá esta vista.
- */
- if(puede("despacho_lumber"))
-  return"despacho_lumber";
-
- return"";
-
-}
-
-
-/* =====================================================
-   FILTRO AUTOMÁTICO · SOLO TRABAJO PENDIENTE DE MI ETAPA
-
-   Vista automática:
-   - La etapa anterior debe estar completada.
-   - Mi propia etapa todavía debe estar pendiente.
-   - "Mostrar todos los spooles" anula este filtro.
-
-   Excepción de la primera etapa:
-   - Despacho Lumber no tiene etapa anterior.
-   - Muestra únicamente los spooles todavía sin despachar.
-   ===================================================== */
-
-function habilitadoParaUsuario(s){
-
- if(mostrarTodos)
-  return true;
-
- const etapa=etapaUsuario();
-
- /*
- DESPACHO LUMBER:
- primera etapa → solamente pendientes de despacho.
- */
- if(etapa==="despacho_lumber")
-  return !s.despacho_lumber;
-
- /*
- RECEPCIÓN EN OBRA:
- despachado desde Lumber + todavía no recibido.
- */
- if(etapa==="recepcion_obra")
-  return !!s.despacho_lumber &&
-         !s.recepcion_obra;
-
- /*
- PH:
- recibido en obra + PH todavía pendiente.
- */
- if(etapa==="ph")
-  return !!s.recepcion_obra &&
-         !s.ph;
-
- /*
- MONTAJE:
- recibido en obra + montaje todavía pendiente.
- PH y Montaje se habilitan ambos desde Recepción en obra.
- */
- if(etapa==="montaje")
-  return !!s.recepcion_obra &&
-         !s.montaje;
-
- /*
- TORQUE:
- montado + torque todavía pendiente.
- */
- if(etapa==="torque")
-  return !!s.montaje &&
-         !s.torque;
-
- /*
- LIBERACIÓN CALIDAD:
- torque realizado + liberación todavía pendiente.
- */
- if(etapa==="liberacion_calidad")
-  return !!s.torque &&
-         !s.liberacion_calidad;
-
- /*
- LIBERACIÓN PRECOM:
- Calidad liberada + PRECOM todavía pendiente.
- */
- if(etapa==="liberacion_precom")
-  return !!s.liberacion_calidad &&
-         !s.liberacion_precom;
-
- return true;
-
-}
-
-
-/* =====================================================
-   DESCRIPCIÓN DEL FILTRO AUTOMÁTICO
-   ===================================================== */
-
-function textoFiltro(){
-
- if(mostrarTodos)
-  return"Mostrando todos los spooles.";
-
- const etapa=etapaUsuario();
-
- if(etapa==="despacho_lumber")
-  return(
-   "Vista automática: se muestran solamente los spooles " +
-   "pendientes de Despacho Lumber."
-  );
-
- if(etapa==="recepcion_obra")
-  return(
-   "Vista automática: se muestran solamente spooles con " +
-   "Despacho Lumber y pendientes de Recepción en obra."
-  );
-
- if(etapa==="ph")
-  return(
-   "Vista automática: se muestran solamente spooles recibidos " +
-   "en obra y pendientes de PH."
-  );
-
- if(etapa==="montaje")
-  return(
-   "Vista automática: se muestran solamente spooles recibidos " +
-   "en obra y pendientes de Montaje."
-  );
-
- if(etapa==="torque")
-  return(
-   "Vista automática: se muestran solamente spooles montados " +
-   "y pendientes de Torque."
-  );
-
- if(etapa==="liberacion_calidad")
-  return(
-   "Vista automática: se muestran solamente spooles con Torque " +
-   "y pendientes de Liberación Calidad."
-  );
-
- if(etapa==="liberacion_precom")
-  return(
-   "Vista automática: se muestran solamente spooles liberados " +
-   "por Calidad y pendientes de Liberación PRECOM."
-  );
-
- return"Mostrando todos los spooles.";
-
-}
-
-
-/* =====================================================
-   ACTUALIZAR BOTÓN DE VISTA
-   ===================================================== */
-
-function actualizarBotonVista(){
-
- const etapa=etapaUsuario();
-
- if(!etapa){
-
-  btnVista.style.display="none";
-
-  infoFiltro.textContent=
-  "Mostrando todos los spooles.";
-
-  return;
-
- }
-
- btnVista.style.display="";
-
- if(mostrarTodos){
-
-  btnVista.textContent=
-  "Ver solo pendientes de mi etapa";
-
-  btnVista.classList.add("todos");
-
- }else{
-
-  btnVista.textContent=
-  "Mostrar todos los spooles";
-
-  btnVista.classList.remove("todos");
-
- }
-
- infoFiltro.textContent=
- textoFiltro();
-
-}
-
-
-/* =====================================================
-   REGLAS DE FLUJO
-   ===================================================== */
-
-function ant(s,e){
-
- if(e==="despacho_lumber")
-  return true;
-
- if(e==="recepcion_obra")
-  return !!s.despacho_lumber;
-
- if(
-  e==="ph" ||
-  e==="montaje"
- )
-  return !!s.recepcion_obra;
-
- if(e==="torque")
-  return !!s.montaje;
-
- if(e==="liberacion_calidad")
-  return !!s.torque;
-
- if(e==="liberacion_precom")
-  return !!s.liberacion_calidad;
-
- return true;
-
-}
-
-
-/*
- Evita destildar una etapa si ya existe
- una etapa posterior.
-*/
-
-function sig(s,e){
-
- if(e==="despacho_lumber")
-  return !!s.recepcion_obra;
-
- if(e==="recepcion_obra")
-  return !!s.ph ||
-         !!s.montaje;
-
- if(e==="ph")
-  return false;
-
- if(e==="montaje")
-  return !!s.torque;
-
- if(e==="torque")
-  return !!s.liberacion_calidad;
-
- if(e==="liberacion_calidad")
-  return !!s.liberacion_precom;
-
- return false;
-
-}
-
-
-/* =====================================================
-   SESIÓN
-   ===================================================== */
-
-async function verificar(){
-
- const {
-  data:{session}
- }=
- await db.auth.getSession();
-
-
- if(!session){
-
-  usuarioEmail="";
-
-  contenido.style.display=
-  "none";
-
-  btnLogin.style.display=
-  "";
-
-  btnLogout.style.display=
-  "none";
-
-  sessionStatus.textContent=
-  "Iniciá sesión para ver y actualizar los spooles.";
-
-  sessionStatus.className=
-  "status";
-
-  return;
-
- }
-
-
- usuarioEmail=
- norm(session.user.email);
-
-
- email.value=
- session.user.email||"";
-
-
- btnLogin.style.display=
- "none";
-
-
- btnLogout.style.display=
- "";
-
-
- contenido.style.display=
- "";
-
-
- /*
- Cada vez que inicia sesión:
- vuelve a la vista automática.
- */
-
- mostrarTodos=false;
-
-
- sessionStatus.textContent=
- "● Sesión activa: "+usuarioEmail;
-
-
- sessionStatus.className=
- "status ok";
-
-
- actualizarBotonVista();
-
-
- await cargar();
-
-}
-
-
-/* =====================================================
-   LOGIN
-   ===================================================== */
-
-async function login(){
-
- sessionStatus.textContent=
- "Ingresando...";
-
-
- const {error}=
- await db.auth.signInWithPassword({
-
-  email:
-  norm(email.value),
-
-  password:
-  password.value
-
- });
-
-
- if(error){
-
-  sessionStatus.textContent=
-  "❌ "+error.message;
-
-  sessionStatus.className=
-  "status err";
-
-  return;
-
- }
-
-
- password.value="";
-
-
- await verificar();
-
-}
-
-
-/* =====================================================
-   LOGOUT
-   ===================================================== */
-
-async function logout(){
-
- await db.auth.signOut();
-
- spooles=[];
-
- mostrarTodos=false;
-
- render();
-
- await verificar();
-
-}
-
-
-/* =====================================================
-   CARGAR SPOOLES
-   ===================================================== */
-
-async function cargar(){
-
- sessionStatus.textContent=
- "Cargando spooles...";
-
-
- const {
-  data,
-  error
- }=
- await db
- .from("piping_spooles")
- .select("*")
- .order(
-  "linea",
-  {ascending:true}
- )
- .order(
-  "spool",
-  {ascending:true}
- );
-
-
- if(error){
-
-  sessionStatus.textContent=
-  "❌ No se pudieron cargar los spooles: "+
-  error.message;
-
-  sessionStatus.className=
-  "status err";
-
-  return;
-
- }
-
-
- spooles=
- data||[];
-
-
- render();
-
-
- sessionStatus.textContent=
- "● Sesión activa: "+
- usuarioEmail+
- " · "+
- spooles.length+
- " spooles";
-
-
- sessionStatus.className=
- "status ok";
-
-}
-
-
-/* =====================================================
-   CELDA CHECKBOX
-   ===================================================== */
-
-function celda(s,e){
-
- const ch=
- !!s[e];
-
-
- let dis=
-
- !puede(e)
-
- ||
-
- (!ch && !ant(s,e))
-
- ||
-
- (ch && sig(s,e));
-
-
- const f=
- s[e+"_fecha"];
-
-
- const u=
- s[e+"_usuario"];
-
-
- return`
-
- <td class="stage">
-
- <div class="check-wrap">
-
- <input
- type="checkbox"
-
- ${ch?"checked":""}
-
- ${dis?"disabled":""}
-
- onchange="
- cambiar(
-  ${s.id},
-  '${e}',
-  this.checked,
-  this
- )
- "
- >
-
- ${
- ch
- ?
- `
- <div
- class="mini"
- title="${esc(u||"")}"
- >
- ${esc(corto(u))}
- </div>
-
- <div class="mini">
- ${esc(fmt(f))}
- </div>
- `
- :
- ""
- }
-
- </div>
-
- </td>
-
- `;
-
-}
-
-
-/* =====================================================
-   CAMBIAR ETAPA
-   ===================================================== */
-
-async function cambiar(
- id,
- e,
- v,
- cb
-){
-
- cb.disabled=true;
-
-
- const {error}=
- await db
- .from("piping_spooles")
- .update({
-  [e]:v
- })
- .eq(
-  "id",
-  id
- );
-
-
- if(error){
-
-  alert(
-   error.message
-  );
-
-  cb.checked=
-  !v;
-
- }
-
-
- if(!error && e==="despacho_lumber"){
-  if(v) agregarAlDespachoActual(id);
-  else quitarDelDespachoActual(id);
- }
-
- await cargar();
-
-}
-
-
-/* =====================================================
-   RENDER
-   ===================================================== */
-
-function render(){
-
- if(!document.getElementById("tbody"))
-  return;
-
-
- const q=
- buscar.value
- .trim()
- .toLowerCase();
-
-
- const fe=
- filtroEstado.value;
-
-
- /*
- Primero aplicamos:
- 1. vista automática según permiso
- 2. búsqueda
- 3. filtro manual de estado
- */
-
- const fs=
- spooles.filter(s=>{
-
-
-  if(
-   !habilitadoParaUsuario(s)
-  )
-   return false;
-
-
-  const t=
-  `${
-   s.linea||""
-  } ${
-   s.spool||""
-  } ${
-   s.sistema||""
-  } ${
-   s.subsistema||""
-  }`
-  .toLowerCase();
-
-
-  return(
-
-   (!q || t.includes(q))
-
-   &&
-
-   matchEstado(s,fe)
-
-  );
-
- });
-
-
- tbody.innerHTML=
- fs.map(s=>`
-
- <tr>
-
- <td class="left">
- ${esc(s.sistema||"")}
- </td>
-
- <td class="left">
- ${esc(s.subsistema||"")}
- </td>
-
- <td class="left">
- ${esc(s.linea||"")}
- </td>
-
- <td class="left spool">
- ${esc(s.spool||"")}
- </td>
-
- ${celda(
-  s,
-  "despacho_lumber"
- )}
-
- ${celda(
-  s,
-  "recepcion_obra"
- )}
-
- ${celda(
-  s,
-  "ph"
- )}
-
- ${celda(
-  s,
-  "montaje"
- )}
-
- ${celda(
-  s,
-  "torque"
- )}
-
- ${celda(
-  s,
-  "liberacion_calidad"
- )}
-
- ${celda(
-  s,
-  "liberacion_precom"
- )}
-
- <td>
-
- <span
- class="estado ${
- s.liberacion_precom
- ?"fin"
- :""
- }"
- >
-
- ${esc(est(s))}
-
- </span>
-
- </td>
-
- </tr>
-
- `).join("");
-
-
- empty.style.display=
- fs.length
- ?"none"
- :"";
-
-
- /*
- Los KPI siguen mostrando el TOTAL REAL
- de la base, no solamente lo filtrado.
- */
-
- kpiTotal.textContent=
- spooles.length;
-
-
- kpiLumber.textContent=
- spooles.filter(
-  s=>!s.despacho_lumber
- ).length;
-
-
- kpiObra.textContent=
- spooles.filter(
-  s=>s.recepcion_obra
- ).length;
-
-
- kpiPrecom.textContent=
- spooles.filter(
-  s=>s.liberacion_precom
- ).length;
-
-
- actualizarBotonVista();
-
- actualizarHerramientasDespacho();
-
-}
-
-
-/* =====================================================
-   EVENTOS
-   ===================================================== */
-
-btnLogin.addEventListener(
- "click",
- login
+cargarPiping();
+
+setInterval(
+  cargarPiping,
+  60000
 );
-
-
-btnLogout.addEventListener(
- "click",
- logout
-);
-
-
-btnActualizar.addEventListener(
- "click",
- cargar
-);
-
-
-buscar.addEventListener(
- "input",
- render
-);
-
-
-filtroEstado.addEventListener(
- "change",
- render
-);
-
-
-btnCopiarDespacho.addEventListener(
- "click",
- copiarTablaDespacho
-);
-
-
-btnLimpiarDespacho.addEventListener(
- "click",
- limpiarDespachoActual
-);
-
-
-btnVista.addEventListener(
- "click",
- ()=>{
-
-  mostrarTodos=
-  !mostrarTodos;
-
-  render();
-
- }
-);
-
-
-password.addEventListener(
- "keydown",
- e=>{
-
-  if(e.key==="Enter")
-   login();
-
- }
-);
-
-
-/* =====================================================
-   INICIO
-   ===================================================== */
-
-verificar();
-
 </script>
 
 </body>
