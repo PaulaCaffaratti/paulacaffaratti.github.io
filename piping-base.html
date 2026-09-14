@@ -59,117 +59,6 @@ td{padding:9px 10px;border-bottom:1px solid #e8edf1;vertical-align:top;white-spa
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
 @media(max-width:850px){.sidebar{position:relative;width:100%}.main{margin-left:0}}
 @media(max-width:700px){.contenido{padding:14px}.kpis{grid-template-columns:repeat(2,1fr)}}
-
-/* =========================================================
-   SISTEMA VISUAL UNIFICADO · EJECUTIVO LIMPIO
-   ========================================================= */
-:root{
- --ui-navy:#123451;--ui-ink:#19344d;--ui-text:#42596d;--ui-muted:#7c8d9e;
- --ui-bg:#f7f9fb;--ui-line:#e4eaf0;--ui-line2:#d6e0e8;
- --ui-green:#287b54;--ui-blue:#3976a5;--ui-orange:#bd7b27;
- --ui-purple:#6f5aaa;--ui-red:#b44a4a;
-}
-html,body{
- font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif!important;
- font-weight:400!important;letter-spacing:0!important;background:var(--ui-bg)!important;color:var(--ui-text)!important;
- -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-}
-*{box-sizing:border-box}
-h1,h2,h3,h4{font-family:inherit!important;color:var(--ui-ink)!important;letter-spacing:-.015em!important}
-h1{font-weight:600!important} h2,h3,h4{font-weight:600!important}
-button,input,select,textarea{font-family:inherit!important}
-input,select,textarea{
- border:1px solid var(--ui-line2)!important;border-radius:7px!important;background:#fff!important;color:var(--ui-ink)!important;
-}
-input:focus,select:focus,textarea:focus{
- outline:none!important;border-color:#9db6ca!important;box-shadow:0 0 0 3px rgba(57,118,165,.07)!important;
-}
-button,.boton,.btn,.btnAzul,.btnVerde,.btnGris,.btn-primary,.btn-secondary,.btn-toggle{
- font-family:inherit!important;font-weight:500!important;letter-spacing:0!important;border-radius:7px!important;box-shadow:none!important;
-}
-.panel,.card,.curva-panel,.flujo-spooles,.matrizResumenUnificado{
- box-shadow:none!important;border-color:var(--ui-line)!important;
-}
-th{font-family:inherit!important;font-weight:600!important;letter-spacing:.02em!important;text-transform:none!important}
-td{font-weight:400!important}
-
-/* BARRA LATERAL: idéntica en TODAS las páginas */
-.sidebar{
- position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:214px!important;
- background:#123451!important;color:#fff!important;padding:28px 14px 20px!important;overflow-y:auto!important;z-index:100!important;
-}
-.logo{
- font-size:15px!important;line-height:1.45!important;font-weight:600!important;letter-spacing:0!important;
- color:#fff!important;margin:0 4px 30px!important;
-}
-.modulo-titulo,.sidebar .modulo-titulo{
- margin:22px 4px 8px!important;font-size:10px!important;line-height:1.2!important;font-weight:500!important;
- letter-spacing:.06em!important;color:#91a9bd!important;text-transform:uppercase!important;
-}
-.sidebar a{
- display:block!important;text-decoration:none!important;color:#e1e9f0!important;background:transparent!important;
- padding:10px 9px!important;margin:0 0 4px!important;border-radius:7px!important;
- font-size:11px!important;line-height:1.35!important;font-weight:400!important;letter-spacing:0!important;
-}
-.sidebar a:hover,.sidebar a.activo,.sidebar a.active{
- background:#fff!important;color:#123451!important;
-}
-
-/* CONTENIDO */
-.main{margin-left:214px!important;min-height:100vh!important}
-.topbar{
- min-height:52px!important;padding:0 26px!important;background:#fff!important;border-bottom:1px solid var(--ui-line)!important;
- display:flex!important;align-items:center!important;
-}
-.topbar strong{font-size:12px!important;font-weight:500!important;color:#6d8093!important}
-.contenido{padding:22px 26px 30px!important;max-width:1460px!important;margin:auto!important}
-.contenido>h1,.hero h1,.matrizHero h1{
- font-size:26px!important;font-weight:600!important;line-height:1.15!important;margin-bottom:5px!important;
-}
-.subtitulo,.hero p,.matrizHero p,.subtitle{font-size:12px!important;font-weight:400!important;color:var(--ui-muted)!important}
-.panel,.card{border-radius:11px!important}
-.panel h2,.card h2,.curva-panel h2,.flujo-spooles h2{font-size:15px!important;font-weight:600!important}
-.kpi small,.kpi .label,.matrizKpi small,.flujo-card small{
- font-weight:500!important;text-transform:none!important;letter-spacing:.01em!important;
-}
-.kpi strong,.kpi .value,.matrizKpi strong,.flujo-card strong{font-weight:600!important;letter-spacing:-.02em!important}
-.estado,.status,.usuario,.nota,.info{font-weight:400!important}
-table{font-variant-numeric:tabular-nums}
-table th{background:#f8fafc!important;color:#687d91!important}
-table td{color:#344d64!important}
-
-/* 14" */
-@media(min-width:851px) and (max-width:1300px){
- .sidebar{width:194px!important;padding-left:12px!important;padding-right:12px!important}
- .main{margin-left:194px!important}
- .contenido{padding:17px 18px 24px!important}
- .sidebar a{font-size:10px!important;padding:9px 8px!important}
-}
-@media(max-width:850px){
- .sidebar{position:relative!important;width:100%!important;bottom:auto!important}
- .main{margin-left:0!important}
- .contenido{padding:14px!important}
-}
-
-.total-principal{border-radius:11px!important}
-.total-pulgadas-numero{font-weight:600!important;letter-spacing:-.025em!important}
-.flujo-card{border-radius:9px!important}
-.flujo-card small{font-size:9px!important}
-.flujo-card strong{font-size:23px!important}
-.kpi{border-radius:9px!important}
-.kpi small{font-size:9px!important}
-.kpi strong{font-size:24px!important}
-.curva-kpi small{font-weight:500!important;text-transform:none!important}
-.curva-kpi strong{font-weight:600!important}
-
-.formulario,.fila,.login-box,.login,.archivo,.controls{gap:8px!important}
-.campo label,.field label,.buscador label{font-size:10px!important;font-weight:500!important;color:#718498!important}
-input,select{font-size:11px!important}
-.contador,.kpis{gap:8px!important}
-.card strong,.kpi strong{font-weight:600!important}
-table{font-size:11px!important}
-th,td{padding:8px 9px!important}
-
 </style>
 </head>
 
@@ -181,16 +70,12 @@ th,td{padding:8px 9px!important}
   <div class="modulo-titulo">PREMOLDEADOS</div>
   <a href="index.html">📊 RESUMEN</a>
   <a href="base.html">📋 BASE DE INGENIERÍA</a>
-  <a href="avance.html">📍 LOCALIZACIÓN DE<br>PREMOLDEADOS</a>
+  <a href="avance.html">📍 LOCALIZACIÓN DE PREMOLDEADOS</a>
 
   <div class="modulo-titulo">PIPING</div>
   <a href="piping.html">📊 RESUMEN</a>
-  <a href="piping-base.html" class="activo">📋 BASE DE INGENIERÍA /<br>TRAZABILIDAD</a>
-  <a href="spooles.html">📍 LOCALIZACIÓN DE<br>SPOOLES</a>
-
-  <div class="modulo-titulo">CALIDAD</div>
-  <a href="calidad.html">✅ MATRIZ DE CALIDAD</a>
-  <a href="calidad-base.html">📤 BASE DE MATRIZ</a>
+  <a href="piping-base.html" class="activo">📋 BASE DE INGENIERÍA / TRAZABILIDAD</a>
+  <a href="spooles.html">📍 LOCALIZACIÓN DE SPOOLES</a>
 </aside>
 
 <div class="main">
@@ -448,6 +333,144 @@ function valor(ws,r,c){
   return ws[ref] ? ws[ref].v : null;
 }
 
+/* =========================================================
+   LECTURA DE TRAZABILIDAD POR NOMBRE DE ENCABEZADO
+   - Ya no depende de la posición de las columnas.
+   - Tolera mayúsculas/minúsculas, tildes, espacios y signos.
+   - Si se reordenan las columnas, la carga sigue funcionando.
+   ========================================================= */
+function normalizarEncabezado(v){
+  return String(v ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .replace(/[%°º]/g," porcentaje ")
+    .replace(/[Øø]/g," diametro ")
+    .replace(/[^a-z0-9]+/g," ")
+    .trim()
+    .replace(/\s+/g," ");
+}
+
+const CAMPOS_TRAZABILIDAD = {
+  sistema:["sistema"],
+  subsistema:["subsistema"],
+  cuadernillo:["cuadernillo","cuadernillo isometrico","isometrico"],
+  linea:["linea","linea piping"],
+  hoja:["hoja"],
+  revision:["revision","rev"],
+  diametro:["diametro","diametro 1","dn"],
+  sch:["sch","schedule"],
+  espesor:["espesor","espesor 1"],
+  piping_class:["piping class","clase piping","class"],
+  junta_numero:["junta","numero junta","n junta","junta numero"],
+  spool:["spool","spool numero","numero spool"],
+  tipo_junta:["tipo","tipo junta","tipo de junta"],
+  diseno_junta:["diseno","diseno junta","diseño junta"],
+  diametro_2:["diametro 2","diametro2","dn 2"],
+  sch_2:["sch 2","sch2","schedule 2"],
+  espesor_2:["espesor 2","espesor2"],
+  ubicacion_estado:["ubicacion estado","ubicacion/estado","estado ubicacion"],
+  numero_serie:["numero serie","n serie","serie"],
+  eps:["eps"],
+  aporte:["aporte","material aporte"],
+  soldador_raiz:["soldador raiz","soldador de raiz"],
+  soldador_relleno:["soldador relleno","soldador de relleno"],
+  fecha_soldadura:["fecha soldadura","fecha de soldadura"],
+  codigo_construccion:["codigo construccion","codigo de construccion"],
+  material_1:["material 1","material1"],
+  grado_material_1:["grado material 1","grado 1"],
+  colada_1:["colada 1","colada1"],
+  material_2:["material 2","material2"],
+  grado_material_2:["grado material 2","grado 2"],
+  colada_2:["colada 2","colada2"],
+  iv:["iv"],
+  porcentaje_end:["porcentaje end","% end","end porcentaje"],
+  lote:["lote","lote end"],
+  libera:["libera","liberacion","liberado"],
+  ubicacion_ensayo:["ubicacion ensayo","ubicacion de ensayo"],
+  fecha_ensayo_1:["fecha ensayo 1","fecha de ensayo 1"],
+  informe_1:["informe 1","informe1"],
+  fecha_ensayo_2:["fecha ensayo 2","fecha de ensayo 2"],
+  resultado_1:["resultado 1","resultado1"],
+  informe_2:["informe 2","informe2"],
+  fecha_ensayo_3:["fecha ensayo 3","fecha de ensayo 3"],
+  resultado_2:["resultado 2","resultado2"],
+  observaciones:["observaciones","observacion"],
+  sistema_color:["sistema color","sistema de color"],
+  fecha_ph:["fecha ph","fecha de ph","ph fecha"],
+  fecha_pintura:["fecha pintura","fecha de pintura","pintura fecha"],
+  ot:["ot","orden trabajo","orden de trabajo"]
+};
+
+function detectarFilaEncabezados(ws){
+  const range=XLSX.utils.decode_range(ws["!ref"] || "A1:A1");
+  const maxFila=Math.min(range.e.r+1,25);
+  const maxCol=range.e.c+1;
+
+  const aliasNormalizados={};
+  for(const [campo,aliases] of Object.entries(CAMPOS_TRAZABILIDAD)){
+    aliasNormalizados[campo]=aliases.map(normalizarEncabezado);
+  }
+
+  let mejorFila=null;
+  let mejorPuntaje=-1;
+
+  for(let r=1;r<=maxFila;r++){
+    const presentes=new Set();
+
+    for(let c=1;c<=maxCol;c++){
+      const encabezado=normalizarEncabezado(valor(ws,r,c));
+      if(!encabezado) continue;
+
+      for(const [campo,aliases] of Object.entries(aliasNormalizados)){
+        if(aliases.includes(encabezado)) presentes.add(campo);
+      }
+    }
+
+    let puntaje=presentes.size;
+    if(presentes.has("linea")) puntaje+=3;
+    if(presentes.has("spool")) puntaje+=3;
+    if(presentes.has("tipo_junta")) puntaje+=2;
+    if(presentes.has("junta_numero")) puntaje+=2;
+
+    if(puntaje>mejorPuntaje){
+      mejorPuntaje=puntaje;
+      mejorFila=r;
+    }
+  }
+
+  if(!mejorFila || mejorPuntaje<8){
+    throw new Error("No pude identificar la fila de encabezados de la trazabilidad.");
+  }
+
+  return mejorFila;
+}
+
+function crearMapaEncabezados(ws,filaEncabezados){
+  const range=XLSX.utils.decode_range(ws["!ref"] || "A1:A1");
+  const mapa={};
+
+  const aliasACampo=new Map();
+  for(const [campo,aliases] of Object.entries(CAMPOS_TRAZABILIDAD)){
+    for(const alias of aliases){
+      aliasACampo.set(normalizarEncabezado(alias),campo);
+    }
+  }
+
+  for(let c=1;c<=range.e.c+1;c++){
+    const encabezado=normalizarEncabezado(valor(ws,filaEncabezados,c));
+    const campo=aliasACampo.get(encabezado);
+    if(campo && !mapa[campo]) mapa[campo]=c;
+  }
+
+  return mapa;
+}
+
+function valorCampo(ws,r,mapa,campo){
+  const c=mapa[campo];
+  return c ? valor(ws,r,c) : null;
+}
+
 function pct(v){
   return (Number(v||0)*100).toFixed(2).replace(".",",")+"%";
 }
@@ -479,64 +502,81 @@ async function analizarExcel(){
 
     juntas=[];
 
-    const range=XLSX.utils.decode_range(ws["!ref"] || "A1:AV1");
+    const range=XLSX.utils.decode_range(ws["!ref"] || "A1:A1");
+    const filaEncabezados=detectarFilaEncabezados(ws);
+    const mapa=crearMapaEncabezados(ws,filaEncabezados);
 
-    for(let r=11;r<=range.e.r+1;r++){
-      const linea=txt(valor(ws,r,4));
-      const juntaNumero=txt(valor(ws,r,11));
-      const tipo=txt(valor(ws,r,13)).toUpperCase();
+    const obligatorios=[
+      ["linea","Línea"],
+      ["spool","Spool"],
+      ["tipo_junta","Tipo junta"]
+    ];
 
-      if(!linea && !juntaNumero && !tipo) continue;
+    const faltantes=obligatorios
+      .filter(([campo])=>!mapa[campo])
+      .map(([,nombre])=>nombre);
+
+    if(faltantes.length){
+      throw new Error("Faltan encabezados obligatorios en la trazabilidad: "+faltantes.join(", "));
+    }
+
+    for(let r=filaEncabezados+1;r<=range.e.r+1;r++){
+      const linea=txt(valorCampo(ws,r,mapa,"linea"));
+      const juntaNumero=txt(valorCampo(ws,r,mapa,"junta_numero"));
+      const tipo=txt(valorCampo(ws,r,mapa,"tipo_junta")).toUpperCase();
+      const spool=txt(valorCampo(ws,r,mapa,"spool"));
+
+      if(!linea && !juntaNumero && !tipo && !spool) continue;
 
       juntas.push({
-        sistema:txt(valor(ws,r,1)) || null,
-        subsistema:txt(valor(ws,r,2)) || null,
-        cuadernillo:txt(valor(ws,r,3)) || null,
+        sistema:txt(valorCampo(ws,r,mapa,"sistema")) || null,
+        subsistema:txt(valorCampo(ws,r,mapa,"subsistema")) || null,
+        cuadernillo:txt(valorCampo(ws,r,mapa,"cuadernillo")) || null,
         linea:linea || null,
-        hoja:txt(valor(ws,r,5)) || null,
-        revision:txt(valor(ws,r,6)) || null,
-        diametro:num(valor(ws,r,7)),
-        sch:txt(valor(ws,r,8)) || null,
-        espesor:num(valor(ws,r,9)),
-        piping_class:txt(valor(ws,r,10)) || null,
+        hoja:txt(valorCampo(ws,r,mapa,"hoja")) || null,
+        revision:txt(valorCampo(ws,r,mapa,"revision")) || null,
+        diametro:num(valorCampo(ws,r,mapa,"diametro")),
+        sch:txt(valorCampo(ws,r,mapa,"sch")) || null,
+        espesor:num(valorCampo(ws,r,mapa,"espesor")),
+        piping_class:txt(valorCampo(ws,r,mapa,"piping_class")) || null,
         junta_numero:juntaNumero || null,
-        spool:txt(valor(ws,r,12)) || null,
+        spool:spool || null,
         tipo_junta:tipo || null,
-        diseno_junta:txt(valor(ws,r,14)) || null,
-        diametro_2:num(valor(ws,r,15)),
-        sch_2:txt(valor(ws,r,16)) || null,
-        espesor_2:num(valor(ws,r,17)),
-        ubicacion_estado:txt(valor(ws,r,18)) || null,
-        numero_serie:txt(valor(ws,r,19)) || null,
-        eps:txt(valor(ws,r,20)) || null,
-        aporte:txt(valor(ws,r,21)) || null,
-        soldador_raiz:txt(valor(ws,r,22)) || null,
-        soldador_relleno:txt(valor(ws,r,23)) || null,
-        fecha_soldadura:fechaISO(valor(ws,r,24)),
-        codigo_construccion:txt(valor(ws,r,25)) || null,
-        material_1:txt(valor(ws,r,26)) || null,
-        grado_material_1:txt(valor(ws,r,27)) || null,
-        colada_1:txt(valor(ws,r,28)) || null,
-        material_2:txt(valor(ws,r,29)) || null,
-        grado_material_2:txt(valor(ws,r,30)) || null,
-        colada_2:txt(valor(ws,r,31)) || null,
-        iv:txt(valor(ws,r,32)) || null,
-        porcentaje_end:num(valor(ws,r,33)),
-        lote:txt(valor(ws,r,34)) || null,
-        libera:txt(valor(ws,r,35)) || null,
-        ubicacion_ensayo:txt(valor(ws,r,36)) || null,
-        fecha_ensayo_1:fechaISO(valor(ws,r,37)),
-        informe_1:txt(valor(ws,r,38)) || null,
-        fecha_ensayo_2:fechaISO(valor(ws,r,39)),
-        resultado_1:txt(valor(ws,r,40)) || null,
-        informe_2:txt(valor(ws,r,41)) || null,
-        fecha_ensayo_3:fechaISO(valor(ws,r,42)),
-        resultado_2:txt(valor(ws,r,43)) || null,
-        observaciones:txt(valor(ws,r,44)) || null,
-        sistema_color:txt(valor(ws,r,45)) || null,
-        fecha_ph:fechaISO(valor(ws,r,46)),
-        fecha_pintura:fechaISO(valor(ws,r,47)),
-        ot:txt(valor(ws,r,48)) || null
+        diseno_junta:txt(valorCampo(ws,r,mapa,"diseno_junta")) || null,
+        diametro_2:num(valorCampo(ws,r,mapa,"diametro_2")),
+        sch_2:txt(valorCampo(ws,r,mapa,"sch_2")) || null,
+        espesor_2:num(valorCampo(ws,r,mapa,"espesor_2")),
+        ubicacion_estado:txt(valorCampo(ws,r,mapa,"ubicacion_estado")) || null,
+        numero_serie:txt(valorCampo(ws,r,mapa,"numero_serie")) || null,
+        eps:txt(valorCampo(ws,r,mapa,"eps")) || null,
+        aporte:txt(valorCampo(ws,r,mapa,"aporte")) || null,
+        soldador_raiz:txt(valorCampo(ws,r,mapa,"soldador_raiz")) || null,
+        soldador_relleno:txt(valorCampo(ws,r,mapa,"soldador_relleno")) || null,
+        fecha_soldadura:fechaISO(valorCampo(ws,r,mapa,"fecha_soldadura")),
+        codigo_construccion:txt(valorCampo(ws,r,mapa,"codigo_construccion")) || null,
+        material_1:txt(valorCampo(ws,r,mapa,"material_1")) || null,
+        grado_material_1:txt(valorCampo(ws,r,mapa,"grado_material_1")) || null,
+        colada_1:txt(valorCampo(ws,r,mapa,"colada_1")) || null,
+        material_2:txt(valorCampo(ws,r,mapa,"material_2")) || null,
+        grado_material_2:txt(valorCampo(ws,r,mapa,"grado_material_2")) || null,
+        colada_2:txt(valorCampo(ws,r,mapa,"colada_2")) || null,
+        iv:txt(valorCampo(ws,r,mapa,"iv")) || null,
+        porcentaje_end:num(valorCampo(ws,r,mapa,"porcentaje_end")),
+        lote:txt(valorCampo(ws,r,mapa,"lote")) || null,
+        libera:txt(valorCampo(ws,r,mapa,"libera")) || null,
+        ubicacion_ensayo:txt(valorCampo(ws,r,mapa,"ubicacion_ensayo")) || null,
+        fecha_ensayo_1:fechaISO(valorCampo(ws,r,mapa,"fecha_ensayo_1")),
+        informe_1:txt(valorCampo(ws,r,mapa,"informe_1")) || null,
+        fecha_ensayo_2:fechaISO(valorCampo(ws,r,mapa,"fecha_ensayo_2")),
+        resultado_1:txt(valorCampo(ws,r,mapa,"resultado_1")) || null,
+        informe_2:txt(valorCampo(ws,r,mapa,"informe_2")) || null,
+        fecha_ensayo_3:fechaISO(valorCampo(ws,r,mapa,"fecha_ensayo_3")),
+        resultado_2:txt(valorCampo(ws,r,mapa,"resultado_2")) || null,
+        observaciones:txt(valorCampo(ws,r,mapa,"observaciones")) || null,
+        sistema_color:txt(valorCampo(ws,r,mapa,"sistema_color")) || null,
+        fecha_ph:fechaISO(valorCampo(ws,r,mapa,"fecha_ph")),
+        fecha_pintura:fechaISO(valorCampo(ws,r,mapa,"fecha_pintura")),
+        ot:txt(valorCampo(ws,r,mapa,"ot")) || null
       });
     }
 
@@ -599,7 +639,7 @@ async function analizarExcel(){
     actualizarBotonCarga();
 
     setEstado(
-      `✓ Excel analizado: ${juntas.length} juntas y ${pulgadas(totalGeneral.pulgadas_a_ejecutar)} de alcance total.`+
+      `✓ Excel analizado por encabezados: ${juntas.length} juntas y ${pulgadas(totalGeneral.pulgadas_a_ejecutar)} de alcance total.`+
       (usuarioAutorizado ? " Listo para cargar." : " Vista previa disponible; carga restringida."),
       usuarioAutorizado ? "ok" : "aviso"
     );
@@ -664,78 +704,6 @@ function pintarPreview(){
   });
 }
 
-
-/* ============================================================
-   SINCRONIZAR LOCALIZACIÓN DE SPOOLES
-   ============================================================
-   Cada vez que se carga una nueva trazabilidad:
-   - toma combinaciones únicas Línea + Spool;
-   - agrega spooles nuevos a piping_spooles;
-   - actualiza Sistema/Subsistema de los existentes;
-   - NO toca ninguna tilde ni sus fechas/usuarios.
-*/
-async function sincronizarSpoolesDesdeTrazabilidad(){
-
-  const mapa = new Map();
-
-  for(const x of juntas){
-
-    const linea = txt(x.linea);
-    const spool = txt(x.spool);
-
-    if(!linea || !spool) continue;
-
-    const clave = `${linea.toLowerCase()}|||${spool.toLowerCase()}`;
-
-    if(!mapa.has(clave)){
-      mapa.set(clave,{
-        linea,
-        spool,
-        sistema:txt(x.sistema) || null,
-        subsistema:txt(x.subsistema) || null
-      });
-    }else{
-      // Si otra junta del mismo spool trae Sistema/Subsistema y la primera no,
-      // completamos el dato sin alterar el seguimiento del spool.
-      const actual = mapa.get(clave);
-
-      if(!actual.sistema && txt(x.sistema)){
-        actual.sistema = txt(x.sistema);
-      }
-
-      if(!actual.subsistema && txt(x.subsistema)){
-        actual.subsistema = txt(x.subsistema);
-      }
-    }
-  }
-
-  const spoolesUnicos = [...mapa.values()];
-
-  if(!spoolesUnicos.length){
-    return 0;
-  }
-
-  for(let i=0;i<spoolesUnicos.length;i+=200){
-
-    const bloque = spoolesUnicos.slice(i,i+200);
-
-    const {error} = await db
-      .from("piping_spooles")
-      .upsert(
-        bloque,
-        {
-          onConflict:"linea,spool",
-          ignoreDuplicates:false
-        }
-      );
-
-    if(error) throw error;
-  }
-
-  return spoolesUnicos.length;
-}
-
-
 async function subirDatos(){
   if(!juntas.length || !totalGeneral){
     setEstado("Primero analizá el Excel.","error");
@@ -798,13 +766,8 @@ async function subirDatos(){
 
     if(errorResumen) throw errorResumen;
 
-    setEstado("⏳ Actualizando Localización de Spooles...");
-
-    const spoolesSincronizados =
-      await sincronizarSpoolesDesdeTrazabilidad();
-
     setEstado(
-      `✓ Carga completada por ${email}: ${juntas.length} juntas · ${pulgadas(totalGeneral.pulgadas_ejecutadas)} ejecutadas · ${pct(totalGeneral.avance_porcentaje)} de avance · ${spoolesSincronizados} spooles sincronizados.`,
+      `✓ Carga completada por ${email}: ${juntas.length} juntas · ${pulgadas(totalGeneral.pulgadas_ejecutadas)} ejecutadas · ${pct(totalGeneral.avance_porcentaje)} de avance.`,
       "ok"
     );
 
