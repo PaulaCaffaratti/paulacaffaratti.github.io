@@ -1240,10 +1240,13 @@ function matchEstado(s,f){
 
 function etapaUsuario(){
 
- /* Jorge Soto despacha desde Lumber y debe ver siempre
-    el universo completo de spooles, sin filtro automático. */
+ /*
+ Jorge Soto es quien realiza la primera etapa:
+ Despacho Lumber. Aunque tenga permisos adicionales,
+ su vista principal es Despacho Lumber.
+ */
  if(usuarioEmail==="jorgefelipe.soto@pecomenergia.com.ar")
-  return"";
+  return"despacho_lumber";
 
  if(puede("recepcion_obra"))
   return"recepcion_obra";
@@ -1263,13 +1266,29 @@ function etapaUsuario(){
  if(puede("liberacion_precom"))
   return"liberacion_precom";
 
+ /*
+ Si en el futuro se agrega otro usuario que solamente
+ despacha desde Lumber, también tendrá esta vista.
+ */
+ if(puede("despacho_lumber"))
+  return"despacho_lumber";
+
  return"";
 
 }
 
 
 /* =====================================================
-   FILTRO AUTOMÁTICO SEGÚN ETAPA ANTERIOR
+   FILTRO AUTOMÁTICO · SOLO TRABAJO PENDIENTE DE MI ETAPA
+
+   Vista automática:
+   - La etapa anterior debe estar completada.
+   - Mi propia etapa todavía debe estar pendiente.
+   - "Mostrar todos los spooles" anula este filtro.
+
+   Excepción de la primera etapa:
+   - Despacho Lumber no tiene etapa anterior.
+   - Muestra únicamente los spooles todavía sin despachar.
    ===================================================== */
 
 function habilitadoParaUsuario(s){
@@ -1277,63 +1296,64 @@ function habilitadoParaUsuario(s){
  if(mostrarTodos)
   return true;
 
- const etapa=
- etapaUsuario();
-
+ const etapa=etapaUsuario();
 
  /*
- Recepción obra:
- solo spooles que ya fueron despachados de Lumber
+ DESPACHO LUMBER:
+ primera etapa → solamente pendientes de despacho.
+ */
+ if(etapa==="despacho_lumber")
+  return !s.despacho_lumber;
+
+ /*
+ RECEPCIÓN EN OBRA:
+ despachado desde Lumber + todavía no recibido.
  */
  if(etapa==="recepcion_obra")
-  return !!s.despacho_lumber;
-
+  return !!s.despacho_lumber &&
+         !s.recepcion_obra;
 
  /*
  PH:
- solo spooles ya recibidos en obra
+ recibido en obra + PH todavía pendiente.
  */
  if(etapa==="ph")
-  return !!s.recepcion_obra;
-
+  return !!s.recepcion_obra &&
+         !s.ph;
 
  /*
- Montaje:
- también se habilita a partir de recepción en obra
+ MONTAJE:
+ recibido en obra + montaje todavía pendiente.
+ PH y Montaje se habilitan ambos desde Recepción en obra.
  */
  if(etapa==="montaje")
-  return !!s.recepcion_obra;
-
+  return !!s.recepcion_obra &&
+         !s.montaje;
 
  /*
- Torque:
- solo spooles ya montados
+ TORQUE:
+ montado + torque todavía pendiente.
  */
  if(etapa==="torque")
-  return !!s.montaje;
-
+  return !!s.montaje &&
+         !s.torque;
 
  /*
- Calidad:
- solo spooles con torque
+ LIBERACIÓN CALIDAD:
+ torque realizado + liberación todavía pendiente.
  */
  if(etapa==="liberacion_calidad")
-  return !!s.torque;
-
+  return !!s.torque &&
+         !s.liberacion_calidad;
 
  /*
- PRECOM:
- solo spooles liberados por Calidad
+ LIBERACIÓN PRECOM:
+ Calidad liberada + PRECOM todavía pendiente.
  */
  if(etapa==="liberacion_precom")
-  return !!s.liberacion_calidad;
+  return !!s.liberacion_calidad &&
+         !s.liberacion_precom;
 
-
- /*
- Usuario que solo carga despacho
- o usuario sin una etapa específica:
- ve todos
- */
  return true;
 
 }
@@ -1348,57 +1368,49 @@ function textoFiltro(){
  if(mostrarTodos)
   return"Mostrando todos los spooles.";
 
- const etapa=
- etapaUsuario();
+ const etapa=etapaUsuario();
 
+ if(etapa==="despacho_lumber")
+  return(
+   "Vista automática: se muestran solamente los spooles " +
+   "pendientes de Despacho Lumber."
+  );
 
  if(etapa==="recepcion_obra")
-
   return(
-   "Vista automática: se muestran solamente " +
-   "spooles con Despacho Lumber."
+   "Vista automática: se muestran solamente spooles con " +
+   "Despacho Lumber y pendientes de Recepción en obra."
   );
-
 
  if(etapa==="ph")
-
   return(
-   "Vista automática: se muestran solamente " +
-   "spooles recibidos en obra."
+   "Vista automática: se muestran solamente spooles recibidos " +
+   "en obra y pendientes de PH."
   );
-
 
  if(etapa==="montaje")
-
   return(
-   "Vista automática: se muestran solamente " +
-   "spooles recibidos en obra."
+   "Vista automática: se muestran solamente spooles recibidos " +
+   "en obra y pendientes de Montaje."
   );
-
 
  if(etapa==="torque")
-
   return(
-   "Vista automática: se muestran solamente " +
-   "spooles montados."
+   "Vista automática: se muestran solamente spooles montados " +
+   "y pendientes de Torque."
   );
-
 
  if(etapa==="liberacion_calidad")
-
   return(
-   "Vista automática: se muestran solamente " +
-   "spooles con Torque."
+   "Vista automática: se muestran solamente spooles con Torque " +
+   "y pendientes de Liberación Calidad."
   );
-
 
  if(etapa==="liberacion_precom")
-
   return(
-   "Vista automática: se muestran solamente " +
-   "spooles liberados por Calidad."
+   "Vista automática: se muestran solamente spooles liberados " +
+   "por Calidad y pendientes de Liberación PRECOM."
   );
-
 
  return"Mostrando todos los spooles.";
 
@@ -1411,14 +1423,8 @@ function textoFiltro(){
 
 function actualizarBotonVista(){
 
- const etapa=
- etapaUsuario();
+ const etapa=etapaUsuario();
 
-
- /*
- Si el usuario no tiene una etapa desde recepción,
- no hace falta mostrar botón de filtro automático.
- */
  if(!etapa){
 
   btnVista.style.display="none";
@@ -1430,14 +1436,12 @@ function actualizarBotonVista(){
 
  }
 
-
  btnVista.style.display="";
-
 
  if(mostrarTodos){
 
   btnVista.textContent=
-  "Ver solo habilitados para mi etapa";
+  "Ver solo pendientes de mi etapa";
 
   btnVista.classList.add("todos");
 
@@ -1449,7 +1453,6 @@ function actualizarBotonVista(){
   btnVista.classList.remove("todos");
 
  }
-
 
  infoFiltro.textContent=
  textoFiltro();
