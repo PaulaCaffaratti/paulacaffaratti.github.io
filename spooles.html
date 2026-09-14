@@ -518,6 +518,43 @@ table td{
   grid-template-columns:repeat(2,1fr);
  }
 }
+
+/* =========================================================
+   RESUMEN DE DESPACHO PARA MAIL
+   ========================================================= */
+.despacho-tools{
+  grid-column:1/-1;
+  display:none;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+  padding-top:2px;
+}
+.btn-despacho{
+  background:#17365d;
+  color:#fff;
+  border:1px solid #17365d;
+}
+.btn-despacho:hover{background:#244d7c}
+.btn-despacho-limpiar{
+  background:#fff;
+  color:#687d91;
+  border:1px solid var(--ui-line2);
+}
+.despacho-contador{
+  font-size:11px;
+  color:#718396;
+}
+.despacho-msg{
+  width:100%;
+  font-size:11px;
+  color:#287b54;
+  min-height:15px;
+}
+@media(max-width:850px){
+  .despacho-tools{grid-column:auto}
+}
+
 </style>
 </head>
 
@@ -642,6 +679,22 @@ Mostrar todos los spooles
 </button>
 
 <div id="infoFiltro" class="info-filtro"></div>
+
+<div id="despachoTools" class="despacho-tools">
+  <button id="btnCopiarDespacho" class="btn-despacho" type="button">
+    📋 Copiar tabla del despacho
+  </button>
+
+  <button id="btnLimpiarDespacho" class="btn-despacho-limpiar" type="button">
+    Nuevo despacho
+  </button>
+
+  <span id="despachoContador" class="despacho-contador">
+    0 spooles en el despacho actual
+  </span>
+
+  <div id="despachoMsg" class="despacho-msg"></div>
+</div>
 
 </div>
 
@@ -825,6 +878,7 @@ let spooles=[];
  true  = mostrar todos
 */
 let mostrarTodos=false;
+let despachoActual=new Set();
 
 
 /* =====================================================
@@ -882,6 +936,224 @@ function corto(e){
 
 }
 
+
+
+/* =====================================================
+   RESUMEN DE DESPACHO PARA MAIL
+   ===================================================== */
+
+function fechaLocalClave(fecha=new Date()){
+  const partes=new Intl.DateTimeFormat(
+    "en-CA",
+    {
+      timeZone:"America/Argentina/Buenos_Aires",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
+    }
+  ).formatToParts(fecha);
+
+  const get=t=>partes.find(p=>p.type===t)?.value||"";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+
+function claveDespachoActual(){
+  return "spooles_despacho_actual_"+usuarioEmail+"_"+fechaLocalClave();
+}
+
+function cargarDespachoActual(){
+  despachoActual=new Set();
+  if(!usuarioEmail)return;
+
+  try{
+    const guardado=JSON.parse(
+      localStorage.getItem(claveDespachoActual())||"[]"
+    );
+    if(Array.isArray(guardado)){
+      guardado.forEach(id=>despachoActual.add(Number(id)));
+    }
+  }catch{
+    despachoActual=new Set();
+  }
+}
+
+function guardarDespachoActual(){
+  if(!usuarioEmail)return;
+  try{
+    localStorage.setItem(
+      claveDespachoActual(),
+      JSON.stringify([...despachoActual])
+    );
+  }catch{}
+}
+
+function spoolesDespachoActual(){
+  return spooles
+    .filter(s=>despachoActual.has(Number(s.id)) && !!s.despacho_lumber)
+    .sort((a,b)=>{
+      const ca=String(a.cuadernillo||a.cuadernillo_nro||"");
+      const cb=String(b.cuadernillo||b.cuadernillo_nro||"");
+      const la=String(a.linea||"");
+      const lb=String(b.linea||"");
+      const sa=String(a.spool||"");
+      const sb=String(b.spool||"");
+
+      return ca.localeCompare(cb,"es",{numeric:true}) ||
+             la.localeCompare(lb,"es",{numeric:true}) ||
+             sa.localeCompare(sb,"es",{numeric:true});
+    });
+}
+
+function actualizarHerramientasDespacho(){
+  const tools=document.getElementById("despachoTools");
+  if(!tools)return;
+
+  if(!puede("despacho_lumber")){
+    tools.style.display="none";
+    return;
+  }
+
+  tools.style.display="flex";
+
+  const lista=spoolesDespachoActual();
+
+  despachoContador.textContent=
+    lista.length+
+    (lista.length===1
+      ?" spool en el despacho actual"
+      :" spooles en el despacho actual");
+
+  btnCopiarDespacho.disabled=lista.length===0;
+}
+
+function agregarAlDespachoActual(id){
+  despachoActual.add(Number(id));
+  guardarDespachoActual();
+}
+
+function quitarDelDespachoActual(id){
+  despachoActual.delete(Number(id));
+  guardarDespachoActual();
+}
+
+function limpiarDespachoActual(){
+  if(
+    despachoActual.size>0 &&
+    !confirm(
+      "¿Iniciar un nuevo despacho? Se limpiará solamente la lista usada para copiar el mail. Los tildes de la base NO se modifican."
+    )
+  ) return;
+
+  despachoActual.clear();
+  guardarDespachoActual();
+
+  despachoMsg.textContent=
+    "Lista del despacho actual vaciada. Ya podés comenzar un nuevo despacho.";
+
+  actualizarHerramientasDespacho();
+}
+
+function despachoComoTexto(lista){
+  const filas=lista.map((s,i)=>{
+    const cuadernillo=s.cuadernillo||s.cuadernillo_nro||"";
+    return [
+      i+1,
+      cuadernillo,
+      s.linea||"",
+      s.spool||""
+    ].join("\t");
+  });
+
+  return [
+    "N°\tCuadernillo\tLínea / Isométrico\tN° Spool",
+    ...filas
+  ].join("\n");
+}
+
+function despachoComoHtml(lista){
+  const filas=lista.map((s,i)=>{
+    const cuadernillo=s.cuadernillo||s.cuadernillo_nro||"";
+
+    return `
+      <tr>
+        <td style="border:1px solid #000;padding:6px 9px;text-align:center;">${i+1}</td>
+        <td style="border:1px solid #000;padding:6px 9px;text-align:center;">${esc(cuadernillo)}</td>
+        <td style="border:1px solid #000;padding:6px 9px;text-align:left;">${esc(s.linea||"")}</td>
+        <td style="border:1px solid #000;padding:6px 9px;text-align:center;">${esc(s.spool||"")}</td>
+      </tr>
+    `;
+  }).join("");
+
+  return `
+    <table style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:12pt;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #000;padding:7px 9px;background:#245781;color:#fff;text-align:center;">N°</th>
+          <th style="border:1px solid #000;padding:7px 9px;background:#245781;color:#fff;text-align:center;">Cuadernillo</th>
+          <th style="border:1px solid #000;padding:7px 9px;background:#245781;color:#fff;text-align:center;">Línea / Isométrico</th>
+          <th style="border:1px solid #000;padding:7px 9px;background:#245781;color:#fff;text-align:center;">N° Spool</th>
+        </tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+  `;
+}
+
+async function copiarTablaDespacho(){
+  const lista=spoolesDespachoActual();
+  despachoMsg.textContent="";
+
+  if(!lista.length){
+    despachoMsg.textContent="No hay spooles agregados al despacho actual.";
+    return;
+  }
+
+  const texto=despachoComoTexto(lista);
+  const htmlTabla=despachoComoHtml(lista);
+
+  try{
+    if(navigator.clipboard && window.ClipboardItem){
+      const item=new ClipboardItem({
+        "text/plain":new Blob([texto],{type:"text/plain"}),
+        "text/html":new Blob([htmlTabla],{type:"text/html"})
+      });
+      await navigator.clipboard.write([item]);
+    }else{
+      const zona=document.createElement("div");
+      zona.contentEditable="true";
+      zona.style.position="fixed";
+      zona.style.left="-9999px";
+      zona.innerHTML=htmlTabla;
+      document.body.appendChild(zona);
+
+      const rango=document.createRange();
+      rango.selectNodeContents(zona);
+
+      const seleccion=window.getSelection();
+      seleccion.removeAllRanges();
+      seleccion.addRange(rango);
+
+      document.execCommand("copy");
+      seleccion.removeAllRanges();
+      zona.remove();
+    }
+
+    despachoMsg.textContent=
+      "✓ Tabla copiada. Pegala directamente en el cuerpo del mail.";
+
+  }catch(error){
+    console.error(error);
+
+    try{
+      await navigator.clipboard.writeText(texto);
+      despachoMsg.textContent=
+        "✓ Tabla copiada como texto. Pegala directamente en el mail.";
+    }catch{
+      despachoMsg.textContent=
+        "No se pudo copiar automáticamente. Probá nuevamente desde Chrome o Edge.";
+    }
+  }
+}
 
 /* =====================================================
    ESTADO DEL SPOOL
@@ -1567,6 +1839,11 @@ async function cambiar(
  }
 
 
+ if(!error && e==="despacho_lumber"){
+  if(v) agregarAlDespachoActual(id);
+  else quitarDelDespachoActual(id);
+ }
+
  await cargar();
 
 }
@@ -1747,6 +2024,8 @@ function render(){
 
  actualizarBotonVista();
 
+ actualizarHerramientasDespacho();
+
 }
 
 
@@ -1781,6 +2060,18 @@ buscar.addEventListener(
 filtroEstado.addEventListener(
  "change",
  render
+);
+
+
+btnCopiarDespacho.addEventListener(
+ "click",
+ copiarTablaDespacho
+);
+
+
+btnLimpiarDespacho.addEventListener(
+ "click",
+ limpiarDespachoActual
 );
 
 
