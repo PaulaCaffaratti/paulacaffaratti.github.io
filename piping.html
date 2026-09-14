@@ -1515,20 +1515,42 @@ async function cargarIndicadoresAvanceSpooles(){
     if(ultimaCarga?.id){
       const {data:juntas,error:errorJuntas} = await db
         .from("piping_juntas")
-        .select("linea,spool,fecha_pintura")
+        .select("linea,spool,fecha_pintura,ot,lote,resultado_1,resultado_2")
         .eq("carga_id",ultimaCarga.id);
 
       if(errorJuntas) throw errorJuntas;
 
       const pintadosUnicos = new Set();
+      const lotesAprobados = new Set();
+
       for(const x of (juntas || [])){
         const linea = String(x.linea ?? "").trim();
         const spool = String(x.spool ?? "").trim();
-        const fechaPintura = String(x.fecha_pintura ?? "").trim();
-        if(!linea || !spool || !fechaPintura) continue;
-        pintadosUnicos.add(linea.toUpperCase()+"|||"+spool.toUpperCase());
+
+        /*
+          Compatibilidad con la carga actual:
+          en piping-base.html la columna Fecha pintura quedó corrida una posición
+          y fue guardada en OT. Se toma fecha_pintura y, si está vacía, OT.
+        */
+        const fechaPintura = String(x.fecha_pintura ?? x.ot ?? "").trim();
+        if(linea && spool && fechaPintura){
+          pintadosUnicos.add(linea.toUpperCase()+"|||"+spool.toUpperCase());
+        }
+
+        const lote = String(x.lote ?? "").trim();
+        const r1 = String(x.resultado_1 ?? "").trim().toUpperCase();
+        const r2 = String(x.resultado_2 ?? "").trim().toUpperCase();
+        if(lote && (r1 === "AP" || r2 === "AP")){
+          lotesAprobados.add(lote.toUpperCase());
+        }
       }
+
       pintados = pintadosUnicos.size;
+
+      const detalleEnd = document.getElementById("kpiSpoolesEndCant")?.parentElement;
+      if(detalleEnd){
+        detalleEnd.innerHTML = `<b id="kpiSpoolesEndCant">${liberadosEnd}</b> spooles liberados de <b id="kpiSpoolesEndTotal">${totalSpooles}</b> · <b>${lotesAprobados.size}</b> lotes END aprobados`;
+      }
     }
 
     const pctPintados = totalSpooles > 0 ? (pintados / totalSpooles) * 100 : 0;
