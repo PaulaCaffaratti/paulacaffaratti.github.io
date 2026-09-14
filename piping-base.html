@@ -339,67 +339,86 @@ function valor(ws,r,c){
    - Tolera mayúsculas/minúsculas, tildes, espacios y signos.
    - Si se reordenan las columnas, la carga sigue funcionando.
    ========================================================= */
-function normalizarEncabezado(v){
+function claveEncabezado(v){
   return String(v ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g,"")
-    .toLowerCase()
-    .replace(/[%°º]/g," porcentaje ")
-    .replace(/[Øø]/g," diametro ")
-    .replace(/[^a-z0-9]+/g," ")
+    .replace(/\r?\n/g," ")
+    .replace(/\s+/g," ")
     .trim()
-    .replace(/\s+/g," ");
+    .toUpperCase();
 }
 
+/*
+  IMPORTANTE:
+  La trazabilidad se identifica por el TEXTO DEL ENCABEZADO,
+  no por el número de columna. Por lo tanto las columnas se
+  pueden mover libremente.
+
+  Se mantienen signos como ".", "_" y "%" porque en esta
+  planilla distinguen columnas repetidas:
+  FECHA / FECHA6 / FECHA_
+  RESULT. / RESULT_
+  INFO. Nº / INFO. Nº_
+*/
 const CAMPOS_TRAZABILIDAD = {
-  sistema:["sistema"],
-  subsistema:["subsistema"],
-  cuadernillo:["cuadernillo","cuadernillo isometrico","isometrico"],
-  linea:["linea","linea piping"],
-  hoja:["hoja"],
-  revision:["revision","rev"],
-  diametro:["diametro","diametro 1","dn"],
-  sch:["sch","schedule"],
-  espesor:["espesor","espesor 1"],
-  piping_class:["piping class","clase piping","class"],
-  junta_numero:["junta","numero junta","n junta","junta numero"],
-  spool:["spool","spool numero","numero spool"],
-  tipo_junta:["tipo","tipo junta","tipo de junta"],
-  diseno_junta:["diseno","diseno junta","diseño junta"],
-  diametro_2:["diametro 2","diametro2","dn 2"],
-  sch_2:["sch 2","sch2","schedule 2"],
-  espesor_2:["espesor 2","espesor2"],
-  ubicacion_estado:["ubicacion estado","ubicacion/estado","estado ubicacion"],
-  numero_serie:["numero serie","n serie","serie"],
-  eps:["eps"],
-  aporte:["aporte","material aporte"],
-  soldador_raiz:["soldador raiz","soldador de raiz"],
-  soldador_relleno:["soldador relleno","soldador de relleno"],
-  fecha_soldadura:["fecha soldadura","fecha de soldadura"],
-  codigo_construccion:["codigo construccion","codigo de construccion"],
-  material_1:["material 1","material1"],
-  grado_material_1:["grado material 1","grado 1"],
-  colada_1:["colada 1","colada1"],
-  material_2:["material 2","material2"],
-  grado_material_2:["grado material 2","grado 2"],
-  colada_2:["colada 2","colada2"],
-  iv:["iv"],
-  porcentaje_end:["porcentaje end","% end","end porcentaje"],
-  lote:["lote","lote end"],
-  libera:["libera","liberacion","liberado"],
-  ubicacion_ensayo:["ubicacion ensayo","ubicacion de ensayo"],
-  fecha_ensayo_1:["fecha ensayo 1","fecha de ensayo 1"],
-  informe_1:["informe 1","informe1"],
-  fecha_ensayo_2:["fecha ensayo 2","fecha de ensayo 2"],
-  resultado_1:["resultado 1","resultado1"],
-  informe_2:["informe 2","informe2"],
-  fecha_ensayo_3:["fecha ensayo 3","fecha de ensayo 3"],
-  resultado_2:["resultado 2","resultado2"],
-  observaciones:["observaciones","observacion"],
-  sistema_color:["sistema color","sistema de color"],
-  fecha_ph:["fecha ph","fecha de ph","ph fecha"],
-  fecha_pintura:["fecha pintura","fecha de pintura","pintura fecha"],
-  ot:["ot","orden trabajo","orden de trabajo"]
+  sistema:["SISTEMA"],
+  subsistema:["SUBSISTEMA"],
+  cuadernillo:["CUADERNILLO"],
+  linea:["LINEA","LÍNEA"],
+  hoja:["HOJA"],
+  revision:["REV","REVISION","REVISIÓN"],
+
+  diametro:["Ø DIAM","DIAM","DIAMETRO","DIÁMETRO"],
+  sch:["SCH"],
+  espesor:["ESP","ESPESOR"],
+  piping_class:["PIPING CLASS"],
+
+  junta_numero:["JUNTA N°","JUNTA Nº","JUNTA N","JUNTA"],
+  spool:["SPOOL"],
+  tipo_junta:["TIPO","TIPO JUNTA"],
+  diseno_junta:["DISEÑO JUNTA","DISENO JUNTA"],
+
+  diametro_2:["Ø DIAM2","DIAM2","DIAMETRO 2","DIÁMETRO 2"],
+  sch_2:["SCH3","SCH 2","SCH2"],
+  espesor_2:["ESP. MM","ESP MM","ESPESOR 2"],
+
+  ubicacion_estado:["ID. DE UBICACION ESTADO","ID. DE UBICACIÓN ESTADO","ID. DE UBICACION/ESTADO"],
+  numero_serie:["# SERIE","N° SERIE","Nº SERIE","SERIE"],
+  eps:["EPS"],
+  aporte:["APORTE"],
+  soldador_raiz:["RAIZ","RAÍZ","SOLDADOR RAIZ","SOLDADOR RAÍZ"],
+  soldador_relleno:["RELL","RELLENO","SOLDADOR RELLENO"],
+  fecha_soldadura:["FECHA DE SOLDADURA","FECHA SOLDADURA"],
+
+  codigo_construccion:["CODIGO CONSTRUCCION","CÓDIGO CONSTRUCCIÓN"],
+  material_1:["MATERIAL #1","MATERIAL 1"],
+  grado_material_1:["GRADO DE MATERIAL"],
+  colada_1:["CODIGO / COLADA","CÓDIGO / COLADA"],
+
+  material_2:["MATERIAL #2","MATERIAL 2"],
+  grado_material_2:["GRADO DE MATERIAL4","GRADO DE MATERIAL 2"],
+  colada_2:["CODIGO / COLADA5","CÓDIGO / COLADA5","CODIGO / COLADA 2"],
+
+  iv:["IV"],
+  porcentaje_end:["% END","PORCENTAJE END"],
+  lote:["LOTE"],
+  libera:["LIBERA"],
+  ubicacion_ensayo:["UBICACION","UBICACIÓN"],
+
+  fecha_ensayo_1:["FECHA"],
+  informe_1:["INFO. Nº","INFO. N°","INFO. N"],
+  fecha_ensayo_2:["FECHA6"],
+  resultado_1:["RESULT.","RESULTADO 1"],
+  informe_2:["INFO. Nº_","INFO. N°_","INFO. N_"],
+  fecha_ensayo_3:["FECHA_"],
+  resultado_2:["RESULT_","RESULTADO 2"],
+
+  observaciones:["OBSERVACIONES"],
+  sistema_color:["SISTEMA - COLOR","SISTEMA COLOR"],
+  fecha_ph:["FECHA PH"],
+  fecha_pintura:["FECHA PINTURA"],
+  ot:["OT"]
 };
 
 function detectarFilaEncabezados(ws){
@@ -407,60 +426,49 @@ function detectarFilaEncabezados(ws){
   const maxFila=Math.min(range.e.r+1,25);
   const maxCol=range.e.c+1;
 
-  const aliasNormalizados={};
-  for(const [campo,aliases] of Object.entries(CAMPOS_TRAZABILIDAD)){
-    aliasNormalizados[campo]=aliases.map(normalizarEncabezado);
-  }
+  const clavesEsperadas=new Set();
+  Object.values(CAMPOS_TRAZABILIDAD).flat().forEach(x=>{
+    clavesEsperadas.add(claveEncabezado(x));
+  });
 
   let mejorFila=null;
   let mejorPuntaje=-1;
 
   for(let r=1;r<=maxFila;r++){
-    const presentes=new Set();
-
+    let puntaje=0;
     for(let c=1;c<=maxCol;c++){
-      const encabezado=normalizarEncabezado(valor(ws,r,c));
-      if(!encabezado) continue;
-
-      for(const [campo,aliases] of Object.entries(aliasNormalizados)){
-        if(aliases.includes(encabezado)) presentes.add(campo);
-      }
+      const k=claveEncabezado(valor(ws,r,c));
+      if(k && clavesEsperadas.has(k)) puntaje++;
     }
-
-    let puntaje=presentes.size;
-    if(presentes.has("linea")) puntaje+=3;
-    if(presentes.has("spool")) puntaje+=3;
-    if(presentes.has("tipo_junta")) puntaje+=2;
-    if(presentes.has("junta_numero")) puntaje+=2;
-
     if(puntaje>mejorPuntaje){
       mejorPuntaje=puntaje;
       mejorFila=r;
     }
   }
 
-  if(!mejorFila || mejorPuntaje<8){
+  if(!mejorFila || mejorPuntaje<10){
     throw new Error("No pude identificar la fila de encabezados de la trazabilidad.");
   }
-
   return mejorFila;
 }
 
 function crearMapaEncabezados(ws,filaEncabezados){
   const range=XLSX.utils.decode_range(ws["!ref"] || "A1:A1");
-  const mapa={};
-
-  const aliasACampo=new Map();
-  for(const [campo,aliases] of Object.entries(CAMPOS_TRAZABILIDAD)){
-    for(const alias of aliases){
-      aliasACampo.set(normalizarEncabezado(alias),campo);
-    }
-  }
+  const encabezados=[];
 
   for(let c=1;c<=range.e.c+1;c++){
-    const encabezado=normalizarEncabezado(valor(ws,filaEncabezados,c));
-    const campo=aliasACampo.get(encabezado);
-    if(campo && !mapa[campo]) mapa[campo]=c;
+    encabezados.push({
+      columna:c,
+      clave:claveEncabezado(valor(ws,filaEncabezados,c))
+    });
+  }
+
+  const mapa={};
+
+  for(const [campo,aliases] of Object.entries(CAMPOS_TRAZABILIDAD)){
+    const buscadas=aliases.map(claveEncabezado);
+    const encontrado=encabezados.find(x=>buscadas.includes(x.clave));
+    if(encontrado) mapa[campo]=encontrado.columna;
   }
 
   return mapa;
@@ -509,7 +517,12 @@ async function analizarExcel(){
     const obligatorios=[
       ["linea","Línea"],
       ["spool","Spool"],
-      ["tipo_junta","Tipo junta"]
+      ["tipo_junta","Tipo"],
+      ["diametro","Ø DIAM"],
+      ["fecha_soldadura","Fecha de soldadura"],
+      ["lote","Lote"],
+      ["resultado_1","RESULT."],
+      ["fecha_pintura","Fecha pintura"]
     ];
 
     const faltantes=obligatorios
@@ -639,7 +652,7 @@ async function analizarExcel(){
     actualizarBotonCarga();
 
     setEstado(
-      `✓ Excel analizado por encabezados: ${juntas.length} juntas y ${pulgadas(totalGeneral.pulgadas_a_ejecutar)} de alcance total.`+
+      `✓ Excel analizado por encabezados verificados: ${juntas.length} juntas y ${pulgadas(totalGeneral.pulgadas_a_ejecutar)} de alcance total.`+
       (usuarioAutorizado ? " Listo para cargar." : " Vista previa disponible; carga restringida."),
       usuarioAutorizado ? "ok" : "aviso"
     );
