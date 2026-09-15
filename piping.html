@@ -1039,7 +1039,7 @@ th,td{padding:8px 9px!important}
         </div>
 
         <div id="notaSpoolesCuadernillo" class="spool-cuadernillos-nota">
-          Cada spool se cuenta una sola vez por combinación Línea + Spool. Se considera liberado cuando el spool tiene información cargada en la columna Lote.
+          La liberación END se toma directamente de Supabase. Un spool queda liberado si su línea cumple la regla END o, como excepción, si el spool tiene el 100% de sus SW cubiertas por lotes aprobados.
         </div>
       </section>
 
@@ -1594,7 +1594,8 @@ async function cargarSpoolesDespachadosLumber(){
   try{
     const [
       {data:ultimaCarga,error:errorCarga},
-      {data:despachados,error:errorDespachados}
+      {data:despachados,error:errorDespachados},
+      {data:liberadosEND,error:errorLiberadosEND}
     ] = await Promise.all([
       db
         .from("piping_cargas")
@@ -1608,11 +1609,16 @@ async function cargarSpoolesDespachadosLumber(){
         .select("linea,spool,despacho_lumber")
         .eq("despacho_lumber",true)
         .order("linea",{ascending:true})
-        .order("spool",{ascending:true})
+        .order("spool",{ascending:true}),
+
+      db
+        .from("v_piping_spooles_liberados_detalle")
+        .select("linea,spool")
     ]);
 
     if(errorCarga) throw errorCarga;
     if(errorDespachados) throw errorDespachados;
+    if(errorLiberadosEND) throw errorLiberadosEND;
 
     if(!ultimaCarga?.id){
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#718096;padding:24px">No hay una trazabilidad cargada.</td></tr>';
@@ -1622,7 +1628,7 @@ async function cargarSpoolesDespachadosLumber(){
 
     const {data:juntas,error:errorJuntas} = await db
       .from("piping_juntas")
-      .select("linea,spool,tipo_junta,lote,resultado_1,resultado_2,fecha_pintura")
+      .select("linea,spool,tipo_junta,fecha_pintura")
       .eq("carga_id",ultimaCarga.id);
 
     if(errorJuntas) throw errorJuntas;
@@ -1631,19 +1637,15 @@ async function cargarSpoolesDespachadosLumber(){
       String(linea ?? "").trim().toUpperCase() + "|||" +
       String(spool ?? "").trim().toUpperCase();
 
-    // Lotes que tienen al menos un resultado AP en la última trazabilidad.
-    const lotesAP = new Set();
-    for(const j of (juntas || [])){
-      const lote = String(j.lote ?? "").trim().toUpperCase();
-      const r1 = String(j.resultado_1 ?? "").trim().toUpperCase();
-      const r2 = String(j.resultado_2 ?? "").trim().toUpperCase();
+    // ÚNICA fuente para END: vista definitiva de Supabase.
+    // No se vuelve a calcular END dentro de piping.html.
+    const spoolesLiberadosEND = new Set(
+      (liberadosEND || []).map(x => clave(x.linea,x.spool))
+    );
 
-      if(lote && (r1==="AP" || r2==="AP")){
-        lotesAP.add(lote);
-      }
-    }
-
-    // Agrupar la trazabilidad por Línea + Spool.
+    // La trazabilidad local se usa solamente para:
+    // 1) saber si el spool tiene SW (si no, END = NO APLICA);
+    // 2) mostrar el estado de pintura.
     const porSpool = new Map();
 
     for(const j of (juntas || [])){
@@ -1655,7 +1657,7 @@ async function cargarSpoolesDespachadosLumber(){
 
       if(!porSpool.has(k)){
         porSpool.set(k,{
-          sw:[],
+          tieneSW:false,
           pintado:false
         });
       }
@@ -1667,9 +1669,7 @@ async function cargarSpoolesDespachadosLumber(){
       }
 
       if(String(j.tipo_junta ?? "").trim().toUpperCase()==="SW"){
-        g.sw.push({
-          lote:String(j.lote ?? "").trim().toUpperCase()
-        });
+        g.tieneSW = true;
       }
     }
 
@@ -1677,34 +1677,9 @@ async function cargarSpoolesDespachadosLumber(){
       const k = clave(s.linea,s.spool);
       const g = porSpool.get(k);
 
-      let endAprobado = false;
-      let aplicaEND = false;
-      let pintado = false;
-
-      if(g){
-        pintado = !!g.pintado;
-
-        // END aprobado: SOLO se evalúan juntas SW.
-        // FW y FFW quedan totalmente excluidas.
-        // Si el spool no tiene ninguna SW, END figura como "NO APLICA"
-        // y no se cuenta como un spool sin END.
-        if(g.sw.length){
-          aplicaEND = true;
-
-          const lotesSW = [...new Set(
-            g.sw
-              .map(x=>String(x.lote ?? "").trim().toUpperCase())
-              .filter(Boolean)
-          )];
-
-          // Para aprobar END:
-          // - debe existir al menos un lote asociado a las SW;
-          // - cada lote SW debe tener un resultado AP.
-          endAprobado =
-            lotesSW.length > 0 &&
-            lotesSW.every(lote=>lotesAP.has(lote));
-        }
-      }
+      const aplicaEND = !!g?.tieneSW;
+      const endAprobado = aplicaEND && spoolesLiberadosEND.has(k);
+      const pintado = !!g?.pintado;
 
       return {
         linea:String(s.linea ?? "").trim(),
@@ -1788,7 +1763,7 @@ async function cargarSpoolesPorCuadernillo(){
     }).join("");
 
     if(nota){
-      nota.textContent = "Cada spool se cuenta una sola vez por combinación Línea + Spool. Para liberación se consideran solo las SW: todas deben tener Lote y todos esos lotes deben tener al menos un RESULTADO AP. Tocá el número de liberados para ver el detalle.";
+      nota.textContent = "END se toma directamente de Supabase: se libera el spool cuando su línea cumple la regla END o cuando, como excepción, el spool tiene el 100% de sus SW cubiertas por lotes aprobados. Tocá el número de liberados para ver el detalle.";
     }
 
   }catch(err){
