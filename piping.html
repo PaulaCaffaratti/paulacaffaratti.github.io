@@ -1647,7 +1647,7 @@ async function cargarSpoolesDespachadosLumber(){
       db
         .from("piping_cargas")
         .select("id")
-        .or("origen_trazabilidad.eq.LUMBER,origen_trazabilidad.is.null")
+        .eq("origen_trazabilidad","LUMBER")
         .order("id",{ascending:false})
         .limit(1)
         .maybeSingle(),
@@ -1887,10 +1887,10 @@ async function cargarResumenObraFWFFW(){
     }
 
     // Rechazos: usar la vista específica para respetar exactamente la regla de lotes/END.
-    const rr=await db.from("v_piping_rechazos_obra").select("*");
+    const rr=await db.from("v_piping_rechazos_obra_nuevo").select("*");
     if(rr.error){
       setTexto("pipeRechazoTotalObra","—");
-      setTexto("pipeRechazoDetalleObra","Pendiente crear la vista v_piping_rechazos_obra en Supabase.");
+      setTexto("pipeRechazoDetalleObra","No se pudo leer la vista v_piping_rechazos_obra_nuevo en Supabase.");
       return;
     }
 
@@ -1963,11 +1963,11 @@ async function cargarPiping(){
     ] = await Promise.all([
 
       db
-        .from("v_piping_dashboard")
+        .from("v_piping_kpi_por_origen")
         .select("*"),
 
       db
-        .from("v_piping_rechazos")
+        .from("v_piping_rechazos_lumber")
         .select("*"),
 
       db
@@ -1986,7 +1986,7 @@ async function cargarPiping(){
         .order("cuadernillo", {ascending:true}),
 
       db
-        .from("v_piping_curva_obra")
+        .from("v_piping_curva_obra_soldadura")
         .select("*")
         .order("fecha", {ascending:true})
 
@@ -2243,21 +2243,27 @@ async function cargarPiping(){
       const filaHoyObra = filasHastaHoy.length
         ? filasHastaHoy[filasHastaHoy.length - 1]
         : null;
+      const filasRealObra = filasHastaHoy.filter(x=>
+        x.real_acumulado !== null && x.real_acumulado !== undefined
+      );
+      const filaUltimoRealObra = filasRealObra.length
+        ? filasRealObra[filasRealObra.length - 1]
+        : null;
 
-      let planHoyObra = 0;
-      let realHoyObra = 0;
+      let planHoyObra = filaHoyObra?.plan_acumulado == null
+        ? 0
+        : Number(filaHoyObra.plan_acumulado);
+      let realHoyObra = filaUltimoRealObra
+        ? Number(filaUltimoRealObra.real_acumulado || 0)
+        : 0;
       let desvioHoyObra = 0;
       let desvioPctObra = null;
 
-      if(filaHoyObra){
-        planHoyObra = Number(filaHoyObra.plan_acumulado || 0);
-        realHoyObra = Number(filaHoyObra.real_acumulado || 0);
-        pulgadasEjecutadasObra = realHoyObra;
-        desvioHoyObra = Number(filaHoyObra.desvio_pulgadas || 0);
-        desvioPctObra =
-          filaHoyObra.desvio_porcentaje === null
-          ? null
-          : Number(filaHoyObra.desvio_porcentaje);
+      pulgadasEjecutadasObra = realHoyObra;
+
+      if(filaHoyObra && filaHoyObra.plan_acumulado != null && planHoyObra > 0){
+        desvioHoyObra = realHoyObra - planHoyObra;
+        desvioPctObra = (desvioHoyObra / planHoyObra) * 100;
       }
 
       setTexto("pipeCurvaObraPlan", pipeNum(planHoyObra)+'"');
@@ -2303,7 +2309,11 @@ async function cargarPiping(){
         return `${d}/${m}`;
       });
 
-      const datosPlanObra = obraFilas.map(x=>Number(x.plan_acumulado || 0));
+      const datosPlanObra = obraFilas.map(x=>
+        x.plan_acumulado === null || x.plan_acumulado === undefined
+        ? null
+        : Number(x.plan_acumulado)
+      );
 
       const datosRealObra = obraFilas.map(x=>
         x.real_acumulado === null || x.real_acumulado === undefined
@@ -2334,7 +2344,7 @@ async function cargarPiping(){
               fill:false
             },
             {
-              label:'Real montado acumulado (")',
+              label:'Real soldado FW + FFW acumulado (")',
               data:datosRealObra,
               borderColor:"#179447",
               backgroundColor:"rgba(23,148,71,.08)",
@@ -2401,87 +2411,25 @@ async function cargarPiping(){
     }
 
 
-    const filas=resumen || [];
+    const kpi = (resumen || [])[0] || null;
+    const tipos = [];
 
-    const total=
-      filas.find(x=>x.categoria==="TOTAL_GENERAL");
+    if(kpi){
+      const pulgadasTotales = Number(kpi.pulgadas_totales || 0);
+      const pulgadasLumber = Number(kpi.pulgadas_lumber || 0);
+      const pulgadasObra = Number(kpi.pulgadas_obra || 0);
+      const pulgadasEjecutadasGlobal = Number(kpi.pulgadas_ejecutadas || 0);
+      const pulgadasPendientesGlobal = Number(kpi.pulgadas_pendientes || 0);
+      const avanceGlobal = Number(kpi.avance_porcentaje || 0);
 
-    const tipos=
-      filas.filter(x=>x.categoria==="TIPO_JUNTA");
-
-    if(total){
-
-      setTexto(
-        "pipeTotalHero",
-        pipeNum(total.pulgadas_a_ejecutar)+'"'
-      );
-
-      setTexto(
-        "pipeJuntasHero",
-        Number(total.juntas || 0)
-      );
-
-      setTexto(
-        "pipeJuntas",
-        Number(total.juntas || 0)
-      );
-
-      setTexto(
-        "pipeTotal",
-        pipeNum(total.pulgadas_a_ejecutar)+'"'
-      );
-
-      const pulgadasLumber = (isoFilas || []).reduce(
-        (suma,x)=>suma + Number(x.pulgadas_planificadas || 0),
-        0
-      );
-
-      const pulgadasTotales = Number(total.pulgadas_a_ejecutar || 0);
-      const pulgadasObra = Math.max(0, pulgadasTotales - pulgadasLumber);
-
-      setTexto(
-        "pipeTotalLumber",
-        pipeNum(pulgadasLumber)+'"'
-      );
-
-      setTexto(
-        "pipeTotalObra",
-        pipeNum(pulgadasObra)+'"'
-      );
-
-      // KPI superior: ejecutadas = Lumber real + Obra real
-      const pulgadasEjecutadasGlobal =
-        Number(pulgadasEjecutadasLumber || 0) +
-        Number(pulgadasEjecutadasObra || 0);
-
-      const pulgadasPendientesGlobal = Math.max(
-        0,
-        pulgadasTotales - pulgadasEjecutadasGlobal
-      );
-
-      const avanceGlobal = pulgadasTotales > 0
-        ? (pulgadasEjecutadasGlobal / pulgadasTotales) * 100
-        : 0;
-
-      setTexto(
-        "pipeEjecutadas",
-        pipeNum(pulgadasEjecutadasGlobal)+'"'
-      );
-
-      setTexto(
-        "pipePendientes",
-        pipeNum(pulgadasPendientesGlobal)+'"'
-      );
-
-      setTexto(
-        "pipeAvance",
-        pipePct(avanceGlobal)
-      );
-
+      setTexto("pipeJuntas", Number(kpi.juntas_totales || 0));
+      setTexto("pipeTotal", pipeNum(pulgadasTotales)+'"');
+      setTexto("pipeTotalLumber", pipeNum(pulgadasLumber)+'"');
+      setTexto("pipeTotalObra", pipeNum(pulgadasObra)+'"');
+      setTexto("pipeEjecutadas", pipeNum(pulgadasEjecutadasGlobal)+'"');
+      setTexto("pipePendientes", pipeNum(pulgadasPendientesGlobal)+'"');
+      setTexto("pipeAvance", pipePct(avanceGlobal));
     }else{
-
-      setTexto("pipeTotalHero","—");
-      setTexto("pipeJuntasHero","—");
       setTexto("pipeJuntas","—");
       setTexto("pipeTotal","—");
       setTexto("pipeTotalLumber","—");
@@ -2489,7 +2437,6 @@ async function cargarPiping(){
       setTexto("pipeEjecutadas","—");
       setTexto("pipePendientes","—");
       setTexto("pipeAvance","—");
-
     }
 
     const tablaTipos = document.getElementById("pipeTablaTipos");
