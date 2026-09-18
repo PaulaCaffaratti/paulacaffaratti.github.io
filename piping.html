@@ -1145,12 +1145,12 @@ th,td{padding:8px 9px!important}
       <section class="curva-panel" id="seccionCurvaObra">
         <div class="curva-head">
           <div>
-            <h2>🏗️ Curva S – Obra</h2>
+            <h2>📈 Curva S – Soldadura en obra</h2>
             <div class="curva-sub">
-              Planificado vs. montaje real de spooles en obra para los grupos vinculados al cronograma.
+              Planificado vs. ejecución real de soldadura en obra. El real toma exclusivamente juntas FW + FFW de la última carga OBRA.
             </div>
           </div>
-          <div id="pipeCurvaObraEstado" class="curva-estado">NO INICIADO</div>
+          <div id="pipeCurvaObraEstado" class="curva-estado">Calculando...</div>
         </div>
 
         <div class="curva-kpis">
@@ -1158,31 +1158,77 @@ th,td{padding:8px 9px!important}
             <small>Plan a hoy</small>
             <strong id="pipeCurvaObraPlan">0,00&quot;</strong>
           </div>
-
           <div class="curva-kpi">
-            <small>Real a hoy</small>
+            <small>Real FW + FFW</small>
             <strong id="pipeCurvaObraReal">0,00&quot;</strong>
           </div>
-
           <div id="pipeCurvaObraDesvioCard" class="curva-kpi desvio">
-            <small>Desvío real - plan</small>
-            <strong id="pipeCurvaObraDesvio">0,00&quot;</strong>
-          </div>
-
-          <div id="pipeCurvaObraDesvioPctCard" class="curva-kpi desvio">
-            <small>Desvío %</small>
-            <strong id="pipeCurvaObraDesvioPct">—</strong>
+            <small>Desvío</small>
+            <div class="curva-desvio-valores">
+              <strong id="pipeCurvaObraDesvio">0,00&quot;</strong>
+              <strong id="pipeCurvaObraDesvioPct">—</strong>
+            </div>
           </div>
         </div>
 
-        <div class="curva-wrap">
-          <canvas id="pipeCurvaObra"></canvas>
-        </div>
-
+        <div class="curva-wrap"><canvas id="pipeCurvaObra"></canvas></div>
         <div class="curva-nota">
-          El real se alimenta automáticamente cuando se marca Montaje en la localización de spooles.
+          El plan continúa según el cronograma de obra. La curva real se detiene en la última fecha de soldadura FW/FFW registrada.
         </div>
       </section>
+
+      <section class="panel spool-cuadernillos-panel">
+        <h2>Spooles por cuadernillo isométrico · Obra</h2>
+        <p class="spool-cuadernillos-sub">
+          Total de spooles con FW/FFW y spooles con END aprobado en obra para IS-001, IS-002 e IS-003.
+        </p>
+        <div class="spool-cuadernillos-tabla-wrap">
+          <table class="spool-cuadernillos-tabla">
+            <thead><tr>
+              <th>Cuadernillo isométrico</th>
+              <th>Total de spooles FW/FFW</th>
+              <th>Total de spooles liberados por END</th>
+            </tr></thead>
+            <tbody id="tablaSpoolesCuadernilloObra">
+              <tr><td>IS-001</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+              <tr><td>IS-002</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+              <tr><td>IS-003</td><td class="spool-num">—</td><td class="spool-num spool-liberado">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="spool-cuadernillos-nota">
+          END de Obra se calcula únicamente sobre FW + FFW de la última trazabilidad marcada como OBRA.
+        </div>
+      </section>
+
+      <div class="grid2">
+        <section class="panel">
+          <h2>% de rechazos · total · Obra</h2>
+          <div class="rechazoTotal">
+            <div id="pipeDonutObra" class="rechazoDonut">
+              <div class="rechazoDonutCentro">
+                <strong id="pipeRechazoTotalObra">—</strong><span>rechazo</span>
+              </div>
+            </div>
+            <div class="rechazoInfo">
+              <div><strong>Límite de rechazo:</strong> 5,00%</div>
+              <div class="rechazoLinea">
+                <div id="pipeRechazoValorObra" class="rechazoValor"></div>
+              </div>
+              <div class="rechazoEscala"><span>0%</span><span>100%</span></div>
+              <div id="pipeRechazoDetalleObra" class="nota">Sin datos de inspección FW/FFW.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>% de rechazos por soldador · Obra</h2>
+          <div class="soldadoresChartWrap"><canvas id="pipeSoldadoresChartObra"></canvas></div>
+          <div class="soldadoresChartLeyenda">
+            Cada punto representa un soldador sobre juntas FW/FFW. La línea horizontal marca el límite máximo permitido de 3,00%.
+          </div>
+        </section>
+      </div>
     </div>
 
   </main>
@@ -1276,6 +1322,7 @@ const PIPING_LIMITE_RECHAZO_TOTAL = 5;
 let pipeCurvaChart = null;
 let pipeCurvaObraChart = null;
 let pipeSoldadoresChart = null;
+let pipeSoldadoresChartObra = null;
 let pipeCuadernillosLumberActuales = [];
 let pipeFechaUltimaTrazaLumber = null;
 
@@ -1600,6 +1647,7 @@ async function cargarSpoolesDespachadosLumber(){
       db
         .from("piping_cargas")
         .select("id")
+        .or("origen_trazabilidad.eq.LUMBER,origen_trazabilidad.is.null")
         .order("id",{ascending:false})
         .limit(1)
         .maybeSingle(),
@@ -1779,6 +1827,126 @@ async function cargarSpoolesPorCuadernillo(){
   }
 }
 
+
+async function cargarResumenObraFWFFW(){
+  const tbody=document.getElementById("tablaSpoolesCuadernilloObra");
+  try{
+    const {data:ultima,error:errorCarga}=await db
+      .from("piping_cargas")
+      .select("id")
+      .eq("origen_trazabilidad","OBRA")
+      .order("id",{ascending:false})
+      .limit(1)
+      .maybeSingle();
+    if(errorCarga) throw errorCarga;
+
+    if(!ultima?.id){
+      if(tbody) tbody.innerHTML='<tr><td colspan="3" style="text-align:center;color:#718096">Todavía no hay una carga OBRA.</td></tr>';
+      setTexto("pipeRechazoTotalObra","—");
+      setTexto("pipeRechazoDetalleObra","Primero cargá la trazabilidad Obra (FW + FFW).");
+      return;
+    }
+
+    const {data:juntas,error:errorJuntas}=await db
+      .from("piping_juntas")
+      .select("cuadernillo,linea,spool,tipo_junta,diametro,fecha_soldadura,soldador_raiz,soldador_relleno,lote,resultado_1,resultado_2,libera")
+      .eq("carga_id",ultima.id)
+      .in("tipo_junta",["FW","FFW"]);
+    if(errorJuntas) throw errorJuntas;
+
+    // Resumen de spooles por cuadernillo. El total puede calcularse ya desde la carga OBRA.
+    const normal = v => normalizarCuadernillo(v);
+    const porCuad={};
+    for(const j of (juntas||[])){
+      const c=normal(j.cuadernillo);
+      if(!["001","002","003"].includes(c)) continue;
+      if(!porCuad[c]) porCuad[c]=new Set();
+      const k=String(j.linea||"").trim().toUpperCase()+"|||"+String(j.spool||"").trim().toUpperCase();
+      if(k!=="|||") porCuad[c].add(k);
+    }
+
+    // Los liberados se leen de la vista específica de Obra cuando esté creada.
+    let liberados=[];
+    const q=await db.from("v_piping_spooles_liberados_obra_detalle").select("cuadernillo,linea,spool");
+    if(!q.error) liberados=q.data||[];
+
+    const libPor={};
+    for(const x of liberados){
+      const c=normal(x.cuadernillo);
+      if(!libPor[c]) libPor[c]=new Set();
+      libPor[c].add(String(x.linea||"").trim().toUpperCase()+"|||"+String(x.spool||"").trim().toUpperCase());
+    }
+
+    if(tbody){
+      tbody.innerHTML=["001","002","003"].map(c=>`
+        <tr>
+          <td><strong>IS-${c}</strong></td>
+          <td class="spool-num">${porCuad[c]?.size||0}</td>
+          <td class="spool-num spool-liberado">${libPor[c]?.size||0}</td>
+        </tr>`).join("");
+    }
+
+    // Rechazos: usar la vista específica para respetar exactamente la regla de lotes/END.
+    const rr=await db.from("v_piping_rechazos_obra").select("*");
+    if(rr.error){
+      setTexto("pipeRechazoTotalObra","—");
+      setTexto("pipeRechazoDetalleObra","Pendiente crear la vista v_piping_rechazos_obra en Supabase.");
+      return;
+    }
+
+    const filas=rr.data||[];
+    const total=filas.find(x=>x.tipo==="TOTAL");
+    const sold=filas.filter(x=>x.tipo==="SOLDADOR");
+    const pctTotal=Number(total?.rechazo_porcentaje||0);
+
+    setTexto("pipeRechazoTotalObra",pipePct(pctTotal));
+    setTexto("pipeRechazoDetalleObra",
+      `${Number(total?.juntas_rechazadas||0)} rechazadas de ${Number(total?.juntas_inspeccionadas||0)} juntas inspeccionadas FW/FFW`
+    );
+
+    const donut=document.getElementById("pipeDonutObra");
+    if(donut) donut.style.background=`conic-gradient(#d83c3c 0deg ${Math.min(360,pctTotal*3.6)}deg,#e8edf1 ${Math.min(360,pctTotal*3.6)}deg 360deg)`;
+    const barra=document.getElementById("pipeRechazoValorObra");
+    if(barra) barra.style.width=Math.min(100,pctTotal)+"%";
+
+    const ctx=document.getElementById("pipeSoldadoresChartObra");
+    if(ctx){
+      if(pipeSoldadoresChartObra) pipeSoldadoresChartObra.destroy();
+      pipeSoldadoresChartObra=new Chart(ctx,{
+        type:"scatter",
+        data:{
+          datasets:[
+            {
+              label:"Soldadores",
+              data:sold.map((x,i)=>({x:i+1,y:Number(x.rechazo_porcentaje||0),soldador:x.soldador||"—"})),
+              pointRadius:6,pointHoverRadius:8
+            },
+            {
+              label:"Límite 3%",
+              data:[{x:0,y:3},{x:Math.max(1,sold.length+1),y:3}],
+              type:"line",pointRadius:0,borderWidth:2
+            }
+          ]
+        },
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          plugins:{
+            tooltip:{callbacks:{label:c=>c.datasetIndex===0?`${c.raw.soldador}: ${pipePct(c.raw.y)}`:"Límite: 3,00%"}},
+            legend:{display:false}
+          },
+          scales:{
+            x:{display:false,min:0,max:Math.max(2,sold.length+1)},
+            y:{beginAtZero:true,ticks:{callback:v=>v+"%"},grid:{color:"#edf1f5"}}
+          }
+        }
+      });
+    }
+  }catch(err){
+    console.error("No se pudo cargar resumen Obra FW/FFW:",err);
+    if(tbody) tbody.innerHTML='<tr><td colspan="3" style="text-align:center;color:#b33a3a">No se pudo cargar el resumen de Obra.</td></tr>';
+  }
+}
+
 async function cargarPiping(){
 
   const estado=document.getElementById("pipeConexion");
@@ -1835,6 +2003,7 @@ async function cargarPiping(){
     // Se carga de forma independiente para no bloquear el resto del dashboard.
     cargarSpoolesPorCuadernillo();
     cargarSpoolesDespachadosLumber();
+    cargarResumenObraFWFFW();
 
 
     const flujoConfig = {
