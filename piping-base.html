@@ -53,6 +53,12 @@ td{padding:9px 10px;border-bottom:1px solid #e8edf1;vertical-align:top;white-spa
 .badge{display:inline-block;padding:4px 8px;border-radius:15px;font-size:10px;font-weight:bold}
 .SW{background:#eaf8ef;color:#176d3c} .FW{background:#fff3e5;color:#9a5d00} .FFW{background:#eeeafd;color:#5545a8}
 .nota{margin-top:12px;color:#68798c;font-size:11px;line-height:1.5}
+.modo-carga{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.modo-card{border:1px solid #dce3ea;border-radius:12px;padding:16px;background:#fafbfd;cursor:pointer}
+.modo-card.activo{border-color:#102f52;background:#eef4f9}
+.modo-card strong{display:block;color:#173650;font-size:14px;margin-bottom:5px}
+.modo-card span{font-size:11px;color:#68798c;line-height:1.45}
+@media(max-width:700px){.modo-carga{grid-template-columns:1fr}}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .login-box{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .usuario{font-size:12px;color:#68798c;margin-top:10px}
@@ -102,15 +108,28 @@ td{padding:9px 10px;border-bottom:1px solid #e8edf1;vertical-align:top;white-spa
     <div id="estado" class="estado">⏳ Verificando sesión...</div>
 
     <section class="panel">
-      <h2>1. Seleccionar Excel de trazabilidad</h2>
+      <h2>1. Seleccionar tipo de trazabilidad</h2>
+
+      <div class="modo-carga">
+        <div id="modoLumber" class="modo-card activo" onclick="seleccionarOrigen('LUMBER')">
+          <strong>Prefabricado Lumber · SW</strong>
+          <span>La carga guarda únicamente juntas SW. Las FW y FFW del Excel se ignoran.</span>
+        </div>
+        <div id="modoObra" class="modo-card" onclick="seleccionarOrigen('OBRA')">
+          <strong>Obra · FW + FFW</strong>
+          <span>La carga guarda únicamente juntas FW y FFW. Las SW del Excel se ignoran.</span>
+        </div>
+      </div>
+
+      <h2 id="tituloCarga">2. Seleccionar Excel · Prefabricado Lumber</h2>
       <div class="fila">
         <input id="archivo" type="file" accept=".xlsx,.xls">
-        <button id="btnAnalizar" class="btnAzul" onclick="analizarExcel()">Analizar Excel</button>
-        <button id="btnCargar" class="btnVerde" onclick="subirDatos()" disabled>Cargar a Supabase</button>
+        <button id="btnAnalizar" class="btnAzul" onclick="analizarExcel()">Analizar Excel Lumber</button>
+        <button id="btnCargar" class="btnVerde" onclick="subirDatos()" disabled>Cargar Lumber a Supabase</button>
       </div>
-      <div class="nota">
-        Se leen las hojas <b>Trazabilidad NQOG317</b> y <b>Resumen</b>.
-        Primero se muestra una vista previa; la carga a la base solo se habilita a usuarios autorizados.
+      <div id="notaCarga" class="nota">
+        Se leen las hojas <b>Trazabilidad NQOG317</b> y <b>Resumen</b>, pero se cargarán únicamente las juntas <b>SW</b>.
+        La carga de Lumber no elimina ni modifica las juntas FW/FFW de Obra.
       </div>
     </section>
 
@@ -205,6 +224,41 @@ let juntas=[];
 let resumenTipos=[];
 let resumenCuadernillos=[];
 let totalGeneral=null;
+let origenSeleccionado="LUMBER";
+let juntasExcelCompletas=[];
+
+function tiposPermitidosOrigen(){
+  return origenSeleccionado==="LUMBER" ? ["SW"] : ["FW","FFW"];
+}
+
+function seleccionarOrigen(origen){
+  origenSeleccionado = origen==="OBRA" ? "OBRA" : "LUMBER";
+  document.getElementById("modoLumber").classList.toggle("activo",origenSeleccionado==="LUMBER");
+  document.getElementById("modoObra").classList.toggle("activo",origenSeleccionado==="OBRA");
+
+  const esLumber=origenSeleccionado==="LUMBER";
+  document.getElementById("tituloCarga").textContent =
+    esLumber ? "2. Seleccionar Excel · Prefabricado Lumber" : "2. Seleccionar Excel · Obra";
+  document.getElementById("btnAnalizar").textContent =
+    esLumber ? "Analizar Excel Lumber" : "Analizar Excel Obra";
+  document.getElementById("btnCargar").textContent =
+    esLumber ? "Cargar Lumber a Supabase" : "Cargar Obra a Supabase";
+  document.getElementById("notaCarga").innerHTML = esLumber
+    ? 'Se leen las hojas <b>Trazabilidad NQOG317</b> y <b>Resumen</b>, pero se cargarán únicamente las juntas <b>SW</b>. La carga de Lumber no elimina ni modifica las juntas FW/FFW de Obra.'
+    : 'Se leen las hojas <b>Trazabilidad NQOG317</b> y <b>Resumen</b>, pero se cargarán únicamente las juntas <b>FW y FFW</b>. La carga de Obra no elimina ni modifica las juntas SW de Lumber.';
+
+  // Obliga a volver a analizar si se cambia de universo.
+  juntas=[];
+  juntasExcelCompletas=[];
+  resumenTipos=[];
+  resumenCuadernillos=[];
+  totalGeneral=null;
+  ["resumen","tipos","cuadernillos","detalle","tablaDetalle"].forEach(id=>{
+    document.getElementById(id).style.display="none";
+  });
+  actualizarBotonCarga();
+  setEstado("Seleccionaste "+(esLumber?"Prefabricado Lumber (SW).":"Obra (FW + FFW).")+" Elegí el Excel y analizalo.","aviso");
+}
 
 function setEstado(texto,tipo=""){
   const e=document.getElementById("estado");
@@ -593,6 +647,19 @@ async function analizarExcel(){
       });
     }
 
+    // Conservamos la lectura completa para control y filtramos según el universo elegido.
+    juntasExcelCompletas=[...juntas];
+    const tiposPermitidos=tiposPermitidosOrigen();
+    juntas=juntasExcelCompletas.filter(x=>tiposPermitidos.includes(String(x.tipo_junta||"").toUpperCase()));
+
+    if(!juntas.length){
+      throw new Error(
+        origenSeleccionado==="LUMBER"
+          ? "El Excel no contiene juntas SW para cargar como Lumber."
+          : "El Excel no contiene juntas FW/FFW para cargar como Obra."
+      );
+    }
+
     resumenCuadernillos=[];
     for(let r=11;r<=13;r++){
       const descripcion=txt(valor(wr,r,2));
@@ -615,44 +682,55 @@ async function analizarExcel(){
       });
     }
 
-    resumenTipos=[];
-    for(let r=19;r<=21;r++){
-      const codigo=txt(valor(wr,r,2)).toUpperCase();
-      if(!codigo) continue;
-
-      resumenTipos.push({
-        categoria:"TIPO_JUNTA",
-        codigo,
-        descripcion:txt(valor(wr,r,3)) || null,
-        juntas:Number(num(valor(wr,r,4)) || 0),
-        pulgadas_a_ejecutar:Number(num(valor(wr,r,5)) || 0),
-        pulgadas_ejecutadas:Number(num(valor(wr,r,6)) || 0),
-        pulgadas_pendientes:Number(num(valor(wr,r,7)) || 0),
-        avance_porcentaje:Number(num(valor(wr,r,8)) || 0),
-        pendiente_porcentaje:Number(num(valor(wr,r,9)) || 0)
+    resumenTipos=["SW","FW","FFW"]
+      .filter(codigo=>tiposPermitidos.includes(codigo))
+      .map(codigo=>{
+        const filas=juntas.filter(x=>String(x.tipo_junta||"").toUpperCase()===codigo);
+        const total=filas.reduce((s,x)=>s+Number(x.diametro||0),0);
+        const ejecutado=filas.filter(x=>!!x.fecha_soldadura).reduce((s,x)=>s+Number(x.diametro||0),0);
+        return {
+          categoria:"TIPO_JUNTA",
+          codigo,
+          descripcion: codigo==="SW" ? "Socket Weld" : (codigo==="FW" ? "Field Weld" : "Field Fit Weld"),
+          juntas:filas.length,
+          pulgadas_a_ejecutar:total,
+          pulgadas_ejecutadas:ejecutado,
+          pulgadas_pendientes:Math.max(0,total-ejecutado),
+          avance_porcentaje: total ? ejecutado/total : 0,
+          pendiente_porcentaje: total ? Math.max(0,total-ejecutado)/total : 0
+        };
       });
-    }
+
+    // Para las cargas separadas, el resumen se calcula sobre las filas realmente cargadas.
+    const totalEjecutar=juntas.reduce((s,x)=>s+Number(x.diametro||0),0);
+    const totalEjecutado=juntas.filter(x=>!!x.fecha_soldadura).reduce((s,x)=>s+Number(x.diametro||0),0);
 
     totalGeneral={
       categoria:"TOTAL_GENERAL",
       codigo:"TOTAL",
-      descripcion:"Total general de Piping",
-      juntas:Number(num(valor(wr,22,4)) || 0),
-      pulgadas_a_ejecutar:Number(num(valor(wr,22,5)) || 0),
-      pulgadas_ejecutadas:Number(num(valor(wr,22,6)) || 0),
-      pulgadas_pendientes:Number(num(valor(wr,22,7)) || 0),
-      avance_porcentaje:Number(num(valor(wr,22,8)) || 0),
-      pendiente_porcentaje:Number(num(valor(wr,22,9)) || 0)
+      descripcion: origenSeleccionado==="LUMBER" ? "Total Prefabricado Lumber · SW" : "Total Obra · FW + FFW",
+      juntas:juntas.length,
+      pulgadas_a_ejecutar:totalEjecutar,
+      pulgadas_ejecutadas:totalEjecutado,
+      pulgadas_pendientes:Math.max(0,totalEjecutar-totalEjecutado),
+      avance_porcentaje:totalEjecutar ? totalEjecutado/totalEjecutar : 0,
+      pendiente_porcentaje:totalEjecutar ? Math.max(0,totalEjecutar-totalEjecutado)/totalEjecutar : 0
     };
 
-    if(!juntas.length) throw new Error("No se detectaron juntas en la trazabilidad.");
-    if(!totalGeneral.pulgadas_a_ejecutar) throw new Error("No se pudo leer el total general de la hoja Resumen.");
+    // El resumen por cuadernillo de la hoja Resumen corresponde al esquema histórico Lumber.
+    // Para Obra no lo insertamos para evitar mezclar el resumen SW con FW/FFW.
+    if(origenSeleccionado==="OBRA"){
+      resumenCuadernillos=[];
+    }
+
+    if(!juntas.length) throw new Error("No se detectaron juntas válidas para el origen seleccionado.");
+    if(!totalGeneral.pulgadas_a_ejecutar) throw new Error("No se pudo calcular el alcance del origen seleccionado.");
 
     pintarPreview();
     actualizarBotonCarga();
 
     setEstado(
-      `✓ Excel analizado por encabezados verificados: ${juntas.length} juntas y ${pulgadas(totalGeneral.pulgadas_a_ejecutar)} de alcance total.`+
+      `✓ ${origenSeleccionado}: ${juntas.length} juntas ${origenSeleccionado==="LUMBER"?"SW":"FW/FFW"} listas para cargar · ${pulgadas(totalGeneral.pulgadas_a_ejecutar)} de alcance.`+
       (usuarioAutorizado ? " Listo para cargar." : " Vista previa disponible; carga restringida."),
       usuarioAutorizado ? "ok" : "aviso"
     );
@@ -750,7 +828,10 @@ async function subirDatos(){
         archivo_nombre:nombreArchivo,
         usuario:email,
         juntas_detectadas:juntas.length,
-        observacion:"Carga desde trazabilidad de soldadura"
+        origen_trazabilidad:origenSeleccionado,
+        observacion: origenSeleccionado==="LUMBER"
+          ? "Carga independiente de trazabilidad Lumber · solo SW"
+          : "Carga independiente de trazabilidad Obra · solo FW/FFW"
       })
       .select("id")
       .single();
@@ -780,7 +861,7 @@ async function subirDatos(){
     if(errorResumen) throw errorResumen;
 
     setEstado(
-      `✓ Carga completada por ${email}: ${juntas.length} juntas · ${pulgadas(totalGeneral.pulgadas_ejecutadas)} ejecutadas · ${pct(totalGeneral.avance_porcentaje)} de avance.`,
+      `✓ ${origenSeleccionado} cargado por ${email}: ${juntas.length} juntas · ${pulgadas(totalGeneral.pulgadas_ejecutadas)} ejecutadas · ${pct(totalGeneral.avance_porcentaje)} de avance.`,
       "ok"
     );
 
